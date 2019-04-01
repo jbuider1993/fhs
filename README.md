@@ -138,15 +138,14 @@
 
 #### 使用说明
 
-1. 操作手册请访问  http://www.fhs-opensource.com (建设中)
+1. 操作手册请访问  http://fhs-opensource.com/  (建设中)
 2. 注意事项：pagex会在运行时动态生成java代码并且编译成class，在idea中，pagex生成java代码可直接编译通过，但是在线上环境，需要把tools.jar copy到jre的lib目录下，并且创建一个classpath的文件夹，存放编译java的时候的依赖。
 2. 本快速开发平台还在开发阶段，很多bug还没修复，很多老代码还没改，不建议在正式项目中使用，等项目正式版发布在使用。我们欢迎您帮我们改几个bug，然后把代码反馈给我们。
-   
+3.clone 我们代码，然后把common，core，api,base_business,mini_admin，parent导入到idea中，配置mini_admin ylm文件中的redis信息和数据库信息，直接运行mini_admin 的 FhsMiniAdminApplication 即可。
+4.如果你修改了默认端口号，请修改path.properties和js.properties中的内容。
 
 #### 参与贡献获取技术支持
 官方QQ 群：976278956
 
-
-体验地址：http://188.131.245.221:8081/   admin  123456
-         网速有点慢，别着急，我努力找个CDN挂下。
-         周一上传代码
+体验地址：http://114.116.20.119:8081/   admin  123456
+         
