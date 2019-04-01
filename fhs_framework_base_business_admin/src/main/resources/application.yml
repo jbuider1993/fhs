@@ -1,0 +1,24 @@
+
+###################  项目启动端口  ###################
+server:
+  port: 8082
+
+
+# 该配置节点为独立的节点，有很多同学容易将这个配置放在spring的节点下，导致配置无法被识别
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*/*.xml
+  type-aliases-package: com.fhs.system.bean;com.fhs.ucenter.bean;
+
+eureka:
+   instance:
+      appname: system
+
+spring:
+    session:
+        store-type: redis
+
+logging:
+  level:
+    com.fhs.ucenter.dao: debug
+    com.fhs.pagex: debug
+    com.fhs.system.dao: debug

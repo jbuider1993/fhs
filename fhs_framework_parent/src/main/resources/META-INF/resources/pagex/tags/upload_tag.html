@@ -1,0 +1,50 @@
+<div class="fitem" >
+    <div class="fitemDiv">
+        <label>&nbsp;</label>
+        <img id="${tagSett.name}InputImg" class="headerImg"
+             src="${staticPath}/images/upload_default_show.png"/>
+        <%  if(nvl(tagSett.required,false)){ %>
+            <span class="form-field-required">*</span>
+        <% } %>
+        <input type="hidden" id="${tagSett.name}InputVal" />
+    </div>
+</div>
+
+<div class="fitem">
+    <div class="fitemDiv">
+        <div class="uploadLableDiv">
+            <label class="uploadLable"> ${tagSett.title}:</label>
+        </div>
+        <input type="button" id="${tagSett.name}Input" style="display: none;" />
+    </div>
+</div>
+<div class="fitem">
+    <div class="bigLabelDiv">
+        <label>&nbsp;</label>
+    </div>
+    <font color="red">&nbsp;&nbsp;&nbsp;&nbsp;${tagSett.placeholder}，图片支持 *.png, *.jpg, *.jpeg, *.gif</font>
+</div>
+<input type="hidden" id="${tagSett.name}" name="${tagSett.name}"
+<%  if(nvl(tagSett.required,false)){ %>
+    datatype = '*'
+<% } %> nullmsg = '请先上传${tagSett.title}'/>
+<script>
+    //初始化上传
+    $(function(){
+        inituploadifyHeader("${tagSett.name}Input", "上传${tagSett.title}","${tagSett.maxSize}");
+    })
+    //上传返显示
+    function uploadHeaderLoadSuccess_${tagSett.name}(info){
+        if(info.${tagSett.name})
+        {
+            initHeader("${tagSett.name}Input", info.${tagSett.name});
+            $("#${tagSett.name}InputVal").val(info.${tagSett.name});
+        }
+    }
+    //上传图片赋值
+    function uploadHeaderOnsave_${tagSett.name}()
+    {
+        $("#${tagSett.name}").val($("#${tagSett.name}InputVal").val());
+        return true;
+    }
+</script>

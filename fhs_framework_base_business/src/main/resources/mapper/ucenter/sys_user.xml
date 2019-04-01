@@ -1,0 +1,762 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fhs.ucenter.dao.SysUserDAO">
+	<!-- 登录 -->
+	<select id="login" resultType="sysUser" parameterType="sysUser">
+		SELECT
+		user_name AS userName,
+		is_disable AS isDisable,
+		user_id AS userId,
+		user_login_name AS userLoginName,
+		is_admin AS isAdmin,
+		password AS password,
+		mobile,
+		email,
+		sex,
+		province_id AS provinceId,
+		city_id AS cityId,
+		area_id AS areaId,
+		address,
+		organization_id AS organizationId,
+		create_user AS createUser,
+		create_time AS createTime,
+		update_user AS updateUser,
+		update_time AS updateTime
+		FROM
+		t_ucenter_ms_user
+		WHERE 1 = 1
+		AND
+		user_login_name =
+		#{userLoginName}
+		AND password = #{password}
+		AND is_disable=0
+	</select>
+
+	<select id="findForListFromMap" parameterType="map" resultType="sysUser">
+		SELECT
+		user_name AS userName,
+		user_id AS userId,
+		user_login_name AS userLoginName,
+		mobile,
+		email,
+		sex,
+		is_admin AS isAdmin,
+		( CasE is_disable
+		WHEN '0' THEN '启用' WHEN '1' THEN '禁用' END ) AS state,
+		province_id AS provinceId,
+		city_id AS cityId,
+		area_id AS areaId,
+		address,
+		organization_id AS organizationId,
+		create_user AS createUser,
+		create_time AS createTime,
+		update_user AS updateUser,
+		update_time AS updateTime
+		FROM t_ucenter_ms_user
+
+		WHERE 1=1
+		<if test="userName !=null and userName!=''">
+			AND user_name LIKE CONCAT('%', #{userName}, '%')
+		</if>
+		ORDER BY user_id DESC
+		<if test="start !=null and start!=''">
+			LIMIT ${start},${end}
+		</if>
+	</select>
+
+	<!-- 添加用户角色信息 -->
+	<insert id="addUserRole" parameterType="sysUser">
+		INSERT INTO t_ucenter_ms_role_user_rela
+		(role_id,user_id )
+		VALUES
+		<foreach collection="roleList" item="roleid" index="index"
+				 separator=",">
+			(#{roleid},#{userId})
+		</foreach>
+
+	</insert>
+
+	<!-- 添加用户信息 -->
+	<insert id="add" parameterType="sysUser">
+		INSERT INTO `t_ucenter_ms_user`
+		(`user_id`,
+		`user_name`,
+		`is_disable`,
+		`user_login_name`,
+		`is_admin`,
+		`password`,
+		`mobile`,
+		`email`,
+		`province_id`,
+		`city_id`,
+		`area_id`,
+		`address`,
+		`organization_id`,
+		`create_user`,
+		`create_time`,
+		`update_user`,
+		`update_time`,
+		`sex`)
+		VALUES (
+		#{userId},
+		#{userName},
+		#{isDisable},
+		#{userLoginName},
+		#{isAdmin},
+		#{password},
+		#{mobile},
+		#{email},
+		#{provinceId},
+		#{cityId},
+		#{areaId},
+		#{address},
+		#{organizationId},
+		#{createUser},
+		#{createTime},
+		#{updateUser},
+		#{updateTime},
+		#{sex}
+		)
+	</insert>
+
+	<!-- 删除用户信息 -->
+	<delete id="delete" parameterType="sysUser">
+		DELETE FROM `t_ucenter_ms_user`
+		WHERE
+		user_id=#{userId}
+	</delete>
+
+	<!-- 修改用户信息 -->
+	<update id="update" parameterType="sysUser">
+		UPDATE `t_ucenter_ms_user`
+		SET
+		`user_name`=#{userName},
+		`user_login_name`=#{userLoginName},
+		`mobile`=#{mobile},
+		`email`=#{email},
+		is_admin=#{isAdmin},
+		organization_id=#{organizationId},
+		<if test="password !=null and password != ''">
+			password=#{password},
+		</if>
+
+		`is_disable`=#{isDisable}
+		WHERE user_id=#{userId}
+	</update>
+
+	<!-- 查询用户总条数 -->
+	<select id="findCount" resultType="int" parameterType="sysUser">
+		SELECT COUNT(1)
+		FROM `t_ucenter_ms_user`
+		WHERE 1=1
+
+		<if test="userName !=null and userName!=''">
+			AND user_name LIKE CONCAT('%', #{userName}, '%')
+		</if>
+	</select>
+
+	<!-- 通过用户编号查询菜单 -->
+	<select id="selectMenuByUid" resultType="sysMenu"
+			parameterType="sysUser">
+		SELECT  m.menu_name AS menuName,
+		m.menu_id AS menuId,
+		m.menu_state AS menuState,
+		s.server_url AS serverUrl,
+		CONCAT(s.server_url,m.menu_url) AS menuUrl,
+		m.father_menu_id AS
+		fatherMenuId
+		FROM t_ucenter_ms_menu m
+		LEFT JOIN t_ucenter_ms_menu_permission b ON
+		b.menu_id = m.menu_id
+		LEFT JOIN t_ucenter_ms_role_permission rt ON rt.permission_id
+		= b.permission_id
+		LEFT JOIN t_ucenter_ms_role_user_rela ru ON rt.role_id =
+		ru.role_id
+		LEFT JOIN t_ucenter_ms_user u ON u.user_id= ru.user_id LEFT JOIN
+		t_ucenter_ms_menu_server s ON s.id = m.server_name_id
+		WHERE m.is_disable = 0
+		and m.is_disable = b.is_disable
+		<if test="userId !=null">
+			AND u.user_id = #{userId}
+		</if>
+		<if test="menuType !=null">
+			AND m.menu_type LIKE CONCAT('%',#{menuType},'%')
+		</if>
+		ORDER BY m.father_menu_id,m.order_index
+	</select>
+
+	<select id="selectMenuAll" resultType="sysMenu" parameterType="map">
+		SELECT
+		menu_id AS menuId,
+		menu_name AS menuName,
+		father_menu_id AS
+		fatherMenuId,
+		s.server_url as serverUrl,
+		CONCAT(server_url ,menu_url) AS menuUrl,
+		menu_type AS menuType,
+		is_disable AS
+		isDisable,
+		image,
+		server_name_id AS serverNameId,
+		order_index AS orderIndex,
+		namespace,
+		check_help_url AS checkHelpUrl,
+		menu_state AS menuState,
+		configuration_home_menu AS
+		configurationHomeMenu,
+		system_id AS systemId
+		FROM
+		`t_ucenter_ms_menu`  m,t_ucenter_ms_menu_server s
+		WHERE m.`server_name_id`=s.`id`
+		<if test="systemId !=null and systemId!=''">
+			AND m.system_id=#{systemId}
+		</if>
+		ORDER BY
+		father_menu_id,order_index
+	</select>
+
+	<!-- 查询admin 拥有的所有的权限列表 -->
+	<select id="selectMenuIdByAdmin" resultType="int" parameterType="sysUser" >
+		SELECT menu_id FROM t_ucenter_ms_menu_permission
+	</select>
+
+	<!-- 查询一个用户拥有的所有的权限列表 -->
+	<select id="selectMenuIdByUserId" resultType="int" parameterType="sysUser" >
+		SELECT m.menu_id AS menuId
+		FROM `t_ucenter_ms_menu` m
+		LEFT JOIN `t_ucenter_ms_menu_permission` b ON
+		b.menu_id = m.menu_id
+		LEFT JOIN `t_ucenter_ms_role_permission` rt ON
+		rt.permission_id = b.permission_id
+		LEFT JOIN `t_ucenter_ms_role_user_rela` ru ON
+		rt.role_id = ru.role_id
+		LEFT JOIN `t_ucenter_ms_user` u ON u.user_id =
+		ru.user_id
+		LEFT JOIN `t_ucenter_ms_menu_server` s ON s.id = m.server_name_id
+		WHERE m.is_disable = 0
+		AND m.is_disable = b.is_disable
+		AND u.user_id = #{userId}
+		AND m.menu_type = '0'
+		ORDER BY
+		m.father_menu_id,m.order_index
+	</select>
+
+	<select id="selectNotPlanfromMenuAll" resultType="sysMenu"
+			parameterType="map">
+		SELECT  m.menu_name AS menuName,
+		m.menu_id AS
+		menuId,
+		m.image AS image,
+		CONCAT(s.server_url,m.menu_url) AS menuUrl,
+		m.father_menu_id AS
+		fatherMenuId,
+		m.check_help_url AS checkHelpUrl
+		FROM t_ucenter_ms_menu m ,
+		t_ucenter_ms_menu_server s
+		WHERE
+		m.father_menu_id!=-1
+		AND s.id =
+		m.server_name_id
+		<if test="menuType !=null">
+			AND m.menu_type LIKE CONCAT('%',#{menuType},'%')
+		</if>
+		AND m.menu_id IN (
+		SELECT model_key AS modelKey
+		FROM
+		`t_admin_app_menu_item` WHERE app_id IN (
+		SELECT app_id AS appId FROM
+		`t_admin_app_group_rela` WHERE
+		group_id = (
+		<include refid="findManagerAllAppIds"></include>
+		)
+		AND m.is_disable = 0
+		ORDER BY
+		m.father_menu_id,m.order_index
+	</select>
+
+
+	<sql id="findManagerAllAppIds">
+		SELECT group_id FROM
+		`t_admin_group` WHERE group_code =
+		#{groupCode}) AND
+		state = 0 UNION
+		SELECT app_id AS appId
+		FROM
+		`t_app_apply` WHERE
+		manager_code =
+		#{managerCode} AND apply_state = 3)
+		AND model_type = 0
+	</sql>
+
+	<!-- 通过用户登录名查询菜单集合 -->
+	<select id="selectMenuByUname" resultType="sysMenu"
+			parameterType="map">
+		SELECT
+		*
+		FROM
+		(SELECT
+		m.menu_name AS menuName,
+		m.menu_id AS menuId,
+		CONCAT(m.namespace, ':', b.method) AS namespace,
+		CONCAT(s.server_url, m.menu_url) AS menuUrl,
+		m.father_menu_id AS
+		fatherMenuId
+		FROM
+		t_ucenter_ms_menu m
+		LEFT JOIN t_ucenter_ms_menu_permission b
+		ON
+		b.menu_id = m.menu_id
+		LEFT JOIN t_ucenter_ms_role_permission rt
+		ON rt.permission_id =
+		b.permission_id
+		LEFT JOIN t_ucenter_ms_role_user_rela ru
+		ON rt.role_id =
+		ru.role_id
+		LEFT JOIN t_ucenter_ms_user u
+		ON u.user_id = ru.user_id
+		LEFT JOIN
+		t_ucenter_ms_menu_server s
+		ON s.id = m.server_name_id
+		WHERE m.`namespace` IS
+		NOT NULL
+		AND m.`namespace` != ''
+		AND u.user_login_name =
+		#{userLoginName}
+		AND m.is_disable
+		= b.is_disable
+		AND m.is_disable = 0
+		ORDER BY m.father_menu_id,
+		m.order_index) me
+		WHERE me.`namespace` IS NOT NULL
+	</select>
+
+	<select id="selectUserByULname" resultType="sysUser"
+			parameterType="sysUser">
+		SELECT user_name AS userName,
+		user_id AS userId,
+		user_login_name AS userLoginName,
+		mobile,
+		email,
+		is_admin AS isAdmin,
+		( CasE is_disable WHEN '0' THEN '启用' WHEN '1' THEN '禁用' END ) AS state,
+		organization_id AS organizationId
+		FROM t_ucenter_ms_user
+		WHERE
+		user_login_name = #{userLoginName}
+		AND is_disable = 0
+	</select>
+	<!-- 通过权限编号集合嘻哈下权限 -->
+	<select id="readMenuByButtonIds" parameterType="map" resultType="sysMenu">
+		SELECT  m.menu_name AS menuName,
+		m.menu_id as menuId,
+		CONCAT(m.namespace,':',b.method) AS namespace,
+		CONCAT(s.server_url,m.menu_url) AS menuUrl,
+		m.father_menu_id AS
+		fatherMenuId
+		FROM t_ucenter_ms_menu m
+		LEFT JOIN t_ucenter_ms_menu_permission b ON
+		b.menu_id = m.menu_id LEFT JOIN
+		t_ucenter_ms_menu_server s ON s.id =
+		m.server_name_id
+		WHERE m.is_disable=b.is_disable
+		AND m.is_disable=0
+		AND
+		b.permission_id In
+		<foreach collection="Ids" index="index" item="item" open="("
+				 separator="," close=")">
+			#{item}
+		</foreach>
+		<if test="menuType !=null">
+			AND m.menu_type LIKE CONCAT('%',#{menuType},'%')
+		</if>
+		ORDER BY m.father_menu_id,m.order_index
+	</select>
+
+
+	<!-- 通过父节点编号查询菜单 -->
+	<select id="selectParentMenuByid" resultType="sysMenu"
+			parameterType="map">
+		SELECT m.menu_name as menuName,
+		m.menu_id as menuId,
+		m.menu_url as
+		menuUrl ,
+		m.father_menu_id as fatherMenuId
+		FROM
+		t_ucenter_ms_menu m
+		WHERE
+		m.menu_id = #{fatherMenuId}
+		<if test="menuType !=null">
+			AND m.menu_type LIKE CONCAT('%',#{menuType},'%')
+		</if>
+		ORDER BY m.father_menu_id,m.order_index
+	</select>
+
+	<!-- 获取菜单信息 -->
+	<select id="findBean" parameterType="sysUser" resultType="sysUser">
+		SELECT
+		user_name AS userName,
+		user_id AS userId,
+		user_login_name AS
+		userLoginName,
+		password,
+		email,is_admin AS isAdmin,
+		is_disable
+		AS isDisable,
+		organization_id AS organizationId
+		FROM t_ucenter_ms_user
+		WHERE 1 = 1
+		<if test="userLoginName != null and userLoginName != ''">
+			AND user_login_name = #{userLoginName}
+		</if>
+
+		<if test="password != null and password != ''">
+			AND password = #{password}
+		</if>
+		<if test="userId !=null">
+			AND user_id = #{userId}
+		</if>
+	</select>
+
+	<!-- 删除用户角色 -->
+	<delete id="deleteUserRole" parameterType="sysUser">
+		DELETE FROM
+		`t_ucenter_ms_role_user_rela`
+		WHERE
+		user_id=#{userId}
+	</delete>
+
+	<!-- 查询用户级角色 -->
+	<select id="searchUserRole" resultType="map" parameterType="sysUser">
+		SELECT r.role_id AS roleId, r.role_name AS roleName
+		FROM t_ucenter_ms_role r
+		LEFT JOIN t_ucenter_ms_role_user_rela ru ON r.role_id = ru.role_id
+		WHERE
+		ru.user_id = #{userId}
+	</select>
+
+	<!-- 通过菜单编号查询菜单集合 -->
+	<select id="readMenuByIds" parameterType="map" resultType="sysMenu">
+		SELECT m.menu_name AS menuName,
+		m.menu_id AS menuId,
+		CONCAT(s.server_url,m.menu_url) AS menuUrl,
+		namespace,
+		menu_type AS
+		menuType,
+		image,
+		is_attention AS isAttention,
+		m.father_menu_id AS
+		fatherMenuId
+		FROM t_ucenter_ms_menu m LEFT JOIN t_ucenter_ms_menu_server s ON
+		s.id =
+		m.server_name_id
+		WHERE m.menu_id in
+		<foreach collection="Ids" index="index" item="item" open="("
+				 separator="," close=")">
+			#{item}
+		</foreach>
+		<if test="menuType !=null">
+			AND m.menu_type LIKE CONCAT('%',#{menuType},'%')
+		</if>
+		ORDER BY m.father_menu_id,m.order_index
+
+	</select>
+
+	<!-- 校验密码是否正确 -->
+	<select id="validataPass" resultType="int" parameterType="sysUser">
+		SELECT
+		COUNT(1)
+		FROM `t_ucenter_ms_user`
+		WHERE 1=1
+		AND password = #{password}
+		AND
+		user_id = #{userId}
+	</select>
+
+	<!-- 修改密码 -->
+	<update id="updatePass" parameterType="sysUser">
+		UPDATE `t_ucenter_ms_user`
+		SET
+		`password`=#{password}
+		WHERE user_id=#{userId}
+	</update>
+
+	<!-- 查询用户权限 -->
+	<select id="searchUserButton" resultType="sysMenuPermission"
+			parameterType="sysUser">
+		SELECT
+		b.permission_name AS buttonName,
+		b.permission_id AS
+		buttonId,
+		b.method AS method,
+		b.permission_type AS buttonType,
+		( CASE
+		b.is_disable WHEN '0' THEN '启用' WHEN '1' THEN '禁用' end ) AS
+		state
+		FROM
+		t_ucenter_ms_menu_permission b
+		LEFT JOIN t_ucenter_ms_role_permission rb
+		ON rb.permission_id =
+		b.permission_id
+		LEFT JOIN t_ucenter_ms_role_user_rela ru
+		ON ru.role_id =
+		rb.role_id
+		WHERE
+		ru.user_id = #{userId}
+	</select>
+
+	<!-- 通过用户编号集合查询权限集合 -->
+	<select id="searchUserButtonIds" resultType="sysMenuPermission"
+			parameterType="map">
+		SELECT permission_id AS buttonId,
+		permission_name AS buttonName,
+		method ,
+		permission_type AS buttonType,
+		menu_id AS menuId,
+		is_disable AS isDisable
+		FROM `t_ucenter_ms_menu_permission` where permission_id In
+		<foreach collection="Ids" index="index" item="item" open="("
+				 separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<select id="searchUserButtonAll" resultType="sysMenu"
+			parameterType="map">
+		SELECT  m.menu_name AS menuName,
+		m.menu_id AS menuId,
+		CONCAT(m.namespace,':',b.method) AS namespace,
+		CONCAT(s.server_url,m.menu_url) AS menuUrl,
+		m.father_menu_id AS
+		fatherMenuId
+		FROM t_ucenter_ms_menu m
+		LEFT JOIN t_ucenter_ms_menu_permission b ON
+		b.menu_id = m.menu_id LEFT JOIN
+		t_ucenter_ms_menu_server s ON s.id =
+		m.server_name_id
+		<if test="menuType !=null">
+			where m.menu_type LIKE CONCAT('%',#{menuType},'%')
+		</if>
+		ORDER BY m.father_menu_id,m.order_index
+	</select>
+
+
+
+	<!-- 通过权限查询菜单 -->
+	<select id="selectMenuByButtonIds" resultType="sysMenu"
+			parameterType="map">
+		SELECT  m.menu_name AS menuName,
+		m.menu_id AS menuId,
+		CONCAT(s.server_url,m.menu_url) AS menuUrl,
+		m.father_menu_id AS
+		fatherMenuId,
+		m.image AS image,
+		m.order_index AS orderIndex,
+		m.Check_help_url AS
+		CheckHelpUrl
+		FROM t_ucenter_ms_menu m
+		LEFT
+		JOIN t_ucenter_ms_menu_permission b ON
+		b.menu_id = m.menu_id LEFT JOIN
+		t_ucenter_ms_menu_server s ON s.id =
+		m.server_name_id
+		WHERE 1 = 1
+		<if test="Ids.size() > 0">
+			AND b.permission_id IN
+			<foreach collection="Ids" index="index" item="item" open="("
+					 separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="menuType !=null">
+			AND m.menu_type LIKE CONCAT('%',#{menuType},'%')
+		</if>
+		AND m.menu_id IN (
+		<include refid="getRoleMenuIdOfGroup"></include>
+		)
+		AND m.is_disable = 0
+		ORDER BY m.father_menu_id,m.order_index
+
+	</select>
+
+	<!-- 通过权限编号集合获取菜单 -->
+	<select id="selectMenuByButtons" resultType="sysMenu"
+			parameterType="map">
+		SELECT  m.menu_name AS menuName,
+		m.menu_id as menuId,
+		CONCAT(m.namespace,':',b.method) AS namespace,
+		CONCAT(s.server_url,m.menu_url) AS menuUrl,
+		m.father_menu_id AS
+		fatherMenuId
+		FROM t_ucenter_ms_menu m
+		LEFT JOIN t_ucenter_ms_menu_permission b ON
+		b.menu_id = m.menu_id LEFT JOIN
+		t_ucenter_ms_menu_server s ON s.id =
+		m.server_name_id
+		WHERE b.permission_id IN
+		<foreach collection="Ids" index="index" item="item" open="("
+				 separator="," close=")">
+			#{item}
+		</foreach>
+		<if test="menuType !=null">
+			AND m.menu_type LIKE CONCAT('%',#{menuType},'%')
+		</if>
+		ORDER BY m.father_menu_id,m.order_index
+	</select>
+
+
+	<!-- 通过权限编号Ids返回特定集合，main项目调用 -->
+	<select id="searchButtons" parameterType="map" resultType="map">
+		SELECT CASE WHEN b.permission_type = 5 THEN CONCAT('el_',b.permission_id)
+		WHEN
+		b.permission_type = 1 THEN CONCAT('r_',b.menu_id)
+		WHEN b.permission_type = 2
+		THEN CONCAT("w_",b.menu_id)
+		WHEN b.permission_type = 3 THEN
+		CONCAT("e_",b.menu_id)
+		WHEN b.permission_type = 4 THEN
+		CONCAT("d_",b.menu_id) END AS boxId
+		FROM
+		t_ucenter_ms_menu_permission b
+		WHERE b.permission_id IN
+		<foreach collection="Ids" index="index" item="item" open="("
+				 separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<select id="getAdminUserCountByLoginName" resultType="int"
+			parameterType="sysUser">
+		SELECT
+		COUNT(1)
+		FROM `t_ucenter_ms_user`
+		WHERE 1 = 1
+		<if test="userId !=null and userId != ''">
+			AND user_id != #{userId}
+		</if>
+		<if test="userName !=null and userName != ''">
+			AND user_name = #{userName}
+		</if>
+		<if test="userLoginName !=null and userLoginName != ''">
+			AND user_login_name = #{userLoginName}
+		</if>
+
+	</select>
+	<!-- 根据传来的fatherIds查出所有的father信息 -->
+	<select id="getFatherMenu" parameterType="java.lang.String"
+			resultType="sysUser">
+		SELECT  m.menu_name AS menuName,
+		m.menu_id AS
+		menuId,
+		CONCAT(s.server_url,m.menu_url) AS menuUrl,
+		m.father_menu_id AS
+		fatherMenuId,
+		m.order_index AS orderIndex,
+		m.check_help_url AS
+		checkHelpUrl
+		FROM t_ucenter_ms_menu m LEFT
+		JOIN t_ucenter_ms_menu_server s ON
+		s.id
+		= m.server_name_id
+		WHERE
+		m.is_disable
+		= 0
+		AND m.father_menu_id!=-1
+		AND
+		m.menu_id IN (${fatherMenuIds})
+		ORDER BY
+		m.father_menu_id,m.order_index
+	</select>
+
+
+	<!-- 找到所有有权限的菜单的id不包括父级菜单 -->
+	<select id="findAllHasPermissionId" parameterType="map"
+			resultType="int">
+		SELECT
+		m.menu_id as menuId
+		FROM t_ucenter_ms_menu m
+		LEFT JOIN
+		t_ucenter_ms_menu_permission b ON
+		b.menu_id = m.menu_id LEFT JOIN
+		t_ucenter_ms_menu_server s ON s.id =
+		m.server_name_id
+		WHERE b.permission_id IN
+		(${menuIds})
+		<if test="menuType !=null">
+			AND m.menu_type LIKE CONCAT('%',#{menuType},'%')
+		</if>
+		AND m.menu_id IN (<include refid="getRoleMenuIdOfGroup"></include>)
+	</select>
+	<!-- 根据角色不同获取当前集团下对应的菜单 id-->
+	<sql id="getRoleMenuIdOfGroup">
+		SELECT model_key AS modelKey
+		FROM
+		  `t_admin_app_menu_item`
+		WHERE app_id IN
+		  (SELECT
+		    app_id
+		  FROM
+		    `t_admin_app_group_rela`
+		  WHERE group_id =
+		    (SELECT
+		      group_id
+		    FROM
+		      `t_admin_group`
+		    WHERE group_code = #{groupCode})
+		    AND state = 0
+	  UNION
+	  SELECT
+	    app_id AS appId
+	  FROM
+	    `t_app_apply`
+	  WHERE manager_code = #{managerCode}
+	    AND apply_state = 3)
+	    AND model_type = 0
+	</sql>
+	<select id="checkOperatorLogin" parameterType="map" resultType="map">
+	   SELECT
+		user_name AS userName,
+		is_disable AS isDisable,
+		user_id AS userId,
+		user_login_name AS
+		userLoginName,isadmin,
+		password AS password,
+		operator_code AS
+		operatorCode
+		FROM
+		t_ucenter_ms_role_user_rela
+		WHERE
+		user_login_name = #{userLoginName}
+		AND password = #{password}
+	</select>
+
+	<!-- 查询当前机构及子机构用户数 -->
+	<select id="findUserByOrgId" parameterType="map" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM t_ucenter_ms_user
+        WHERE organization_id LIKE CONCAT(#{organizationId}, '%')
+		<if test="isDisable != null and isDisable != ''">
+			AND is_disable = #{isDisable}
+		</if>
+	</select>
+
+	<!-- 根据用户ID查询用户权限URL -->
+	<select id="getPermissionUrlByUserId" parameterType="string" resultType="string">
+       SELECT
+			mpu.url
+		FROM
+			t_ucenter_ms_role_user_rela ur,
+			t_ucenter_ms_role_permission rp,
+			t_ucenter_ms_menu_permission_url_rela mpu
+		WHERE
+			ur.role_id = rp.role_id
+		AND rp.permission_id = mpu.permission_id
+		AND ur.`user_id` = #{userId}
+		GROUP BY mpu.url
+	</select>
+
+	<!-- 根据所有用户权限URL -->
+	<select id="getPermissionUrlAll" resultType="string">
+		    select  mpu.url from t_ucenter_ms_menu_permission_url_rela mpu
+	</select>
+
+</mapper>
+

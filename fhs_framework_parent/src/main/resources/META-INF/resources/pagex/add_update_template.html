@@ -1,0 +1,136 @@
+<%
+include("/page/tags/form_include.html"){}
+%>
+<form id="addUpdateForm" method="post">
+    <!--表单内容html-->
+    ${formHtml}
+    <!--扩展-->
+    ${extendsHtml!}
+</form>
+
+
+<script type="text/javascript">
+
+    var url_save =  '${modelConfig.saveUrl}';
+    var addUpdateForm = null;
+
+    $(function() {
+        //初始化加载
+        if (isExitsFunction("ready")) {
+            ready();
+        }
+        $('#subBtn').show();
+        addUpdateForm = $('#addUpdateForm').Validform({
+            tiptype : 5
+        });
+        if (isView) {
+            $('#subBtn').hide();
+            url_save = '';
+            loadForm();
+            return;
+        }
+        initError('addOrUpdateDialog');
+        // 如果是编辑页面，就初始化一些数据
+        if (isEdit) {
+            // student/update?id=1  || student/update/1
+            url_save = '${modelConfig.updateUrl}${parameter.id!}';
+            loadForm();
+            return;
+        }
+        <!--每个tag在ready的时候执行的方法-->
+        <% for(readyJs in tagReadyJsList){ %>
+            ${readyJs};
+        <% } %>
+    });
+
+
+
+    //初始化编辑的form
+    function loadForm() {
+        $('#addUpdateForm').form({
+            onLoadSuccess : loadFormSuccess
+        });
+        // student/info/1 || student/info?id=1
+        $('#addUpdateForm').form('load',
+            '${modelConfig.infoUrl}${parameter.id!}');
+    }
+
+    //加载表单数据
+    function loadFormSuccess(info) {
+        //表单数据加载
+        if (isExitsFunction("loadSuccess")) {
+            loadSuccess(info);
+        }
+        if (isView) {
+            renderView('addUpdateForm');
+        }
+        <!--每个tag在loadsuccess的时候执行的方法-->
+    <% for(loadSuccess in tagLoadSuccessList){ %>
+        ${loadSuccess};
+    <% } %>
+    }
+
+    //保存
+    function save() {
+        var flag = true;
+
+        // 如果自定义校验方法没有校验正确，则也校验下form里面内容是否正确
+        //保存数据加载
+        if (isExitsFunction("onSave")) {
+            flag = onSave();
+            if(typeof (flag) == 'undefined') {
+                flag = true;
+            }
+        }
+        <!--每个tag在onSaveList的时候执行的方法  -->
+        <% for(onSave in tagOnSaveList){ %>
+            if(!${onSave})
+            {
+                flag = false;
+            }
+        <% } %>
+        if(!flag)
+        {
+            addUpdateForm.check();
+        }
+        if(flag) {
+            $('#addUpdateForm').form('submit', {
+                url : url_save,
+                onSubmit : function() {
+                    return (addUpdateForm.check());
+                },
+                success : function(d) {
+                    d = $.parseJSON(d);
+                    if (d && d.result) {
+                        Ealert("操作成功！");
+                        closeDialog();
+                        reload();
+                        if (isExitsFunction("saveSucess")) {
+                            saveSucess();
+                        }
+                    } else {
+
+                        if(d.code == 300 || d.code==400 || d.code==500 )
+                        {
+                            EalertE(d.message);
+                        }
+                        else
+                        {
+                            EalertE('操作失败');
+                        }
+                        if (isExitsFunction("saveError")) {
+                            saveError();
+                        }
+                    }
+                }
+            });
+        }
+
+    };
+    //其他的自定义的方法
+    ${otherFunctions}
+    <% for(overallJs in tagOverallJsList){ %>
+            ${overallJs};
+    <% } %>
+</script>
+

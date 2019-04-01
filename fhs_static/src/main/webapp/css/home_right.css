@@ -1,0 +1,64 @@
+@charset "utf-8";
+/* CSS Document */
+body,div,p,h1,h2,h3,h4,h5,h6,ul,li{ margin:0; padding:0; text-align:left;}
+ul,li{ list-style:none;}
+a{ color:#676767; text-decoration:none}
+a:hover{ color:#02a5fe; text-decoration:none;}
+.left{ float:left;}
+.right{ float:right;}
+.clear{ clear:both;}
+#home_content{ width:98%;}
+.box1{ width:98%;}
+.home_box{ margin:12px 0 0 12px;  font-size:12px; color:#676767; line-height:28px;width: 98%  }
+.home_box2{ width:43%;}
+.home_box3{ width:48.6%;}
+.home_top{  height:30px; line-height:30px; background:#f5f5f5; border:1px solid #c7c7c7;}
+.top_left{ display:block; height:30px; width:30px; border-right:1px solid #c7c7c7; }
+.top_left img{ padding:7px 0 0 7px;}
+.top_right{width:95%;}
+.top_right2{width:90%;}
+.top_right3{width:90%;}
+.home_con{ border:1px solid #c7c7c7; border-top:none; padding:10px 14px;  min-height:180px; height:auto !important;  height:180px; }
+.home_con2 ul{overflow:auto; zoom:1;}
+.home_con2 ul li{ width:76px; float:left; display:inline; text-align:center;}
+.home_con2  ul li a { display:block;}
+.home_con2  ul li img { margin-bottom:3px;}
+.con_left{ width:540px; border-right:1px solid #c7c7c7; padding:12px;}
+.con_right{ width:360px; padding:15px;}
+.con_right ul li{ border-bottom:1px dotted #c7c7c7; list-style:disc;}
+.home_con3{ padding:10px}
+/*滑动层*/
+.dis {
+display:block
+}
+.undis {
+display:none
+}
+.nav {
+width:100%;
+margin:0 auto;
+height:28px;
+padding-top:4px;
+_padding-top:0;
+border-bottom:1px solid #c7c7c7;
+
+}
+.nav li {
+float:left;
+height:30px;
+padding-right:5px
+_padding-right:0;
+}
+.nav li a {
+float:left;
+width:95px;
+height:28px;
+text-align:center;
+line-height:28px
+}
+.nav .nav_link{ background:url(../images/huadong_02.png) no-repeat 0 0;color:blur;}
+.nav li.nav_current a {
+color:red;
+background:url(../images/huadong_01.png) no-repeat 0 0;
+}
+.nav-down{ padding-top:4px;}

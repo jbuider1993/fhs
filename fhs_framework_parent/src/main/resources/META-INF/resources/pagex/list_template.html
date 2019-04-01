@@ -1,0 +1,302 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <!--链接样式表-->
+    <link rel="Shortcut Icon" href="${staticPath}images/favicon.ico"/>
+
+    <link rel="stylesheet" type="text/css"
+          href="${staticPath}css/loading_preloader.css" />
+    <link rel="stylesheet" type="text/css"
+          href="${staticPath}css/common.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="${staticPath}css/loading_preloader.css"/>
+    <script type="text/javascript" src="${staticPath}js/jquery.min.js"></script>
+    <script type="text/javascript" src="${staticPath}js/jQuery.md5.js"></script>
+
+    <script type="text/javascript" src="${staticPath}js/json2.js"></script>
+    <!--topso start-->
+    <link rel="stylesheet" type="text/css"
+          href="${staticPath}css/tipso.min.css"/>
+    <script type="text/javascript" src="${staticPath}js/tipso.min.js"></script>
+    <!--topso end-->
+    <!--easyui start-->
+    <script type="text/javascript"
+            src="${staticPath}js/easyui/jquery.easyui.min.js"></script>
+    <link rel="stylesheet" type="text/css"
+          href="${staticPath}js/easyui/themes/metro/easyui.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="${staticPath}js/easyui/themes/icon.css"/>
+    <!--easyui end-->
+    <script type="text/javascript" src="${basePath}js/systemConfig.js"></script>
+    <script type="text/javascript" src="${staticPath}js/ecommon.js"></script>
+    <!--my97 start-->
+<% if(strutil.contain(formFieldTypes,'date')){ %>
+    <script type="text/javascript"
+            src="${staticPath}js/My97DatePicker/WdatePicker.js"></script>
+<% } %>
+    <!--my97 end-->
+
+    <!--upload start-->
+<% if(strutil.contain(formFieldTypes,'up') || strutil.contain(formFieldTypes,'ups')){ %>
+    <link rel="stylesheet" type="text/css"
+          href="${staticPath}js/uploadfive/uploadifive.css" />
+    <script type="text/javascript"
+            src="${staticPath}js/uploadfive/jquery.uploadifive.js"></script>
+    <script type="text/javascript"
+            src="${staticPath}js/viewer/viewer.min.js"></script>
+    <script type="text/javascript"
+            src="${staticPath}js/uploadfive/jquery.uploadifive.js"></script>
+    <script type="text/javascript" src="${staticPath}js/listUploadFiles.js"></script>
+    <script type="text/javascript" src="${staticPath}js/uploadUtil.js"></script>
+<% } %>
+    <!--upload end-->
+    <!--toast start-->
+    <script type="text/javascript" src="${staticPath}js/jquery.toast.js"></script>
+    <link rel="stylesheet" type="text/css"
+          href="${staticPath}css/jquery.toast.css"/>
+    <!--toast end-->
+    <!--lc_switch start-->
+    <% if(strutil.contain(formFieldTypes, 'switch')){ %>
+        <script src="${staticPath}/js/switch/lc_switch.js" type="text/javascript"></script>
+        <link href="${staticPath}/js/switch/lc_switch.css" rel="stylesheet"/>
+    <% } %>
+    <!--lc_switch end-->
+    <!--validform start-->
+    <link rel="stylesheet" type="text/css"
+          href="${staticPath}css/validform.css"/>
+    <script type="text/javascript" src="${staticPath}js/Validform_v5.3.2.js"></script>
+    <!--validform end-->
+    <!--time start-->
+    <% if(strutil.contain(formFieldTypes, 'time')){ %>
+        <link rel="stylesheet" type="text/css"
+              href="${staticPath}js/time/timedropper.css"/>
+        <script type="text/javascript" src="${staticPath}js/time/timedropper.js"></script>
+    <% } %>
+    <!--time end-->
+    <script type="text/javascript" src="${staticPath}js/baidutemplate.js"></script>
+    <script type="text/javascript" src="${staticPath}js/jquery.qrcode.min.js"></script>
+    <!-- um start -->
+    <% if(strutil.contain(formFieldTypes, 'um')){ %>
+        <script type="text/javascript" src="${staticPath}/js/um/third-party/template.min.js"></script>
+        <script type="text/javascript" charset="utf-8"
+                src="${staticPath}/js/um/umeditor.config.js"> </script>
+        <script type="text/javascript" charset="utf-8"
+                src="${staticPath}/js/um/umeditor.min.js"></script>
+        <link href="${staticPath}/js/um/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+    <% } %>
+    <!--um end-->
+    <!-- bmap start -->
+    <% if(strutil.contain(formFieldTypes, 'address')){ %>
+        <script type="text/javascript" charset="utf-8"
+                src="http://api.map.baidu.com/api?v=2.0&ak=NAGEfysPQEek4fLb8WBNkwjjteWZi1Aj" ></script>
+    <% } %>
+    <!--bmap end-->
+
+</head>
+<body>
+<table id="listGrid" title="${modelConfig.title}列表" class="easyui-datagrid"
+       fit="true" style="width: 90%;" url="${modelConfig.dataGridUrl}&${modelConfig.extendsParam}"
+       pagination="true" rownumbers="true" fitColumns="true"
+       singleSelect="true" pageSize="10" striped="true" toolbar="#toolbar">
+    <thead>
+    <tr>
+        <!--遍历列表字段-->
+        <% for(field in listFields){ %>
+            <th align="${field.align}" width="${field.width}"
+            <% if(field.showField == null){ %>
+                field="${field.camelName}"
+            <% } %>
+            <% if(field.showField != null){ %>
+                field="${field.showField}"
+            <% } %>
+            <% if(field.formart != null){ %>
+                formatter="${field.formart}"
+            <% } %>
+            <% if(field.showTips == true){ %>
+                formatter="formatTips"
+            <% } %>
+            >${field.title}</th>
+        <% } %>
+    </tr>
+    </thead>
+</table>
+
+
+<div id="toolbar">
+    <div style="margin-bottom: 5px;">
+        ${filtersHtml}
+        <#shiro name="${namespace}:see">
+            <a href="javascript:void(0)" class="easyui-linkbutton "
+               iconCls="icon-search" plain="true" onclick="reload()">查询</a>
+        </#shiro>
+        <#shiro name="${namespace}:add">
+            <a href="javascript:void(0)" class="easyui-linkbutton addBTN"
+               iconCls="icon-add" plain="true" onclick="add()">添加</a>
+        </#shiro>
+
+        <#shiro name="${namespace}:see">
+            <a href="javascript:void(0)" class="easyui-linkbutton viewBTN"
+               iconcls="icon-view" plain="true"
+               onclick="addSelectRowFun('listGrid',view);">查看</a>&nbsp;&nbsp;&nbsp;
+        </#shiro>
+
+
+        <#shiro name="${namespace}:update">
+            <a href="javascript:void(0)" class="easyui-linkbutton  updateBTN"
+               plain="true"
+               onclick="addSelectRowFun('listGrid',update);">修改</a>
+        </#shiro>
+
+        <#shiro name="${namespace}:del">
+            <a href="javascript:void(0)" class="easyui-linkbutton deleteBTN"
+               iconCls="icon-remove" plain="true"
+               onclick="pubDel('listGrid','${modelConfig.delUrl}/','${modelConfig.pkey}');">删除</a>
+        </#shiro>
+
+        <#shiro name="${namespace}:see">
+            <a href="javascript:void(0)" class="easyui-linkbutton exportBTN"
+               iconCls="icon-remove" plain="true"
+               onclick="exportExcel();">导出</a>
+        </#shiro>
+
+        <!--自定义按钮-->
+        <% for(button in buttons){ %>
+            <#shiro name="${button.permissionsCode}">
+                <a href="javascript:void(0)" class="easyui-linkbutton"
+                   iconcls="icon-view" plain="true" id="${button.id}"
+                <% if(nvl(button.isRow,false)){ %>
+                    onclick="addSelectRowFun('listGrid',${button.fun});"
+                <% } %>
+                <% if(!nvl(button.isRow,false)){ %>
+                    onclick="${button.fun}();"
+                <% } %>
+                >${button.title}</a>
+            </#shiro>
+        <% } %>
+
+    </div>
+</div>
+<div id="addOrUpdateDialog" class="easyui-dialog" title="添加/修改${modelConfig.title}"
+     data-options="iconCls:'icon-save'" closed="true"
+     style="width: 80%; height: 90%; padding: 10px"
+     buttons="#dlg-buttons">
+</div>
+
+<div id="dlg-buttons">
+    <a href="#" id="subBtn" class="easyui-linkbutton" onclick="save()">保存</a>
+    <a href="#" class="easyui-linkbutton" onclick="closeDialog()">返回</a>
+</div>
+
+
+</body>
+
+<script type="text/javascript">
+
+    // 去掉禁用的按钮
+    $(function () {
+        <% for(buttonId in disableButtons){ %>
+            $('.${buttonId}BTN').remove();
+        <% } %>
+    });
+    /**
+     * 添加
+     */
+    function add() {
+        openDialog('${basePath}/ms/pagex/${namespace}_add_update.jsp?isAdd=true&${modelConfig.extendsParam}', '添加');
+    }
+
+    /**
+     * 处理
+     */
+    function update(row) {
+        openDialog('${basePath}/ms/pagex/${namespace}_add_update.jsp?isEdit=true&id=' + row.${modelConfig.pkeyCamel}, '修改');
+    }
+
+    /**
+     * 查看
+     */
+    function view(row) {
+        openDialog('${basePath}/ms/pagex/${namespace}_add_update.jsp?isView=true&id=' + row.${modelConfig.pkeyCamel}, '查看');
+    }
+
+    //重新加载
+    function reload() {
+        var _reloadParam = {
+        <% for(param1 in filterParams){ %>
+             ${param1.name}:${param1.val},
+        <% } %>
+        between: {
+        <% for(param1 in filterParamsForBetween){ %>
+            ${param1.name}:${param1.val},
+        <% } %>
+        }
+    }
+        ;
+        if (isExitsFunction("extendsParam")) {
+            var _extendsParam = extendsParam();
+            for (key in _extendsParam) {
+                _reloadParam[key] = _extendsParam[key];
+            }
+        }
+        $('#listGrid').datagrid('load', _reloadParam);
+    }
+
+    //导出excel
+    function exportExcel() {
+        var columnFields = $("#listGrid").datagrid('getColumnFields');
+        var fieldArray = [];
+        for (i = 0; i < columnFields.length; i++) {
+            fieldArray.push($("#listGrid").datagrid('getColumnOption', columnFields[i]));
+        }
+        // 扩展字段
+        if (isExitsFunction('excelSett')) {
+            var appendFieldArray = excelSett();
+            for (i = 0; i < appendFieldArray.length; i++) {
+                fieldArray.push(appendFieldArray[i]);
+            }
+        }
+        $.ajax({
+            url: "${basePath}/ms/x/${namespace}/setExportField",
+            type: "post",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            data: json2str(fieldArray),
+            success: function (result) {
+                window.location.href = "${basePath}/ms/x/${namespace}/pubExportExcel";
+            }
+        });
+    }
+
+    $(function () {
+        if (isExitsFunction("onListPageReady")) {
+            onListPageReady();
+        }
+    })
+    //其他的自定义的方法
+    ${otherFunctions}
+</script>
+</html>
+<script type="text/javascript">
+    var loading = window.setTimeout(hideMask,100);
+    var preloader = null;
+    var ue = null;
+    //隐藏遮罩层
+    function hideMask(){
+        $("#loading").hide(100);
+        preloader = window.setTimeout(hidePreloader,1000);
+        window.clearTimeout(loading);
+    }
+    function hidePreloader()
+    {
+        $("#preloader").hide();
+        window.clearTimeout(preloader);
+    }
+</script>
+<!--后期提出来做插件-->
+<div id="loading" class="loading"></div>
+<div id="preloader">
+    <div id="preloader_4">
+        <span></span> <span></span> <span></span> <span></span> <span></span>
+    </div>
+</div>

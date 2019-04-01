@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fhs.system.dao.WordbookDAO">
+	<insert id="add" parameterType="wordbook">
+		 INSERT INTO t_service_wordbook(
+
+			wordbook_code,
+			wordbook_desc,
+			wordbook_group_code,
+			order_num)
+			 VALUES(
+
+			#{wordbookCode},
+			#{wordbookDesc},
+			#{wordbookGroupCode},
+			#{orderNum})
+	</insert>
+
+	<delete id="delete" parameterType="wordbook">
+		 DELETE FROM t_service_wordbook WHERE wordbook_id = #{wordbookId}
+	</delete>
+	<select id="findForListFromMap" parameterType="java.util.Map" resultType="wordbook">
+		 SELECT wordbook_id AS wordbookId,
+			wordbook_code AS wordbookCode,
+			wordbook_desc AS wordbookDesc,
+			wordbook_group_code AS wordbookGroupCode ,
+		    order_num AS orderNum
+			<include refid="findFromAndWhere"></include>
+			ORDER BY order_num
+		<if test = "start!= null and end != null">
+				LIMIT ${start}, ${end}
+		</if>
+	</select>
+
+	<select id="findCount" parameterType="wordbook" resultType="java.lang.Integer">
+		 SELECT COUNT(1) AS count
+		 <include refid="findFromAndWhere"></include>
+	</select>
+	<sql id="findFromAndWhere">
+		FROM t_service_wordbook
+		WHERE
+		<if test="wordbookGroupCode != null and wordbookGroupCode != ''">
+			wordbook_group_code = #{wordbookGroupCode}
+		</if>
+		<if test="wordbookDesc != null and wordbookDesc != ''">
+			AND wordbook_desc like ('%${wordbookDesc}%')
+		</if>
+
+
+	</sql>
+
+	 <delete id="batchDelete" parameterType="string">
+	 	DELETE FROM t_service_wordbook
+	 	WHERE wordbook_group_code=#{wordbookGroupCode}
+	 </delete>
+
+	 <select id="findMapList" parameterType="map" resultType="map">
+	 	 SELECT
+		  `wordbook_id` AS `wordbookId`,
+		  `wordbook_code` AS  `wordbookCode`,
+		  `wordbook_desc` AS `wordbookDesc`,
+		  `wordbook_group_code` AS `wordbookGroupCode`,
+		  order_num AS orderNum
+		FROM `t_service_wordbook`
+		WHERE 1 = 1
+		<if test="wordbookGroupCode != null and wordbookGroupCode != ''">
+       		AND wordbook_group_code=#{wordbookGroupCode}
+        </if>
+		<if test="isHouseCheck != null and isHouseCheck != ''">
+       		AND wordbook_group_code IN ('fail_reson_type','check_question_state','check_record_state','location_type','check_obj','check_type')
+        </if>
+		ORDER BY order_num ASC
+	 </select>
+</mapper>

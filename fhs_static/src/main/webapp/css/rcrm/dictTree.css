@@ -1,0 +1,29 @@
+
+.dictTree {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #666;
+	white-space: nowrap;
+}
+.dictTree img {
+	border: 0px;
+	vertical-align: middle;
+}
+.dictTree a {
+	color: #333;
+	text-decoration: none;
+}
+.dictTree a.node, .dictTree a.nodeSel {
+	white-space: nowrap;
+	padding: 1px 2px 1px 2px;
+}
+.dictTree a.node:hover, .dictTree a.nodeSel:hover {
+	color: #333;
+	text-decoration: underline;
+}
+.dictTree a.nodeSel {
+	background-color: #c0d2ec;
+}
+.dictTree .clip {
+	overflow: hidden;
+}

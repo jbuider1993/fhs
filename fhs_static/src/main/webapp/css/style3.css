@@ -1,0 +1,230 @@
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	background-color: #F7F7F7;
+}
+a:link {
+	color: #003300;
+	text-decoration: none;
+}
+a:visited {
+	color: #003300;
+	text-decoration: none;
+}
+a:hover {
+	color: #FF6600;
+	text-decoration: underline;
+}
+td {
+	font-size: 12px;
+	line-height: normal;
+	color: #333333;
+}
+.top01 {
+	font-family: "ËÎÌו";
+	font-size: 12px;
+	line-height: normal;
+	color: #FFFFFF;
+}
+.menulink {
+	font-size: 12px;
+}
+.menulink:link {
+	color: #000000;
+	text-decoration: none;
+}
+.menulink:visited {
+	color: #000000;
+	text-decoration: none;
+}
+.menulink:hover {
+	color: #006600;
+	text-decoration: none;
+}
+.toplink {
+	font-size: 12px;
+}
+.toplink:link {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+.toplink:visited {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+.toplink:hover {
+	color: #FF0000;
+	text-decoration: none;
+}
+.proname {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	line-height: normal;
+	font-weight: bold;
+	color: #8A4500;
+}
+.title {
+	font-size: 13px;
+	line-height: normal;
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #E99345;
+}
+.lefttitle {
+	font-size: 12px;
+	line-height: normal;
+	font-weight: bold;
+	color: #333333;
+	padding-left:18px
+}
+input {
+	font-size: 12px;
+	height: 18px;
+}
+select {
+	font-size: 12px;
+	height: 18px;
+}
+.singleselect {
+	font-size: 12px;
+	height: 18px;
+}
+textarea {
+	font-size: 12px;
+	
+}
+.tr1px {
+	border-bottom-width: 1px;
+	border-bottom-style: dashed;
+	border-bottom-color: #CCCCCC;
+	height: 32px;
+	line-height: 32px;
+}
+.newleftbg {
+	background-image: url(../images/style3/images/newleftbg.gif);
+	background-repeat: repeat-x;
+	background-color: #ECEBE1;
+}
+a.btnlink{
+	padding-left:20px;
+	padding-top:5px;
+	letter-spacing: 1pt;
+	display:block;
+	height:25px;
+     no-repeat;
+	background-color: #B2B2B2;
+	background-image: url(../images/style3/images/195line2.gif);
+	color: #000000;
+	text-decoration: none;
+}
+a.btnlink:link,a.btnlink:visited{
+	padding-left:20px;
+	padding-top:5px;
+	letter-spacing: 1pt;
+	display:block;
+	height:25px;
+     no-repeat;
+	background-color: #D5D2BF;
+	background-image: url(../images/style3/images/195line2.gif);
+	color: #000000;
+	text-decoration: none;
+}
+a.btnlink:hover, a.btnlink:active{
+no-repeat;
+	text-decoration:none;
+	letter-spacing: 1pt;
+	color: #716C4A;
+	text-decoration: none;
+	background-color: #C9C6AD;
+	background-image: url(../images/style3/images/195line2.gif);
+}
+.head {
+	font-size: 12px;
+	line-height: normal;
+	color: #FFFFFF;
+	background-color: #BDB89D;
+}
+.copyright {
+	font-size: 12px;
+	line-height: normal;
+	color: #353535;
+}
+.listtr1 {
+	background-color: #00ADFE;
+	height: 30px;
+}
+.listtr2 {
+	background-color: #FEFEFC;
+	height: 30px;
+}
+.listtr3 {
+	background-color: #FFFFCC;]
+	height: 30px;
+}
+.listtr4 {
+	background-color: #8BD0F1;
+	height: 30px;
+}
+.top02 {
+	background-color: #CCCCCC;
+}
+.tr1 {
+	background-color: #00ADFE;
+}
+.tr2{
+	font-weight:bold;	
+	border-bottom-width: 1px;
+	border-bottom-style: dashed;
+	border-bottom-color: #B1C6CD;
+}
+.pushbarbg {
+	background-color: #BDB89D;
+}
+.tabborder {
+	border-bottom:1px solid #B1C6CD;
+	border-left:1px solid #B1C6CD;
+	border-right:1px solid #B1C6CD;
+	border-top:1px solid #B1C6CD;
+	padding:8 8 8 8;
+	margin-top: 2px;
+}
+.tdMn {
+	background-color: #00ADFE;
+	height: 30px;
+}
+.GridListTable{
+	border-top:1px solid #EAF5F6;
+	border-bottom:1px solid #EAF5F6;
+	border-left:1px solid #EAF5F6;
+	border-right:1px solid #EAF5F6;
+}
+.leftBgColor{	
+	background-color:"#DFDBCA";	
+}
+/**************scroll div***********/
+.scrollbox {overflow:auto;overflow-x=hidden; vertical-align: top; clip:   rect(   ); text-align: center;float: none}
+.scrollboxWH {overflow:auto; vertical-align: top; clip:   rect(   ); text-align: center;float: none}
+/**************scroll div***********/
+
+
+
+.css {	background-color:#B76215;
+	font-family: "ËÎÌו", Arial;
+	font-size: 13px;
+	color: #FFFFFF;
+	margin-top: -8px;
+	margin-bottom: -4px;
+	margin-left: -4px;
+	margin-right: -8px;
+	border-top-color:#000000;
+	overflow:hidden;
+	width:120;
+}
+.box1 {
+	BORDER-RIGHT: #B76215 1px solid; BORDER-TOP: #B76215 1px solid; OVERFLOW: hidden; BORDER-LEFT: #B76215 1px solid; WIDTH: 80px; CLIP: rect(0px 80px 18px 0px); BORDER-BOTTOM: #B76215 1px solid; HEIGHT: 18px
+}
+.box2 {
+	BORDER-RIGHT: #B76215 1px solid; BORDER-TOP: #B76215 1px solid; OVERFLOW: hidden; BORDER-LEFT: #B76215 1px solid; WIDTH: 100px; CLIP: rect(0px 100px 18px 0px); BORDER-BOTTOM: #B76215 1px solid; HEIGHT: 18px
+}
