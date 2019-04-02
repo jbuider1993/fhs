@@ -1,32 +1,32 @@
 <script type="text/javascript">
-    var name = '${tagSett.name}';
+    var _switch_name = '${tagSett.name}';
     var dft = '${tagSett.dft}';
     //初始化控件
     $(function(){
-        $('#'+name+'_switch').lc_switch();
+        $('#'+_switch_name+'_switch').lc_switch();
         //默认选中是
         if(dft=='true')
         {
-            $('#'+name+'_switch').lcs_on();
+            $('#'+_switch_name+'_switch').lcs_on();
         }
     })
 
     //表单loadSuccess的时候触发
     function ${tagSett.name}_switch_loadSuccess(info)
     {
-        if(info.is_disable==1)
+        if(info['${tagSett.name}']==1)
         {
-            $('#'+name+'_switch').lcs_on();
+            $('#'+_switch_name+'_switch').lcs_on();
         }else if(info.is_disable==0){
-        $('#'+name+'_switch').lcs_off();
-    }
+             $('#'+_switch_name+'_switch').lcs_off();
+        }
     }
 
     //表单保存的时候
     function ${tagSett.name}_switch_onSave(info)
     {
-        var _isSwitchCheck= $('#'+name+'_switch').is(':checked');
-        $('#'+name).val(_isSwitchCheck ? 1:0);
+        var _isSwitchCheck= $('#'+_switch_name+'_switch').is(':checked');
+        $('#'+_switch_name).val(_isSwitchCheck ? 1:0);
         return true;
     }
 
