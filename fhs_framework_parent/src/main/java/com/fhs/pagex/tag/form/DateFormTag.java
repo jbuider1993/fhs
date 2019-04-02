@@ -37,7 +37,6 @@ public class DateFormTag extends  EmptyFormTag{
         }
         StringBuilder resultHtmlBuilder = new StringBuilder();
         resultHtmlBuilder.append(getTitleHtml());
-        // onfocus="WdatePicker({readOnly:true,maxDate:'%y-%M-%d'})"
         resultHtmlBuilder.append(" <input type='text' readonly autocomplete='off' " + super.formartDataType());
         resultHtmlBuilder.append(formartClass("Wdate"));
         resultHtmlBuilder.append(formartIdNameHtml());
