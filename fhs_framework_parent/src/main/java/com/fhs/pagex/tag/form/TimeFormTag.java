@@ -24,7 +24,6 @@ public class TimeFormTag extends  EmptyFormTag{
     public String getContentHtml() {
         StringBuilder resultHtmlBuilder = new StringBuilder();
         resultHtmlBuilder.append(getTitleHtml());
-        // onfocus="WdatePicker({readOnly:true,maxDate:'%y-%M-%d'})"
         resultHtmlBuilder.append(" <input type='text' readonly  " + super.formartDataType());
         resultHtmlBuilder.append(formartIdNameHtml());
         resultHtmlBuilder.append(getOtherAttrValHtml());
@@ -36,6 +35,11 @@ public class TimeFormTag extends  EmptyFormTag{
 
     @Override
     public String readyJs() {
+        return "$( '#"+this.tagSett.get("name")+"' ).timeDropper({setCurrentTime:false});";
+    }
+
+    @Override
+    public String loadSuccessJs() {
         return "$( '#"+this.tagSett.get("name")+"' ).timeDropper({setCurrentTime:false});";
     }
 
