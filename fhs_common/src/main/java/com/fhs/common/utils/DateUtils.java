@@ -121,6 +121,16 @@ public class DateUtils
     }
 
 
+    /**
+     * 将日期转换为天数
+     * @param date  日期
+     * @return 距离1970-01-01天数
+     */
+    public static long toDays(Date date)
+    {
+       return date.getTime()/(24*3600*1000);
+    }
+
 
     /**
      * 获取2个日期相减后的分钟数
