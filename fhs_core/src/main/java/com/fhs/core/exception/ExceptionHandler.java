@@ -1,20 +1,18 @@
 package com.fhs.core.exception;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.fhs.common.utils.AESUtil;
+import com.fhs.common.utils.JsonUtils;
+import com.fhs.common.utils.Logger;
 import com.fhs.common.utils.ThreadKey;
 import com.fhs.core.config.EConfig;
+import com.fhs.core.result.HttpResult;
+import com.fhs.core.result.PubResult;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fhs.common.utils.JsonUtils;
-import com.fhs.common.utils.Logger;
-import com.fhs.core.result.HttpResult;
-import com.fhs.core.result.PubResult;
-
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -89,7 +87,11 @@ public class ExceptionHandler implements HandlerExceptionResolver
             JsonUtils.outJson(response, HttpResult.otherResult(PubResult.NO_PERMISSION).asJson());
             return null;
         }
-
+        else if (ex instanceof ResultException)
+        {
+            JsonUtils.outJson(response, ((ResultException)ex).getHttpResult().asJson());
+            return null;
+        }
         else
         {
 

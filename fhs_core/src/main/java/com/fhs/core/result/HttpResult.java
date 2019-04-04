@@ -71,6 +71,14 @@ public class HttpResult<V> extends BaseObject<HttpResult>
      */
     private String exceptionInfo;
 
+    public HttpResult(int code, V data, String message) {
+        this.code = code;
+        this.data = data;
+        this.message = message;
+    }
+
+
+
     /**
      * 成功包含data的返回结果
      */
@@ -182,6 +190,8 @@ public class HttpResult<V> extends BaseObject<HttpResult>
         result.message = baseResult.getMessage();
         return result;
     }
+
+
 
 
 
