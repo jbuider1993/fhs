@@ -85,6 +85,7 @@ public class PageXAutoJavaService {
         Map<String,String> tempTransMap = null;
         Set<String> filedNameSet = new HashSet<>();
         filedNameSet.addAll(DEFAULT_FIELD_SET);
+        filedNameSet.add(ConverterUtils.toString(pagexListSettDTO.getModelConfig().get("pkey")));
         //便利列表页面所有的行
         for(Map<String,Object> row : pagexListSettDTO.getListSett())
         {
