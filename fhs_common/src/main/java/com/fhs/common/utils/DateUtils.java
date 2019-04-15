@@ -110,6 +110,12 @@ public class DateUtils {
         return resultLinkList;
     }
 
+    /**
+     * 获取多少天之前的日期
+     * @param date  日期
+     * @param count 多少天
+     * @return 多少天之前的日期
+     */
     public static Date getSpecifiedNDayBefore(Date date, Integer count) {// 可以用new Date().toLocalString()传递参数
         Calendar c = Calendar.getInstance();
         c.setTime(date);
@@ -117,6 +123,7 @@ public class DateUtils {
         c.set(Calendar.DATE, day - count);
         return c.getTime();
     }
+
 
 
     /**
