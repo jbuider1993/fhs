@@ -103,7 +103,7 @@
     <tr>
         <!--遍历列表字段-->
         <% for(field in listFields){ %>
-            <th align="${field.align}" width="${field.width}"
+            <th data-options="${field.otherAttr}"
             <% if(field.showField == null){ %>
                 field="${field.camelName}"
             <% } %>
@@ -151,7 +151,7 @@
         <#shiro name="${namespace}:del">
             <a href="javascript:void(0)" class="easyui-linkbutton deleteBTN"
                iconCls="icon-remove" plain="true"
-               onclick="pubDel('listGrid','${modelConfig.delUrl}/','${modelConfig.pkey}');">删除</a>
+               onclick="pubDel('listGrid','${modelConfig.delUrl}/','${modelConfig.pkeyCamel}');">删除</a>
         </#shiro>
 
         <#shiro name="${namespace}:see">
