@@ -7,6 +7,7 @@ import com.alipay.api.request.AlipaySystemOauthTokenRequest;
 import com.alipay.api.request.AlipayUserInfoShareRequest;
 import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import com.alipay.api.response.AlipayUserInfoShareResponse;
+import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.BusinessException;
@@ -138,6 +139,15 @@ public class FrontUserLoginWebApiAction implements InitializingBean {
      */
     private void loginAndRedirect(HttpServletRequest request, HttpServletResponse response,String userId)
     {
+        UcenterFrontUser user  = frontUserService.selectById(userId);
+        if(user == null)
+        {
+            throw new ParamException("用户信息丢失:" + userId);
+        }
+        if(Constant.STR_YES.equals(user.getIsDisable()))
+        {
+            throw new ParamException("用户被禁用");
+        }
         String accessToken = loginService.login(userId);
         request.getSession().setAttribute("accessToken",accessToken);
         String callback = request.getSession().getAttribute("callBack").toString();
