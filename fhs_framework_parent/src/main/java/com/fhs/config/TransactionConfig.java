@@ -39,6 +39,7 @@ public class TransactionConfig {
         properties.setProperty("insert*", "PROPAGATION_REQUIRED,-Exception");
         properties.setProperty("add*", "PROPAGATION_REQUIRED,-Exception");
         properties.setProperty("save*", "PROPAGATION_REQUIRED,-Exception");
+        properties.setProperty("create*", "PROPAGATION_REQUIRED,-Exception");
         properties.setProperty("update*", "PROPAGATION_REQUIRED,-Exception");
         properties.setProperty("del*", "PROPAGATION_REQUIRED,-Exception");
         TransactionInterceptor result = new TransactionInterceptor(transactionManager, properties);
