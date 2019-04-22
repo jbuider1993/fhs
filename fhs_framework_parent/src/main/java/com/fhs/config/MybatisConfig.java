@@ -4,8 +4,11 @@ import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.core.config.EConfig;
 import com.mybatis.jpa.core.PersistentEnhancerScaner;
+import com.mybatis.jpa.plugin.ResultTypePlugin;
 import com.mybatis.jpa.xml.XMLMapperLoader;
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -26,7 +29,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @AutoConfigureAfter(MybatisPlusAutoConfiguration.class)
-public class MybatisConfig {
+public class MybatisConfig implements InitializingBean {
     @Value("${fhs.mybatis-jpa.entity-package}")
     private String entityPackage;
 
@@ -45,10 +48,17 @@ public class MybatisConfig {
         return scanner;
     }
 
+
     @Bean
     public XMLMapperLoader getXMLMapperLoader(){
         XMLMapperLoader loader = new XMLMapperLoader();
         loader.setEnabled(ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isDevModel")));//开启xml热加载
         return loader;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Interceptor zipkinInterceptor = new ResultTypePlugin();
+        sqlSessionFactory.getConfiguration().addInterceptor(zipkinInterceptor);
     }
 }
