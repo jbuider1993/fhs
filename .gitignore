@@ -14,3 +14,5 @@
 /fhs_framework_base_business_admin/*.iml
 /fhs_mini_admin/fhs_mini_admin.iml
 /fhs_static/static.iml
+/fhs_framework_base_business_admin/target
+/fhs_mini_admin/target
