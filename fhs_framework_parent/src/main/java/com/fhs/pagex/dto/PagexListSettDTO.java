@@ -8,8 +8,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.script.ScriptException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * pagex 列表页面DTO
@@ -59,6 +61,23 @@ public class PagexListSettDTO extends  PagexBaseDTO{
     private List<Map<String, Object>> buttons;
 
     /**
+     * 系统默认支持的一些参数
+     */
+    private static Set<String> DEFAULT_KEY = new HashSet<>();
+
+    static
+    {
+        DEFAULT_KEY.add("showField");
+        DEFAULT_KEY.add("formart");
+        DEFAULT_KEY.add("title");
+        DEFAULT_KEY.add("trans");
+        DEFAULT_KEY.add("key");
+        DEFAULT_KEY.add("name");
+        DEFAULT_KEY.add("isJoin");
+        DEFAULT_KEY.add("namespace");
+    }
+
+    /**
      * 是的话就把删除，查看，编辑三个按钮放到最后一列上
      */
     private boolean isColumnButton;
@@ -91,6 +110,15 @@ public class PagexListSettDTO extends  PagexBaseDTO{
         String showField = null;
         for(Map<String,Object> field:listSett)
         {
+            StringBuilder otherAttr = new StringBuilder();
+            for(String key:field.keySet())
+            {
+                if(!DEFAULT_KEY.contains(key))
+                {
+                    otherAttr.append( key+ ":'"+field.get(key) + "',");
+                }
+            }
+            field.put("otherAttr",otherAttr.toString());
             field.put("camelName", ColumnNameUtil.underlineToCamel(ConverterUtils.toString(field.get("name"))));
             if(field.containsKey("showField"))
             {
@@ -98,6 +126,7 @@ public class PagexListSettDTO extends  PagexBaseDTO{
                 showField = "transMap." + ColumnNameUtil.underlineToCamel(showField.replace("transMap.",""));
                 field.put("showField", showField);
             }
+
         }
     }
 
