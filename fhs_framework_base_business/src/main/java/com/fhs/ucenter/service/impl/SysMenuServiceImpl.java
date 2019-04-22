@@ -103,10 +103,6 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenu> implements SysM
         {
         	father = treeDataMap.get(tempTree.getParentid());
 			treeDataMap.put(tempTree.getId(), tempTree);
-			if(tempTree.getName().equals("支付子系统"))
-			{
-				System.out.println("11");
-			}
 			if(father!=null)
 			{
 				// 我的级别是爸爸的+1
