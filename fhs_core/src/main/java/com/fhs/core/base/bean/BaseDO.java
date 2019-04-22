@@ -72,13 +72,13 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T>
      */
     @TableField("update_user")
     @Trans(type = Constant.USER_INFO, key = Constant.USER_NAME)
-    @Between
     protected String updateUser;
     
     /**
      * 更新时间
      */
     @TableField("update_time")
+    @Between
     protected String updateTime;
     
     /**
