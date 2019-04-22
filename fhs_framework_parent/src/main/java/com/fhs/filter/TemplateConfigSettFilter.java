@@ -18,7 +18,7 @@ import java.util.Set;
  */
 @Component
 @ServletComponentScan
-@WebFilter(urlPatterns = {"*.jsp", "/b/*"}, filterName = "templateConfigSettFilter", asyncSupported = true)
+@WebFilter(urlPatterns = {"/*"}, filterName = "templateConfigSettFilter", asyncSupported = true)
 public class TemplateConfigSettFilter implements Filter {
 
     /**
