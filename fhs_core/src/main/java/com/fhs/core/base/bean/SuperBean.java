@@ -23,6 +23,12 @@ public class SuperBean<T extends SuperBean>  extends BaseObject<T>{
 	private Map<String,String> transMap = new HashMap<>();
 
     /**
+     * 数据权限
+     */
+    @TableField(exist=false)
+    private Map<String,String> dataPermissin = new HashMap<>();
+
+    /**
      * 配合mybatis jpa between注解过滤条件使用
      */
     @TableField(exist=false)

@@ -51,6 +51,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T>
     /**
      * 子类id字段缓存
      */
+    @TableField(exist = false)
     private static final Map<Class<?>, Field> ID_FIELD_CACHE_MAP = new HashMap<>();
     
     /**
