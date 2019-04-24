@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
+import com.fhs.core.config.EConfig;
 import com.fhs.core.db.DataSource;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.strategy.GenInfo;
@@ -27,12 +28,11 @@ import java.util.*;
 
 @Service("sysUserServiceImpl")
 @DataSource("base_business")
-public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysUserService
-{
-    private  final int ADMIN = 1;
+public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysUserService {
+    private final int ADMIN = 1;
 
     /**
-     *显示的菜单
+     * 显示的菜单
      */
     private static final int SHOW = 0;
 
@@ -56,49 +56,43 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
     @Autowired
     private SysRoleService roleService;
 
+    @Autowired
+    private SysUserService sysUserService;
+
     @Override
-    public SysUser login(SysUser adminUser)
-    {
+    public SysUser login(SysUser adminUser) {
         return sysUserDAO.login(adminUser);
     }
 
     @Override
-    public void sendMail(SysUser adminUser, String pas)
-    {
-       //如果开通要发邮件的话可以写到这里
+    public void sendMail(SysUser adminUser, String pas) {
+        //如果开通要发邮件的话可以写到这里
 
     }
 
     @Override
-    public String readPass(String userName)
-    {
+    public String readPass(String userName) {
         return ENCodeUtils.encodeByMD5(userName).toLowerCase();
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public int addUserRole(SysUser adminUser)
-    {
+    public int addUserRole(SysUser adminUser) {
         return sysUserDAO.addUserRole(adminUser);
     }
 
     @Override
-    public List<Map<String, Object>> searchUserRole(SysUser adminUser)
-    {
+    public List<Map<String, Object>> searchUserRole(SysUser adminUser) {
         return sysUserDAO.searchUserRole(adminUser);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public boolean deleteUserRole(SysUser adminUser)
-    {
-        try
-        {
+    public boolean deleteUserRole(SysUser adminUser) {
+        try {
             sysUserDAO.deleteUserRole(adminUser);
             return true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -106,21 +100,18 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     @GenInfo
-    public Map<String, Object> addUser(SysUser adminUser)
-    {
+    public Map<String, Object> addUser(SysUser adminUser) {
         int count = 0;
-        if(StringUtil.isEmpty(adminUser.getUserId())) { //新增
+        if (StringUtil.isEmpty(adminUser.getUserId())) { //新增
             adminUser.setUserId(StringUtil.getUUID());
             count = this.add(adminUser);
-        }else {//修改
+        } else {//修改
             count = super.updateById(adminUser);
         }
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        if (count > 0)
-        {
+        if (count > 0) {
             // 添加用户成功时插入当前用户角色
-            if (adminUser.getRoleList() != null && adminUser.getRoleList().length > 0)
-            {
+            if (adminUser.getRoleList() != null && adminUser.getRoleList().length > 0) {
                 //删除用户角色中间表数据
                 deleteUserRole(adminUser);
                 //新增用户角色中间表
@@ -136,24 +127,18 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public boolean updateUser(SysUser adminUser)
-    {
+    public boolean updateUser(SysUser adminUser) {
         // 删除原有的角色
         boolean count = deleteUserRole(adminUser);
-        if (count)
-        {
+        if (count) {
             // 修改用户信息
             boolean bean = update(adminUser);
-            if (bean)
-            {
-                if (adminUser.getRoleList().length > 0)
-                {
+            if (bean) {
+                if (adminUser.getRoleList().length > 0) {
                     // 插入新的用户角色
                     int count1 = addUserRole(adminUser);
                     return count1 > 0;
-                }
-                else
-                {
+                } else {
                     return true;
                 }
             }
@@ -165,8 +150,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
      * 根据用户查询菜单
      */
     @Override
-    public List<SysMenu> selectMenuByUid(SysUser adminUser)
-    {
+    public List<SysMenu> selectMenuByUid(SysUser adminUser) {
         return sysUserDAO.selectMenuByUid(adminUser);
     }
 
@@ -177,31 +161,24 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
      * @return
      */
     @Override
-    public JSONArray buildMenuJson(SysUser adminUser)
-    {
+    public JSONArray buildMenuJson(SysUser adminUser) {
         List<SysMenu> menuList = null;
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("menuType", "0");//运营菜单
         SysUser temp = sysUserDAO.findBean(adminUser);
-        if (temp.getIsAdmin() == ADMIN)
-        {
+        if (temp.getIsAdmin() == ADMIN) {
             menuList = sysUserDAO.selectMenuAll(map);
-        }
-        else
-        {
+        } else {
             menuList = selectMenuByUid(adminUser);
         }
         JSONArray array = searchArrayGroupby(menuList);
         return array;
     }
 
-    private List<SysMenu> dropDoulbe(List<SysMenu> menuList)
-    {
+    private List<SysMenu> dropDoulbe(List<SysMenu> menuList) {
         MyMap<String, SysMenu> map = new MyMap<String, SysMenu>();
-        for (SysMenu menu : menuList)
-        {
-            if(menu.getMenuState() != SHOW)
-            {
+        for (SysMenu menu : menuList) {
+            if (menu.getMenuState() != SHOW) {
                 continue;
             }
             map.put(menu.getFatherMenuId() + "" + menu.getMenuId(), menu);
@@ -210,60 +187,53 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
     }
 
 
-
+    @Override
+    public SysUser findBean(SysUser bean) {
+        SysUser adminUser = super.findBean(bean);
+//    	super.transBeanSingleField(adminUser, "cityCode", "cityName", "6100000");
+        return adminUser;
+    }
 
     @Override
-	public SysUser findBean(SysUser bean) {
-    	SysUser adminUser  = super.findBean(bean);
-//    	super.transBeanSingleField(adminUser, "cityCode", "cityName", "6100000");
-		return adminUser;
-	}
-
-	@Override
-	public List<SysUser> findForListFromMap(Map<String, Object> map) {
-		List<SysUser>  result = super.findForListFromMap(map);
+    public List<SysUser> findForListFromMap(Map<String, Object> map) {
+        List<SysUser> result = super.findForListFromMap(map);
 //		super.transListSingleField(result, "cityCode", "cityName", "6100000");
-		return result;
-	}
+        return result;
+    }
 
-	/**
+    /**
      * 根据父Id分组构建json数据
      *
      * @param menuList
      * @return
      */
 
-    public JSONArray searchArrayGroupby(List<SysMenu> menuList)
-    {
+    public JSONArray searchArrayGroupby(List<SysMenu> menuList) {
         menuList = dropDoulbe(menuList);
         MyMap<String, JSONObject> tempmap = new MyMap<String, JSONObject>();
         MyMap<String, JSONObject> mapobj = new MyMap<String, JSONObject>();
         MyMap<String, Integer> map = caseListToMap(menuList);
-        for (Integer item : map.getValueList())
-        {
+        for (Integer item : map.getValueList()) {
             JSONArray temparr = new JSONArray();
             List<SysMenu> templist = seachChildJson(item, menuList);
-            for (SysMenu menu : templist)
-            {
+            for (SysMenu menu : templist) {
                 JSONObject menujson = new JSONObject();
                 menujson.put("id", menu.getMenuId());
                 menujson.put("name", menu.getMenuName());
                 menujson.put("url", menu.getMenuUrl());
                 menujson.put("img", "");
-                menujson.put ("serverUrl", menu.getServerUrl ());
+                menujson.put("serverUrl", menu.getServerUrl());
                 menujson.put("sonMenu", new JSONArray());
                 temparr.add(menujson);
                 tempmap.put(menu.getMenuId().toString(), menujson);
             }
             JSONObject tempobj = searchMenuByParentId(item, temparr, tempmap);
-            if (tempobj == null)
-            {
+            if (tempobj == null) {
                 continue;
             }
             String key = tempobj.getString("id") + "root";
             JSONObject res = tempmap.get(key);
-            if (res == null)
-            {
+            if (res == null) {
                 tempmap.put(key, tempobj);
             }
             mapobj.put(key, tempobj);
@@ -272,21 +242,16 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
         return array;
     }
 
-    private JSONArray mapToJSONArray(MyMap<String, JSONObject> map)
-    {
+    private JSONArray mapToJSONArray(MyMap<String, JSONObject> map) {
         JSONArray array = new JSONArray();
         List<String> set = map.getKeyList();
         Iterator<String> iter = set.iterator();
-        while (iter.hasNext())
-        {
+        while (iter.hasNext()) {
             JSONObject tempob = map.get(iter.next());
             int id = tempob.getIntValue("id");
-            if (id == 0)
-            {
+            if (id == 0) {
                 array.addAll(tempob.getJSONArray("sonMenu"));
-            }
-            else
-            {
+            } else {
                 array.add(tempob);
             }
         }
@@ -299,11 +264,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
      * @param menuList
      * @return
      */
-    private MyMap<String, Integer> caseListToMap(List<SysMenu> menuList)
-    {
+    private MyMap<String, Integer> caseListToMap(List<SysMenu> menuList) {
         MyMap<String, Integer> map = new MyMap<String, Integer>();
-        for (SysMenu item : menuList)
-        {
+        for (SysMenu item : menuList) {
             map.put(ConverterUtils.toString(item.getFatherMenuId()), item.getFatherMenuId());
         }
         return map;
@@ -316,14 +279,11 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
      * @param menuList
      * @return
      */
-    private List<SysMenu> seachChildJson(Integer parentId, List<SysMenu> menuList)
-    {
+    private List<SysMenu> seachChildJson(Integer parentId, List<SysMenu> menuList) {
         List<SysMenu> array = new ArrayList<SysMenu>();
-        for (SysMenu item : menuList)
-        {
+        for (SysMenu item : menuList) {
             if (parentId != null && (item.getFatherMenuId()) != null
-                && parentId.intValue() == item.getFatherMenuId().intValue())
-            {
+                    && parentId.intValue() == item.getFatherMenuId().intValue()) {
                 array.add(item);
             }
         }
@@ -337,17 +297,14 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
      * @param child
      * @return
      */
-    private JSONObject searchMenuByParentId(Integer parentId, JSONArray child, MyMap<String, JSONObject> parenmap)
-    {
+    private JSONObject searchMenuByParentId(Integer parentId, JSONArray child, MyMap<String, JSONObject> parenmap) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("fatherMenuId", parentId);
         SysMenu parentmenu = selectParentMenuByid(map);
-        if (parentmenu != null && parentmenu.getMenuId() != 0)
-        {
+        if (parentmenu != null && parentmenu.getMenuId() != 0) {
             JSONObject menujson = parenmap.get(parentId.toString());
             JSONArray array = new JSONArray();
-            if (menujson == null)
-            {
+            if (menujson == null) {
                 menujson = new JSONObject();
                 menujson.put("id", parentmenu.getMenuId());
                 menujson.put("name", parentmenu.getMenuName());
@@ -355,22 +312,17 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
                 menujson.put("img", "");
                 menujson.put("sonMenu", child);
 
-            }
-            else
-            {
+            } else {
                 JSONArray temp = menujson.getJSONArray("sonMenu");
                 temp.addAll(child);
             }
             array.add(menujson);
             parenmap.put(parentmenu.getMenuId().toString(), menujson);
-            if (parentmenu.getFatherMenuId() != 0)
-            {
+            if (parentmenu.getFatherMenuId() != 0) {
                 return searchMenuByParentId(parentmenu.getFatherMenuId(), array, parenmap);
             }
             return menujson;
-        }
-        else
-        {
+        } else {
             return child.getJSONObject(0);
             // return null;
         }
@@ -380,8 +332,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
      * 获取根据子菜单获取父菜单
      */
     @Override
-    public SysMenu selectParentMenuByid(Map<String, Object> map)
-    {
+    public SysMenu selectParentMenuByid(Map<String, Object> map) {
         return sysUserDAO.selectParentMenuByid(map);
     }
 
@@ -389,10 +340,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
      * 校验密码
      */
     @Override
-    public boolean validataPass(SysUser adminUser)
-    {
-        if (adminUser.getOldPassword() == null)
-        {
+    public boolean validataPass(SysUser adminUser) {
+        if (adminUser.getOldPassword() == null) {
             return false;
         }
         adminUser.setPassword(ENCodeUtils.encodeByMD5(adminUser.getOldPassword()).toLowerCase());
@@ -403,8 +352,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
     /**
      * 验证登录名是否存在
      */
-    public boolean validataLoginName(SysUser adminUser)
-    {
+    public boolean validataLoginName(SysUser adminUser) {
         int count = sysUserDAO.getAdminUserCountByLoginName(adminUser);
         return count <= 0;
     }
@@ -429,14 +377,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
                 sendMail(adminUser, adminUser.getNewPassword());
             }
             return count > 0;
-        }else {
+        } else {
             return false;
         }
     }
 
     @Override
-    public List<SysMenu> Test(Map<String, Object> map)
-    {
+    public List<SysMenu> Test(Map<String, Object> map) {
         return sysUserDAO.readMenuByIds(map);
     }
 
@@ -444,8 +391,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
      * 获取用户操作权限
      */
     @Override
-    public List<SysMenuPermission> searchUserButton(SysUser adminUser)
-    {
+    public List<SysMenuPermission> searchUserButton(SysUser adminUser) {
         return sysUserDAO.searchUserButton(adminUser);
     }
 
@@ -453,18 +399,15 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
      * 根据用户获取菜单，shiro授权使用
      */
     @Override
-    public List<String> selectMenuByUname(SysUser adminUser)
-    {
+    public List<String> selectMenuByUname(SysUser adminUser) {
         return selectMenuByUname(adminUser, SHOW);
     }
 
     @Override
-    public List<String> selectMenuByUname(SysUser adminUser, int menuState)
-    {
+    public List<String> selectMenuByUname(SysUser adminUser, int menuState) {
         List<SysMenu> adminMenus = null;
         SysUser tempUser = selectUserByULname(adminUser);
-        if (tempUser == null)
-        {
+        if (tempUser == null) {
             return null;
         }
         Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -472,9 +415,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
         {
             paramMap.put("menuState", menuState);
             adminMenus = sysMenuDAO.findForAllList(paramMap);
-        }
-        else
-        {
+        } else {
             paramMap = MapUtils.bean2Map(adminUser);
             paramMap.put("menuState", menuState);
             adminMenus = sysUserDAO.selectMenuByUname(paramMap);
@@ -483,47 +424,40 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
         return resulstList;
     }
 
-    private List<String> readButtonsByList(List<SysMenu> adminMenus)
-    {
+    private List<String> readButtonsByList(List<SysMenu> adminMenus) {
         List<String> resulstList = new ArrayList<String>();
-        for (SysMenu item : adminMenus)
-        {
+        for (SysMenu item : adminMenus) {
             resulstList.add(item.getNamespace());
         }
         return resulstList;
     }
 
     @Override
-    public boolean delete(SysUser bean)
-    {
+    public boolean delete(SysUser bean) {
         deleteUserRole(bean);
         return super.delete(bean);
     }
 
     @Override
-    public SysUser selectUserByULname(SysUser adminUser)
-    {
+    public SysUser selectUserByULname(SysUser adminUser) {
         return sysUserDAO.selectUserByULname(adminUser);
     }
 
     @Override
-    public Map<String, Object> checkOperatorLogin(Map<String, Object> paramMap)
-    {
+    public Map<String, Object> checkOperatorLogin(Map<String, Object> paramMap) {
         paramMap.put("password", ENCodeUtils.encodeByMD5(ConverterUtils.toString(paramMap.get("password"))).toLowerCase());
         return sysUserDAO.checkOperatorLogin(paramMap);
     }
 
     @Override
-    public SysUser findUserByName(String userName)
-    {
+    public SysUser findUserByName(String userName) {
         SysUser adminUser = new SysUser();
         adminUser.setUserLoginName(userName);
-        return  selectUserByULname(adminUser);
+        return selectUserByULname(adminUser);
     }
 
     @Override
-    public List<String> findMenuButtonByName(String userName)
-    {
+    public List<String> findMenuButtonByName(String userName) {
         SysUser adminUser = new SysUser();
         adminUser.setUserLoginName(userName);
         return selectMenuByUname(adminUser);
@@ -533,7 +467,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
     public HttpResult refreshRedisCache() {
         List<SysUser> userList = this.select();
         userList.forEach(sysUser -> {
-            if(!StringUtil.isEmpty(sysUser.getUserName())) {
+            if (!StringUtil.isEmpty(sysUser.getUserName())) {
                 redisCacheService.remove(Constant.USER_NAME + sysUser.getUserId());
                 redisCacheService.addStr(Constant.USER_NAME + sysUser.getUserId(), sysUser.getUserName());
             }
@@ -551,25 +485,21 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
         // 遍历AdminMenu转换为LeftMenu
         menuList.forEach(adminMenu -> {
             LeftMenu leftMenu = new LeftMenu()
-                    .mk("id", adminMenu.getMenuId(), "serverUrl", adminMenu.getServerUrl(), "name", adminMenu.getMenuName(), "url", adminMenu.getMenuUrl(),"menuServer",adminMenu.getServerNameId(),"image",adminMenu.getImage());
+                    .mk("id", adminMenu.getMenuId(), "serverUrl", adminMenu.getServerUrl(), "name", adminMenu.getMenuName(), "url", adminMenu.getMenuUrl(), "menuServer", adminMenu.getServerNameId(), "image", adminMenu.getImage());
             leftMenuMap.put(leftMenu.getId(), leftMenu);
         });
         List<LeftMenu> result = new ArrayList<>();
         menuList.forEach(adminMenu -> {
-            if (ConverterUtils.toInt(adminMenu.getMenuState()) != SysMenuService.NOT_SHOW)
-            {
+            if (ConverterUtils.toInt(adminMenu.getMenuState()) != SysMenuService.NOT_SHOW) {
                 // 如果不是null 也不是root则找爸爸吧自己添加到爸爸的儿子里面去
-                if (adminMenu.getFatherMenuId() != null && adminMenu.getFatherMenuId() != ROOT)
-                {
-                    if (leftMenuMap.containsKey(adminMenu.getFatherMenuId()))
-                    {
+                if (adminMenu.getFatherMenuId() != null && adminMenu.getFatherMenuId() != ROOT) {
+                    if (leftMenuMap.containsKey(adminMenu.getFatherMenuId())) {
                         leftMenuMap.get(adminMenu.getFatherMenuId()).getSonMenu().add(
                                 leftMenuMap.get(adminMenu.getMenuId()));
                     }
                 }
                 // 如果是一级菜单则挂写到result去
-                else if (adminMenu.getFatherMenuId() != null && adminMenu.getFatherMenuId() == ROOT)
-                {
+                else if (adminMenu.getFatherMenuId() != null && adminMenu.getFatherMenuId() == ROOT) {
                     result.add(leftMenuMap.get(adminMenu.getMenuId()));
                 }
             }
@@ -580,12 +510,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
 
     private List<SysMenu> menuFilter(SysUser user, List<SysMenu> menuList) {
         List<Integer> userMenuIds = null;
-        if (user.getIsAdmin() == ADMIN)
-        {
+        if (user.getIsAdmin() == ADMIN) {
             userMenuIds = sysUserDAO.selectMenuIdByAdmin(user);
-        }
-        else
-        {
+        } else {
             userMenuIds = sysUserDAO.selectMenuIdByUserId(user);
         }
 
@@ -596,8 +523,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
         // 已经添加进结果的菜单
         Set<SysMenu> hasAddMenu = new HashSet<>();
         userMenuIds.forEach(id -> {
-            if (menuMap.containsKey(id))
-            {
+            if (menuMap.containsKey(id)) {
                 hasAddMenu.add(menuMap.get(id));
                 // 能看到儿子就能看到爸爸，找儿子的爸爸
                 initFather(hasAddMenu, menuMap, menuMap.get(id));
@@ -605,21 +531,16 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
         });
         List<SysMenu> result = new ArrayList<>();
         result.addAll(hasAddMenu);
-        result.sort(new Comparator<SysMenu>()
-        {
+        result.sort(new Comparator<SysMenu>() {
             @Override
-            public int compare(SysMenu o1, SysMenu o2)
-            {
-                if (o1.getFatherMenuId() == null)
-                {
+            public int compare(SysMenu o1, SysMenu o2) {
+                if (o1.getFatherMenuId() == null) {
                     return -1;
                 }
-                if (o2.getFatherMenuId() == null)
-                {
+                if (o2.getFatherMenuId() == null) {
                     return 1;
                 }
-                if (o1.getFatherMenuId() - o2.getFatherMenuId() == 0)
-                {
+                if (o1.getFatherMenuId() - o2.getFatherMenuId() == 0) {
                     return ConverterUtils.toInt(o1.getOrderIndex()) - ConverterUtils.toInt(o2.getOrderIndex());
                 }
                 return o1.getFatherMenuId() - o2.getFatherMenuId();
@@ -629,11 +550,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
     }
 
     private void initFather(Set<SysMenu> hasAddMenu, Map<Integer, SysMenu> menuMap, SysMenu sysMenu) {
-        if (menuMap.containsKey(sysMenu.getFatherMenuId()))
-        {
+        if (menuMap.containsKey(sysMenu.getFatherMenuId())) {
             SysMenu father = menuMap.get(sysMenu.getFatherMenuId());
-            if (!hasAddMenu.contains(father))
-            {
+            if (!hasAddMenu.contains(father)) {
                 hasAddMenu.add(father);
                 // 很愉快的找打爸爸后接着网上找 找father的爸爸
                 initFather(hasAddMenu, menuMap, father);
@@ -642,9 +561,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
     }
 
     /**
-     * @desc 根据用户id获取用户信息
      * @param userId 用户id
      * @return 用户信息
+     * @desc 根据用户id获取用户信息
      */
     @Override
     public SysUser findSysUserById(String userId) {
@@ -652,25 +571,25 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
         SysUser sysUser = this.findBeanById(userId);
         //根据用户id获取当前用户的角色
         List<Map<String, Object>> sysUserRoleList = this.searchUserRole(sysUser);
-        if(sysUserRoleList.size() > 0) {
+        if (sysUserRoleList.size() > 0) {
             Vector<String> roleVectorList = new Vector<>();
-            for(int i=0; i<sysUserRoleList.size(); i++) {
+            for (int i = 0; i < sysUserRoleList.size(); i++) {
                 Map<String, Object> map = sysUserRoleList.get(i);
                 roleVectorList.add(map.get("roleId").toString());
             }
             String[] roleList = new String[roleVectorList.size()];
             roleVectorList.toArray(roleList);
             sysUser.setRoleList(roleList);
-        }else {
+        } else {
             sysUser.setRoleList(new String[0]);
         }
         return sysUser;
     }
 
     /**
-     * @desc 根据id删除用户
      * @param userId 要删除的用户de id
      * @return 删除是否成功
+     * @desc 根据id删除用户
      */
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
@@ -678,7 +597,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
         this.deleteById(userId);
         SysUser sysUser = new SysUser();
         sysUser.setUserId(userId);
-         return this.deleteUserRole(sysUser);
+        return this.deleteUserRole(sysUser);
     }
 
     @Override
@@ -689,8 +608,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
     @Override
     public List<String> getPermissionUrl(SysUser sysUser) {
         // 如果是admin则返回所有的url
-        if(sysUser.getIsAdmin() == SysUserService.SYS_USER_IS_ADMIN)
-        {
+        if (sysUser.getIsAdmin() == SysUserService.SYS_USER_IS_ADMIN) {
             return getPermissionUrlAll();
         }
         return getPermissionUrlByUserId(sysUser.getUserId());
@@ -699,32 +617,36 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
 
     @Override
     public Map<String, String> findUserDataPermissions(String userId) {
-        List<SysRole>  roleList = roleService.findRolesByUserId(userId);
-        Map<String,String> resultMap = new HashMap<>();
-        if(roleList.isEmpty())
-        {
-            return resultMap;
-        }
+        List<SysRole> roleList = roleService.findRolesByUserId(userId);
+        Map<String, String> resultMap = new HashMap<>();
         //谷歌的map value是一个hashset
-        final HashMultimap<String,String> dataPermissionTempMap = HashMultimap.create();
+        final HashMultimap<String, String> dataPermissionTempMap = HashMultimap.create();
         //有多个角色，把多个角色的数据权限合并
-        roleList.forEach(role->{
-            if(CheckUtils.isNotEmpty(role.getDataPermissions()))
-            {
+        roleList.forEach(role -> {
+            if (CheckUtils.isNotEmpty(role.getDataPermissions())) {
                 final JSONObject oneRoleDataPermisstionMap = JSON.parseObject(role.getDataPermissions());
-                oneRoleDataPermisstionMap.keySet().forEach(key->{
+                oneRoleDataPermisstionMap.keySet().forEach(key -> {
                     String tempPermissions = oneRoleDataPermisstionMap.getString(key);
-                    if(CheckUtils.isNotEmpty(tempPermissions))
-                    {
-                        dataPermissionTempMap.putAll(key,ListUtils.array2List(tempPermissions.split(",")));
+                    if (CheckUtils.isNotEmpty(tempPermissions)) {
+                        dataPermissionTempMap.putAll(key, ListUtils.array2List(tempPermissions.split(",")));
                     }
                 });
             }
         });
-        dataPermissionTempMap.keySet().forEach(key->{
+        dataPermissionTempMap.keySet().forEach(key -> {
             Set<String> dataPermissionsSet = dataPermissionTempMap.get(key);
-            resultMap.put(key,StringUtil.getStrForIn(dataPermissionsSet,true));
+            resultMap.put(key, StringUtil.getStrForIn(dataPermissionsSet, true));
         });
+        SysUser user = sysUserService.selectById(userId);
+        // 如果不是不是管理员，哪些数据权限他没有设置为-1
+        if (user.getIsAdmin() != Constant.INT_TRUE) {
+            String[] permissonDataKeys = ConverterUtils.toString(EConfig.getOtherConfigPropertiesValue("permissonDataKey")).split(",");
+            for (String permissonDataKey : permissonDataKeys) {
+                if (!resultMap.containsKey(permissonDataKey)) {
+                    resultMap.put(permissonDataKey, "-1");
+                }
+            }
+        }
         return resultMap;
     }
 
