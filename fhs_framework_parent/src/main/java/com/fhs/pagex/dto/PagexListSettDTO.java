@@ -26,8 +26,6 @@ import java.util.Set;
  * @Version: 1.0
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class PagexListSettDTO extends  PagexBaseDTO{
 
 
