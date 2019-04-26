@@ -1,6 +1,7 @@
 package com.fhs.config;
 
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
+import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.core.config.EConfig;
 import com.mybatis.jpa.core.PersistentEnhancerScaner;
@@ -50,9 +51,10 @@ public class MybatisConfig implements InitializingBean {
 
 
     @Bean
-    public XMLMapperLoader getXMLMapperLoader(){
+    public XMLMapperLoader getXMLMapperLoader(MybatisPlusProperties plusProperties){
         XMLMapperLoader loader = new XMLMapperLoader();
         loader.setEnabled(ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isDevModel")));//开启xml热加载
+        loader.setMapperLocations(plusProperties.resolveMapperLocations());
         return loader;
     }
 
