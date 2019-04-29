@@ -92,6 +92,16 @@
                 src="http://api.map.baidu.com/api?v=2.0&ak=NAGEfysPQEek4fLb8WBNkwjjteWZi1Aj" ></script>
     <% } %>
     <!--bmap end-->
+    <% if(strutil.contain(formFieldTypes,'css')){ %>
+        <% for(href in exs){ %>
+            <link type="text/css" rel="stylesheet" href="${href}"/>
+        <% } %>
+    <% } %>
+    <% if(strutil.contain(formFieldTypes,'js')){ %>
+        <% for(src in exs){ %>
+            <script type="text/javascript" charset="utf-8" src="${src}"></script>
+        <% } %>
+    <% } %>
 
 </head>
 <body>

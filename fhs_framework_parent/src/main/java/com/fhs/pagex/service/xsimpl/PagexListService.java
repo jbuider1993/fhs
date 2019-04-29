@@ -74,6 +74,12 @@ public class   PagexListService implements IPageXService, InitializingBean {
         {
             formFieldSetts.append(field.get("type") + ",");
         }
+        if(listPageSett.getExp() != null){
+
+        }
+        for(String exp : listPageSett.getExp()){
+            formFieldSetts.append(exp+",");
+        }
         // 普通的过滤条件参数 map包含name和val 2个key其中val为此过滤条件的获取值的代码
         List<Map<String,String>> filterParams = new ArrayList<>();
         List<Map<String,String>> filterParamsForBetween = new ArrayList<>();
@@ -85,6 +91,7 @@ public class   PagexListService implements IPageXService, InitializingBean {
             paramMap.put("listFields",listPageSett.getListSett());
             paramMap.put("namespace",namespace);
             paramMap.put("formFieldTypes",formFieldSetts.toString());
+            paramMap.put("exs",listPageSett.getExs());
             paramMap.put("buttons",listPageSett.getButtons());
             paramMap.put("disableButtons",listPageSett.getDisableButtons());
             paramMap.put("filterParams",filterParams);

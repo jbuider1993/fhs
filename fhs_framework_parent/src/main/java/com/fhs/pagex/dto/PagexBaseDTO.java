@@ -46,7 +46,7 @@ public abstract class PagexBaseDTO {
     /**
      * 模型配置
      */
-    private Map<String, Object> modelConfig;
+    protected Map<String, Object> modelConfig;
 
     /**
      * 初始化js引擎

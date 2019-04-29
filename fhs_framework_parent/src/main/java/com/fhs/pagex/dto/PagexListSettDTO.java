@@ -3,15 +3,10 @@ package com.fhs.pagex.dto;
 import com.fhs.common.utils.ConverterUtils;
 import com.mybatis.jpa.common.ColumnNameUtil;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.script.ScriptException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * pagex 列表页面DTO
@@ -50,6 +45,13 @@ public class PagexListSettDTO extends  PagexBaseDTO{
      * 默认会提供export,add,del,update,view,search 6个按钮
      */
     private List<String> disableButtons;
+
+    private List<String> exp;
+
+    /**
+     * 扩展的引入js或css的源
+     */
+    private List<String> exs;
 
     /**
      * 自定义的按钮，key为按钮名称 value为按钮点击时候需要调用的方法
@@ -96,7 +98,25 @@ public class PagexListSettDTO extends  PagexBaseDTO{
         this.initOtherFunction();
         this.initIsColumnButton();
         this.initModelConfig();
+        this.initExp();
+        this.initExs();
     }
+
+    public void initExp(){
+        exp = new ArrayList<>();
+        Object exps = modelConfig.get("exp");
+        if(exps != null && !"".equals(exps.toString().trim())){
+            exp.add(exps.toString().trim());
+        }
+    }
+
+    public void initExs(){
+        Object exss = modelConfig.get("exs");
+        if(exss != null && !"".equals(exss.toString().trim())){
+            exs = Arrays.asList(exss.toString().trim().split(","));
+        }
+    }
+
 
     /**
      * 初始化列表字段设置
