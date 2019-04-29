@@ -44,7 +44,7 @@ public class DateGridTag extends  BaseGridTag{
         {
             super.tagSett.put("onfocus","WdatePicker()");
         }
-        return "<input type='text'" + super.getOtherAttrValHtml() + formartIdHtml()
+        return "<input type='text' class='Wdate'"  + super.getOtherAttrValHtml() + formartIdHtml()
                 + formartPlaceholderHtml() + " />";
     }
 
