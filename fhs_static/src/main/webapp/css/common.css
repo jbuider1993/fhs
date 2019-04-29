@@ -11,6 +11,31 @@ input{
 .big_text {
 	width: 87% !important;
 }
+.big_combo{
+	border-color: #e5e6e7;
+    background-color: #fff;
+    padding: 0px 0px 0px 5px !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    width: 86% !important;
+	border-color: #e5e6e7;
+    background-color: #fff;
+    padding: 0px 0 4px 5px;
+    height: 38px !important;
+    margin-left: 13px;
+    display: inline-block;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0;
+    border-width: 1px;
+    border-style: solid;
+    overflow: hidden;
+    vertical-align: middle;
+	margin-left: 13px !important;
+}
+.big_textbox_text{
+   width: 90% !important;
+}
 input[type="text"],input[type="password"]{
 	height: 38px;
 	width: 208px;
@@ -57,7 +82,7 @@ textarea{
 	padding-left: 10px;
 	border-radius: 2px;
 	width: 87% !important;
-	margin-left:16px !important;
+	margin-left:13px !important;
 }
 
 .infoGroup legend{
@@ -246,7 +271,7 @@ form{
 	float: left; vertical-align: top; padding-top: 8px; width:15%;text-align: right; padding-right: 10px;
 }
 .bigContent{
-	float: left; vertical-align: top; width:79%;font-size: 14px;
+	float: left; vertical-align: top; width:79%;font-size: 14px;margin-left:4px;
 }
 
 .mrgleftPer15 {

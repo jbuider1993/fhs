@@ -126,6 +126,39 @@ function Ealert(message) {
   //$.messager.alert('操作提示', message, 'info'); 重复提示：qiuhang：2018/10/15
 }
 
+//把日期转换 为date
+function convertDateFromString(dateString){
+	if (dateString) {
+		var date = new Date(dateString.replace(/-/,"/"))
+		return date;
+	}
+}
+
+//格式化日期
+function dateFmt(date,fmt){
+	var o = {
+		"M+" : date.getMonth() + 1, //月份
+		"d+" : date.getDate(), //日
+		"h+" : date.getHours(), //小时
+		"m+" : date.getMinutes(), //分
+		"s+" : date.getSeconds(), //秒
+		"q+" : Math.floor((date.getMonth() + 3) / 3), //季度
+		"S" : date.getMilliseconds()//毫秒
+	};
+	if (arguments.length == 1) {
+		fmt = 'yyyy-MM-dd hh:mm:ss';
+	}
+	if (/(y+)/.test(fmt)){
+		fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+	}
+	for ( var k in o){
+		if (new RegExp("(" + k + ")").test(fmt)){
+			fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]): (("00" + o[k]).substr(("" + o[k]).length)));
+		}
+	}
+	return fmt;
+}
+
 // 给select 添加option
 function appendOptions(jsondata, showKey, valKey, val, selectId) {
   var optionHtml = '<option value="-1">请选择</option>'
@@ -2166,6 +2199,10 @@ function time2Day(_val,_row,_index){
 
 // easyui datagrid 列tips
 function formatRowColor(val,row,index){
+	if(!val)
+	{
+		return '';
+	}
 	var _color = '#1ab394';
 	if(val.indexOf('禁')!=-1||val.indexOf('未')!=-1||val.indexOf('异')!=-1)
 	{

@@ -149,6 +149,16 @@
 
 			//bind the blur event;
 			$this.delegate("[datatype]","blur",function(){
+				if($(this).hasClass('Wdate'))
+				{
+					return;
+				}
+				//判断是否是在提交表单操作时触发的验证请求；
+				var subpost=arguments[1];
+				Validform.util.check.call(this,$this,subpost);
+			});
+
+			$this.delegate(".Wdate","change",function(){
 				//判断是否是在提交表单操作时触发的验证请求；
 				var subpost=arguments[1];
 				Validform.util.check.call(this,$this,subpost);
