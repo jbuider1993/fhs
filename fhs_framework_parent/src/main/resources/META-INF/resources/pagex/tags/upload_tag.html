@@ -18,12 +18,14 @@
         <input type="button" id="${tagSett.name}Input" style="display: none;" />
     </div>
 </div>
-<div class="fitem">
-    <div class="bigLabelDiv">
-        <label>&nbsp;</label>
+<% if(isEmpty(parameter.isView)){ %>
+    <div class="fitem">
+        <div class="bigLabelDiv">
+            <label>&nbsp;</label>
+        </div>
+        <font color="red">&nbsp;&nbsp;&nbsp;&nbsp;${tagSett.placeholder}，图片支持 *.png, *.jpg, *.jpeg, *.gif</font>
     </div>
-    <font color="red">&nbsp;&nbsp;&nbsp;&nbsp;${tagSett.placeholder}，图片支持 *.png, *.jpg, *.jpeg, *.gif</font>
-</div>
+<% } %>
 <input type="hidden" id="${tagSett.name}" name="${tagSett.name}"
 <%  if(nvl(tagSett.required,false)){ %>
     datatype = '*'
