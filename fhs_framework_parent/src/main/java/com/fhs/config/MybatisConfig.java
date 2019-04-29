@@ -3,6 +3,7 @@ package com.fhs.config;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
 import com.fhs.common.utils.ConverterUtils;
+import com.fhs.common.utils.Logger;
 import com.fhs.core.config.EConfig;
 import com.mybatis.jpa.core.PersistentEnhancerScaner;
 import com.mybatis.jpa.plugin.ResultTypePlugin;
@@ -31,6 +32,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @AutoConfigureAfter(MybatisPlusAutoConfiguration.class)
 public class MybatisConfig implements InitializingBean {
+
+    private static Logger LOG =  Logger.getLogger(MybatisConfig.class);
+
     @Value("${fhs.mybatis-jpa.entity-package}")
     private String entityPackage;
 
@@ -55,6 +59,7 @@ public class MybatisConfig implements InitializingBean {
         XMLMapperLoader loader = new XMLMapperLoader();
         loader.setEnabled(ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isDevModel")));//开启xml热加载
         loader.setMapperLocations(plusProperties.resolveMapperLocations());
+        LOG.info("xml刷新器初始化:" + plusProperties.getMapperLocations() + "--" + loader.getMapperLocations());
         return loader;
     }
 
