@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 192.168.0.241
+ Source Server         : 华为云2
  Source Server Type    : MySQL
- Source Server Version : 50724
- Source Host           : 192.168.0.241:3306
+ Source Server Version : 50710
+ Source Host           : 114.116.20.119:3306
  Source Schema         : fhs-demo
 
  Target Server Type    : MySQL
- Target Server Version : 50724
+ Target Server Version : 50710
  File Encoding         : 65001
 
- Date: 01/04/2019 22:23:21
+ Date: 28/04/2019 18:21:50
 */
 
 SET NAMES utf8mb4;
@@ -4833,12 +4833,11 @@ CREATE TABLE `t_ucenter_ms_menu`  (
   `remarks` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   `system_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所属系统',
   PRIMARY KEY (`menu_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1090 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'T_admin_Menu 菜单表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1091 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'T_admin_Menu 菜单表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_ucenter_ms_menu
 -- ----------------------------
-INSERT INTO `t_ucenter_ms_menu` VALUES (0, 'root', NULL, '#', NULL, '0', 0, 0, NULL, 1, -1, NULL, 0, '0', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `t_ucenter_ms_menu` VALUES (29, '系统管理', 0, '#', '', '0', 0, 0, '01ad9fd6c8194e79843ce9f220c136a3', 1, 1, '0', 0, '0', NULL, NULL, NULL, NULL, NULL, '55ff598ae42845d4b51ec2bc71bbc009');
 INSERT INTO `t_ucenter_ms_menu` VALUES (30, '菜单管理', 29, 'page/ms/ucenter/sys_main_frame.jsp', 'sysMenu', '0', 0, 0, 'c7228b3378a54e4e9b2058d2a90cbc2b', 1, 0, '0', 0, '0', NULL, NULL, NULL, NULL, NULL, '55ff598ae42845d4b51ec2bc71bbc009');
 INSERT INTO `t_ucenter_ms_menu` VALUES (40, '角色管理', 29, 'page/ms/ucenter/sys_role_main_frame.jsp', 'sysRole', '0', 0, 0, '9d13df63498845d1a3a802d69c89e409', 1, 1, '0', 0, '0', NULL, NULL, NULL, NULL, NULL, '55ff598ae42845d4b51ec2bc71bbc009');
@@ -4854,6 +4853,7 @@ INSERT INTO `t_ucenter_ms_menu` VALUES (1086, '表单演示', 1085, '/ms/pagex/s
 INSERT INTO `t_ucenter_ms_menu` VALUES (1087, '隐藏菜单', 1085, '#', 'role', NULL, 0, NULL, '', 1, 2, NULL, 1, '0', '1', '2019-03-30 17:40:24', '1', '2019-03-30 17:40:24', NULL, '55ff598ae42845d4b51ec2bc71bbc009');
 INSERT INTO `t_ucenter_ms_menu` VALUES (1088, '停车场管理', 1085, '/ms/pagex/parking_list.jsp?parent_park_id=0', 'parking', NULL, 0, NULL, '', 1, 3, NULL, 0, '0', '1', '2019-03-30 18:52:02', '1', '2019-03-30 18:53:00', NULL, '55ff598ae42845d4b51ec2bc71bbc009');
 INSERT INTO `t_ucenter_ms_menu` VALUES (1089, '停车场出入口管理', 1085, '/ms/pagex/parking_port_list.jsp', 'parking_port', NULL, 0, NULL, '', 1, 4, NULL, 0, '0', '1', '2019-03-30 18:52:41', '1', '2019-03-30 18:52:41', NULL, '55ff598ae42845d4b51ec2bc71bbc009');
+INSERT INTO `t_ucenter_ms_menu` VALUES (1090, 'root', NULL, '#', NULL, '0', 0, 0, NULL, 1, -1, NULL, 0, '0', NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for t_ucenter_ms_menu_permission
@@ -5045,7 +5045,7 @@ CREATE TABLE `t_ucenter_ms_menu_server`  (
 -- ----------------------------
 -- Records of t_ucenter_ms_menu_server
 -- ----------------------------
-INSERT INTO `t_ucenter_ms_menu_server` VALUES (1, 'base', 'http://localhost:8081/');
+INSERT INTO `t_ucenter_ms_menu_server` VALUES (1, 'base', 'http://114.116.20.119:8081/');
 
 -- ----------------------------
 -- Table structure for t_ucenter_ms_model
