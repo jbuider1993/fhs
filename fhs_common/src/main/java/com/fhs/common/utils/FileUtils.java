@@ -25,10 +25,9 @@ import java.util.regex.Pattern;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public class FileUtils extends org.apache.commons.io.FileUtils
-{
+public class FileUtils extends org.apache.commons.io.FileUtils {
     // Commons Logging instance.
-    private static Logger log = Logger.getLogger(JsonUtils.class);
+    private static final Logger LOG = Logger.getLogger(JsonUtils.class);
 
     /**
      * byte缓存大小
@@ -38,54 +37,19 @@ public class FileUtils extends org.apache.commons.io.FileUtils
     /**
      * <下载文件>
      *
-     * @param path 文件路径
+     * @param path     文件路径
      * @param response HttpServletResponse
-     * @param filename 显示的文件名
+     * @param fileName 显示的文件名
      */
-    public static void download(String path, HttpServletResponse response, String filename)
-    {
-
-        InputStream fis = null;
-
-        try
-        {
-
-            // 以流的形式下载文件。
-            fis = new BufferedInputStream(new FileInputStream(path));
-            byte[] bytes = new byte[fis.available()];
-            fis.read(bytes);
-            fis.close();
-            download(bytes, response, filename);
-        }
-        catch (IOException ex)
-        {
-            ex.printStackTrace();
-            log.error(ex);
-        }
-        finally
-        {
-            if (fis != null)
-            {
-                try
-                {
-                    fis.close();
-                }
-                catch (IOException e)
-                {
-                    log.error(e);
-                }
-            }
-
-        }
+    public static void download(String path, HttpServletResponse response, String fileName) {
+        download( new File(path),  response,  fileName);
     }
 
-    public static void jsDownload(String path, HttpServletResponse response)
-    {
+    public static void jsDownload(String path, HttpServletResponse response) {
         String fileName = null;
         File file = new File(path);
         fileName = file.getName();
-        if (!fileName.equals(""))
-        {
+        if (!fileName.equals("")) {
             download(path, response, fileName);
         }
 
@@ -95,35 +59,40 @@ public class FileUtils extends org.apache.commons.io.FileUtils
      * <下载文件> 输入文件流
      *
      * @param inputStream 文件路径
-     * @param response HttpServletResponse
-     * @param filename 显示的文件名
+     * @param response    HttpServletResponse
+     * @param filename    显示的文件名
      */
-    public static void downloadInputStream(InputStream inputStream, HttpServletResponse response, String filename)
-    {
-        try
-        {
+    public static void downloadInputStream(InputStream inputStream, HttpServletResponse response, String filename) {
+        downloadInputStream(inputStream, response, filename, null);
+    }
+
+
+    /**
+     * <下载文件> 输入文件流
+     *
+     * @param inputStream 文件路径
+     * @param response    HttpServletResponse
+     * @param filename    显示的文件名
+     */
+    public static void downloadInputStream(InputStream inputStream, HttpServletResponse response, String filename, Long length) {
+
+        try (OutputStream toClient = new BufferedOutputStream(response.getOutputStream());) {
+            initResponseHeader(response, filename, length == null ? inputStream.available() : length);
             // 以流的形式下载文件。
-            byte[] bytes = new byte[inputStream.available()];
-            inputStream.read(bytes);
-            inputStream.close();
-            download(bytes, response, filename);
-        }
-        catch (IOException ex)
-        {
-            ex.printStackTrace();
-            log.error(ex);
-        }
-        finally
-        {
-            if (inputStream != null)
-            {
-                try
-                {
+            byte[] bytes = new byte[1024 * 200];
+            int readLength = 0;
+            while ((readLength = inputStream.read(bytes)) != -1) {
+                toClient.write(bytes, 0, readLength);
+            }
+            toClient.flush();
+        } catch (IOException ex) {
+            LOG.error(ex);
+        } finally {
+            if (inputStream != null) {
+                try {
                     inputStream.close();
-                }
-                catch (IOException e)
-                {
-                    log.error(e);
+                } catch (IOException e) {
+                    LOG.error(e);
                 }
             }
 
@@ -132,17 +101,17 @@ public class FileUtils extends org.apache.commons.io.FileUtils
 
     /**
      * 格式化文件名称去掉特殊字符
+     *
      * @param fileName 文件名称
      * @return 格式化后的文件明湖曾
      */
-    private static String formartFileName(String fileName){
+    private static String formartFileName(String fileName) {
         String suffix = fileName.substring(fileName.lastIndexOf("."));
-        fileName = fileName.replace(suffix,"");
-        String regex="^[a-zA-Z0-9\u4E00-\u9FA5]+$";
+        fileName = fileName.replace(suffix, "");
+        String regex = "^[a-zA-Z0-9\u4E00-\u9FA5]+$";
         Pattern pattern = Pattern.compile(regex);
-        Matcher match=pattern.matcher(fileName);
-        if(match.matches())
-        {
+        Matcher match = pattern.matcher(fileName);
+        if (match.matches()) {
             return fileName + suffix;
         }
         return "default" + suffix;
@@ -152,89 +121,30 @@ public class FileUtils extends org.apache.commons.io.FileUtils
     /**
      * <下载文件>
      *
-     * @param file 需要下载的文件
+     * @param file     需要下载的文件
      * @param response HttpServletResponse
      * @param fileName 显示的文件名
      */
-    public static void download(File file, HttpServletResponse response, String fileName)
-    {
-        BufferedOutputStream toClient = null;
-        InputStream fis = null;
-        fileName = formartFileName(fileName);
-        BufferedInputStream bi = null;
-        try
-        {
-            initResponseHeader( response,  fileName,file.length());
-            toClient = new BufferedOutputStream(response.getOutputStream());
-            fis = new FileInputStream(file);
-            bi = new BufferedInputStream(fis);
-            // 1m缓冲区
-            byte[] bytes = new byte[1024*1024];
-            int length = 0;
-            while((length = bi.read(bytes)) > 0)
-            {
-                toClient.write(bytes,0,length);
-            }
-            toClient.flush();
-            toClient.close();
-        }
-        catch (IOException ex)
-        {
-            ex.printStackTrace();
-            log.error("下载文件错误:",ex);
-        }
-        finally
-        {
-            if (fis != null)
-            {
-                try
-                {
-                    fis.close();
-                }
-                catch (IOException e)
-                {
-                    log.error(e);
-                }
-            }
-            if (bi != null )
-            {
-                try
-                {
-                    bi.close();
-                }
-                catch (IOException e)
-                {
-                    log.error(e);
-                }
-            }
-            if (toClient != null)
-            {
-                try
-                {
-                    toClient.flush();
-                    toClient.close();
-                }
-                catch (IOException e)
-                {
-                    log.error(e);
-                }
-            }
+    public static void download(File file, HttpServletResponse response, String fileName) {
+        try {
+            downloadInputStream(new FileInputStream(file), response, fileName, file.length());
+        } catch (FileNotFoundException e) {
+            LOG.error(e);
         }
     }
 
     /**
      * 初始化下载文件的response的header
+     *
      * @param response response
      * @param fileName 文件名称
      */
-    public static void initResponseHeader(HttpServletResponse response, String fileName,long length)
-    {
+    public static void initResponseHeader(HttpServletResponse response, String fileName, long length) {
         fileName = formartFileName(fileName);
         // 清空response
         response.reset();
         String contentType = getContentType(fileName);
-        if (!contentType.equals("application/javascript"))
-        {
+        if (!contentType.equals("application/javascript")) {
             String disposition = "application/octet-stream".equals(contentType) ? "attachment" : "inline";
             // 解决中文乱码
             response.setHeader("Content-Disposition",
@@ -248,8 +158,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils
         //本页面允许在浏览器端或缓存服务器中缓存，时限为20秒。
         //20秒之内重新进入该页面的话不会进入该servlet的
         java.util.Date date = new java.util.Date();
-        response.setDateHeader("Last-Modified",date.getTime()); //Last-Modified:页面的最后生成时间
-        response.setDateHeader("Expires",date.getTime()+1000 * 60 * 60 * 2); //Expires:过时期限值
+        response.setDateHeader("Last-Modified", date.getTime()); //Last-Modified:页面的最后生成时间
+        response.setDateHeader("Expires", date.getTime() + 1000 * 60 * 60 * 2); //Expires:过时期限值
         response.setHeader("Cache-Control", "public"); //Cache-Control来控制页面的缓存与否,public:浏览器和缓存服务器都可以缓存页面信息；
         response.setHeader("Pragma", "Pragma"); //Pragma:设置页面是否缓存，为Pragma则缓存，no-cache则不缓存
         response.setHeader("Access-Control-Allow-Origin", "*");
@@ -258,51 +168,34 @@ public class FileUtils extends org.apache.commons.io.FileUtils
     /**
      * <下载文件>
      *
-     * @param bytes 需要下载的二进制
+     * @param bytes    需要下载的二进制
      * @param response HttpServletResponse
      * @param fileName 显示的文件名
      */
-    public static void download(byte[] bytes, HttpServletResponse response, String fileName)
-    {
+    public static void download(byte[] bytes, HttpServletResponse response, String fileName) {
         OutputStream toClient = null;
         InputStream fis = null;
-        try
-        {
-            initResponseHeader( response,  fileName,bytes.length);
+        try {
+            initResponseHeader(response, fileName, bytes.length);
             toClient = new BufferedOutputStream(response.getOutputStream());
             toClient.write(bytes);
             toClient.flush();
-            toClient.close();
-
-        }
-        catch (IOException ex)
-        {
-            ex.printStackTrace();
-            log.error("下载文件错误:",ex);
-        }
-        finally
-        {
-            if (fis != null)
-            {
-                try
-                {
+        } catch (IOException ex) {
+            LOG.error("下载文件错误:", ex);
+        } finally {
+            if (fis != null) {
+                try {
                     fis.close();
-                }
-                catch (IOException e)
-                {
-                    log.error(e);
+                } catch (IOException e) {
+                    LOG.error(e);
                 }
             }
-            if (toClient != null)
-            {
-                try
-                {
+            if (toClient != null) {
+                try {
                     toClient.flush();
                     toClient.close();
-                }
-                catch (IOException e)
-                {
-                    log.error(e);
+                } catch (IOException e) {
+                    LOG.error("下载文件错误:", e);
                 }
             }
         }
@@ -314,17 +207,14 @@ public class FileUtils extends org.apache.commons.io.FileUtils
      * @param fileName 文件名
      * @return ContentType
      */
-    private static String getContentType(String fileName)
-    {
+    private static String getContentType(String fileName) {
         String result = "application/octet-stream";
-        if (fileName == null || (!fileName.contains(".")))
-        {
+        if (fileName == null || (!fileName.contains("."))) {
             return result;
         }
         int index = fileName.lastIndexOf(".");
         String suffix = fileName.substring(index + 1);
-        switch (suffix)
-        {
+        switch (suffix) {
             case "png":
                 result = "image/png";
                 break;
@@ -351,16 +241,12 @@ public class FileUtils extends org.apache.commons.io.FileUtils
      * @param filePath 文件路径
      * @return properties对象
      */
-    public static Properties loadProperties(String filePath)
-    {
+    public static Properties loadProperties(String filePath) {
         Properties properties = new Properties();
-        try
-        {
+        try {
             properties = PropertiesLoaderUtils.loadAllProperties(filePath);
-        }
-        catch (Exception e)
-        {
-            log.error(filePath + "is not find!");
+        } catch (Exception e) {
+            LOG.error(filePath + "is not find!");
         }
         return properties;
     }
@@ -370,16 +256,11 @@ public class FileUtils extends org.apache.commons.io.FileUtils
      *
      * @param os 需要关闭的流对象
      */
-    public static void closeOutputStream(OutputStream os)
-    {
-        if (os != null)
-        {
-            try
-            {
+    public static void closeOutputStream(OutputStream os) {
+        if (os != null) {
+            try {
                 os.close();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -390,16 +271,11 @@ public class FileUtils extends org.apache.commons.io.FileUtils
      *
      * @param is 需要关闭的流对象
      */
-    public static void closeInputStream(InputStream is)
-    {
-        if (is != null)
-        {
-            try
-            {
+    public static void closeInputStream(InputStream is) {
+        if (is != null) {
+            try {
                 is.close();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -409,12 +285,11 @@ public class FileUtils extends org.apache.commons.io.FileUtils
      * 文件分布式存储 存储方式 uuId 的hash 算法
      *
      * @param saveFilePathType 文件存放的目录
-     * @param fileName 文件名字
-     * @param suffix 文件后缀 * @param fileScope File类静态变量 跨域参数
+     * @param fileName         文件名字
+     * @param suffix           文件后缀 * @param fileScope File类静态变量 跨域参数
      * @return
      */
-    public static String addLocatedFilePath(String saveFilePathType, String fileName, String suffix, String fileScope)
-    {
+    public static String addLocatedFilePath(String saveFilePathType, String fileName, String suffix, String fileScope) {
         // 获取uuId 首字母
         String fileOne = fileName.substring(0, 1);
         // 获取 uuId 的第二个字母
@@ -424,8 +299,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils
         // 存放文件的子文件夹
         String saveFileSonPath = saveFilePath + fileScope + Constant.SLASH + fileTwo;
         // 创建父文件夹
-        if (createFileDir(saveFileSonPath))
-        {
+        if (createFileDir(saveFileSonPath)) {
             return saveFileSonPath + Constant.SLASH + fileName;
         }
         return null;
@@ -437,12 +311,10 @@ public class FileUtils extends org.apache.commons.io.FileUtils
      * @param filePath 文件夹的路径
      * @return
      */
-    public static boolean createFileDir(String filePath)
-    {
+    public static boolean createFileDir(String filePath) {
         File file = new File(filePath);
         // 如果文件夹不存在则创建
-        if (!file.exists() || !file.isDirectory())
-        {
+        if (!file.exists() || !file.isDirectory()) {
             file.mkdirs();
         }
         return true;
@@ -451,15 +323,13 @@ public class FileUtils extends org.apache.commons.io.FileUtils
     /**
      * 根据uuId 获得文件的路径
      *
-     * @param fileName 文件名称
+     * @param fileName         文件名称
      * @param saveFilePathType 获取文件的目录
-     * @param fileScope File类静态变量 跨域参数
+     * @param fileScope        File类静态变量 跨域参数
      * @return
      */
-    public static String getFilePath(String saveFilePathType, String fileName, String fileScope)
-    {
-        if (saveFilePathType != null && fileName != null)
-        {
+    public static String getFilePath(String saveFilePathType, String fileName, String fileScope) {
+        if (saveFilePathType != null && fileName != null) {
             // 获取uuId 首字母
             String fileOne = fileName.substring(0, 1);
             // 获取 uuId 的第二个字母
@@ -467,8 +337,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils
             // 获取文件的路径
             String loaclFilePath = saveFilePathType + fileScope + fileOne + Constant.SLASH + fileTwo;
             // 本地文件的目录
-            if (createFileDir(loaclFilePath))
-            {
+            if (createFileDir(loaclFilePath)) {
                 // 获取文件的完整路径
                 return loaclFilePath + Constant.SLASH + fileName;
             }
@@ -486,14 +355,12 @@ public class FileUtils extends org.apache.commons.io.FileUtils
      * @throws IOException
      */
     public static void copyFile(File oldPath, String newPath)
-        throws FileNotFoundException, IOException
-    {
+            throws FileNotFoundException, IOException {
         FileInputStream fis = new FileInputStream(oldPath);
         FileOutputStream fos = new FileOutputStream(newPath);
         int len = 0;
         byte[] buf = new byte[1024];
-        while ((len = fis.read(buf)) != -1)
-        {
+        while ((len = fis.read(buf)) != -1) {
             fos.write(buf, 0, len);
         }
         fis.close();
@@ -508,14 +375,12 @@ public class FileUtils extends org.apache.commons.io.FileUtils
      * @throws IOException
      */
     public static final byte[] input2byte(InputStream inStream)
-        throws IOException
-    {
+            throws IOException {
         ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
         // buff用于存放循环读取的临时数据
         byte[] buff = new byte[CACHE_SIZE];
         int rc = 0;
-        while ((rc = inStream.read(buff, 0, CACHE_SIZE)) > 0)
-        {
+        while ((rc = inStream.read(buff, 0, CACHE_SIZE)) > 0) {
             swapStream.write(buff, 0, rc);
         }
         // in_b为转换之后的结果
@@ -524,34 +389,24 @@ public class FileUtils extends org.apache.commons.io.FileUtils
     }
 
 
-
-
-
     /**
-     *
      * 如果文件不存在，则创建新文件
      *
      * @param filePath
      * @return
      */
-    public static boolean createNewFile(String filePath)
-    {
+    public static boolean createNewFile(String filePath) {
         File file = new File(filePath);
-        try
-        {
-            if (!file.exists())
-            {
+        try {
+            if (!file.exists()) {
                 File fileDir = file.getParentFile();
-                if (!fileDir.exists())
-                {
+                if (!fileDir.exists()) {
                     fileDir.mkdirs();
                 }
                 file.createNewFile();
             }
             return true;
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return false;
@@ -559,65 +414,46 @@ public class FileUtils extends org.apache.commons.io.FileUtils
     }
 
     /**
-     *
      * <将byte数组转换为file对象>
      *
      * @param byteArray 需要转换为file对象的byte数组
-     * @param filePath 生成file文件的路径
+     * @param filePath  生成file文件的路径
      */
-    public static void byteArrayToFile(byte[] byteArray, String filePath)
-    {
+    public static void byteArrayToFile(byte[] byteArray, String filePath) {
         File targetFile = new File(filePath);
-        if (!targetFile.exists())
-        {
+        if (!targetFile.exists()) {
             createNewFile(filePath);
         }
         BufferedOutputStream bos = null;
         FileOutputStream fos = null;
-        try
-        {
+        try {
             fos = new FileOutputStream(targetFile);
             bos = new BufferedOutputStream(fos);
             bos.write(byteArray);
             bos.flush();
-        }
-        catch (FileNotFoundException e)
-        {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
-                if (fos != null)
-                {
+        } finally {
+            try {
+                if (fos != null) {
                     fos.close();
                 }
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            try
-            {
-                if (bos != null)
-                {
+            try {
+                if (bos != null) {
                     bos.close();
                 }
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
     /**
-     *
      * <将图片>
      *
      * @param source
@@ -625,33 +461,27 @@ public class FileUtils extends org.apache.commons.io.FileUtils
      * @param targetH
      * @return
      */
-    public static BufferedImage resize(BufferedImage source, int targetW, int targetH)
-    {
+    public static BufferedImage resize(BufferedImage source, int targetW, int targetH) {
         // targetW，targetH分别表示目标长和宽
         int type = source.getType();
         BufferedImage target = null;
-        double sx = (double)targetW / source.getWidth();
-        double sy = (double)targetH / source.getHeight();
+        double sx = (double) targetW / source.getWidth();
+        double sy = (double) targetH / source.getHeight();
         // 这里想实现在targetW，targetH范围内实现等比缩放。如果不需要等比缩放
         // 则将下面的if else语句注释即可
-        if (sx > sy)
-        {
+        if (sx > sy) {
             sx = sy;
-            targetW = (int)(sx * source.getWidth());
-        }
-        else
-        {
+            targetW = (int) (sx * source.getWidth());
+        } else {
             sy = sx;
-            targetH = (int)(sy * source.getHeight());
+            targetH = (int) (sy * source.getHeight());
         }
-        if (type == BufferedImage.TYPE_CUSTOM)
-        { // handmade
+        if (type == BufferedImage.TYPE_CUSTOM) { // handmade
             ColorModel cm = source.getColorModel();
             WritableRaster raster = cm.createCompatibleWritableRaster(targetW, targetH);
             boolean alphaPremultiplied = cm.isAlphaPremultiplied();
             target = new BufferedImage(cm, raster, alphaPremultiplied, null);
-        }
-        else
+        } else
             target = new BufferedImage(targetW, targetH, type);
         Graphics2D g = target.createGraphics();
         // smoother than exlax:
@@ -661,16 +491,14 @@ public class FileUtils extends org.apache.commons.io.FileUtils
         return target;
     }
 
-    public static final InputStream byte2Input(byte[] buf)
-    {
+    public static final InputStream byte2Input(byte[] buf) {
         return new ByteArrayInputStream(buf);
     }
 
     /**
      * 删除单个文件
      *
-     * @param fileName
-     *            要删除的文件的文件名
+     * @param fileName 要删除的文件的文件名
      * @return 单个文件删除成功返回true，否则返回false
      */
     public static boolean deleteFile(String fileName) {
@@ -678,23 +506,23 @@ public class FileUtils extends org.apache.commons.io.FileUtils
         // 如果文件路径所对应的文件存在，并且是一个文件，则直接删除
         if (file.exists() && file.isFile()) {
             if (file.delete()) {
-                log.infoMsg("删除单个文件" + fileName + "成功！");
+                LOG.infoMsg("删除单个文件" + fileName + "成功！");
                 return true;
             } else {
-                log.infoMsg("删除单个文件" + fileName + "失败！");
+                LOG.infoMsg("删除单个文件" + fileName + "失败！");
                 return false;
             }
         } else {
-            log.infoMsg("删除单个文件失败：" + fileName + "不存在！");
+            LOG.infoMsg("删除单个文件失败：" + fileName + "不存在！");
             return false;
         }
     }
 
     /**
-     * @desc 转存文件
      * @param base64Pic
      * @param imgFilePath
      * @return
+     * @desc 转存文件
      */
     public static Map<String, Object> savePic(String base64Pic, String imgFilePath) {
         BASE64Decoder decoder = new BASE64Decoder();
@@ -721,13 +549,14 @@ public class FileUtils extends org.apache.commons.io.FileUtils
             }
             return resultMap;
         } catch (Exception e) {
-            log.infoMsg(e.getMessage());
+            LOG.infoMsg(e.getMessage());
             return resultMap;
         }
     }
 
     /**
      * 读取文本文件
+     *
      * @param is 输入流
      * @return 文本内容
      */
@@ -742,7 +571,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils
             }
             br.close();
         } catch (Exception e) {
-            log.error(e);
+            LOG.error(e);
         }
         return result.toString();
     }
