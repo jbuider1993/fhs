@@ -5,6 +5,7 @@ import com.fhs.fileService.bean.ServiceFile;
 import com.fhs.fileService.business.FileServerBusiness;
 import com.fhs.fileService.service.ServiceFileService;
 import com.fhs.common.utils.*;
+import com.fhs.fileStorage.FileStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,48 +23,41 @@ public class FileServerBusinessImpl implements FileServerBusiness {
     @Autowired
     private ServiceFileService fileService;
 
+    @Autowired
+    private FileStorage fileStorage;
+
     @Override
     public ServiceFile uploadFile(MultipartFile fileData) {
-        ServiceFile sf = new ServiceFile ();
+        ServiceFile sf = new ServiceFile();
         String fileName = fileData.getOriginalFilename();
-        String suffix = fileName.substring (fileName.lastIndexOf ("."));
-        String fileId = StringUtil.getUUID ( );
-        String currentDate = DateUtils.getCurrentDateStr ("yyyy/MM/dd");
-        String prefix = suffix.replace (".", "");
-
-        File file = null;
-        try {
-            file = new File (EConfig.getPathPropertiesValue ("saveFilePath") + currentDate + fileP + prefix + fileP + fileId + suffix);
-            FileUtils.copyInputStreamToFile (fileData.getInputStream (), file);
-
-            sf.setFileId (fileId);
-            sf.setFileName (fileName);
-            sf.setFileSuffix (suffix);
-            sf.setUploadDate (currentDate);
-            this.insertDataToDB (sf);
-        } catch (IOException e) {
-            LOG.error (this, e);
-        }
+        String suffix = fileName.substring(fileName.lastIndexOf("."));
+        String fileId = StringUtil.getUUID();
+        String currentDate = DateUtils.getCurrentDateStr("yyyy-MM-dd");
+        sf.setFileId(fileId);
+        sf.setFileName(fileName);
+        sf.setFileSuffix(suffix);
+        sf.setUploadDate(currentDate);
+        fileStorage.uploadFile(sf, fileData);
+        this.insertDataToDB(sf);
         return sf;
     }
 
     @Override
     public List<ServiceFile> uploadFileForList(List<MultipartFile> allFileData) {
-        List<ServiceFile> rvList = new ArrayList<ServiceFile> ();
+        List<ServiceFile> rvList = new ArrayList<ServiceFile>();
 
         allFileData.forEach(fileData -> {
-            rvList.add (this.uploadFile(fileData));
+            rvList.add(this.uploadFile(fileData));
         });
 
         return rvList;
     }
 
     /**
-     *
      * @param sf
      * @return
      */
-    private boolean insertDataToDB(ServiceFile sf){
-        return ( fileService.insert (sf) > 0 );
+    private boolean insertDataToDB(ServiceFile sf) {
+        return (fileService.insert(sf) > 0);
     }
 }

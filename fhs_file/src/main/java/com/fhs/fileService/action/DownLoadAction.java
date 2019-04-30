@@ -7,6 +7,7 @@ import com.fhs.core.exception.ParamException;
 import com.fhs.fileService.bean.ServiceFile;
 import com.fhs.fileService.service.ServiceFileService;
 import com.fhs.fileService.utils.ThumbnailatorUtils;
+import com.fhs.fileStorage.FileStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,10 +31,15 @@ import java.util.Map;
 @RequestMapping("downLoad")
 public class DownLoadAction extends BaseAction<ServiceFile> {
 
+    private static final Logger LOG = Logger.getLogger(DownLoadAction.class);
+
     @Autowired
     ServiceFileService serviceFileService;
 
-    private static final Logger LOG = Logger.getLogger(DownLoadAction.class);
+    @Autowired
+    private FileStorage fileStorage;
+
+
 
     /**
      * 根据文件id下载文件
@@ -45,11 +52,7 @@ public class DownLoadAction extends BaseAction<ServiceFile> {
             String fileId = request.getParameter("fileId");
             // 文件下载路径
             ServiceFile serviceFile = serviceFileService.selectById(fileId);
-            String path = this.getAllPath(serviceFile);
-            File file = new File(path);
-            if (file.exists()) {
-                FileUtils.download(file, response, file.getName());
-            }
+            fileStorage.downloadFile(serviceFile,response);
         } catch (Exception e) {
             LOG.error(this, e);
             throw new ParamException("下载文件异常,可能是文件不存在");
@@ -69,11 +72,7 @@ public class DownLoadAction extends BaseAction<ServiceFile> {
             // 文件下载路径
             String fileId = fileName.substring(0, fileName.indexOf("."));
             ServiceFile serviceFile = serviceFileService.selectById(fileId);
-            String path = this.getAllPath(serviceFile);
-            File file = new File(path);
-            if (file.exists()) {
-                FileUtils.download(file, response, file.getName());
-            }
+            fileStorage.downloadFile(serviceFile,response);
         } catch (Exception e) {
             LOG.error(this, e);
             throw new RuntimeException("下载文件异常:" + e.getMessage());
@@ -143,28 +142,24 @@ public class DownLoadAction extends BaseAction<ServiceFile> {
         fileId = serviceFile.getFileId();
         // 图片规格
         String fileIdWH = fileId + "_" + maxWidth + "_" + maxHeight + suffix;
-
-        String filePath = "";
+        String filePath =  uploadDate + File.separator + suffix.replace(".", "") + File.separator;
         //兼容旧数据
-        if (CheckUtils.isNotEmpty(uploadDate)) {
-            filePath = uploadDate + File.separator + suffix.replace(".", "") + File.separator;
-        }
+
         // 文件名
         String showFileName = serviceFile.getFileName();
 
         String minPath = downFilePath + filePath + fileIdWH;
 
         File file = new File(minPath);
-        if (file.exists()) {
-            FileUtils.download(file, response, showFileName);
+        if (fileStorage.checkFileIsExist(minPath,serviceFile)) {
+            fileStorage.downloadFileByToken(minPath,serviceFile,response);
         } else {
-
             byte[] fileByte;
-            try {
+            try (InputStream is = fileStorage.getFileInputStream(serviceFile)){
                 fileByte = ThumbnailatorUtils
-                        .zoom2Bytes(downFilePath + filePath + serviceFile.getFileId() + suffix, maxWidth, maxHeight);
+                        .zoom2Bytes(is, maxWidth, maxHeight);
                 file.createNewFile();
-                FileUtils.writeByteArrayToFile(file, fileByte);
+                fileStorage.uploadFileByToken(fileByte,minPath,serviceFile);
                 FileUtils.download(file, response, showFileName);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -189,25 +184,11 @@ public class DownLoadAction extends BaseAction<ServiceFile> {
                 fileId = fileId.substring(0, fileId.indexOf("."));
             }
             ServiceFile serviceFile = serviceFileService.selectById(fileId);
-            File file = new File(this.getAllPath(serviceFile));
-            // 文件名
-            String showFileName = serviceFile.getFileName();
-            if (file.exists()) {
-                FileUtils.download(file, response, showFileName);
-            }
+            fileStorage.downloadFile(serviceFile,response);
         } catch (Exception e) {
             throw new RuntimeException("下载文件异常:" + e.getMessage());
         }
     }
 
-    /**
-     * 获取文件下载地址
-     *
-     * @param serviceFile
-     * @return
-     */
-    private String getAllPath(ServiceFile serviceFile) {
-        return serviceFileService.getAllPath(serviceFile);
-    }
 
 }

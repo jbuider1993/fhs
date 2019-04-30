@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -65,7 +66,7 @@ public class AliyunOSSFileStorage implements FileStorage {
     }
 
     @Override
-    public void uploadFileByToken(byte[] bytes, String token) {
+    public void uploadFileByToken(byte[] bytes, String token,ServiceFile  serviceFile) {
         // 上传文件
         try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream((bytes))) {
             upload(byteArrayInputStream, token);
@@ -88,7 +89,7 @@ public class AliyunOSSFileStorage implements FileStorage {
         {
             // 获取文件输出流
             OSSObject ossObject = ossClientdownForId.getObject(bucketname, token);
-            FileUtils.downloadInputStream(ossObject.getObjectContent(), response, fileName);
+            FileUtils.downloadInputStream(ossObject.getObjectContent(), response, fileName,ossObject.getObjectMetadata().getContentLength());
         }
         catch (Exception e)
         {
@@ -101,13 +102,56 @@ public class AliyunOSSFileStorage implements FileStorage {
     }
 
     @Override
-    public void downloadFileByToken(String token, HttpServletResponse response) {
+    public void downloadFileByToken(String token,ServiceFile  serviceFile, HttpServletResponse response) {
         download(token,  response,null);
+    }
+
+    @Override
+    public boolean checkFileIsExist(String token, ServiceFile serviceFile) {
+        // 初始化 阿里文件服务客户端
+        OSSClient ossClient = this.getClient();
+        token = token == null ? serviceFile.getFileId() : token;
+        try
+        {
+            // 获取文件输出流
+            boolean result = ossClient.doesObjectExist(bucketname,token);
+            return result;
+        }
+        catch (Exception e)
+        {
+            LOG.error("判断文件是否存在异常:" + token,e);
+        }
+        finally
+        {
+            ossClient.shutdown();
+        }
+        return false;
+    }
+
+    @Override
+    public InputStream getFileInputStream(ServiceFile serviceFile) throws FileNotFoundException {
+        // 初始化 阿里文件服务客户端
+        OSSClient ossClientdownForId = this.getClient();
+        try
+        {
+            // 获取文件输出流
+            OSSObject ossObject = ossClientdownForId.getObject(bucketname, serviceFile.getFileId());
+            byte[] bytes = FileUtils.input2byte(ossObject.getObjectContent());
+            return new ByteArrayInputStream(bytes);
+        }
+        catch (Exception e)
+        {
+            LOG.error("文件不存在" + serviceFile.getFileId(),e);
+        }
+        finally
+        {
+            ossClientdownForId.shutdown();
+        }
+        throw new  FileNotFoundException();
     }
 
     private OSSClient getClient() {
         return new OSSClient(endpoint, accessKeyId, accessKeySecret);
     }
-
 
 }
