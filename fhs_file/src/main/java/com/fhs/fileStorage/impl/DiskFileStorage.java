@@ -9,9 +9,12 @@ import com.fhs.fileService.service.ServiceFileService;
 import com.fhs.fileStorage.FileStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 /**
  * 硬盘文件存储
@@ -26,7 +29,7 @@ public class DiskFileStorage implements FileStorage {
 
 
     @Override
-    public void uploadFile(ServiceFile serviceFile, File file) {
+    public void uploadFile(ServiceFile serviceFile, MultipartFile file) {
 
 
 

@@ -1,6 +1,7 @@
 package com.fhs.fileStorage;
 
 import com.fhs.fileService.bean.ServiceFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -9,7 +10,7 @@ public interface FileStorage {
 
     String fileP =  File.separator;
 
-    void uploadFile(ServiceFile serviceFile, File file);
+    void uploadFile(ServiceFile serviceFile, MultipartFile file);
 
 
     void uploadFileByToken(byte[] bytes,String token);
