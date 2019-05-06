@@ -87,14 +87,17 @@
 
 		<c:if test="${permissonDataUrl !=  null}">
 			<div class="fitem">
-				<div class="fitemDiv">
+				<div class="bigLabelDiv">
 					<label >${permissonDataTitle}:</label>
+				</div>
+				<div class="bigContent">
 					<input type="hidden" name="dataPermissions" id="dataPermissions" dataType="*" nullmsg="请选择${permissonDataTitle}"/>
 					<select id="dataPermissions_select" name="dataPermissions_select" class="easyui-combobox"
 							nullmsg="请选择"
 							valuefield="id" textfield="parkName"
 							data-options="
 									url: '${permissonDataUrl}',
+									multiple: true,
 								">
 					</select>
 					<span class="form-field-required">*</span>

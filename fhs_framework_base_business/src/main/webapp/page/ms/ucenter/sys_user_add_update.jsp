@@ -46,21 +46,25 @@
 			</select>
 			<span class="form-field-required">*</span>
 		</div>
-		<div class="fitemDiv" id="roleListDiv">
-			<label>角色:</label>
-			<select id="roleList" class="easyui-combobox"
-					name="roleList" multiple="multiple" style="width: 200px;"
-					datatype="*" nullmsg="请选择角色"
-					data-options="
-									valueField: 'roleId',
-									textField: 'roleName',
-									multiple:true,
-									editable : false,
-									panelHeight: 'auto'">
+	</div>
+	<div class="fitem">
+	       <div class="bigLabelDiv">
+                <label>角色:</label>
+	       </div>
+	       <div class="bigContent" id="roleListDiv">
+                <select id="roleList" class="easyui-combobox"
+                					name="roleList" multiple="multiple" style="width: 200px;"
+                					datatype="*" nullmsg="请选择角色"
+                					data-options="
+                									valueField: 'roleId',
+                									textField: 'roleName',
+                									multiple:true,
+                									editable : false,
+                									panelHeight: 'auto'">
 
-			</select>
-			<span class="form-field-required">*</span>
-		</div>
+                			</select>
+                			<span class="form-field-required">*</span>
+	       </div>
 	</div>
 </form>
 <hfst:readyTag nameSpace="sysUser" idField="userId"/>
