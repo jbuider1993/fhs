@@ -24,6 +24,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * c端用户登录过滤器
+ */
 @ServletComponentScan
 @WebFilter(urlPatterns = {"/front/*","/page/h5/*","/page/pc/*","/b/page-h5/*"},filterName = "userFilter",asyncSupported = true)
 public class UserFilter implements Filter {

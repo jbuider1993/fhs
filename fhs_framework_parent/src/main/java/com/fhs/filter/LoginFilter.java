@@ -1,8 +1,11 @@
 package com.fhs.filter;
+
+import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.Logger;
 import com.fhs.core.config.EConfig;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +14,6 @@ import java.io.IOException;
 
 /**
  * by wanglei
- * 处理 根目录登录问题
  * 后台用户登录filter
  */
 @ServletComponentScan
@@ -31,8 +33,16 @@ public class LoginFilter implements Filter{
         HttpServletResponse response = (HttpServletResponse)res;
         String basePath = EConfig.getPathPropertiesValue("basePath");
         String uri = request.getRequestURI();
-        if(CheckUtils.isNullOrEmpty(uri) || "/".equals(uri) || uri.contains("/b/page-ms")  || (uri.startsWith("/page/ms") && request.getSession().getAttribute("sessionUser") == null ))
+        //访问根目录跳转到首页
+        if(CheckUtils.isNullOrEmpty(uri) || "/".equals(uri)   )
         {
+            response.sendRedirect(basePath + "ms/index");
+        }
+        //如果当前用户为空并且访问受保护的资源
+        else if(((uri.startsWith("/page/ms") || uri.contains("/b/page-ms") ||  uri.contains("/ms/")) && request.getSession().getAttribute(Constant.SESSION_USER) == null ))
+        {
+            String extendsParam = CheckUtils.isNullOrEmpty(request.getQueryString()) ? "" : "?" + request.getQueryString();
+            request.getSession().setAttribute("serviceURL", request.getRequestURL().toString() + extendsParam);
             response.sendRedirect(basePath + "ms/index");
         }
         else
