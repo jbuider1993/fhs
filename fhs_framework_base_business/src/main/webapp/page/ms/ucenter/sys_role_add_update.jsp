@@ -95,6 +95,7 @@
 							valuefield="id" textfield="parkName"
 							data-options="
 									url: '${permissonDataUrl}',
+									multiple: true,
 								">
 					</select>
 					<span class="form-field-required">*</span>
