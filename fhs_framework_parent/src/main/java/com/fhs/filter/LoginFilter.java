@@ -31,7 +31,7 @@ public class LoginFilter implements Filter{
         HttpServletResponse response = (HttpServletResponse)res;
         String basePath = EConfig.getPathPropertiesValue("basePath");
         String uri = request.getRequestURI();
-        if(CheckUtils.isNullOrEmpty(uri) || "/".equals(uri) || (uri.startsWith("/page/ms") && request.getSession().getAttribute("sessionUser") == null ))
+        if(CheckUtils.isNullOrEmpty(uri) || "/".equals(uri) || uri.contains("/b/page-ms")  || (uri.startsWith("/page/ms") && request.getSession().getAttribute("sessionUser") == null ))
         {
             response.sendRedirect(basePath + "ms/index");
         }
