@@ -56,7 +56,9 @@ public class RefreshCacheTask implements InitializingBean,Runnable,ApplicationCo
         //先去刷新一遍，然后判断是否是开发者模式如果是，则继续刷新
         try
         {
-            this.refresh();
+            new Thread(() -> {
+                this.refresh();
+            }).start();
         }
         catch(Exception e)
         {

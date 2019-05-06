@@ -123,16 +123,25 @@ public class PageXAutoJavaService {
         paramMap.put("po",poMap);
         paramMap.put("modelConfig",pagexListSettDTO.getModelConfig());
         String javaCode = BeetlUtil.renderBeelt("/pagex/auto_code/java_code_tag.html",paramMap);
-        LOG.info("自动生成java代码：" + javaCode);
+
         MemoryClassLoader loader = MemoryClassLoader.getInstrance();
         //如果已经存在则重新new一个类加载器，实现类刷新
         if( pageXDBService.getNamespaceClassMap().containsKey(namespace))
         {
             loader = new MemoryClassLoader();
         }
-        loader.registerJava(javaClassName,javaCode);
-        Class poClass = loader.getClass(javaClassName);
-        pageXDBService.getNamespaceClassMap().put(namespace,poClass);
+        try
+        {
+            loader.registerJava(javaClassName,javaCode);
+            Class poClass = loader.getClass(javaClassName);
+            pageXDBService.getNamespaceClassMap().put(namespace,poClass);
+            LOG.info("代码生成注入到classloader成功：" + poClass);
+        }
+        catch (Exception e)
+        {
+            LOG.info("自动生成java代码注册错误：" + javaCode);
+            LOG.error("注册java代码错误",e);
+        }
     }
 
 
