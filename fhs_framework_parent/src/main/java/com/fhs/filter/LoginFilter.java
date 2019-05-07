@@ -39,7 +39,7 @@ public class LoginFilter implements Filter{
             response.sendRedirect(basePath + "ms/index");
         }
         //如果当前用户为空并且访问受保护的资源
-        else if(((uri.startsWith("/page/ms") || uri.contains("/b/page-ms") ||  uri.contains("/ms/")) && request.getSession().getAttribute(Constant.SESSION_USER) == null ))
+        else if(((uri.startsWith("/page/ms") || uri.contains("/b/page-ms") ||  uri.contains("/ms/")) && request.getSession().getAttribute(Constant.SESSION_USER) == null  && (!uri.contains("/ms/index"))))
         {
             String extendsParam = CheckUtils.isNullOrEmpty(request.getQueryString()) ? "" : "?" + request.getQueryString();
             request.getSession().setAttribute("serviceURL", request.getRequestURL().toString() + extendsParam);
