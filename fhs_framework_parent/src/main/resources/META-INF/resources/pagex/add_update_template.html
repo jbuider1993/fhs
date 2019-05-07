@@ -114,6 +114,17 @@ include("/page/tags/form_include.html"){}
                         {
                             EalertE(d.message);
                         }
+                        if(d.code == 409 )
+                        {
+                            if (isExitsFunction("getConflictMsg")) {
+                                EalertE(getConflictMsg());
+                            }
+                            else
+                            {
+                                EalertE('存在重复的数据，请检查');
+                            }
+                        }
+
                         else
                         {
                             EalertE('操作失败');
