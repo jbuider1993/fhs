@@ -1,5 +1,7 @@
 package com.fhs.system.api.cloud;
 
+import com.fhs.common.constant.Constant;
+import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.StringUtil;
 import com.fhs.core.db.DataSource;
 import com.fhs.core.result.HttpResult;
@@ -42,6 +44,10 @@ public class LogAdminOperatorLogApiServiceCloud implements FeignlogAdminOperator
     @RequestMapping("/addLogAdminOperatorLog")
     @Override
     public HttpResult<Integer> addLogAdminOperatorLog(LogAdminOperatorLogVo logAdminOperatorLogVo) {
+        if(!CheckUtils.isNullOrEmpty(logAdminOperatorLogVo.getOperatorId()))
+        {
+            return HttpResult.success(Constant.ZERO);
+        }
         LogAdminOperatorLog log =new LogAdminOperatorLog();
         BeanUtils.copyProperties(logAdminOperatorLogVo,log);
         log.setId(StringUtil.getUUID());
