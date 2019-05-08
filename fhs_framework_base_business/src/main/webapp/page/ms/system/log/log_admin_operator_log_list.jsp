@@ -30,14 +30,7 @@
 <div id="toolbar">
 	<div style="margin-bottom: 5px;">
 		<shiro:hasPermission name="logAdminOperatorLog:see">
-			<select id="operatorIdF" name="operatorIdF" class="easyui-combobox" prompt="操作用户"
-					data-options="
-				valueField: 'userId',
-				textField: 'userName',
-				editable : false,
-				url: '${fhs_framework_ucenter_basePath}webApi/sysUser/findList?jsonpCallback=?',
-				showAll:true
-				">
+			<select id="operatorIdF" name="operatorIdF">
 			</select>
 			<select id="logTypeF" name="logTypeF" class="easyui-combobox" prompt="操作类型"
 					data-options="
@@ -72,6 +65,29 @@
 
 	var id = '${param.id}';
 
+	$(function(){
+		var _grid_url = '${basePath}/ms/sysUser/findPage';
+		$('#operatorIdF').combogrid({
+			method : 'get',
+			idField : 'userId',
+			textField : 'userName',
+			url : _grid_url,
+			columns : [[
+				{field:'userName',title:'用户名',width:'100px;'},
+				{field:'userLoginName',title:'用户登录名',width:'100px;'},
+			]],
+			pagination : false,
+			fitColumns : true,
+			mode : 'remote',
+			keyHandler : {
+				enter : function(q) {
+					var _temp_keyword =  $('#operatorIdF').combogrid('getText');
+					var _temp_reloadUrl = _grid_url+'?userName=' + _temp_keyword;
+					$('#operatorIdF').combogrid('grid').datagrid('reload',_temp_reloadUrl);
+				}
+			}
+		});
+	})
 
 	/**
 	 * 查看
@@ -82,7 +98,7 @@
 	//重新加载
 	function reload() {
 		$('#listGrid').datagrid('load', {
-            operatorId : $('#operatorIdF').combobox('getValue'),
+            operatorId : $('#operatorIdF').combogrid('getValue'),
             logType : $('#logTypeF').combobox('getValue'),
             operatDesc : $('#operatDescF').val(),
             reqParam : $('#reqParamF').val(),
