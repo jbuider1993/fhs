@@ -1,10 +1,10 @@
-package com.fhs.core.responsebody.annotation;
+package com.fhs.core.jsonfilter.annotation;
 
 
 import java.lang.annotation.*;
 
 /**
- * json
+ * json过滤器
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

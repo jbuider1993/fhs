@@ -1,4 +1,4 @@
-package com.fhs.core.responsebody.annotation;
+package com.fhs.core.jsonfilter.annotation;
 
 import java.lang.annotation.*;
 
@@ -11,10 +11,9 @@ import java.lang.annotation.*;
 public @interface ObjFilter {
 
     /**
-     * 比如返回ClassRoom对象，里面有个属性是Student 可以写stus
-     * @return
+     * 类
      */
-    String expression() default  "";
+    Class clazz();
 
     /**
      * 哪些字段可以返回
