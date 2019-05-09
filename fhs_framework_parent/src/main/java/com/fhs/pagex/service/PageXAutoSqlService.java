@@ -295,10 +295,12 @@ public class PageXAutoSqlService {
         String fieldName = null;
         String operator = null;
         String camelName = null;
+        Set<String> hasWhereFields = new HashSet<>();
         for(Map<String,Object> field : fields)
         {
             fieldName =ConverterUtils.toString(field.get("name"));
             camelName = ColumnNameUtil.underlineToCamel(fieldName);
+            hasWhereFields.add(fieldName);
             //代表是between
             if(ConverterUtils.toBoolean(field.get("isBT")))
             {
@@ -359,12 +361,27 @@ public class PageXAutoSqlService {
             for(String extendsFilter : extendsFilters )
             {
                 String clomun = extendsFilter.split("=")[0];
+                hasWhereFields.add(clomun);
                 sqlBuilder.append(" <if test=\"");
                 sqlBuilder.append(clomun + "  !='' and   ");
                 sqlBuilder.append( clomun + " !=null \"> ");
                 sqlBuilder.append(" AND " + clomun  +  "= #{" + clomun + "}");
                 sqlBuilder.append("</if>");
             }
+        }
+        PagexAddDTO addDTO = PagexDataService.SIGNEL.getPagexAddDTOFromCache(pagexListSettDTO.getModelConfig().get("namespace").toString());
+        List<Map<String, Object>> formFieldSett = addDTO.getFormFieldSett();
+
+        for(Map<String, Object> filed:formFieldSett)
+        {
+            fieldName = ConverterUtils.toString(filed.get("name"));
+            camelName =  ConverterUtils.toString(filed.get("camelName"));
+            if(hasWhereFields.contains(fieldName))continue;
+            sqlBuilder.append(" <if test=\"");
+            sqlBuilder.append(camelName + "  !='' and   ");
+            sqlBuilder.append( camelName + " !=null \"> ");
+            sqlBuilder.append(" AND " + fieldName  +  "<![CDATA[=]]> #{" + camelName + "}");
+            sqlBuilder.append("</if>");
         }
         sqlBuilder.append("</where>");
         return sqlBuilder.toString();
