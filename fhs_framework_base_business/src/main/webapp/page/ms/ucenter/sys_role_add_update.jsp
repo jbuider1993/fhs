@@ -91,8 +91,8 @@
 					<label >${permissonDataTitle}:</label>
 				</div>
 				<div class="bigContent">
-					<input type="hidden" name="dataPermissions" id="dataPermissions" dataType="*" nullmsg="请选择${permissonDataTitle}"/>
-					<select id="dataPermissions_select" name="dataPermissions_select" class="easyui-combobox"
+					<input type="hidden" name="dataPermissions" id="dataPermissions"/>
+					<select id="dataPermissions_select"  dataType="*" nullmsg="请选择${permissonDataTitle}" name="dataPermissions_select" class="easyui-combobox"
 							nullmsg="请选择"
 							valuefield="id" textfield="parkName"
 							data-options="
@@ -572,19 +572,7 @@
 			}, "json");
 		};
 
-        // 剔除当前不存在的小区（重新选择时，前面多一逗号）
-        $("#propertyList").combobox({
-            onChange: function(n,o){
-                $("#propertyDiv").find("input[type='hidden'][name='propertyList'][value='']").remove();
-            }
-        });
 
-        // 剔除当前不存在的部门（重新选择时，前面多一逗号）
-        $("#deptList").combobox({
-            onChange: function(n,o){
-                $("#deptDiv").find("input[type='hidden'][name='deptList'][value='']").remove();
-            }
-        });
 	});
 
 	function resetChecketBox(row, data) {
