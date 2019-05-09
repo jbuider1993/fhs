@@ -1,7 +1,6 @@
 package com.fhs.system.service;
 
 import com.fhs.core.base.service.BaseService;
-import com.fhs.core.result.HttpResult;
 import com.fhs.system.bean.Area;
 
 import java.util.Map;
@@ -34,5 +33,5 @@ public interface AreaService extends BaseService<Area>
     /**
      * 刷新区域缓存
      */
-    HttpResult refreshRedisCache();
+    void refreshRedisCache();
 }

@@ -45,7 +45,7 @@ public class AreaAction extends ModelSuperAction<Area>
      * @param area
      */
     @RequestMapping("getProvinceData")
-    @ResponseBody
+
     public void getProvinceData(HttpServletRequest request, HttpServletResponse response, Area area)
     {
         Map<String, Object> map = new HashMap<String, Object>();
@@ -60,8 +60,10 @@ public class AreaAction extends ModelSuperAction<Area>
      */
     @RequiresPermissions("area:refreshRedisCache")
     @RequestMapping("/refreshRedisCache")
-    public HttpResult refreshRedisCache(){
-        return areaService.refreshRedisCache();
+    @ResponseBody
+    public HttpResult<Boolean> refreshRedisCache(){
+        areaService.refreshRedisCache();
+        return HttpResult.success(true);
     }
 
 }

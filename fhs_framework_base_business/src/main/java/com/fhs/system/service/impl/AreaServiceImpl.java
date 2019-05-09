@@ -61,7 +61,7 @@ public class AreaServiceImpl extends BaseServiceImpl<Area> implements AreaServic
     }
 
     @Override
-    public HttpResult refreshRedisCache() {
+    public void refreshRedisCache() {
         List<Area> areaList = this.select();
         areaList.forEach(area -> {
             if(!StringUtil.isEmpty(area.getAreaName())){
@@ -73,7 +73,6 @@ public class AreaServiceImpl extends BaseServiceImpl<Area> implements AreaServic
                 }
             }
         });
-        return HttpResult.success();
     }
 
 
