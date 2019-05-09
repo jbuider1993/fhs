@@ -17,7 +17,7 @@ import java.io.IOException;
  * 后台用户登录filter
  */
 @ServletComponentScan
-@WebFilter(urlPatterns = {"*"},filterName = "loginFilter" ,asyncSupported = true)
+@WebFilter(urlPatterns = {"*"},filterName = "zLoginFilter" ,asyncSupported = true)
 public class LoginFilter implements Filter{
 
     private static final Logger LOGGER = Logger.getLogger(LoginFilter.class);
