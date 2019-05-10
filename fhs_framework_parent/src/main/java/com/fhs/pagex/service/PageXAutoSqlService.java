@@ -376,7 +376,7 @@ public class PageXAutoSqlService {
         {
             fieldName = ConverterUtils.toString(filed.get("name"));
             camelName =  ConverterUtils.toString(filed.get("camelName"));
-            if(hasWhereFields.contains(fieldName))continue;
+            if(hasWhereFields.contains(fieldName)||CheckUtils.isNullOrEmpty(fieldName))continue;
             sqlBuilder.append(" <if test=\"");
             sqlBuilder.append(camelName + "  !='' and   ");
             sqlBuilder.append( camelName + " !=null \"> ");
