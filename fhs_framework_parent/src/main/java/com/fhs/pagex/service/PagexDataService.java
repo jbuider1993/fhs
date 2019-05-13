@@ -12,6 +12,7 @@ import com.fhs.pagex.listener.JsRefreshListener;
 
 import javax.script.ScriptException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * pagex 包 所有的缓存数据都放到这里
@@ -38,39 +39,39 @@ public enum PagexDataService {
     /**
      * js内容存放map key为文件名
      */
-    private Map<String, String> jsContentMap = new HashMap<>();
+    private Map<String, String> jsContentMap = new ConcurrentHashMap<>();
 
     /**
      * 列表页面html缓存
      */
-    private Map<String, String> listPageHtmlCache = new HashMap<>();
+    private Map<String, String> listPageHtmlCache = new ConcurrentHashMap<>();
 
     /**
      * addDTO缓存
      */
-    private Map<String, PagexAddDTO> pagexAddDtoCache = new HashMap<>();
+    private Map<String, PagexAddDTO> pagexAddDtoCache = new ConcurrentHashMap<>();
 
     /**
      * listDTO缓存
      */
-    private Map<String, PagexListSettDTO> pagexListSettDTOCache = new HashMap<>();
+    private Map<String, PagexListSettDTO> pagexListSettDTOCache = new ConcurrentHashMap<>();
 
     /**
      * pageXFrontDTO 缓存
      */
-    private Map<String, PageXFrontDTO> pageXFrontDTOCache = new HashMap<>();
+    private Map<String, PageXFrontDTO> pageXFrontDTOCache = new ConcurrentHashMap<>();
 
     /**
      * PageXTreeDTO 缓存
      */
-    private Map<String, PageXTreeDTO> pageXTreeDTOCache = new HashMap<>();
+    private Map<String, PageXTreeDTO> pageXTreeDTOCache = new ConcurrentHashMap<>();
 
 
 
     /**
      * 添加页面html缓存
      */
-    private Map<String, String> addPageHtmlCache = new HashMap<>();
+    private Map<String, String> addPageHtmlCache = new ConcurrentHashMap<>();
     /**
      * 刷新js的事件
      */
@@ -79,7 +80,7 @@ public enum PagexDataService {
     /**
      * add页面扩展html模板路径
      */
-    private Map<String, String> addPageExtendsHtmlPathMap = new HashMap<>();
+    private Map<String, String> addPageExtendsHtmlPathMap = new ConcurrentHashMap<>();
 
 
     private PageXAutoJavaService pageXAutoJavaService;
