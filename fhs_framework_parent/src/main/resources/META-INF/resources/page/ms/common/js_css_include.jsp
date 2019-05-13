@@ -49,6 +49,9 @@
 <script type="text/javascript" src="${staticPath}js/listUploadFiles.js"></script>
 <script type="text/javascript" src="${staticPath}js/uploadUtil.js"></script>
 <script type="text/javascript" src="${staticPath}js/Validform_v5.3.2.js"></script>
+<script type="text/javascript" src="${staticPath}js/sweetalert/sweetalert2.js"></script>
+<link rel="stylesheet" type="text/css"
+	  href="${staticPath}js/sweetalert/sweetalert2.css" />
 <script type="text/javascript">
 var isEdit = false;
 <c:if test="${!empty param.isEdit}">
