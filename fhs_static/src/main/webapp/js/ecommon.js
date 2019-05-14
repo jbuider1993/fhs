@@ -62,7 +62,7 @@ function addSelectRowFun(gridId, funName) {
   if (row) {
     funName(row);
   } else {
-    $.messager.alert('操作提示', '请选择一条数据进行操作!', 'info');
+    swal('操作提示', '您必须在列表中选中一条数据后才能进行操作', 'warning');
   }
 }
 
@@ -110,7 +110,11 @@ function Ealert(message) {
 			}
 		});
   }
+  if(message.indexOf('成功') >= 0){
+	 swal('提示', message, 'success');
+  }
   else{
+
 	  $.toast({
 			heading: '提示',
 			text: message,
@@ -531,30 +535,44 @@ function pubDel(gridId, url, id, callback, messager) {
   }
   var row = $('#' + gridId).datagrid('getSelected');
   if (row) {
-    $.messager.confirm('提示', messager, function(r) {
-      var _delParam = url.indexOf('?') !=-1 ? '&jackToken=' + getCookie(getReferer()) : '?jackToken=' + getCookie(getReferer());
-      if (r) {
-        $.ajax({
-          type : 'POST',
-          url : url + row[id] + _delParam,
-          dataType : 'json',
-          success : function(data) {
-            if (data.result == true) {
-              Ealert('数据删除成功');
-              if (callback == null || callback == undefined) {
-                reload();
-              } else {
-                callback();
-              }
-            } else {
-              Ealert('数据删除失败');
-            }
-          }
-        });
-      }
-    });
+	  var _delParam = url.indexOf('?') !=-1 ? '&jackToken=' + getCookie(getReferer()) : '?jackToken=' + getCookie(getReferer());
+	  swal({
+		  title: '删除',
+		  text: "您确定要删除么?这将无法恢复!",
+		  type: 'warning',   //感叹号图标
+		  showCancelButton: true,   //显示取消按钮
+		  confirmButtonText: "是的，我要删除",
+		  confirmButtonColor: "#ec6c62",
+		  cancelButtonText: '取消',
+		},function() {    //大部分，then是通用的回调函数
+		   $.ajax({
+			  type : 'POST',
+			  url : url + row[id] + _delParam,
+			  dataType : 'json',
+			  success : function(data) {
+				if (data.result == true) {
+				  if (callback == null || callback == undefined) {
+					reload();
+				  } else {
+					callback();
+				  }
+				  setTimeout(function(){
+					   swal({
+						  title: '操作成功',
+						  text: "数据已经删除成功",
+						  type: 'success',
+						  timer:1500,
+					  });
+				  },300);
+				 
+				} else {
+				   swal("失败提示", "您的数据删除操作没有成功", "error");
+				}
+			  }
+			});
+		})
   } else {
-    $.messager.alert('操作提示', '请选择一条数据进行操作!', 'info');
+    swal('操作提示', '您必须在列表中选中一条数据后才能进行操作', 'warning');
   }
 
 }
