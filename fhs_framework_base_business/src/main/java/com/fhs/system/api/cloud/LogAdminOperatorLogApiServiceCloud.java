@@ -44,7 +44,7 @@ public class LogAdminOperatorLogApiServiceCloud implements FeignlogAdminOperator
     @RequestMapping("/addLogAdminOperatorLog")
     @Override
     public HttpResult<Integer> addLogAdminOperatorLog(LogAdminOperatorLogVo logAdminOperatorLogVo) {
-        if(!CheckUtils.isNullOrEmpty(logAdminOperatorLogVo.getOperatorId()))
+        if(CheckUtils.isNullOrEmpty(logAdminOperatorLogVo.getOperatorId()))
         {
             return HttpResult.success(Constant.ZERO);
         }
