@@ -41,7 +41,7 @@ public class ActionInterceptAndCreateLogAop {
     /**
      * 定义切入点
      */
-    @Pointcut("execution(* com.fhs.*.action.*.*(..) )")
+    @Pointcut("execution(* com.*.*.action.*.*(..) )")
     public void interceptAndCreateLogAop() {
 
     }
