@@ -57,4 +57,9 @@ public class SysUserVo extends BaseVo {
      * 是否超管 0:否 1:是
      */
     private Integer isAdmin;
+
+    /**
+     * 集团编码-saas模式适用
+     */
+    private String groupCode;
 }

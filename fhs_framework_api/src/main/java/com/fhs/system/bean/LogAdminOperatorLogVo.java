@@ -89,5 +89,8 @@ public class LogAdminOperatorLogVo extends BaseVo<LogAdminOperatorLogVo> {
 	@Length(message = "ip地址字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     private String networkIp;
 
-
+    /**
+     * 集团编码
+     */
+    private String groupCode;
 }
