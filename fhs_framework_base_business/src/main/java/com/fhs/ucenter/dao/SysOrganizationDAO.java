@@ -1,12 +1,12 @@
 package com.fhs.ucenter.dao;
 
 import com.fhs.common.bean.ComboboxNode;
-import com.fhs.ucenter.bean.SysOrganization;
 import com.fhs.core.base.dao.BaseDao;
-import com.mybatis.jpa.annotation.MapperDefinition;
+import com.fhs.ucenter.bean.SysOrganization;
 import com.fhs.ucenter.bean.TreeModel;
+import com.mybatis.jpa.annotation.MapperDefinition;
+import com.mybatis.jpa.annotation.MultiTenancyCheck;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -16,8 +16,8 @@ import java.util.Map;
  * @version [版本号, 2018-09-04]
  * @versio 1.0 陕西小伙伴网络科技有限公司  Copyright (c) 2018 All Rights Reserved.
  */
+@MultiTenancyCheck
 @MapperDefinition(domainClass = SysOrganization.class)
-@Repository
 public interface SysOrganizationDAO extends BaseDao<SysOrganization> {
 
     /**

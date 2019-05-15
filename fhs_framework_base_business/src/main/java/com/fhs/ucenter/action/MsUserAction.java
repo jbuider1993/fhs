@@ -62,6 +62,7 @@ public class MsUserAction extends ModelSuperAction<SysUser>
             if(StringUtil.isEmpty(sysUser.getUserId())) { //新增
                 sysUser.setCreateTime(DateUtils.formartDate(new Date(), DateUtils.DATETIME_PATTERN));
                 sysUser.setCreateUser(loginSysUser.getUserId());
+                sysUser.setGroupCode(loginSysUser.getGroupCode());
             }
             Map<String, Object> resultMap = sysUserService.addUser(sysUser);
             boolean retult = ConverterUtils.toBoolean(resultMap.get("retult"));
@@ -165,7 +166,6 @@ public class MsUserAction extends ModelSuperAction<SysUser>
     @LogDesc(type = LogDesc.UPDATE, value = "修改后台用户")
     public HttpResult update(HttpServletRequest request, HttpServletResponse response, SysUser sysUser)
     {
-
         try
         {
             if ("defaultPass".equals(sysUser.getPassword()))
@@ -232,7 +232,7 @@ public class MsUserAction extends ModelSuperAction<SysUser>
      * @param response
      */
     @RequestMapping("seachMenuByUser")
-    public void seachMenuByUser(@RequestParam("systemId") String systemId, HttpServletRequest request, HttpServletResponse response)
+    public void seachMenuByUser(@RequestParam("menuType") String menuType, HttpServletRequest request, HttpServletResponse response)
     {
         SysUserVo user = super.getSessionuser(request);
         SysUser sysUser = new SysUser();
@@ -242,7 +242,7 @@ public class MsUserAction extends ModelSuperAction<SysUser>
             LOG.error("用户没有登录:" + request.getSession());
             return;
         }
-        super.outWrite(JsonUtils.list2json(sysUserService.getMenu(sysUser, systemId)), response);
+        super.outWrite(JsonUtils.list2json(sysUserService.getMenu(sysUser, menuType)), response);
     }
 
     /**

@@ -4,6 +4,8 @@ import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.Logger;
 import com.fhs.common.utils.SCaptcha;
 import com.fhs.core.config.EConfig;
+import com.fhs.core.exception.ParamException;
+import com.fhs.core.result.HttpResult;
 import com.fhs.ucenter.api.vo.SysUserVo;
 import com.fhs.ucenter.bean.SysUser;
 import com.fhs.ucenter.service.SysSystemService;
@@ -15,7 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,7 +39,7 @@ public class MsLoginAction
      * 后台用户服务
      */
     @Autowired
-    SysUserService sysUserService;
+    private SysUserService sysUserService;
 
     /**
      * 子系统服务
@@ -51,26 +53,24 @@ public class MsLoginAction
      * 用户登录
      * */
     @RequestMapping("/securityLogin")
-    public ModelAndView securityLogin(SysUser sysUser, HttpServletRequest request,HttpServletResponse response)
+    @ResponseBody
+    public HttpResult<Boolean> securityLogin(SysUser sysUser, HttpServletRequest request, HttpServletResponse response)
     {
-        ModelAndView model = new ModelAndView("login");
         String identifyCode = request.getParameter("identifyCode");
         Object sessionIdentify = request.getSession().getAttribute("identifyCode");
         if (null == sessionIdentify)//session 失效
         {
-            return model;
+            throw new ParamException("验证码失效，请刷新验证码后重新输入");
         }
         if (!sessionIdentify.toString().equals(identifyCode))
         {
-            request.setAttribute("codeError", false);
-            return model;
+            throw new ParamException("验证码错误，请重新输入");
         }
         request.getSession().setAttribute("identifyCode",null);
         sysUser = sysUserService.login(sysUser);
         if (sysUser == null)
         {
-            request.setAttribute("loginError", true);
-            return model;
+            throw new ParamException("用户名或者密码错误");
         }
         //如果不是admin就去加载全部的数据
         if(sysUser.getIsAdmin() == Constant.INT_TRUE)
@@ -86,11 +86,11 @@ public class MsLoginAction
         Subject subjects = SecurityUtils.getSubject();
         // 显示调用，让程序重新去加载授权数据
         subjects.isPermitted("init");
-        model.setViewName("redirect:page/ms/index/indexMenuLayui.jsp");
+
         SysUserVo sysUserVo = new SysUserVo();
         BeanUtils.copyProperties(sysUser,sysUserVo);
         request.getSession().setAttribute(Constant.SESSION_USER, sysUserVo);
-        return model;
+        return HttpResult.success(true);
     }
 
     /**

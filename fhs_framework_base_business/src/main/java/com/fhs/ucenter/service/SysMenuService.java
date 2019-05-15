@@ -22,6 +22,11 @@ public interface SysMenuService extends BaseService<SysMenu>
     int NOT_SHOW = 1;
 
     /**
+     * 租户
+     */
+    int MENU_TYPE_TENANT=1;
+
+    /**
      * 根据父Id获取树集合
      * @param parentId 条件列表
      * @return

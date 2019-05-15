@@ -72,7 +72,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
 
     @Override
     public String readPass(String userName) {
-        return ENCodeUtils.encodeByMD5(userName).toLowerCase();
+        return ENCodeUtils.encodeByMD5(userName + "fhs_framework").toLowerCase();
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -104,9 +104,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
         int count = 0;
         if (StringUtil.isEmpty(adminUser.getUserId())) { //新增
             adminUser.setUserId(StringUtil.getUUID());
-            count = this.add(adminUser);
+            count = this.insertJpa(adminUser);
         } else {//修改
-            count = super.updateById(adminUser);
+            count = super.updateSelectiveById(adminUser);
         }
         Map<String, Object> paramMap = new HashMap<String, Object>();
         if (count > 0) {
@@ -132,7 +132,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
         boolean count = deleteUserRole(adminUser);
         if (count) {
             // 修改用户信息
-            boolean bean = update(adminUser);
+            boolean bean = super.updateSelectiveById(adminUser)>0;
             if (bean) {
                 if (adminUser.getRoleList().length > 0) {
                     // 插入新的用户角色
@@ -476,9 +476,22 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
     }
 
     @Override
-    public List<LeftMenu> getMenu(SysUser user, String systemId) {
+    public List<LeftMenu> getMenu(SysUser user, String menuType) {
+
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("systemId", systemId);
+        //如果是saas模式需要判断菜单类型
+        if(ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isSaasModel")))
+        {
+            //如果不是运营者的集团编码，只能是租户，如果是运营者的编码可以按照参数请求的来
+            if(EConfig.getOtherConfigPropertiesValue("operator_group_code").equals(user.getGroupCode()))
+            {
+                map.put("menuType", menuType);
+            }
+            else
+            {
+                map.put("menuType", SysMenuService.MENU_TYPE_TENANT);
+            }
+        }
         List<SysMenu> menuList = sysUserDAO.selectMenuAll(map);
         menuList = menuFilter(user, menuList);
         Map<Integer, LeftMenu> leftMenuMap = new HashMap<>();

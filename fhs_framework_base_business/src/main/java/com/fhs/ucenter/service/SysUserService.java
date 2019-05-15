@@ -197,9 +197,10 @@ public interface SysUserService extends BaseService<SysUser>
     /**
      * 获取当前用户的 左侧菜单
      * @param user 当前登录用户
+     * @param menuType 菜单类型
      * @return 他有权限的左侧菜单
      */
-    List<LeftMenu> getMenu(SysUser user, String systemId);
+    List<LeftMenu> getMenu(SysUser user, String menuType);
 
     /**
      * @desc 根据用户id获取用户信息

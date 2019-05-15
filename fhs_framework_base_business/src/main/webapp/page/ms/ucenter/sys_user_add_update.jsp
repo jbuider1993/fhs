@@ -28,15 +28,6 @@
 		<hfs:province name="provinceId" areaName="areaId" cityName="cityId" required="false" title="省份" />
 	</div>
 	<div class="fitem">
-		<hfs:city name="cityId" areaName="areaId" required="false" title="市" />
-		<hfs:area name="areaId" required="false" title="区县" />
-	</div>
-	<div class="fitem">
-		<hfs:bigInput  maxLenth="200" name="address" title="地址" required="false" />
-		<input type="hidden" name="isAdmin" id="isAdmin" value="0"/>
-		<input type="hidden" name="passWd" id="passWd"/>
-	</div>
-	<div class="fitem">
 		<div class="fitemDiv">
 			<label>所属机构:</label>
 			<select class="easyui-combotree" id="organizationId" datatype="*" nullmsg="请选择机构" name="organizationId" data-options="

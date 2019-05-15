@@ -18,6 +18,7 @@ import com.fhs.core.group.Delete;
 import com.fhs.core.group.Update;
 import com.fhs.core.trans.Trans;
 import com.fhs.core.trans.TransTypes;
+import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -34,11 +35,11 @@ import javax.validation.constraints.NotNull;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
+@Data
 @Entity
 @Table(name = "t_ucenter_ms_role")
 @TransTypes(types = {Constant.WORD_BOOK, Constant.USER_INFO, Constant.SYS_ORGANIZATION_INFO})
-public class SysRole extends BaseDO<SysRole>
-{
+public class SysRole extends BaseDO<SysRole> {
     /**
      *
      */
@@ -53,7 +54,9 @@ public class SysRole extends BaseDO<SysRole>
     @Min(message = "{test.roleId.min}", value = -2147483648, groups = {Add.class, Update.class})
     private Integer roleId;
 
-    /** 加密主键 */
+    /**
+     * 加密主键
+     */
     @NotNull(message = "{test.roleIdE.null}")
     @Length(message = "{test.roleIdE.length}", max = 10, min = 0)
     @Transient
@@ -86,7 +89,7 @@ public class SysRole extends BaseDO<SysRole>
      * 所属机构
      */
     @NotEmpty
-    @NotNull(message="所属机构字段不可为null", groups = {Update.class, Delete.class})
+    @NotNull(message = "所属机构字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "所属机构字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "organization_id")
     @Trans(type = Constant.SYS_ORGANIZATION_INFO, key = Constant.SYS_ORGANIZATION_NAME)
@@ -96,11 +99,16 @@ public class SysRole extends BaseDO<SysRole>
      * 数据权限(资源类型，部门及小区)
      */
     @NotEmpty
-    @NotNull(message="数据权限(资源类型，部门及小区)字段不可为null", groups = {Update.class, Delete.class})
+    @NotNull(message = "数据权限(资源类型，部门及小区)字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "数据权限(资源类型，部门及小区)字段的长度最大为500", groups = {Add.class, Update.class}, max = 500)
     @Column(name = "data_permissions")
     private String dataPermissions;
 
+    /**
+     * 集团编码
+     */
+    @Column(name = "group_code")
+    private String groupCode;
 
 
     /**
@@ -109,15 +117,6 @@ public class SysRole extends BaseDO<SysRole>
     @Transient
     private String[] methods;
 
-    public String[] getMethods()
-    {
-        return methods;
-    }
-
-    public void setMethods(String[] methods)
-    {
-        this.methods = methods;
-    }
 
     /**
      * 状态
@@ -125,125 +124,43 @@ public class SysRole extends BaseDO<SysRole>
     @Transient
     private String state;
 
-    public String getState()
-    {
-        return state;
-    }
 
-    public void setState(String state)
-    {
-        this.state = state;
-    }
-
-    /** 给主键进行加密 */
-    public void setRoleIdE(String roleIdE)
-    {
+    /**
+     * 给主键进行加密
+     */
+    public void setRoleIdE(String roleIdE) {
         roleId = EncryptUtils.getDecodeIdFromIdE(roleIdE);
         this.roleIdE = roleIdE;
     }
 
-    /** 获取加密主键 */
-    public String getRoleIdE()
-    {
+    /**
+     * 获取加密主键
+     */
+    public String getRoleIdE() {
         return roleIdE;
     }
 
     /**
      * 给角色id赋值
      */
-    public void setRoleId(Integer roleId)
-    {
+    public void setRoleId(Integer roleId) {
         roleIdE = EncryptUtils.getEncodeIdEFromId(roleId);
         this.roleId = roleId;
     }
 
-    /**
-     * 获取角色id
-     */
-    public Integer getRoleId()
-    {
-        return roleId;
+    public SysRole() {
     }
 
-    /**
-     * 给角色名称赋值
-     */
-    public void setRoleName(String roleName)
-    {
+    public SysRole(Integer roleId, String roleIdE, String roleName, String remark, Integer isDisable, String organizationId, String dataPermissions, String groupCode, String[] methods, String state) {
+        this.roleId = roleId;
+        this.roleIdE = roleIdE;
         this.roleName = roleName;
-    }
-
-    /**
-     * 获取角色名称
-     */
-    public String getRoleName()
-    {
-        return roleName;
-    }
-
-    /**
-     * 给赋值
-     */
-    public void setRemark(String remark)
-    {
         this.remark = remark;
-    }
-
-    /**
-     * 获取
-     */
-    public String getRemark()
-    {
-        return remark;
-    }
-
-    /**
-     * 给 是否禁用 0:启用 1:禁用 赋值
-     */
-    public void setIsDisable(Integer isDisable)
-    {
         this.isDisable = isDisable;
-    }
-
-    /**
-     * 获取 是否禁用 0:启用 1:禁用
-     */
-    public Integer getIsDisable()
-    {
-        return isDisable;
-    }
-
-    /**
-     * 获取 所属机构
-     * @return
-     */
-    public String getOrganizationId() {
-        return organizationId;
-    }
-
-    /**
-     * 给 所属机构 赋值
-     * @param organizationId
-     */
-    public void setOrganizationId(String organizationId) {
         this.organizationId = organizationId;
-    }
-
-    /**
-     * 获取 数据权限(资源类型，部门及小区)
-     * @return
-     */
-    public String getDataPermissions() {
-        return dataPermissions;
-    }
-
-    /**
-     * 给 数据权限(资源类型，部门及小区) 赋值
-     * @param dataPermissions
-     */
-    public void setDataPermissions(String dataPermissions) {
         this.dataPermissions = dataPermissions;
+        this.groupCode = groupCode;
+        this.methods = methods;
+        this.state = state;
     }
-
-
 }

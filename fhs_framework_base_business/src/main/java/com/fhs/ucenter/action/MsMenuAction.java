@@ -32,7 +32,7 @@ import java.util.Map;
 public class MsMenuAction extends ModelSuperAction<SysMenu>
 {
 
-    Logger LOG = Logger.getLogger(MsMenuAction.class);
+    private static final Logger LOG = Logger.getLogger(MsMenuAction.class);
 
     @Autowired
     SysMenuService sysMenuService;

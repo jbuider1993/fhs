@@ -19,6 +19,7 @@ import com.fhs.core.group.Delete;
 import com.fhs.core.group.Update;
 import com.fhs.core.trans.Trans;
 import com.fhs.core.trans.TransTypes;
+import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -36,10 +37,10 @@ import java.util.List;
  * @since [产品/模块版本]
  */
 @Entity
+@Data
 @Table(name = "t_ucenter_ms_user")
 @TransTypes(types = {Constant.WORD_BOOK, Constant.SYS_ORGANIZATION_INFO})
-public class SysUser extends BaseDO<SysUser>
-{
+public class SysUser extends BaseDO<SysUser> {
     /**
      *
      */
@@ -53,7 +54,9 @@ public class SysUser extends BaseDO<SysUser>
     @Column(name = "user_id")
     private String userId;
 
-    /** 加密主键 */
+    /**
+     * 加密主键
+     */
 
     @Transient
     private String userIdE;
@@ -89,6 +92,12 @@ public class SysUser extends BaseDO<SysUser>
     private String mobile;
 
     /**
+     * 集团编码-saas模式适用
+     */
+    @Column(name = "group_code")
+    private String groupCode;
+
+    /**
      * 邮箱
      */
     @NotNull(message = "{test.email.null}", groups = {Update.class, Add.class})
@@ -113,21 +122,21 @@ public class SysUser extends BaseDO<SysUser>
     /**
      * 省
      */
-    @Length(message="的provinceId字段的长度最大为64", groups = {Add.class, Update.class}, max=64, min=0)
+    @Length(message = "的provinceId字段的长度最大为64", groups = {Add.class, Update.class}, max = 64, min = 0)
     @Column(name = "province_id", nullable = true, length = 64)
     private String provinceId;
 
     /**
      * 市
      */
-    @Length(message="的cityId字段的长度最大为64", groups = {Add.class, Update.class}, max=64, min=0)
+    @Length(message = "的cityId字段的长度最大为64", groups = {Add.class, Update.class}, max = 64, min = 0)
     @Column(name = "city_id", nullable = true, length = 64)
     private String cityId;
 
     /**
      * 区
      */
-    @Length(message="的areaId字段的长度最大为64", groups = {Add.class, Update.class}, max=64, min=0)
+    @Length(message = "的areaId字段的长度最大为64", groups = {Add.class, Update.class}, max = 64, min = 0)
     @Column(name = "area_id", nullable = true, length = 64)
     private String areaId;
 
@@ -141,8 +150,8 @@ public class SysUser extends BaseDO<SysUser>
     /**
      * 性别
      */
-    @Max(message="前端用户的sex字段大于int最大值", value=2147483647, groups = {Add.class, Update.class})
-    @Min(message="前端用户的sex字段小于int小值", value=-2147483648, groups = {Add.class, Update.class})
+    @Max(message = "前端用户的sex字段大于int最大值", value = 2147483647, groups = {Add.class, Update.class})
+    @Min(message = "前端用户的sex字段小于int小值", value = -2147483648, groups = {Add.class, Update.class})
     @Column(name = "sex", length = 11)
     @Trans(type = Constant.WORD_BOOK, key = "sex")
     private Integer sex;
@@ -150,8 +159,8 @@ public class SysUser extends BaseDO<SysUser>
     /**
      * 组织机构ID
      */
-    @Length(message="{test.organizationId.length}", groups = {Add.class, Update.class}, max=32, min=0)
-    @NotNull(message="{test.organizationId.null}", groups = {Update.class, Add.class})
+    @Length(message = "{test.organizationId.length}", groups = {Add.class, Update.class}, max = 32, min = 0)
+    @NotNull(message = "{test.organizationId.null}", groups = {Update.class, Add.class})
     @RLike
     @Trans(type = Constant.SYS_ORGANIZATION_INFO, key = Constant.SYS_ORGANIZATION_NAME)
     private String organizationId;
@@ -192,179 +201,32 @@ public class SysUser extends BaseDO<SysUser>
     @Transient
     private String checkCode;
 
-    public String getUserId() {
-        return userId;
+    public SysUser() {
     }
 
-    public void setUserId(String userId) {
+    public SysUser(String userId, String userIdE, String userLoginName, String userName, String password, String mobile, String groupCode, String email, Integer isDisable, Integer isAdmin, String provinceId, String cityId, String areaId, String address, Integer sex, String organizationId, String state, String[] roleList, String oldPassword, String newPassword, Integer menuType, List<SysRole> roles, String checkCode) {
         this.userId = userId;
-    }
-
-    public String getUserIdE() {
-        return userIdE;
-    }
-
-    public void setUserIdE(String userIdE) {
         this.userIdE = userIdE;
-    }
-
-    public String getUserLoginName() {
-        return userLoginName;
-    }
-
-    public void setUserLoginName(String userLoginName) {
         this.userLoginName = userLoginName;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
         this.mobile = mobile;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
+        this.groupCode = groupCode;
         this.email = email;
-    }
-
-    public Integer getIsDisable() {
-        return isDisable;
-    }
-
-    public void setIsDisable(Integer isDisable) {
         this.isDisable = isDisable;
-    }
-
-    public Integer getIsAdmin() {
-        return isAdmin;
-    }
-
-    public void setIsAdmin(Integer isAdmin) {
         this.isAdmin = isAdmin;
-    }
-
-    public String getProvinceId() {
-        return provinceId;
-    }
-
-    public void setProvinceId(String provinceId) {
         this.provinceId = provinceId;
-    }
-
-    public String getCityId() {
-        return cityId;
-    }
-
-    public void setCityId(String cityId) {
         this.cityId = cityId;
-    }
-
-    public String getAreaId() {
-        return areaId;
-    }
-
-    public void setAreaId(String areaId) {
         this.areaId = areaId;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
         this.address = address;
-    }
-
-    public String getOrganizationId() {
-        return organizationId;
-    }
-
-    public void setOrganizationId(String organzationId) {
-        this.organizationId = organzationId;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String[] getRoleList() {
-        return roleList;
-    }
-
-    public void setRoleList(String[] roleList) {
-        this.roleList = roleList;
-    }
-
-    public String getOldPassword() {
-        return oldPassword;
-    }
-
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
-    }
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
-
-    public Integer getMenuType() {
-        return menuType;
-    }
-
-    public void setMenuType(Integer menuType) {
-        this.menuType = menuType;
-    }
-
-    public List<SysRole> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<SysRole> roles) {
-        this.roles = roles;
-    }
-
-    public String getCheckCode() {
-        return checkCode;
-    }
-
-    public void setCheckCode(String checkCode) {
-        this.checkCode = checkCode;
-    }
-
-    public Integer getSex() {
-        return sex;
-    }
-
-    public void setSex(Integer sex) {
         this.sex = sex;
+        this.organizationId = organizationId;
+        this.state = state;
+        this.roleList = roleList;
+        this.oldPassword = oldPassword;
+        this.newPassword = newPassword;
+        this.menuType = menuType;
+        this.roles = roles;
+        this.checkCode = checkCode;
     }
 }

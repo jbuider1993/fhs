@@ -109,10 +109,16 @@ public class LogAdminOperatorLog extends SuperBean<LogAdminOperatorLog> {
     @Like
     private String networkIp;
 
+    /**
+     * 参数
+     */
+    @Column(name = "group_code")
+    private String groupCode;
+
     public LogAdminOperatorLog(){
     }
 
-    public LogAdminOperatorLog(String id, String operatorId, String createTime, Integer logType, String url, String operatDesc, String reqParam, Integer menuId, String networkIp) {
+    public LogAdminOperatorLog(String id, String operatorId, String createTime, Integer logType, String url, String operatDesc, String reqParam, Integer menuId, String networkIp, String groupCode) {
         this.id = id;
         this.operatorId = operatorId;
         this.createTime = createTime;
@@ -122,5 +128,6 @@ public class LogAdminOperatorLog extends SuperBean<LogAdminOperatorLog> {
         this.reqParam = reqParam;
         this.menuId = menuId;
         this.networkIp = networkIp;
+        this.groupCode = groupCode;
     }
 }

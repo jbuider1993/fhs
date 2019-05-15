@@ -1,10 +1,11 @@
 package com.fhs.ucenter.dao;
 
-import com.mybatis.jpa.annotation.MapperDefinition;
 import com.fhs.core.base.dao.BaseDao;
 import com.fhs.ucenter.bean.SysRole;
+import com.mybatis.jpa.annotation.MapperDefinition;
+import com.mybatis.jpa.annotation.MultiTenancyCheck;
+import com.mybatis.jpa.annotation.NotMultiTenancyCheck;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -14,8 +15,8 @@ import java.util.Map;
  * @author jianbo.qin
  *
  */
+@MultiTenancyCheck
 @MapperDefinition(domainClass = SysRole.class)
-@Repository
 public interface SysRoleDAO extends BaseDao<SysRole>
 {
     /**
@@ -24,6 +25,7 @@ public interface SysRoleDAO extends BaseDao<SysRole>
      * @param adminRole
      * @return
      */
+    @NotMultiTenancyCheck
     public int addButtons(SysRole adminRole);
 
     /**
@@ -32,6 +34,7 @@ public interface SysRoleDAO extends BaseDao<SysRole>
      * @param adminRole
      * @return
      */
+    @NotMultiTenancyCheck
     public int deleteButtons(SysRole adminRole);
 
     /**
@@ -40,8 +43,10 @@ public interface SysRoleDAO extends BaseDao<SysRole>
      * @param adminRole
      * @return
      */
+    @NotMultiTenancyCheck
     public List<Map<String, Object>> searchButtons(SysRole adminRole);
 
+    @NotMultiTenancyCheck
     public List<String> searchButtonId(Map<String, Object> map);
 
     /**
@@ -50,6 +55,7 @@ public interface SysRoleDAO extends BaseDao<SysRole>
      * @param map
      * @return
      */
+    @NotMultiTenancyCheck
     public List<SysRole> findRoleByGroupCode(Map<String, Object> map);
 
     /**
@@ -58,6 +64,7 @@ public interface SysRoleDAO extends BaseDao<SysRole>
      * @param userId 用户id
      * @return 用户角色集合
      */
+    @NotMultiTenancyCheck
     public List<SysRole> findRolesByUserId(@Param("userId") String userId);
 
     /**
@@ -73,11 +80,13 @@ public interface SysRoleDAO extends BaseDao<SysRole>
      * @param paramMap 查询条件
      * @return 关联用户数量
      */
+    @NotMultiTenancyCheck
     Integer findUserCountByRoleId(Map<String, Object> paramMap);
 
     /**
      * 删除角色用户关联
      * @param adminRole
      */
+    @NotMultiTenancyCheck
     void deleteUserRela(SysRole adminRole);
 }

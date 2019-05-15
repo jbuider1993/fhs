@@ -181,9 +181,10 @@ public class MsRoleAction extends ModelSuperAction<SysRole>
      * @param response
      * @paramadminRole
      */
-    @RequiresPermissions("sysRole:update")
-    @RequestMapping("updateSysRole")
     @ResponseBody
+    @LogDesc(value = "更新", type = LogDesc.UPDATE)
+    @RequestMapping("updateSysRole")
+    @RequiresPermissions("sysRole:update")
     public HttpResult updateSysRole(HttpServletRequest request, HttpServletResponse response, SysRole sysRole)
     {
 
@@ -208,7 +209,8 @@ public class MsRoleAction extends ModelSuperAction<SysRole>
         }
         catch (Exception e)
         {
-            return HttpResult.error(e);
+            LOG.error(this,e);
+            return HttpResult.error(false);
         }
         return HttpResult.success();
     }
@@ -231,6 +233,7 @@ public class MsRoleAction extends ModelSuperAction<SysRole>
             SysUserVo sysUser = super.getSessionuser(request);
             sysRole.setCreateUser(sysUser.getUserId());
             sysRole.setCreateTime(DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN));
+            sysRole.setGroupCode(sysUser.getGroupCode());
             sysRoleService.addRole(sysRole);
         }
         catch (Exception e)

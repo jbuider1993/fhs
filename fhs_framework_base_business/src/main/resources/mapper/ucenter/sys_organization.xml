@@ -17,13 +17,17 @@
 
     <select id="findForListFromMap" parameterType="java.util.Map"
             resultType="sysOrganization">
-        SELECT 	<include refid="Base_Column_List" /> FROM t_ucenter_ms_organization
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_ucenter_ms_organization
         WHERE 1 = 1
-        <include refid="sqlWhere" />
+        <include refid="sqlWhere"/>
     </select>
     <select id="findBean" parameterType="sysOrganization"
             resultType="sysOrganization">
-        SELECT <include refid="Base_Column_List" /> FROM t_ucenter_ms_organization
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_ucenter_ms_organization
         WHERE 1 = 1
         <if test="null != null and null != ''">
             AND null = #{null}
@@ -32,7 +36,7 @@
 
     <select id="findCountFromMap" parameterType="map" resultType="java.lang.Integer">
         SELECT COUNT(1) AS count FROM t_ucenter_ms_organization WHERE 1 = 1
-        <include refid="sqlWhere" />
+        <include refid="sqlWhere"/>
     </select>
 
     <sql id="sqlWhere">
@@ -49,15 +53,15 @@
         SELECT id AS id, name AS text,parent_id AS parentId, id AS wxOrgId FROM
         t_ucenter_ms_organization
         where is_disable = 0
-            <if test="parentId !=null and parentId!='' and parentId != '-1'">
-                AND parent_id  =#{parentId}
-            </if>
-            <if test="parentId == '-1' ">
-                AND id  =#{userOrgId}
-            </if>
-            <if test="userOrgId !=null and userOrgId!='' and parentId!='-1' ">
-                AND id  LIKE CONCAT(#{userOrgId}, '%')
-            </if>
+        <if test="parentId !=null and parentId!='' and parentId != '-1'">
+            AND parent_id =#{parentId}
+        </if>
+        <if test="parentId == '-1' ">
+            AND id =#{userOrgId}
+        </if>
+        <if test="userOrgId !=null and userOrgId!='' and parentId!='-1' ">
+            AND id LIKE CONCAT(#{userOrgId}, '%')
+        </if>
         ORDER BY parent_id
     </select>
 
@@ -69,21 +73,23 @@
         TRIM(t.name) AS name,
         'd' AS nodeType
         FROM `t_ucenter_ms_organization` t
-        WHERE 1=1 AND t.is_disable = 0
+        WHERE t.is_disable = 0
         <if test="organizationId != null and organizationId != ''">
             AND t.id LIKE CONCAT(#{organizationId}, '%')
         </if>
         ORDER BY pid
     </select>
-    
+
     <select id="findCountByNameAndParentId" parameterType="sysOrganization" resultType="java.lang.Integer">
-        SELECT COUNT(1) FROM t_ucenter_ms_organization WHERE 1=1
-        <if test="parentId != null and parentId != ''">
-            AND parent_id = #{parentId}
-        </if>
-        <if test="name != null and name != ''">
-            AND name = #{name}
-        </if>
+        SELECT COUNT(1) FROM t_ucenter_ms_organization
+        <where>
+            <if test="parentId != null and parentId != ''">
+                AND parent_id = #{parentId}
+            </if>
+            <if test="name != null and name != ''">
+                AND name = #{name}
+            </if>
+        </where>
     </select>
 
     <!-- 根据条件查询机构数 -->
@@ -94,5 +100,5 @@
             AND is_disable = #{isDisable}
         </if>
     </select>
-   
+
 </mapper>

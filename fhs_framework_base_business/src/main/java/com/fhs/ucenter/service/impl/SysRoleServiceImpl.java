@@ -40,7 +40,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole> implements SysR
     public boolean addRole(SysRole adminRole)
     {
         // 插入角色信息
-        int count = dao.add(adminRole);
+        int count = dao.insertJpa(adminRole);
         if (count > 0)
         {
             return saveButtons(adminRole);
@@ -161,7 +161,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRole> implements SysR
         if (count)
         {
             // 修改当前角色信息
-            int result = dao.update(adminRole);
+            int result = dao.updateSelectiveById(adminRole);
             if (result > 0)
             {
                 if (adminRole.getMethods().length > 0)
