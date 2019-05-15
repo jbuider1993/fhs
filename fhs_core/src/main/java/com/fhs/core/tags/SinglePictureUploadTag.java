@@ -1,7 +1,9 @@
 package com.fhs.core.tags;
-import java.io.IOException;
+
+import com.fhs.core.config.EConfig;
 
 import javax.servlet.jsp.JspException;
+import java.io.IOException;
 
 /**
  * 单张上传图片.
@@ -46,7 +48,7 @@ public class SinglePictureUploadTag extends BaseFormTag
         write("	<div class=\"fitem\" tag=\"singlePicture\" inputImg=\""+ super.getName() + "\"> \r\n"
                 + "		<div class=\"fitemDiv\">						\r\n"
                 + "			<label>&nbsp;</label>						\r\n"
-                + "         <img id=\"" + super.getName()+ "InputImg\" class=\"headerImg\" src=\"" + BaseTagsURI.staticPath + "/images/upload_default_show.png\"/>\r\n"
+                + "         <img id=\"" + super.getName()+ "InputImg\" class=\"headerImg\" src=\"" + EConfig.getPathPropertiesValue("staticPath") + "/images/upload_default_show.png\"/>\r\n"
                 +  requiredSpan
                 + "         <input type=\"hidden\" id=\"" + super.getName() + "InputVal\" " +required+ "/>\r\n"
                 + "     </div>											\r\n"

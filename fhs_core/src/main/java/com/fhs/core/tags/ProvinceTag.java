@@ -1,5 +1,7 @@
 package com.fhs.core.tags;
 
+import com.fhs.core.config.EConfig;
+
 import javax.servlet.jsp.JspException;
 import java.io.IOException;
 
@@ -32,7 +34,7 @@ public class ProvinceTag extends BaseFormTag
         write(" <div class=\"fitemDiv\">");
         write("<label>" + super.getTitle() + ":</label>");
         write("<input id="+super.getName()+" editable=\"true\"  data-options=\"\r\n" + "                            url: '"
-            + BaseTagsURI.systemServiceUrl + "webApi/area/getProvinceData?areaParentId=0&jsonpCallback=?',\r\n"
+            + EConfig.getPathPropertiesValue("systemServiceUrl") + "webApi/area/getProvinceData?areaParentId=0&jsonpCallback=?',\r\n"
             + "                            valueField: 'id',\r\n"
             + "                            textField:'areaName',\r\n"
             + "                            onSelect: function(rec){\r\n"
@@ -40,7 +42,7 @@ public class ProvinceTag extends BaseFormTag
         if (cityName != null)
         {
             write("                                $('#cityId').combobox('loadData', {});\r\n"
-                + "                                var cityUrl = '" + BaseTagsURI.systemServiceUrl
+                + "                                var cityUrl = '" + EConfig.getPathPropertiesValue("systemServiceUrl")
                 + "webApi/area/getProvinceData?areaParentId=' + rec.id + '&jsonpCallback=?';\r\n" + "                                $('#"
                 + cityName + "').combobox('reload', cityUrl);\r\n" + "                                $('#" + cityName
                 + "').combobox('clear');\r\n");

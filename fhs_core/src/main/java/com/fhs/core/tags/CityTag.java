@@ -1,5 +1,7 @@
 package com.fhs.core.tags;
 
+import com.fhs.core.config.EConfig;
+
 import javax.servlet.jsp.JspException;
 import java.io.IOException;
 
@@ -35,7 +37,7 @@ public class CityTag extends BaseFormTag
         if (areaName != null)
         {
             write("                                $('#" + areaName + "').combobox('loadData', {});\r\n"
-                + "                                var url = '" + BaseTagsURI.systemServiceUrl
+                + "                                var url = '" + EConfig.getPathPropertiesValue("systemServiceUrl")
                 + "webApi/area/getProvinceData?areaParentId=' + rec.id + '&jsonpCallback=?' ;\r\n" + "                                $('#"
                 + areaName + "').combobox('reload', url);\r\n" + "                                $('#" + areaName
                 + "').combobox('clear');");

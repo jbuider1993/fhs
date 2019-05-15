@@ -1,8 +1,9 @@
 package com.fhs.core.tags;
 
-import java.io.IOException;
+import com.fhs.core.config.EConfig;
 
 import javax.servlet.jsp.JspException;
+import java.io.IOException;
 
 
 // TODO: Auto-generated Javadoc
@@ -39,7 +40,7 @@ public class WordBookTag extends BaseFormTag
             + "                                        editable : false,\r\n"
             + "                                        panelHeight: 'auto',\r\n"
             + "                                        showAll: " + showAll + ",\r\n"
-            + "                                        url: '" + BaseTagsURI.systemServiceUrl
+            + "                                        url: '" + EConfig.getPathPropertiesValue("systemServiceUrl")
             + "webApi/wordbook/getData?wordbookGroupCode=" + code + "&jsonpCallback=?' \"");
         write(super.getHtml().toString());
         write(" </div>");

@@ -1,5 +1,6 @@
 package com.fhs.core.tags;
 
+import com.fhs.core.config.EConfig;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
@@ -138,7 +139,7 @@ public class BtnOperationTag extends BaseFormTag {
         String write_other2_html = "";
         Subject subject = SecurityUtils.getSubject();
         if (this.showDel && subject.isPermitted(this.nameSpace + ":" + "del")){
-            String delBtn = "" +this.delFuncName+ "(\\'" + BaseTagsURI.basePath + this.delReqUrl+ "' + val + '\\')";
+            String delBtn = "" +this.delFuncName+ "(\\'" + EConfig.getPathPropertiesValue("basePath") + this.delReqUrl+ "' + val + '\\')";
             write_del_html = "+ '<a href=\"javascript:void(0)\" onclick=\"" + delBtn + "\" class=\"easyui-linkbutton linkbutton-del\"   plain=\"true\">删除</a>'";
         };
 
