@@ -139,7 +139,7 @@ public class ActionInterceptAndCreateLogAop {
             log.setReqParam(paramsJson);
             log.setNetworkIp(ip);
             log.setLogType(type);
-
+            log.setGroupCode(adminUser.getGroupCode());
             String namespace = uri.substring(uri.indexOf("/", uri.indexOf("/") + 1) + 1, uri.lastIndexOf("/"));
             SysMenuVo menu = namesapceMenuMap.get(namespace);
             if (menu != null) {

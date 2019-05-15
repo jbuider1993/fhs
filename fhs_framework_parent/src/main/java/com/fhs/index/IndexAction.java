@@ -97,7 +97,7 @@ public class IndexAction {
             // 如果url为空则到子系统选择页面
             if(serviceURL == null)
             {
-                modelAndView.setViewName("ms/index/indexMenuLayui");
+                modelAndView.setViewName("page/ms/index/indexMenuLayui");
             }else
             {
                 modelAndView.setViewName("redirect:" + serviceURL);
@@ -146,7 +146,7 @@ public class IndexAction {
         if(CheckUtils.isNotEmpty(serviceURL)){
             modelAndView.setViewName("redirect:" + serviceURL);
         }else {
-            modelAndView.setViewName("ms/index/indexMenuLayui");
+            modelAndView.setViewName("page/ms/index/indexMenuLayui");
         }
         return modelAndView;
     }
@@ -163,7 +163,7 @@ public class IndexAction {
             return index(request,response);
         }
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("ms/index/indexMenuLayui");
+        modelAndView.setViewName("/page/ms/index/indexMenuLayui");
         return modelAndView;
     }
 

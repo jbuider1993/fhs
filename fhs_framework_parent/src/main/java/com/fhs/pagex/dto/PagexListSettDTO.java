@@ -1,5 +1,6 @@
 package com.fhs.pagex.dto;
 
+import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
 import com.mybatis.jpa.common.ColumnNameUtil;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
@@ -46,12 +47,15 @@ public class PagexListSettDTO extends  PagexBaseDTO{
      */
     private List<String> disableButtons;
 
-    private List<String> exp;
+    /**
+     * 扩展css
+     */
+    private List<String> excss;
 
     /**
-     * 扩展的引入js或css的源
+     * 扩展js
      */
-    private List<String> exs;
+    private List<String> exjs;
 
     /**
      * 自定义的按钮，key为按钮名称 value为按钮点击时候需要调用的方法
@@ -98,22 +102,21 @@ public class PagexListSettDTO extends  PagexBaseDTO{
         this.initOtherFunction();
         this.initIsColumnButton();
         this.initModelConfig();
-        this.initExp();
-        this.initExs();
+        this.initExCSS();
+        this.initExJS();
     }
 
-    public void initExp(){
-        exp = new ArrayList<>();
-        Object exps = modelConfig.get("exp");
-        if(exps != null && !"".equals(exps.toString().trim())){
-            exp.add(exps.toString().trim());
+    public void initExCSS(){
+        Object excssStr = modelConfig.get("excss");
+        if(!CheckUtils.isNullOrEmpty(excssStr)){
+            excss = Arrays.asList(excssStr.toString().split(","));
         }
     }
 
-    public void initExs(){
-        Object exss = modelConfig.get("exs");
-        if(exss != null && !"".equals(exss.toString().trim())){
-            exs = Arrays.asList(exss.toString().trim().split(","));
+    public void initExJS(){
+        Object exjsStr = modelConfig.get("exjs");
+        if(!CheckUtils.isNullOrEmpty(exjsStr)){
+            exjs = Arrays.asList(exjsStr.toString().split(","));
         }
     }
 

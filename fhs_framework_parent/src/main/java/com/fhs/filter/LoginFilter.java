@@ -4,6 +4,8 @@ import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.Logger;
 import com.fhs.core.config.EConfig;
+import com.fhs.ucenter.api.vo.SysUserVo;
+import com.mybatis.jpa.context.MultiTenancyContext;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 
 import javax.servlet.*;
@@ -33,17 +35,28 @@ public class LoginFilter implements Filter{
         HttpServletResponse response = (HttpServletResponse)res;
         String basePath = EConfig.getPathPropertiesValue("basePath");
         String uri = request.getRequestURI();
+        MultiTenancyContext.setProviderId(null);
         //访问根目录跳转到首页
         if(CheckUtils.isNullOrEmpty(uri) || "/".equals(uri)   )
         {
             response.sendRedirect(basePath + "ms/index");
+            return;
         }
         //如果当前用户为空并且访问受保护的资源
-        else if(((uri.startsWith("/page/ms") || uri.contains("/b/page-ms") ||  uri.contains("/ms/")) && request.getSession().getAttribute(Constant.SESSION_USER) == null  && (!uri.contains("/ms/index"))))
+        else if(((uri.startsWith("/page/ms") || uri.contains("/b/page-ms") ||  uri.contains("/ms/")) && (!uri.contains("/ms/index"))))
         {
-            String extendsParam = CheckUtils.isNullOrEmpty(request.getQueryString()) ? "" : "?" + request.getQueryString();
-            request.getSession().setAttribute("serviceURL", request.getRequestURL().toString() + extendsParam);
-            response.sendRedirect(basePath + "ms/index");
+            if(request.getSession().getAttribute(Constant.SESSION_USER) == null)
+            {
+                String extendsParam = CheckUtils.isNullOrEmpty(request.getQueryString()) ? "" : "?" + request.getQueryString();
+                request.getSession().setAttribute("serviceURL", request.getRequestURL().toString() + extendsParam);
+                response.sendRedirect(basePath + "ms/index");
+            }
+            else
+            {
+                SysUserVo user = (SysUserVo)request.getSession().getAttribute(Constant.SESSION_USER);
+                MultiTenancyContext.setProviderId(user.getGroupCode());
+                chain.doFilter (req, res);
+            }
         }
         else
         {

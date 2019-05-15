@@ -12,7 +12,6 @@
     <link rel="stylesheet" type="text/css"
           href="${staticPath}css/loading_preloader.css"/>
     <script type="text/javascript" src="${staticPath}js/jquery.min.js"></script>
-    <script type="text/javascript" src="${staticPath}js/jQuery.md5.js"></script>
 
     <script type="text/javascript" src="${staticPath}js/json2.js"></script>
     <!--topso start-->
@@ -99,17 +98,19 @@
                 src="http://api.map.baidu.com/api?v=2.0&ak=NAGEfysPQEek4fLb8WBNkwjjteWZi1Aj" ></script>
     <% } %>
     <!--bmap end-->
-    <% if(strutil.contain(formFieldTypes,'css')){ %>
-        <% for(href in exs){ %>
+
+    <!--扩展js和css引入 start-->
+    <% if(strutil.contain(formFieldTypes,'excss')){ %>
+        <% for(href in excss){ %>
             <link type="text/css" rel="stylesheet" href="${href}"/>
         <% } %>
     <% } %>
-    <% if(strutil.contain(formFieldTypes,'js')){ %>
-        <% for(src in exs){ %>
+    <% if(strutil.contain(formFieldTypes,'exjs')){ %>
+        <% for(src in exjs){ %>
             <script type="text/javascript" charset="utf-8" src="${src}"></script>
         <% } %>
     <% } %>
-
+    <!--扩展js和css引入 end-->
 </head>
 <body>
 <table id="listGrid" title="${modelConfig.title}列表" class="easyui-datagrid"

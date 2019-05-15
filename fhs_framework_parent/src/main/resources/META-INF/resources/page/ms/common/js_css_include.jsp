@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
-	isELIgnored="false" pageEncoding="utf-8"%>
+isELIgnored="false" pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -7,34 +7,34 @@
 <!--链接样式表-->
 <link rel="Shortcut Icon" href="${staticPath}images/favicon.ico" />
 <link rel="stylesheet" type="text/css"
-	href="${staticPath}js/easyui/themes/metro/easyui.css" />
+      href="${staticPath}js/easyui/themes/metro/easyui.css" />
 
 <link rel="stylesheet" type="text/css"
-	  href="${staticPath}css/jquery.toast.css" />
+      href="${staticPath}css/jquery.toast.css" />
 <link rel="stylesheet" type="text/css"
-	href="${staticPath}js/easyui/themes/icon.css" />
+      href="${staticPath}js/easyui/themes/icon.css" />
 <link rel="stylesheet" type="text/css"
-	href="${staticPath}css/common.css" />
+      href="${staticPath}css/common.css" />
 <link rel="stylesheet" type="text/css"
-	  href="${staticPath}css/tipso.min.css" />
+      href="${staticPath}css/tipso.min.css" />
 <link rel="stylesheet" type="text/css"
-	href="${staticPath}js/uploadfive/uploadifive.css" />
+      href="${staticPath}js/uploadfive/uploadifive.css" />
 <link rel="stylesheet" type="text/css"
-	  href="${staticPath}js/time/timedropper.css" />
+      href="${staticPath}js/time/timedropper.css" />
 <link rel="stylesheet" type="text/css"
-	href="${staticPath}css/validform.css" />
+      href="${staticPath}css/validform.css" />
 <link rel="stylesheet" type="text/css"
-	  href="${staticPath}css/loading_preloader.css" />
+      href="${staticPath}css/loading_preloader.css" />
 
 <link rel="stylesheet" type="text/css"
-	href="${staticPath}js/viewer/viewer.min.css" />
+      href="${staticPath}js/viewer/viewer.min.css" />
 <link href="${staticPath}/js/switch/lc_switch.css" rel="stylesheet" />
 
 <script type="text/javascript" src="${staticPath}js/jquery.min.js"></script>
 <script type="text/javascript" src="${staticPath}js/json2.js"></script>
 <script type="text/javascript" src="${staticPath}js/tipso.min.js"></script>
 <script type="text/javascript"
-	src="${staticPath}js/easyui/jquery.easyui.min.js"></script>
+        src="${staticPath}js/easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="${basePath}js/systemConfig.js"></script>
 <script type="text/javascript" src="${staticPath}js/ecommon.js"></script>
 <script type="text/javascript"

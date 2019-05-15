@@ -15,6 +15,7 @@ import com.fhs.pagex.dto.PageXTreeDTO;
 import com.fhs.pagex.service.PagexDataService;
 import com.fhs.ucenter.api.vo.SysUserVo;
 import com.mybatis.jpa.context.DataPermissonContext;
+import com.mybatis.jpa.context.MultiTenancyContext;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,6 +51,7 @@ public class PageXMsPubAction extends PageXBaseAction{
         Map<String,Object> paramMap = super.getParameterMap(request);
         SysUserVo user = getSessionUser( request);
         paramMap.put("createUser",user.getUserId());
+        paramMap.put("groupCode",user.getGroupCode());
         paramMap.put("updateUser",user.getUserId());
         super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
         service.insert(paramMap,namespace);
@@ -68,6 +70,7 @@ public class PageXMsPubAction extends PageXBaseAction{
            checkPermiessAndNamespace( namespace,"see");
            Map<String,Object> paramMap = new HashMap<>();
            paramMap.put("id",id);
+           paramMap.put("groupCode", MultiTenancyContext.getProviderId());
            super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
            return JSONObject.parseObject(service.findBean(paramMap,namespace));
     }
@@ -83,6 +86,7 @@ public class PageXMsPubAction extends PageXBaseAction{
         checkPermiessAndNamespace( namespace,"update");
         Map<String,Object> paramMap = super.getParameterMap(request);
         paramMap.put("id",id);
+        paramMap.put("groupCode", MultiTenancyContext.getProviderId());
         paramMap.put("updateUser",getSessionUser( request).getUserId());
         super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
         int i = service.update(paramMap,namespace);
@@ -103,7 +107,7 @@ public class PageXMsPubAction extends PageXBaseAction{
         {
             id = id.substring(0,id.indexOf("&amp;"));
         }
-        checkPermiessAndNamespace( namespace,"update");
+        checkPermiessAndNamespace( namespace,"del");
         super.setDB(PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace));
         int i = service.del(id,namespace);
         return HttpResult.success(i!=0);
@@ -119,6 +123,7 @@ public class PageXMsPubAction extends PageXBaseAction{
         checkPermiessAndNamespace( namespace,"see");
         Map<String,Object> paramMap = super.getPageTurnNum(request);
         paramMap.put("dataPermissin", DataPermissonContext.getDataPermissonMap());
+        paramMap.put("groupCode", MultiTenancyContext.getProviderId());
         request.getSession().setAttribute(this.getClass() + "preLoadParam",paramMap);
         Map<String,Object> resultMap = new HashMap<>();
         JSONArray rows = super.findListDataAndInitJoin(namespace,paramMap);
@@ -144,6 +149,7 @@ public class PageXMsPubAction extends PageXBaseAction{
         Map<String,Object> paramMap = new HashMap<>();
         paramMap.put("start",-1);
         paramMap.put("end",-1);
+        paramMap.put("groupCode", MultiTenancyContext.getProviderId());
         paramMap.put("sortTzwName","create_time ASC");
         super.setDB(PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace));
         paramMap.put("dataPermissin", DataPermissonContext.getDataPermissonMap());
@@ -206,6 +212,7 @@ public class PageXMsPubAction extends PageXBaseAction{
         //去掉分页
         paramMap.remove("start");
         paramMap.remove("end");
+        paramMap.put("groupCode", MultiTenancyContext.getProviderId());
         paramMap.put("start", Constant.PAGE_ALL);
         paramMap.put("dataPermissin", DataPermissonContext.getDataPermissonMap());
         super.setDB(PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace));
@@ -231,6 +238,7 @@ public class PageXMsPubAction extends PageXBaseAction{
         Map<String,Object> paramMap =super.getParameterMap(request);
         paramMap.put("start", Constant.PAGE_ALL);
         paramMap.put("dataPermissin", DataPermissonContext.getDataPermissonMap());
+        paramMap.put("groupCode", MultiTenancyContext.getProviderId());
         super.setDB(PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace));
         String resultJson = service.findListPage(paramMap,namespace);
         return JSONArray.parseArray(resultJson);
