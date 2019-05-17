@@ -372,7 +372,12 @@ public class PageXAutoSqlService {
         }
         //是否为多租户模式
         if (ConverterUtils.toBoolean(addDTO.getModelConfig().get("isMultiTenant"))) {
+            sqlBuilder.append(" <if test=\"");
+            sqlBuilder.append( " groupCode !='' and   ");
+            sqlBuilder.append( " groupCode !=null \"> ");
             sqlBuilder.append(" AND group_code <![CDATA[=]]> #{groupCode}");
+            sqlBuilder.append("</if>");
+
         }
         sqlBuilder.append("</where>");
         return sqlBuilder.toString();
