@@ -11,6 +11,7 @@ import com.fhs.system.bean.LogAdminOperatorLogVo;
 import com.fhs.system.service.LogAdminOperatorLogService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,7 +44,7 @@ public class LogAdminOperatorLogApiServiceCloud implements FeignlogAdminOperator
      */
     @RequestMapping("/addLogAdminOperatorLog")
     @Override
-    public HttpResult<Integer> addLogAdminOperatorLog(LogAdminOperatorLogVo logAdminOperatorLogVo) {
+    public HttpResult<Integer> addLogAdminOperatorLog(@RequestBody LogAdminOperatorLogVo logAdminOperatorLogVo) {
         if(CheckUtils.isNullOrEmpty(logAdminOperatorLogVo.getOperatorId()))
         {
             return HttpResult.success(Constant.ZERO);
