@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,7 +8,7 @@
 <title>登录</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="${staticPath}/images/favicon.ico">
-<link href="${basePath}/css/login.css" rel='stylesheet' type='text/css' />
+<link href="${staticPath}/css/login.css" rel='stylesheet' type='text/css' />
 <script src="${staticPath}/js/jquery.min.js"></script>
 <script src="${staticPath}/js/jQuery.md5.js"></script>
 <link href="${staticPath}/js/toastr/toastr.css" rel="stylesheet"
@@ -18,8 +17,6 @@
 <script src="${staticPath}/js/ecommon.js"></script>
 
 </head>
-<body>
-
 
 <script type="text/javascript">
 	var checkCodeBool = false;
@@ -29,15 +26,6 @@
 		if(top.location!=self.location){
 			top.location = self.location;
 		}
-		if('${loginError}' != '')
-		{
-			showToast('用户名或密码输入错误!');
-		}
-		if('${codeError}' != '')
-		{
-			showToast('验证码输入错误!');
-			$('#identifyCode').focus();
-		}
 	});
 
 	var login = function() {
@@ -45,8 +33,26 @@
 		if (bool) {
 			var password = $('#imPassword').val();
 			var newPassword = $.md5(password).toUpperCase();
-			$('#imPassword').val(newPassword);
-			$('form').submit();
+			$.ajax({
+                method:'post',
+                url:'${basePath}/securityLogin',
+                data:{
+                    userLoginName:$('#userLoginName').val(),
+                    password:newPassword,
+                    identifyCode:$('#identifyCode').val(),
+                },
+                dataType:'json',
+                success:function(_res){
+                    if(_res.code==200)
+                    {
+                        location.href='${basePath}/b/page-ms-index/indexMenuLayui';
+                    }
+                    else{
+                        showToast(_res.message);
+                        reloadImg();
+                    }
+                }
+            });
 		}
 	}
 	var check = function() {
@@ -100,7 +106,7 @@
 <body id="login-user">
     <div class="main">
         <div class="login">
-            <img src="${basePath}/images/logo1.png" alt="FHS-演示系统">
+            <img src="${basePath}/images/logo1.png" alt="招商局集团">
             <form action="${basePath}/securityLogin" method="POST">
                 <label for="">用户</label>
                 <input type="text" id="userLoginName" name="userLoginName" placeholder="请输入用户名">
