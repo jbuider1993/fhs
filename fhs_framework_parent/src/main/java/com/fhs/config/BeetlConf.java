@@ -1,6 +1,7 @@
 package com.fhs.config;
 
 import com.fhs.core.base.action.BaseAction;
+import org.apache.shiro.SecurityUtils;
 import org.beetl.core.Template;
 import org.beetl.core.resource.ClasspathResourceLoader;
 import org.beetl.ext.spring.BeetlGroupUtilConfiguration;

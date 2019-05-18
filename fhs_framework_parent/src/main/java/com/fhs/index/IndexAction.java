@@ -11,6 +11,7 @@ import com.fhs.system.api.FeignlogAdminOperatorLogApiService;
 import com.fhs.system.bean.LogAdminOperatorLogVo;
 import com.fhs.ucenter.api.service.FeignSysUserApiService;
 import com.fhs.ucenter.api.vo.SysUserVo;
+import io.buji.pac4j.subject.Pac4jPrincipal;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -106,7 +107,7 @@ public class IndexAction {
         }
 
         // 获取登录名称
-        String userLoginName = SecurityUtils.getSubject().getPrincipal().toString();
+        String userLoginName = ((Pac4jPrincipal)SecurityUtils.getSubject().getPrincipal()).getProfile().getId();
         // 根据登录名称获取用户信息,并放入session
         HttpResult<SysUserVo> result = feignSysUserService.getSysUserByName(userLoginName);
         LOGGER.infoMsg("后端用户登录成功，用户信息:{}",result.getData());

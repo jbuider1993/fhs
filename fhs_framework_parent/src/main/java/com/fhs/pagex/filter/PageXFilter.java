@@ -3,11 +3,8 @@ package com.fhs.pagex.filter;
 import com.fhs.common.utils.Logger;
 import com.fhs.pagex.context.PagexServletContext;
 import com.fhs.pagex.service.HandelPageXService;
-import org.springframework.boot.web.servlet.ServletComponentScan;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -24,12 +21,9 @@ import java.io.IOException;
  * @UpdateDate: 2018/11/30 0030 21:13
  * @Version: 1.0
  */
-@Component
-@ServletComponentScan
-@WebFilter(urlPatterns = "/ms/pagex/*",filterName = "pageXFilter",asyncSupported = true)
-public class ZPageXFilter implements Filter {
+public class PageXFilter implements Filter {
 
-    private static final Logger LOG = Logger.getLogger(ZPageXFilter.class);
+    private static final Logger LOG = Logger.getLogger(PageXFilter.class);
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

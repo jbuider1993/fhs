@@ -5,11 +5,11 @@ import com.fhs.common.utils.Logger;
 import com.fhs.core.result.HttpResult;
 import com.fhs.ucenter.api.service.FeignSysUserApiService;
 import com.fhs.ucenter.api.vo.SysUserVo;
+import io.buji.pac4j.realm.Pac4jRealm;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.cas.CasRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -17,21 +17,16 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-@SuppressWarnings("deprecation")
-public class ShiroCasRealm extends CasRealm {
+/**
+ * cas单点登录器
+ */
+public class ShiroCasRealm extends Pac4jRealm {
 
-	final Logger logger = Logger.getLogger(getClass());
+	private static final Logger LOGGER = Logger.getLogger(ShiroCasRealm.class);
 
-	private final static Integer isDisable = 0;
 
 	private  FeignSysUserApiService feignSysUserService;
 
-	public ShiroCasRealm(String casLoginUrl,String casServiceUrl)
-	{
-	    setCasServerUrlPrefix(casLoginUrl);
-        // 客户端回调地址
-        setCasService(casServiceUrl);
-	}
 
 	/**
 	 * 鎺堟潈
@@ -47,19 +42,19 @@ public class ShiroCasRealm extends CasRealm {
 			HttpResult<SysUserVo> httpResult = feignSysUserService.getSysUserByName(loginName);
 			SysUserVo user = httpResult.getData();
 			HttpServletRequest req = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-			logger.info("用户已经登录");
+			LOGGER.info("用户已经登录");
 			HttpResult<List<String>> menuResult =  feignSysUserService.selectMenuByUname(loginName);
 			List<String> listsMenu = menuResult.getData();
 			if (listsMenu == null || listsMenu.size() <= 0) {
 				return null;
 			}
-			logger.info(menuResult.asJson());
+			LOGGER.info(menuResult.asJson());
 			SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
 			authorizationInfo.addStringPermissions(listsMenu);
 			return authorizationInfo;
 
 		} catch (Exception e) {
-			logger.error("加载权限错误，用户："+principalcollection.getPrimaryPrincipal(), e);
+			LOGGER.error("加载权限错误，用户："+principalcollection.getPrimaryPrincipal(), e);
 		}
 		return null;
 
