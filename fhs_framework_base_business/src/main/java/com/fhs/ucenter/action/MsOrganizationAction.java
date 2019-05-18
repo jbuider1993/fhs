@@ -181,6 +181,7 @@ public class MsOrganizationAction extends ModelSuperAction<SysOrganization> {
 
             try
             {
+                sysOrganization.setGroupCode(super.getSessionuser(request).getGroupCode());
                 sysOrganization.preInsert(super.getSessionuser(request).getUserId());
                 sysOrganizationService.insertOrganization(sysOrganization);
             }

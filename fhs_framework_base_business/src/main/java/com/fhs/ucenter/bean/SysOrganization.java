@@ -85,4 +85,7 @@ public class SysOrganization extends BaseDO<SysOrganization> {
     @Column(name = "project_id")
     private String projectId;
 
+    @Column(name = "group_code")
+    private String groupCode;
+
 }
