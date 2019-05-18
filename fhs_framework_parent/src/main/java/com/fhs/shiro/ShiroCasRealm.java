@@ -6,6 +6,8 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.ucenter.api.service.FeignSysUserApiService;
 import com.fhs.ucenter.api.vo.SysUserVo;
 import io.buji.pac4j.realm.Pac4jRealm;
+import io.buji.pac4j.subject.Pac4jPrincipal;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -38,7 +40,7 @@ public class ShiroCasRealm extends Pac4jRealm {
 			feignSysUserService = SpringContextUtil.getBeanByClassForApi(FeignSysUserApiService.class);
 		}
 		try {
-			String loginName = (String) principalcollection.getPrimaryPrincipal();
+			String loginName  = ((Pac4jPrincipal) SecurityUtils.getSubject().getPrincipal()).getProfile().getId();
 			HttpResult<SysUserVo> httpResult = feignSysUserService.getSysUserByName(loginName);
 			SysUserVo user = httpResult.getData();
 			HttpServletRequest req = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();

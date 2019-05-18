@@ -14,6 +14,7 @@ import com.fhs.ucenter.api.vo.SysUserVo;
 import io.buji.pac4j.subject.Pac4jPrincipal;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -58,7 +59,8 @@ public class IndexAction {
     @Autowired
     RedisCacheService redisCacheService;
 
-
+    @Value("${fhs.login.enable-cas}")
+    private boolean isEnableCas;
 
     /**
      * 初始化项目主页
@@ -107,7 +109,14 @@ public class IndexAction {
         }
 
         // 获取登录名称
-        String userLoginName = ((Pac4jPrincipal)SecurityUtils.getSubject().getPrincipal()).getProfile().getId();
+        String userLoginName = null;
+        if(isEnableCas)
+        {
+            userLoginName = ((Pac4jPrincipal) SecurityUtils.getSubject().getPrincipal()).getProfile().getId();
+        }
+        else{
+            userLoginName = SecurityUtils.getSubject().getPrincipal().toString();
+        }
         // 根据登录名称获取用户信息,并放入session
         HttpResult<SysUserVo> result = feignSysUserService.getSysUserByName(userLoginName);
         LOGGER.infoMsg("后端用户登录成功，用户信息:{}",result.getData());

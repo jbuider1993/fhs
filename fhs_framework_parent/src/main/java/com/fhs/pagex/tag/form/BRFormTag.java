@@ -3,7 +3,7 @@ package com.fhs.pagex.tag.form;
 import org.springframework.stereotype.Component;
 
 /**
- * input 一行只有一个的大input
+ * 强制换行
  * @ProjectName: framework_v2_idea2
  * @Package: com.fhs.pagex.tag.form
  * @ClassName: InputFormTag
