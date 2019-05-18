@@ -15,6 +15,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -47,6 +48,11 @@ public class MsLoginAction
     @Autowired
     private SysSystemService sysSystemService;
 
+    /**
+     * 登录地址
+     */
+    @Value("${fhs.login.url:http://default.fhs-opensource.com}")
+    private String shrioLoginUrl;
 
 
     /**
@@ -116,14 +122,14 @@ public class MsLoginAction
         }
     }
 
-
     /**
      * 退出
      * */
     @RequestMapping("ms/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.getSession().removeAttribute(Constant.SESSION_USER);
-        response.sendRedirect(EConfig.getPathPropertiesValue("basePath"));
+        SecurityUtils.getSubject().logout();
+        response.sendRedirect(EConfig.getPathPropertiesValue("basePath")+ shrioLoginUrl) ;
     }
 
 }
