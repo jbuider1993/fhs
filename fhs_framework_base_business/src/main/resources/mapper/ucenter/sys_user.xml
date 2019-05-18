@@ -152,7 +152,9 @@
         `t_ucenter_ms_menu` m,t_ucenter_ms_menu_server s
         WHERE m.`server_name_id`=s.`id`
         <!-- 查询制定的菜单类型 -->
+        <if test="menuType !=null">
         AND (m.menu_type=#{menuType} OR m.menu_type=2)
+        </if>
         ORDER BY
         father_menu_id,order_index
     </select>
