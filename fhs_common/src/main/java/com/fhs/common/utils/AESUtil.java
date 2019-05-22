@@ -2,110 +2,137 @@ package com.fhs.common.utils;
 
 import org.apache.commons.codec.binary.Base64;
 
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
+import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * AES加密解密工具类
- * @author jackwong
  *
+ * @author jackwong
  */
 public class AESUtil {
-	private static final String KEY_ALGORITHM = "AES";
-    private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";//默认的加密算法
-
     /**
-     * AES 加密操作
+     * 加密
      *
-     * @param content 待加密内容
+     * @param content  需要加密的内容
      * @param password 加密密码
-     * @return 返回Base64转码后的加密数据
+     * @return
      */
     public static String encrypt(String content, String password) {
         try {
-            Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);// 创建密码器
+            KeyGenerator kgen = KeyGenerator.getInstance("AES");
+//kgen.init(128, new SecureRandom(password.getBytes()));//适用windows
 
+//解决linux 系统下面出错问题
+            SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+            random.setSeed(password.getBytes());
+            kgen.init(128, random);
+
+            SecretKey secretKey = kgen.generateKey();
+
+            byte[] enCodeFormat = secretKey.getEncoded();
+
+            SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
+            Cipher cipher = Cipher.getInstance("AES");// 创建密码器
             byte[] byteContent = content.getBytes("utf-8");
-
-            cipher.init(Cipher.ENCRYPT_MODE, getSecretKey(password));// 初始化为加密模式的密码器
-
-            byte[] result = cipher.doFinal(byteContent);// 加密
-
-            return Base64.encodeBase64String(result);//通过Base64转码返回
-        } catch (Exception ex) {
-            Logger.getLogger(AESUtil.class.getName()).log(Level.SEVERE, null, ex);
+            cipher.init(Cipher.ENCRYPT_MODE, key);// 初始化
+            byte[] result = cipher.doFinal(byteContent);
+            return Base64.encodeBase64String(result);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
         }
-
         return null;
     }
 
+
     /**
-     * AES 解密操作
+     * 解密
      *
-     * @param content
-     * @param password
+     * @param content  待解密内容
+     * @param password 解密密钥
      * @return
+     * @throws BadPaddingException 解析失败,秘钥和验证码不匹配
      */
-    public static String decrypt(String content, String password) {
-
+    public static String decrypt(String content, String password)  {
         try {
-            //实例化
-            Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
-
-            //使用密钥初始化，设置为解密模式
-            cipher.init(Cipher.DECRYPT_MODE, getSecretKey(password));
-
-            //执行操作
+            KeyGenerator kgen = KeyGenerator.getInstance("AES");
+            //解决linux 系统下面出错问题
+            SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+            random.setSeed(password.getBytes());
+            kgen.init(128, random);
+            SecretKey secretKey = kgen.generateKey();
+            byte[] enCodeFormat = secretKey.getEncoded();
+            SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
+            Cipher cipher = Cipher.getInstance("AES");// 创建密码器
+            cipher.init(Cipher.DECRYPT_MODE, key);// 初始化
             byte[] result = cipher.doFinal(Base64.decodeBase64(content));
-
-            return new String(result, "utf-8");
-        } catch (Exception ex) {
-            Logger.getLogger(AESUtil.class.getName()).log(Level.SEVERE, null, ex);
+            return new String(result,"utf-8"); // 加密
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
         }
-
         return null;
     }
+
 
     /**
-     * 生成加密秘钥
+     * 将二进制转换成16进制
      *
+     * @param buf
      * @return
      */
-    private static SecretKeySpec getSecretKey(final String password) {
-        //返回生成指定算法密钥生成器的 KeyGenerator 对象
-        KeyGenerator kg = null;
-
-        try {
-            kg = KeyGenerator.getInstance(KEY_ALGORITHM);
-
-            //AES 要求密钥长度为 128
-            kg.init(128, new SecureRandom(password.getBytes()));
-
-            //生成一个密钥
-            SecretKey secretKey = kg.generateKey();
-
-            return new SecretKeySpec(secretKey.getEncoded(), KEY_ALGORITHM);// 转换为AES专用密钥
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(AESUtil.class.getName()).log(Level.SEVERE, null, ex);
+    public static String parseByte2HexStr(byte buf[]) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < buf.length; i++) {
+            String hex = Integer.toHexString(buf[i] & 0xFF);
+            if (hex.length() == 1) {
+                hex = '0' + hex;
+            }
+            sb.append(hex.toUpperCase());
         }
-
-        return null;
+        return sb.toString();
     }
 
-    public static void main(String[] args) {
-        String s = "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";
 
-
-        String s1 = AESUtil.decrypt(s, "fhs@123");
-        System.out.println(s1);
-
-
-
+    /**
+     * 将16进制转换为二进制
+     *
+     * @param hexStr
+     * @return
+     */
+    public static byte[] parseHexStr2Byte(String hexStr) {
+        if (hexStr.length() < 1)
+            return null;
+        byte[] result = new byte[hexStr.length() / 2];
+        for (int i = 0; i < hexStr.length() / 2; i++) {
+            int high = Integer.parseInt(hexStr.substring(i * 2, i * 2 + 1), 16);
+            int low = Integer.parseInt(hexStr.substring(i * 2 + 1, i * 2 + 2), 16);
+            result[i] = (byte) (high * 16 + low);
+        }
+        return result;
     }
+
 }
