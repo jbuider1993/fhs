@@ -1,6 +1,7 @@
 package com.fhs.ucenter.api;
 
 import com.fhs.core.db.DataSource;
+import com.fhs.core.exception.ParamChecker;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.ucenter.api.form.GetSingleFrontUserForm;
@@ -67,5 +68,13 @@ public class FrontUserApiServiceCloud implements FeignFrontUserApiService {
         });
         resultVo.setOpenIdMap(openIdMap);
         return HttpResult.success(resultVo);
+    }
+
+    @RequestMapping("/update")
+    public HttpResult<Boolean> update(@RequestBody FrontUserVo frontUserVo)
+    {
+        ParamChecker.isNotNull(frontUserVo.getUserId(),"用户id不能为空");
+        boolean result = 0 < frontUserService.updateSelectiveById(UcenterFrontUser.builder().userId(frontUserVo.getUserId()).mobile(frontUserVo.getMobile()).realName(frontUserVo.getRealName()).build());
+        return HttpResult.success(result);
     }
 }
