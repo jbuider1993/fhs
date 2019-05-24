@@ -26,4 +26,12 @@ public interface FeignFrontUserApiService {
     @RequestLine("POST /api/frontUser/getSingleFrontUser")
     HttpResult<FrontUserVo> getSingleFrontUser(@RequestBody GetSingleFrontUserForm getSingleFrontUserForm);
 
+    /**
+     * 修改用户信息
+     * @param frontUserVo 用户vo
+     * @return 是否修改成功
+     */
+    @RequestLine("POST /api/frontUser/update")
+    HttpResult<Boolean> update(@RequestBody FrontUserVo frontUserVo);
+
 }
