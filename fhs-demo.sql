@@ -1,21 +1,52 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 华为云2
+ Source Server         : 192.168.0.241
  Source Server Type    : MySQL
- Source Server Version : 50710
- Source Host           : 114.116.20.119:3306
+ Source Server Version : 50724
+ Source Host           : 192.168.0.241:3306
  Source Schema         : fhs-demo
 
  Target Server Type    : MySQL
- Target Server Version : 50710
+ Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 28/04/2019 18:21:50
+ Date: 18/05/2019 18:07:56
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for t_demo_playground
+-- ----------------------------
+DROP TABLE IF EXISTS `t_demo_playground`;
+CREATE TABLE `t_demo_playground`  (
+  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操场名称',
+  `area` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '面积',
+  `build_hours` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '建造时间',
+  `duty` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '负责人',
+  `duty_phone` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '负责人电话',
+  `description` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
+  `picture` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '现场照片',
+  `is_disable` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '是否启动0启动，1未启动',
+  `create_time` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `update_time` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `create_user` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `update_user` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of t_demo_playground
+-- ----------------------------
+INSERT INTO `t_demo_playground` VALUES ('1d19affa3eb0db9c4a22afeb02e39c89', 'Tom', '123', '2019-05-17', '王二', '13044444444', ',,语文,计算机科学与技术', '', '1', NULL, NULL, NULL, NULL);
+INSERT INTO `t_demo_playground` VALUES ('5b51fc54901a36a0d1d5c0a90d7d80fa', 'zhouxp', '123', '2019-05-16', '王二', '13044444444', ',,数学,物理', '', '1', NULL, NULL, NULL, NULL);
+INSERT INTO `t_demo_playground` VALUES ('7a385b8ad51b67a5d8e44b039b95ce9e', 'Tom', '123', '2019-05-31', '王二', '13044444444', ',,数学,计算机科学与技术', '', '0', NULL, NULL, NULL, NULL);
+INSERT INTO `t_demo_playground` VALUES ('9884ac0f6eb87f5418bba307901a9eb4', 'Test', '123', '2019-05-04', '王二', '18220313214', '主线程', '', '0', NULL, NULL, NULL, NULL);
+INSERT INTO `t_demo_playground` VALUES ('9afdfaece2f7401eef2a6b9d728b7db6', 'zhouxp', '123', '2019-05-16', '王二', '13044444444', '阿斯顿', '', '0', NULL, NULL, NULL, NULL);
+INSERT INTO `t_demo_playground` VALUES ('d6c44ffbfb27d9179d1d7649ae4c45d9', 'Tom', '123', '2019-05-16', '王二', '13044444444', '风格化', '', '1', NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for t_demo_role
@@ -73,6 +104,64 @@ CREATE TABLE `t_demo_student`  (
 -- Records of t_demo_student
 -- ----------------------------
 INSERT INTO `t_demo_student` VALUES ('205d318f52cf11e98b5fd02788407b5e', '1', '1', '2019-03-30 17:35:26', '1', '2019-03-30 17:50:54', '1', '1', '1121', 1, '<p>请输入富文本1232122</p>', '121', 'EST-1', 'd49d28c74f2c4fa8902390bc0f2adc4d', 'd2231c017ba64a299013c5a67f139dbc', '2019-03-15', '0', '1212', '116.403847', '39.915526', '北京市东城区天安门', '', '', '');
+INSERT INTO `t_demo_student` VALUES ('b6cf7133756b11e9b4c9d02788407b5e', '123', '1', '2019-05-13 18:41:47', '1', '2019-05-13 18:41:47', '1', '', '123', 1, '<p>123</p>', '', '', '', '', '', '', '', '', '', '123', '', '', '');
+
+-- ----------------------------
+-- Table structure for t_demo_subject
+-- ----------------------------
+DROP TABLE IF EXISTS `t_demo_subject`;
+CREATE TABLE `t_demo_subject`  (
+  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '科目名称',
+  `is_disable` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '是否禁用0启动，1为起点',
+  `create_time` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `update_time` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `create_user` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `update_user` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of t_demo_subject
+-- ----------------------------
+INSERT INTO `t_demo_subject` VALUES ('1', '数学', '1', NULL, NULL, NULL, NULL);
+INSERT INTO `t_demo_subject` VALUES ('2', '语文', '0', NULL, NULL, NULL, NULL);
+INSERT INTO `t_demo_subject` VALUES ('3', '物理', '0', NULL, NULL, NULL, NULL);
+INSERT INTO `t_demo_subject` VALUES ('3aa41ecf2c1ea2c0f7469d47b1b74386', '计算机科学与技术', '0', NULL, NULL, NULL, NULL);
+INSERT INTO `t_demo_subject` VALUES ('3eee110ffc0aba3ac9bb686b732153fe', '英语', '0', NULL, NULL, NULL, NULL);
+INSERT INTO `t_demo_subject` VALUES ('4', '化学', '0', NULL, NULL, NULL, NULL);
+INSERT INTO `t_demo_subject` VALUES ('5', '政治', '1', NULL, NULL, NULL, NULL);
+
+-- ----------------------------
+-- Table structure for t_demo_teacher
+-- ----------------------------
+DROP TABLE IF EXISTS `t_demo_teacher`;
+CREATE TABLE `t_demo_teacher`  (
+  `teacher_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `teacher_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '名字',
+  `age` int(3) NULL DEFAULT NULL COMMENT '年龄',
+  `sex` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '性别',
+  `phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '电话',
+  `entry_time` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '入职时间',
+  `logo` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '本人照片',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL COMMENT '资料',
+  `type` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '教授课程',
+  `is_disable` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '0' COMMENT '是否禁用0启动，1未启动',
+  `create_time` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+  `update_time` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+  `create_user` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+  `update_user` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`teacher_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of t_demo_teacher
+-- ----------------------------
+INSERT INTO `t_demo_teacher` VALUES ('4693ad6375fa11e9b4c9d02788407b5e', '张三', 18, '0', '18220301234', '2019-05-14', '', '<p>是是是</p>', '数学1', '0', '2019-05-14 11:42:18', '2019-05-16 17:13:20', '1', '1');
+INSERT INTO `t_demo_teacher` VALUES ('5fa9d41375ff11e9b4c9d02788407b5e', 'Test12', 12, '1', '18220301234', '2019-05-14', '', '<p>请输入富文本12</p>', '物理', '1', '2019-05-14 12:18:48', '2019-05-16 15:55:14', '1', '1');
+INSERT INTO `t_demo_teacher` VALUES ('60b6ad4b75fb11e9b4c9d02788407b5e', '李四', 55, '0', '18220301234', '2019-05-14', '', '<p>请输入富文本123</p>', '政治', '0', '2019-05-14 11:50:12', '2019-05-16 17:11:42', '1', '1');
+INSERT INTO `t_demo_teacher` VALUES ('cfba89c076b811e9b4c9d02788407b5e', '小三', 12, '1', '18323123213', '2019-05-15', '', '<p>啊</p>', '数学', '0', '2019-05-15 10:26:14', '2019-05-16 16:05:39', '1', '1');
+INSERT INTO `t_demo_teacher` VALUES ('eceebfa075fb11e9b4c9d02788407b5e', '王五', 12, '1', '18220301234', '2019-05-02', '', '<p>请输入富123文本</p>', '计算机科学与技术', '1', '2019-05-14 11:54:07', '2019-05-16 17:07:40', '1', '1');
 
 -- ----------------------------
 -- Table structure for t_log_admin_operator_log
@@ -88,140 +177,152 @@ CREATE TABLE `t_log_admin_operator_log`  (
   `req_param` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '参数',
   `menu_id` int(32) NULL DEFAULT NULL COMMENT '菜单id',
   `network_ip` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'ip地址',
+  `group_code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '集团编码',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_log_admin_operator_log
 -- ----------------------------
-INSERT INTO `t_log_admin_operator_log` VALUES ('001d4bd1b6ba458f8df9abbeafa305da', '2019-03-28 14:47:23 221', '1', 0, '/ms/sysRole/addSysRole', '角色管理:添加角色', '{\"roleId\":[\"\"],\"roleName\":[\"2333\"],\"organizationId\":[\"001\"],\"methods\":[\"v_1011:1\",\"v_1011:2\",\"v_1011:3\",\"v_1011:4\",\"v_1012:1\",\"v_1012:2\",\"v_1012:3\",\"v_1012:4\",\"v_1014:1\",\"v_1014:2\",\"v_1014:3\",\"v_1014:4\",\"v_1015:1\",\"v_1015:2\",\"v_1015:3\",\"v_1015:4\",\"v_1016:1\",\"v_1016:2\",\"v_1016:3\",\"v_1016:4\",\"v_1017:1\",\"v_1017:2\",\"v_1017:3\",\"v_1017:4\",\"v_1019:1\",\"v_1019:2\",\"v_1019:3\",\"v_1019:4\",\"v_1021:1\",\"v_1021:2\",\"v_1021:3\",\"v_1021:4\",\"v_1023:1\",\"v_1023:2\",\"v_1023:3\",\"v_1023:4\",\"v_1040:1\",\"v_1040:2\",\"v_1040:3\",\"v_1040:4\",\"v_1036:1\",\"v_1036:2\",\"v_1036:3\",\"v_1036:4\",\"v_1037:1\",\"v_1037:2\",\"v_1037:3\",\"v_1037:4\",\"v_1038:1\",\"v_1038:2\",\"v_1038:3\",\"v_1038:4\",\"v_1039:1\",\"v_1039:2\",\"v_1039:3\",\"v_1039:4\",\"v_30:1\",\"v_30:2\",\"v_30:3\",\"v_30:4\",\"v_40:1\",\"v_40:2\",\"v_40:3\",\"v_40:4\",\"v_41:1\",\"v_41:2\",\"v_41:3\",\"v_41:4\",\"t_41:1696\",\"v_151:1\",\"v_151:2\",\"v_151:3\",\"v_151:4\",\"t_151:1702\",\"v_781:1\",\"v_781:2\",\"v_781:3\",\"v_781:4\",\"t_781:1860\",\"v_972:1\",\"v_972:2\",\"v_972:3\",\"v_988:1\",\"t_988:1705\",\"v_1041:1\",\"v_1041:2\",\"v_1041:3\",\"v_1041:4\",\"v_1042:1\",\"v_1042:2\",\"v_1043:1\",\"v_1043:2\",\"v_1043:3\",\"v_1043:4\",\"v_1026:1\",\"v_1026:2\",\"v_1026:3\",\"v_1026:4\"],\"isDisable\":[\"0\"],\"dataPermissions\":[\"{\\\"parkId\\\":\\\"0d601eb23f0e11e99571d02788407b5e\\\"}\"],\"dataPermissions_select\":[\"0d601eb23f0e11e99571d02788407b5e\"],\"remark\":[\"\"],\"jackToken\":[\"27bde992cb97480b8e380e9412273325\"]}', 40, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('01e53a29154242f2bd8bb7686608440d', '2019-03-30 16:56:56 925', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1086\"],\"menuName\":[\"表单演示\"],\"namespace\":[\"student\"],\"menuUrl\":[\"/ms/pagex/student_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"1\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"1085\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('04d0c6d89e3346cfa00bc34acce0a3bf', '2019-03-29 12:04:40 111', '62b5870c510c4e9da3f72460001c42fa', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('05006e8b75d24b5eb251fc06de3b15a5', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('0a53039d05d94149b42ec4251d80ab84', '2019-03-25 21:01:47 200', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuName\":[\"操作日志\"],\"namespace\":[\"logAdminOperatorLog\"],\"menuUrl\":[\"/page/ms/system/log/log_admin_operator_log_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"9\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"1739e714876445998432566574d0ae75\"]}', 30, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('0e9d35a084194ee0901972cc4abe1ef2', '2019-03-25 19:37:18 431', '1', 4, '/ms/index', '登录', '不可见', 0, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('1230967d17d441a2b79472fe9bc8c02c', '2019-03-28 17:43:18 833', '62b5870c510c4e9da3f72460001c42fa', 1, '/ms/sysMenu/del', '菜单管理:删除', '{\"id\":[\"1048\"],\"jackToken\":[\"27bde992cb97480b8e380e9412273325\"]}', 30, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('12efe344868845a7a8e5cf8fb19692d3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('1415afe3cdfb42478312c29740b17dec', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('176a72212b374ff9a56929bd0feaa1d8', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('18e652094bb641f2aa50a58b08040175', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('1b87b80d56ca4f1099efbd778d87b1c0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('1bb587405ff64921ba058851e9fde765', '2019-03-29 11:17:35 765', '62b5870c510c4e9da3f72460001c42fa', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('1c3254d366b140b0a456a1a065d353f6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('21efb22714f545b59f0c05ccf5b039e2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('26bfe04009274775b5a2c01d3701bfc9', '2019-03-28 10:49:35 586', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1026\"],\"menuName\":[\"月租户管理\"],\"namespace\":[\"pay_monthly_record\"],\"menuUrl\":[\"/ms/pagex/pay/pay_monthly_record_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"2\"],\"orderIndex\":[\"1\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc008\"],\"fatherMenuId\":[\"1024\"],\"jackToken\":[\"81039867302a4a79ac045a0695544f0d\"]}', 30, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('2a98461086a44a2fbd0672fda7458b83', '2019-03-27 12:24:58 983', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('2ccfc77d1e7248668bfc78e191b80e24', '2019-03-30 16:32:26 616', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1085\"],\"menuName\":[\"demo1\"],\"namespace\":[\"demo\"],\"menuUrl\":[\"#\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"2\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"0\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('31b0b909b50b46b0ab55c301a4eaa339', '2019-03-25 21:14:09 668', '1', 4, '/ms/index', '登录', '不可见', 0, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('31d46c8069124d3abd5bfb9db58e439f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('331f8d8f85404c858591f3158880037d', '2019-03-30 16:55:51 432', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1086\"],\"menuName\":[\"表单演示\"],\"namespace\":[\"student\"],\"menuUrl\":[\"/pagex/ms/student_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"1\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"1085\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('36f570d69edd49f591e4423933e761bd', '2019-03-25 19:29:16 477', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"5058fef8a0dd4b6291a416232cee40eb\"]}', 972, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('3a8d8ad4598a4e3aae7654f533fe2f13', '2019-03-25 21:32:21 662', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1042\"],\"menuName\":[\"操作日志\"],\"namespace\":[\"logAdminOperatorLog\"],\"menuUrl\":[\"/page/ms/system/log/log_admin_operator_log_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"b2321aae021d4e93b4630126121ae1ff\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"9\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"5dc4da6e41cf497aa0bacce9655a5900\"]}', 30, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('3ab3911f596d4bad8e1983b908aab2e6', '2019-03-25 19:29:44 768', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"5058fef8a0dd4b6291a416232cee40eb\"]}', 972, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('3b4c3521358e4bbb8cc8a82334f4fb3e', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('3d86f3d5be8f43ea8ad075e8edbd6fac', '2019-03-25 19:37:47 495', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('3e40f8aa859d4406b5c8d63cc1a5254b', '2019-03-25 21:03:21 662', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1042\"],\"menuName\":[\"操作日志\"],\"namespace\":[\"1\"],\"menuUrl\":[\"/page/ms/system/log/log_admin_operator_log_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"9\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"1739e714876445998432566574d0ae75\"]}', 30, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('3f50d7e807274059b834f39599840f53', '2019-03-27 14:25:40 703', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('407786f9a6674de1ad820f8e5cd855df', '2019-03-26 14:14:33 186', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('4088a66d40b24b7fb7c4eb4281eb48fb', '2019-03-25 19:47:08 803', '1', 4, '/ms/index', '登录', '不可见', 0, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('412eb33c7ab04a26b2eabbc022e5e6b1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('4171be88b7344f6ab4aa9c0c0c263dda', '2019-03-25 19:33:01 899', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"5058fef8a0dd4b6291a416232cee40eb\"]}', 972, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('463479190f5f4389a5ad951a80d61aba', '2019-03-28 17:43:25 094', '62b5870c510c4e9da3f72460001c42fa', 1, '/ms/sysMenu/del', '菜单管理:删除', '{\"id\":[\"1024\"],\"jackToken\":[\"27bde992cb97480b8e380e9412273325\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('4671eeeb901c48b4b05a498c7d7bbf99', '2019-03-25 21:03:27 313', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1042\"],\"menuName\":[\"操作日志\"],\"namespace\":[\"logAdminOperatorLog\"],\"menuUrl\":[\"/page/ms/system/log/log_admin_operator_log_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"9\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"1739e714876445998432566574d0ae75\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('49317ed6e8724a718c8382e926545040', '2019-03-29 16:12:36 266', '62b5870c510c4e9da3f72460001c42fa', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('4a61076a7a5545d3bddc1c7532b1ad38', '2019-03-29 19:10:53 877', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('4c835846cb954908a9c3b48ab40c07ee', '2019-03-25 21:35:48 988', '1', 0, '/ms/sysRole/addSysRole', '角色管理:添加角色', '{\"roleIdE\":[\"\"],\"roleName\":[\"1231\"],\"organizationId\":[\"001\"],\"methods\":[\"v_1011:1\",\"v_1011:2\",\"v_1011:3\",\"v_1011:4\",\"v_1012:1\",\"v_1012:2\",\"v_1012:3\",\"v_1012:4\",\"v_1014:1\",\"v_1014:2\",\"v_1014:3\",\"v_1014:4\",\"v_1015:1\",\"v_1015:2\",\"v_1015:3\",\"v_1015:4\",\"v_1016:1\",\"v_1016:2\",\"v_1016:3\",\"v_1016:4\",\"v_1017:1\",\"v_1017:2\",\"v_1017:3\",\"v_1017:4\",\"v_1019:1\",\"v_1019:2\",\"v_1019:3\",\"v_1019:4\",\"v_1021:1\",\"v_1021:2\",\"v_1021:3\",\"v_1021:4\",\"v_1023:1\",\"v_1023:2\",\"v_1023:3\",\"v_1023:4\",\"v_1040:1\",\"v_1040:2\",\"v_1040:3\",\"v_1040:4\",\"v_1036:1\",\"v_1036:2\",\"v_1036:3\",\"v_1036:4\",\"v_1037:1\",\"v_1037:2\",\"v_1037:3\",\"v_1037:4\",\"v_1038:1\",\"v_1038:2\",\"v_1038:3\",\"v_1038:4\",\"v_1039:1\",\"v_1039:2\",\"v_1039:3\",\"v_1039:4\",\"v_30:1\",\"v_30:2\",\"v_30:3\",\"v_30:4\",\"v_40:1\",\"v_40:2\",\"v_40:3\",\"v_40:4\",\"v_41:1\",\"v_41:2\",\"v_41:3\",\"v_41:4\",\"t_41:1696\",\"v_151:1\",\"v_151:2\",\"v_151:3\",\"v_151:4\",\"t_151:1702\",\"v_781:1\",\"v_781:2\",\"v_781:3\",\"v_781:4\",\"t_781:1860\",\"v_972:1\",\"v_972:2\",\"v_972:3\",\"v_988:1\",\"t_988:1705\",\"v_1041:1\",\"v_1041:2\",\"v_1041:3\",\"v_1041:4\",\"v_1042:1\",\"v_1042:2\",\"v_1043:1\",\"v_1043:2\",\"v_1043:3\",\"v_1043:4\",\"v_1026:1\",\"v_1026:2\",\"v_1026:3\",\"v_1026:4\"],\"isDisable\":[\"0\"],\"remark\":[\"12123\"],\"jackToken\":[\"5dc4da6e41cf497aa0bacce9655a5900\"]}', 40, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('4c939e3cec784594bac516658cfeb989', '2019-03-30 16:53:58 296', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"表单演示\"],\"namespace\":[\"student\"],\"menuUrl\":[\"/pagex/student_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"1\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"1085\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('4f43799da8934a33919bc4e485b89843', '2019-03-29 12:21:57 809', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('50fda074205a42fbb8fa00d9c2aa50c2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('557bc7f8b1004b03851cefd192e22b35', '2019-03-30 16:38:50 047', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1085\"],\"menuName\":[\"demo12\"],\"namespace\":[\"demo\"],\"menuUrl\":[\"#\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"2\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"0\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('6009072f142b48c193d1b29c85f2105f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('63ea9eace13048ab86e4181f081549c3', '2019-03-25 19:31:06 850', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"5058fef8a0dd4b6291a416232cee40eb\"]}', 972, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('6633d34335e64032b2ce27b99d238025', '2019-03-25 19:32:29 700', '1', 2, '/ms/sysMenuPermission/update', '菜单权限管理:更新', '{\"permissionName\":[\"删除\"],\"permissionId\":[\"1956\"],\"method\":[\"del22\"],\"menuId\":[\"1042\"],\"permissionType\":[\"4\"],\"isDisable\":[\"0\"],\"jackToken\":[\"5058fef8a0dd4b6291a416232cee40eb\"]}', 972, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('664e0c5687ae4f2da90596e4d38a7331', '2019-03-25 21:12:52 973', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1043\"],\"menuName\":[\"菜单权限\"],\"namespace\":[\"sysMenuPermission\"],\"menuUrl\":[\"#\"],\"isDisable\":[\"0\"],\"menuState\":[\"1\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"100\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"d8fb6a1caf0b49de9e187fff293ee76e\"]}', 30, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('671fbcee2a494e32913d7fe7444e0529', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('67523e9ca4b94e6992390e8600ebe09f', '2019-03-26 19:41:40 610', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('686067fb5b5e4acb857e2d301e4186e6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('6dc2c21b94c54717a7a0612363dadd71', '2019-03-30 15:52:42 590', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1041\"],\"menuName\":[\"机构管理新(PAGEXtree未完成)\"],\"namespace\":[\"organization\"],\"menuUrl\":[\"/ms/pagex/organization_tree.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"5\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('6e62b52b000b41b4aa2876b8184ede87', '2019-03-28 10:29:27 332', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('6ec3bb596c1c41c9b9746a1e3f449cc2', '2019-03-27 12:33:03 629', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('76a753b2ffec4bf790958778de5f38b6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('779fb81cf83c49b0a489f46f683a5e9f', '2019-03-30 18:52:41 530', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"停车场出入口管理\"],\"namespace\":[\"parking_port\"],\"menuUrl\":[\"/ms/pagex/parking_port_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"4\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"1085\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('799caf5bd0ce4fef86c60ae1cc2ce6d8', '2019-03-26 22:01:47 423', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('79bfababc39643c39134953c493f0ffd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('7acebdf2ea1146c5a12976beff87c6a3', '2019-03-29 14:51:52 348', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('7d8f3f1c47fb4048ba73718ce85b6997', '2019-03-30 16:31:57 661', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"demo\"],\"namespace\":[\"demo\"],\"menuUrl\":[\"#\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"2\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"0\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('7f63a2f9811342a595725391541c23ce', '2019-03-29 09:46:38 015', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('7fc401d909964e74b137a6afbcc40cae', '2019-03-25 19:21:00 794', '1', 1, '/ms/sysMenu/del', '菜单管理:删除', '{\"id\":[\"1025\"],\"jackToken\":[\"5058fef8a0dd4b6291a416232cee40eb\"]}', 30, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('811f0843016a4155aa20ee24e9d62ee8', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('839933204de940e089ee698916adb71d', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('859658796d204196a3b271d89f15ab28', '2019-03-26 19:53:44 981', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('88a50bc1a5ed4e8392c59f947056e0b4', '2019-03-25 21:12:13 539', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"d8fb6a1caf0b49de9e187fff293ee76e\"]}', 972, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('899d8050706847cf9dbb54ee393fb7ad', '2019-03-28 09:53:48 662', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('8c14cbe86ba048559a62c6475bde3b44', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('8ce4f7bafb36495996a485064ca5e715', '2019-03-30 18:52:02 885', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"停车场管理\"],\"namespace\":[\"parking\"],\"menuUrl\":[\"/ms/pagex/parking_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"3\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"1085\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('8d846dfea5a94eef881e746ac857da5a', '2019-03-28 17:43:13 355', '62b5870c510c4e9da3f72460001c42fa', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"1\"],\"namespace\":[\"1\"],\"menuUrl\":[\"1\"],\"isDisable\":[\"0\"],\"menuState\":[\"1\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"1\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc008\"],\"fatherMenuId\":[\"1024\"],\"jackToken\":[\"27bde992cb97480b8e380e9412273325\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('8da4bb07713e448abab38d5d25c8b949', '2019-03-28 16:37:47 209', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('8f36c9b2734e492fab2fe5ba393bc958', '2019-03-26 10:46:53 023', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('8f9dab9a6b7147fb9ddb138f76cfb1fe', '2019-03-29 11:16:08 826', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('8fbd60e0cd904ed8a333711da14b010a', '2019-03-28 14:51:17 858', '1', 0, '/ms/sysUser/addUser', '后管用户:添加后台用户', '{\"jackToken\":[\"27bde992cb97480b8e380e9412273325\"],\"address\":[\"\"],\"sex\":[\"\"],\"mobile\":[\"13455555555\"],\"cityId\":[\"440300\"],\"isAdmin\":[\"0\"],\"userName\":[\"王磊\"],\"roleList\":[\"1\",\"2\"],\"userId\":[\"\"],\"provinceId\":[\"440000\"],\"organizationId\":[\"001\"],\"isDisable\":[\"0\"],\"areaId\":[\"\"],\"passWd\":[\"\"],\"userLoginName\":[\"shuaizai88\"],\"userNameShow\":[\"王磊\"],\"email\":[\"\"]}', 41, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('9018a589d1874a028ccf162f3480d962', '2019-03-25 19:38:38 967', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"15e12171f1924454a30eb2a56f8ddf0f\"]}', 972, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('9200789f0ac54654baa37251515d6408', '2019-03-25 19:28:37 385', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"5058fef8a0dd4b6291a416232cee40eb\"]}', 972, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('954c292a5a82490ca1f1bd3daea1cb52', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('96045afc863f4f8cb7dd6199d4010837', '2019-03-28 10:47:51 502', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"月租户管理\"],\"namespace\":[\"#\"],\"menuUrl\":[\"#\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"2\"],\"orderIndex\":[\"5\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc008\"],\"fatherMenuId\":[\"\"],\"jackToken\":[\"81039867302a4a79ac045a0695544f0d\"]}', 30, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('972c09f597ac4febbaa477b636c16f3b', '2019-03-29 16:12:12 850', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('9a92505a6c614068aa907969cafb3d8d', '2019-03-25 19:38:16 821', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"15e12171f1924454a30eb2a56f8ddf0f\"]}', 972, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('9d0186054caf479493edf559f47b11d1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('9dbcddd65efb460a8a09cc25e283495a', '2019-03-25 21:32:02 541', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1042\"],\"menuName\":[\"操作日志\"],\"namespace\":[\"logAdminOperatorLog\"],\"menuUrl\":[\"/page/ms/system/log/log_admin_operator_log_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"9a5457114e14485a846b5a7bf04f7858\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"9\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"5dc4da6e41cf497aa0bacce9655a5900\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('a2a1afe437704d3fbd4864b106c38c98', '2019-03-29 17:17:57 912', '62b5870c510c4e9da3f72460001c42fa', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('a3cd110241084c4988d9053c971d2ff6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('a65b0dc05a9d4c80aeea21e59506ac8b', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('a70436c29b0645f680c1a3fb57301dbd', '2019-03-25 21:01:27 241', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuName\":[\"操作日志\"],\"namespace\":[\"logAdminOperatorLog\"],\"menuUrl\":[\"/page/ms/system/log/log_admin_operator_log_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"9\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"1739e714876445998432566574d0ae75\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('a9cc61aad56a4ad983762e77586bc845', '2019-03-25 19:30:46 667', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"5058fef8a0dd4b6291a416232cee40eb\"]}', 972, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('aacf369bb3bd4a88a4f8145ba6ed8a0e', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('ab6168657afd45c38830263eb3719205', '2019-03-25 21:15:01 078', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"5dc4da6e41cf497aa0bacce9655a5900\"]}', 972, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('ad410dd1a41e4a92bfe66a2fd94797c3', '2019-03-25 21:04:04 826', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('b0d25953912a4c72bd6fd1478d7597a5', '2019-03-26 12:28:20 060', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('b474430d1d1e4374ba9a1dafd70f1614', '2019-03-25 21:03:13 798', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1042\"],\"menuName\":[\"操作日志\"],\"namespace\":[\"1\"],\"menuUrl\":[\"/page/system/log/log_admin_operator_log_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"9\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"1739e714876445998432566574d0ae75\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('b5c83b5ed3bf4172937cda79f289d7e7', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('b71d9612c49742a1b70f10f93d0fbbe3', '2019-03-29 14:07:31 139', '62b5870c510c4e9da3f72460001c42fa', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('b8470db9752e4d16973edf8f8250b564', '2019-03-28 10:42:34 463', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"月租户管理\"],\"namespace\":[\"pay_monthly_record\"],\"menuUrl\":[\"/ms/pagex/pay/pay_monthly_record_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"2\"],\"orderIndex\":[\"5\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc008\"],\"fatherMenuId\":[\"\"],\"jackToken\":[\"81039867302a4a79ac045a0695544f0d\"]}', 30, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('ba41d720323c45a7bd54e1aa30acbab7', '2019-03-30 17:40:24 473', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"隐藏菜单\"],\"namespace\":[\"role\"],\"menuUrl\":[\"#\"],\"isDisable\":[\"0\"],\"menuState\":[\"1\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"2\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"1085\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('c1868876b3ce45d498dacf86bb2f965d', '2019-03-30 16:52:29 287', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1085\"],\"menuName\":[\"demo\"],\"namespace\":[\"demo\"],\"menuUrl\":[\"#\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"2\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"0\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('c311e1c5784e4e1d847c4160f0e6cc06', '2019-03-30 16:41:16 358', '1', 1, '/ms/sysMenu/del', '菜单管理:删除', '{\"id\":[\"1041\"],\"jackToken\":[\"null\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('c48769b9a18445c8b96fa0c1a9f0f24b', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('c52658fc189c4cffa5414b66cca50d53', '2019-03-29 20:48:24 714', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('c5c6f61f46fb4a0f90c3d18c0d722e22', '2019-03-27 16:10:54 159', '1', 4, '//ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('c80f507fe4824733aa4173db502fd362', '2019-03-29 16:41:57 792', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('c8d40ff062af4d8c8fde1c7cca0ebeac', '2019-03-25 19:46:20 619', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"15e12171f1924454a30eb2a56f8ddf0f\"]}', 972, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('ca3d419704e24917a7cba53520b01ebe', '2019-03-25 19:38:00 392', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"15e12171f1924454a30eb2a56f8ddf0f\"]}', 972, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('cb32bf53cb504c479ffdd6de7c1176d0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('cbf4140fe0d440cb9bf30271a2c21063', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('ccc6e47ed3b54706b890ecb887066060', '2019-03-25 19:32:35 133', '1', 2, '/ms/sysMenuPermission/update', '菜单权限管理:更新', '{\"permissionName\":[\"删除\"],\"permissionId\":[\"1956\"],\"method\":[\"del\"],\"menuId\":[\"1042\"],\"permissionType\":[\"4\"],\"isDisable\":[\"0\"],\"jackToken\":[\"5058fef8a0dd4b6291a416232cee40eb\"]}', 972, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('ce6835de760c4774b71dda10300e60cd', '2019-03-30 16:38:00 019', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1085\"],\"menuName\":[\"demo1\"],\"namespace\":[\"demo\"],\"menuUrl\":[\"#\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"2\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"0\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('ce709ff864344af1900ac47b4f4ab519', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('d43828e37d644f50a7349c444843a933', '2019-03-28 14:06:22 685', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('d62bab719570440284c2ca4a371ce7e5', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('d8ea3a33542a435a8b3b8f462846f53c', '2019-03-28 10:38:07 858', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"月租户管理\"],\"namespace\":[\"pay_monthly_record\"],\"menuUrl\":[\"/ms/pagex/pay/pay_monthly_record_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"2\"],\"orderIndex\":[\"4\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc008\"],\"fatherMenuId\":[\"\"],\"jackToken\":[\"81039867302a4a79ac045a0695544f0d\"]}', 30, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('da3960fd0d374cb2a80d22f3773a2cd8', '2019-03-28 16:55:58 244', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"test\"],\"namespace\":[\"testte\"],\"menuUrl\":[\"tttt\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"1\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"\"],\"jackToken\":[\"0805f70cd15743a5ae45ad8ea59d5214\"]}', 30, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('db67401ab90c4eab9e57221df6113c89', '2019-03-25 21:27:36 721', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1042\"],\"menuName\":[\"操作日志\"],\"namespace\":[\"logAdminOperatorLog\"],\"menuUrl\":[\"/page/ms/system/log/log_admin_operator_log_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"9\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"5dc4da6e41cf497aa0bacce9655a5900\"]}', 30, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('dc97f9efe9bb47e69946d7b363d009d1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('dcc323dac4584e289d65548845d11b3f', '2019-03-27 20:12:03 403', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('dcd8dfc85af748d9a961295d88ea6ab4', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('deccb87267084847a38a36133af5ae26', '2019-03-25 21:27:16 353', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1042\"],\"menuName\":[\"操作日志\"],\"namespace\":[\"logAdminOperatorLog\"],\"menuUrl\":[\"/page/ms/system/log/log_admin_operator_log_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"9\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"5dc4da6e41cf497aa0bacce9655a5900\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('ded2ac62a1ad4629bf2ad20e4cbdc388', '2019-03-29 18:10:20 615', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1026\"],\"menuName\":[\"月租户管理\"],\"namespace\":[\"pay_monthly_record\"],\"menuUrl\":[\"/ms/pagex/pay/pay_monthly_record_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"2\"],\"orderIndex\":[\"5\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc008\"],\"fatherMenuId\":[\"1033\"],\"jackToken\":[\"3091bb8e52b74b9290406623c985ad52\"]}', 30, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('e03516af80104a918bacc05d28e88358', '2019-03-25 21:31:23 896', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1042\"],\"menuName\":[\"操作日志\"],\"namespace\":[\"logAdminOperatorLog\"],\"menuUrl\":[\"/page/ms/system/log/log_admin_operator_log_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"789281fd3a3f49a1a76d9d189f675e8c\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"9\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"5dc4da6e41cf497aa0bacce9655a5900\"]}', 30, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('e09eb1bab539413fa6ec2f47e24dff99', '2019-03-30 16:32:42 615', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1085\"],\"menuName\":[\"demo12\"],\"namespace\":[\"demo\"],\"menuUrl\":[\"#\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"2\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"0\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('e16437b07e2e4c258f26f21a24370d88', '2019-03-30 16:39:46 199', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1085\"],\"menuName\":[\"demo121\"],\"namespace\":[\"demo\"],\"menuUrl\":[\"#\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"2\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"0\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('e44cb838f41a4df486665bc7830a29f8', '2019-03-30 18:53:00 205', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1088\"],\"menuName\":[\"停车场管理\"],\"namespace\":[\"parking\"],\"menuUrl\":[\"/ms/pagex/parking_list.jsp?parent_park_id=0\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"3\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"1085\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('ebd5e1bf119c48e2acf22e41c2a88de8', '2019-03-25 19:20:33 622', '1', 1, '/ms/sysMenu/del', '菜单管理:删除', '{\"id\":[\"1007\"],\"jackToken\":[\"5058fef8a0dd4b6291a416232cee40eb\"]}', 30, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('ee7ffa1a922c45e28eb7306912cc32e9', '2019-03-27 12:41:40 599', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1016\"],\"menuName\":[\"临时收费时段\"],\"namespace\":[\"park_temp_segment\"],\"menuUrl\":[\"/ms/pagex/park_temp_segment_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"2\"],\"orderIndex\":[\"3\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc008\"],\"fatherMenuId\":[\"1013\"],\"jackToken\":[\"078fad71000e4a07a2187816c41cf2a7\"]}', 30, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('f302829c0ef5438bb0b7cf8e06fea488', '2019-03-26 14:02:32 200', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('f5a55a72f30e4c0493a7e7554c004c7c', '2019-03-27 16:21:05 615', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('f958106a81a843bb947bb15361b749e4', '2019-03-25 21:15:04 490', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1955\"],\"jackToken\":[\"5dc4da6e41cf497aa0bacce9655a5900\"]}', 972, '127.0.0.1');
-INSERT INTO `t_log_admin_operator_log` VALUES ('fa673b86049047ccb5e3081521b998b0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('fbef48a359924b69a1ce32c76c94f592', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_log_admin_operator_log` VALUES ('fda91f542f394564b65669a29aeea84f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('001d4bd1b6ba458f8df9abbeafa305da', '2019-03-28 14:47:23 221', '1', 0, '/ms/sysRole/addSysRole', '角色管理:添加角色', '{\"roleId\":[\"\"],\"roleName\":[\"2333\"],\"organizationId\":[\"001\"],\"methods\":[\"v_1011:1\",\"v_1011:2\",\"v_1011:3\",\"v_1011:4\",\"v_1012:1\",\"v_1012:2\",\"v_1012:3\",\"v_1012:4\",\"v_1014:1\",\"v_1014:2\",\"v_1014:3\",\"v_1014:4\",\"v_1015:1\",\"v_1015:2\",\"v_1015:3\",\"v_1015:4\",\"v_1016:1\",\"v_1016:2\",\"v_1016:3\",\"v_1016:4\",\"v_1017:1\",\"v_1017:2\",\"v_1017:3\",\"v_1017:4\",\"v_1019:1\",\"v_1019:2\",\"v_1019:3\",\"v_1019:4\",\"v_1021:1\",\"v_1021:2\",\"v_1021:3\",\"v_1021:4\",\"v_1023:1\",\"v_1023:2\",\"v_1023:3\",\"v_1023:4\",\"v_1040:1\",\"v_1040:2\",\"v_1040:3\",\"v_1040:4\",\"v_1036:1\",\"v_1036:2\",\"v_1036:3\",\"v_1036:4\",\"v_1037:1\",\"v_1037:2\",\"v_1037:3\",\"v_1037:4\",\"v_1038:1\",\"v_1038:2\",\"v_1038:3\",\"v_1038:4\",\"v_1039:1\",\"v_1039:2\",\"v_1039:3\",\"v_1039:4\",\"v_30:1\",\"v_30:2\",\"v_30:3\",\"v_30:4\",\"v_40:1\",\"v_40:2\",\"v_40:3\",\"v_40:4\",\"v_41:1\",\"v_41:2\",\"v_41:3\",\"v_41:4\",\"t_41:1696\",\"v_151:1\",\"v_151:2\",\"v_151:3\",\"v_151:4\",\"t_151:1702\",\"v_781:1\",\"v_781:2\",\"v_781:3\",\"v_781:4\",\"t_781:1860\",\"v_972:1\",\"v_972:2\",\"v_972:3\",\"v_988:1\",\"t_988:1705\",\"v_1041:1\",\"v_1041:2\",\"v_1041:3\",\"v_1041:4\",\"v_1042:1\",\"v_1042:2\",\"v_1043:1\",\"v_1043:2\",\"v_1043:3\",\"v_1043:4\",\"v_1026:1\",\"v_1026:2\",\"v_1026:3\",\"v_1026:4\"],\"isDisable\":[\"0\"],\"dataPermissions\":[\"{\\\"parkId\\\":\\\"0d601eb23f0e11e99571d02788407b5e\\\"}\"],\"dataPermissions_select\":[\"0d601eb23f0e11e99571d02788407b5e\"],\"remark\":[\"\"],\"jackToken\":[\"27bde992cb97480b8e380e9412273325\"]}', 40, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('01e53a29154242f2bd8bb7686608440d', '2019-03-30 16:56:56 925', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1086\"],\"menuName\":[\"表单演示\"],\"namespace\":[\"student\"],\"menuUrl\":[\"/ms/pagex/student_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"1\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"1085\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('04d0c6d89e3346cfa00bc34acce0a3bf', '2019-03-29 12:04:40 111', '62b5870c510c4e9da3f72460001c42fa', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('05006e8b75d24b5eb251fc06de3b15a5', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('0a53039d05d94149b42ec4251d80ab84', '2019-03-25 21:01:47 200', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuName\":[\"操作日志\"],\"namespace\":[\"logAdminOperatorLog\"],\"menuUrl\":[\"/page/ms/system/log/log_admin_operator_log_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"9\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"1739e714876445998432566574d0ae75\"]}', 30, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('0e9d35a084194ee0901972cc4abe1ef2', '2019-03-25 19:37:18 431', '1', 4, '/ms/index', '登录', '不可见', 0, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('10b2ed91f1db4c59a4d4d91738ce5f34', '2019-05-13 17:55:54 365', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"老北京\"],\"namespace\":[\"aaa\"],\"menuUrl\":[\"page/ms/ffdd/ss/dd\"],\"isDisable\":[\"0\"],\"menuState\":[\"1\"],\"image\":[\"6aac631d411741eb937633230ea5e7b0\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"4\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc008\"],\"fatherMenuId\":[\"1086\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('1230967d17d441a2b79472fe9bc8c02c', '2019-03-28 17:43:18 833', '62b5870c510c4e9da3f72460001c42fa', 1, '/ms/sysMenu/del', '菜单管理:删除', '{\"id\":[\"1048\"],\"jackToken\":[\"27bde992cb97480b8e380e9412273325\"]}', 30, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('12efe344868845a7a8e5cf8fb19692d3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('1415afe3cdfb42478312c29740b17dec', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('176a72212b374ff9a56929bd0feaa1d8', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('18e652094bb641f2aa50a58b08040175', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('1b87b80d56ca4f1099efbd778d87b1c0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('1bb587405ff64921ba058851e9fde765', '2019-03-29 11:17:35 765', '62b5870c510c4e9da3f72460001c42fa', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('1c3254d366b140b0a456a1a065d353f6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('21efb22714f545b59f0c05ccf5b039e2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('26bfe04009274775b5a2c01d3701bfc9', '2019-03-28 10:49:35 586', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1026\"],\"menuName\":[\"月租户管理\"],\"namespace\":[\"pay_monthly_record\"],\"menuUrl\":[\"/ms/pagex/pay/pay_monthly_record_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"2\"],\"orderIndex\":[\"1\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc008\"],\"fatherMenuId\":[\"1024\"],\"jackToken\":[\"81039867302a4a79ac045a0695544f0d\"]}', 30, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('2a98461086a44a2fbd0672fda7458b83', '2019-03-27 12:24:58 983', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('2ccfc77d1e7248668bfc78e191b80e24', '2019-03-30 16:32:26 616', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1085\"],\"menuName\":[\"demo1\"],\"namespace\":[\"demo\"],\"menuUrl\":[\"#\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"2\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"0\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('31b0b909b50b46b0ab55c301a4eaa339', '2019-03-25 21:14:09 668', '1', 4, '/ms/index', '登录', '不可见', 0, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('31d46c8069124d3abd5bfb9db58e439f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('331f8d8f85404c858591f3158880037d', '2019-03-30 16:55:51 432', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1086\"],\"menuName\":[\"表单演示\"],\"namespace\":[\"student\"],\"menuUrl\":[\"/pagex/ms/student_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"1\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"1085\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('36f570d69edd49f591e4423933e761bd', '2019-03-25 19:29:16 477', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"5058fef8a0dd4b6291a416232cee40eb\"]}', 972, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('3a8d8ad4598a4e3aae7654f533fe2f13', '2019-03-25 21:32:21 662', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1042\"],\"menuName\":[\"操作日志\"],\"namespace\":[\"logAdminOperatorLog\"],\"menuUrl\":[\"/page/ms/system/log/log_admin_operator_log_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"b2321aae021d4e93b4630126121ae1ff\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"9\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"5dc4da6e41cf497aa0bacce9655a5900\"]}', 30, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('3ab3911f596d4bad8e1983b908aab2e6', '2019-03-25 19:29:44 768', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"5058fef8a0dd4b6291a416232cee40eb\"]}', 972, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('3b4c3521358e4bbb8cc8a82334f4fb3e', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('3d86f3d5be8f43ea8ad075e8edbd6fac', '2019-03-25 19:37:47 495', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('3e40f8aa859d4406b5c8d63cc1a5254b', '2019-03-25 21:03:21 662', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1042\"],\"menuName\":[\"操作日志\"],\"namespace\":[\"1\"],\"menuUrl\":[\"/page/ms/system/log/log_admin_operator_log_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"9\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"1739e714876445998432566574d0ae75\"]}', 30, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('3f50d7e807274059b834f39599840f53', '2019-03-27 14:25:40 703', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('407786f9a6674de1ad820f8e5cd855df', '2019-03-26 14:14:33 186', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('4088a66d40b24b7fb7c4eb4281eb48fb', '2019-03-25 19:47:08 803', '1', 4, '/ms/index', '登录', '不可见', 0, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('412eb33c7ab04a26b2eabbc022e5e6b1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('4171be88b7344f6ab4aa9c0c0c263dda', '2019-03-25 19:33:01 899', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"5058fef8a0dd4b6291a416232cee40eb\"]}', 972, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('463479190f5f4389a5ad951a80d61aba', '2019-03-28 17:43:25 094', '62b5870c510c4e9da3f72460001c42fa', 1, '/ms/sysMenu/del', '菜单管理:删除', '{\"id\":[\"1024\"],\"jackToken\":[\"27bde992cb97480b8e380e9412273325\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('4671eeeb901c48b4b05a498c7d7bbf99', '2019-03-25 21:03:27 313', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1042\"],\"menuName\":[\"操作日志\"],\"namespace\":[\"logAdminOperatorLog\"],\"menuUrl\":[\"/page/ms/system/log/log_admin_operator_log_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"9\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"1739e714876445998432566574d0ae75\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('49317ed6e8724a718c8382e926545040', '2019-03-29 16:12:36 266', '62b5870c510c4e9da3f72460001c42fa', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('49f982ef506547908907e637656a1049', '2019-05-18 17:50:14 201', '1', 3, '//ms/x/student/info/205d318f52cf11e98b5fd02788407b5e', '查看了学生', '{\"id\":\"205d318f52cf11e98b5fd02788407b5e\",\"groupCode\":null}', 1086, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('4a61076a7a5545d3bddc1c7532b1ad38', '2019-03-29 19:10:53 877', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('4c835846cb954908a9c3b48ab40c07ee', '2019-03-25 21:35:48 988', '1', 0, '/ms/sysRole/addSysRole', '角色管理:添加角色', '{\"roleIdE\":[\"\"],\"roleName\":[\"1231\"],\"organizationId\":[\"001\"],\"methods\":[\"v_1011:1\",\"v_1011:2\",\"v_1011:3\",\"v_1011:4\",\"v_1012:1\",\"v_1012:2\",\"v_1012:3\",\"v_1012:4\",\"v_1014:1\",\"v_1014:2\",\"v_1014:3\",\"v_1014:4\",\"v_1015:1\",\"v_1015:2\",\"v_1015:3\",\"v_1015:4\",\"v_1016:1\",\"v_1016:2\",\"v_1016:3\",\"v_1016:4\",\"v_1017:1\",\"v_1017:2\",\"v_1017:3\",\"v_1017:4\",\"v_1019:1\",\"v_1019:2\",\"v_1019:3\",\"v_1019:4\",\"v_1021:1\",\"v_1021:2\",\"v_1021:3\",\"v_1021:4\",\"v_1023:1\",\"v_1023:2\",\"v_1023:3\",\"v_1023:4\",\"v_1040:1\",\"v_1040:2\",\"v_1040:3\",\"v_1040:4\",\"v_1036:1\",\"v_1036:2\",\"v_1036:3\",\"v_1036:4\",\"v_1037:1\",\"v_1037:2\",\"v_1037:3\",\"v_1037:4\",\"v_1038:1\",\"v_1038:2\",\"v_1038:3\",\"v_1038:4\",\"v_1039:1\",\"v_1039:2\",\"v_1039:3\",\"v_1039:4\",\"v_30:1\",\"v_30:2\",\"v_30:3\",\"v_30:4\",\"v_40:1\",\"v_40:2\",\"v_40:3\",\"v_40:4\",\"v_41:1\",\"v_41:2\",\"v_41:3\",\"v_41:4\",\"t_41:1696\",\"v_151:1\",\"v_151:2\",\"v_151:3\",\"v_151:4\",\"t_151:1702\",\"v_781:1\",\"v_781:2\",\"v_781:3\",\"v_781:4\",\"t_781:1860\",\"v_972:1\",\"v_972:2\",\"v_972:3\",\"v_988:1\",\"t_988:1705\",\"v_1041:1\",\"v_1041:2\",\"v_1041:3\",\"v_1041:4\",\"v_1042:1\",\"v_1042:2\",\"v_1043:1\",\"v_1043:2\",\"v_1043:3\",\"v_1043:4\",\"v_1026:1\",\"v_1026:2\",\"v_1026:3\",\"v_1026:4\"],\"isDisable\":[\"0\"],\"remark\":[\"12123\"],\"jackToken\":[\"5dc4da6e41cf497aa0bacce9655a5900\"]}', 40, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('4c939e3cec784594bac516658cfeb989', '2019-03-30 16:53:58 296', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"表单演示\"],\"namespace\":[\"student\"],\"menuUrl\":[\"/pagex/student_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"1\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"1085\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('4f43799da8934a33919bc4e485b89843', '2019-03-29 12:21:57 809', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('50fda074205a42fbb8fa00d9c2aa50c2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('557bc7f8b1004b03851cefd192e22b35', '2019-03-30 16:38:50 047', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1085\"],\"menuName\":[\"demo12\"],\"namespace\":[\"demo\"],\"menuUrl\":[\"#\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"2\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"0\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('6009072f142b48c193d1b29c85f2105f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('63ea9eace13048ab86e4181f081549c3', '2019-03-25 19:31:06 850', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"5058fef8a0dd4b6291a416232cee40eb\"]}', 972, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('6633d34335e64032b2ce27b99d238025', '2019-03-25 19:32:29 700', '1', 2, '/ms/sysMenuPermission/update', '菜单权限管理:更新', '{\"permissionName\":[\"删除\"],\"permissionId\":[\"1956\"],\"method\":[\"del22\"],\"menuId\":[\"1042\"],\"permissionType\":[\"4\"],\"isDisable\":[\"0\"],\"jackToken\":[\"5058fef8a0dd4b6291a416232cee40eb\"]}', 972, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('664e0c5687ae4f2da90596e4d38a7331', '2019-03-25 21:12:52 973', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1043\"],\"menuName\":[\"菜单权限\"],\"namespace\":[\"sysMenuPermission\"],\"menuUrl\":[\"#\"],\"isDisable\":[\"0\"],\"menuState\":[\"1\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"100\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"d8fb6a1caf0b49de9e187fff293ee76e\"]}', 30, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('671fbcee2a494e32913d7fe7444e0529', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('67523e9ca4b94e6992390e8600ebe09f', '2019-03-26 19:41:40 610', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('686067fb5b5e4acb857e2d301e4186e6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('6dc2c21b94c54717a7a0612363dadd71', '2019-03-30 15:52:42 590', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1041\"],\"menuName\":[\"机构管理新(PAGEXtree未完成)\"],\"namespace\":[\"organization\"],\"menuUrl\":[\"/ms/pagex/organization_tree.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"5\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('6e62b52b000b41b4aa2876b8184ede87', '2019-03-28 10:29:27 332', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('6ec3bb596c1c41c9b9746a1e3f449cc2', '2019-03-27 12:33:03 629', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('76a753b2ffec4bf790958778de5f38b6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('779fb81cf83c49b0a489f46f683a5e9f', '2019-03-30 18:52:41 530', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"停车场出入口管理\"],\"namespace\":[\"parking_port\"],\"menuUrl\":[\"/ms/pagex/parking_port_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"4\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"1085\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('799caf5bd0ce4fef86c60ae1cc2ce6d8', '2019-03-26 22:01:47 423', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('79bfababc39643c39134953c493f0ffd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('7acebdf2ea1146c5a12976beff87c6a3', '2019-03-29 14:51:52 348', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('7d8f3f1c47fb4048ba73718ce85b6997', '2019-03-30 16:31:57 661', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"demo\"],\"namespace\":[\"demo\"],\"menuUrl\":[\"#\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"2\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"0\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('7f63a2f9811342a595725391541c23ce', '2019-03-29 09:46:38 015', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('7fc401d909964e74b137a6afbcc40cae', '2019-03-25 19:21:00 794', '1', 1, '/ms/sysMenu/del', '菜单管理:删除', '{\"id\":[\"1025\"],\"jackToken\":[\"5058fef8a0dd4b6291a416232cee40eb\"]}', 30, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('811f0843016a4155aa20ee24e9d62ee8', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('839933204de940e089ee698916adb71d', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('859658796d204196a3b271d89f15ab28', '2019-03-26 19:53:44 981', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('88a50bc1a5ed4e8392c59f947056e0b4', '2019-03-25 21:12:13 539', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"d8fb6a1caf0b49de9e187fff293ee76e\"]}', 972, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('899d8050706847cf9dbb54ee393fb7ad', '2019-03-28 09:53:48 662', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('89a5e027537a4cef9a7f215a4836e2a4', '2019-05-13 18:43:36 849', '1', 1, '/ms/sysMenu/del', '菜单管理:删除', '{\"id\":[\"1090\"],\"jackToken\":[\"null\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('8aced455f0c948828c1a3ce01f4561a2', '2019-05-18 17:49:54 581', '1', 2, '//ms/x/parking/update/cf0a05d652db11e98b5fd02788407b5e', '更新了停车场', '{\"jackToken\":\"\",\"img\":\"b24d46ad28db400488345d683ab9139e\",\"businessUnit\":\"\",\"rightPhone\":\"\",\"parkName\":\"测试停车场\",\"latitude\":\"39.909652\",\"description\":\"1\",\"secret\":\"93629636204727632726423198178145\",\"provinceid\":\"\",\"isSync\":\"0\",\"parkType\":\"\",\"isDisable\":\"0\",\"areaid\":\"\",\"businessCharge\":\"\",\"freeTime\":\"1\",\"parentParkId\":\"0\",\"blackListRemark\":\"1\",\"serviceLife\":\"\",\"id\":\"cf0a05d652db11e98b5fd02788407b5e\",\"longitude\":\"116.404177\",\"groupCode\":null,\"zoomRate\":\"\",\"operationWay\":\"\",\"onlyVip\":\"\",\"address\":\"北京市东城区天安门广场\",\"updateUser\":\"1\",\"cityid\":\"\",\"spaceCount\":\"1\",\"url\":\"\",\"areaCount\":\"\",\"exitTime\":\"1\",\"oneDayMaxFee\":\"1\",\"rightCharge\":\"\",\"rightUnit\":\"\",\"businessPhone\":\"\"}', 1088, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('8c14cbe86ba048559a62c6475bde3b44', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('8ce4f7bafb36495996a485064ca5e715', '2019-03-30 18:52:02 885', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"停车场管理\"],\"namespace\":[\"parking\"],\"menuUrl\":[\"/ms/pagex/parking_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"3\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"1085\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('8d846dfea5a94eef881e746ac857da5a', '2019-03-28 17:43:13 355', '62b5870c510c4e9da3f72460001c42fa', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"1\"],\"namespace\":[\"1\"],\"menuUrl\":[\"1\"],\"isDisable\":[\"0\"],\"menuState\":[\"1\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"1\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc008\"],\"fatherMenuId\":[\"1024\"],\"jackToken\":[\"27bde992cb97480b8e380e9412273325\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('8da4bb07713e448abab38d5d25c8b949', '2019-03-28 16:37:47 209', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('8f36c9b2734e492fab2fe5ba393bc958', '2019-03-26 10:46:53 023', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('8f9dab9a6b7147fb9ddb138f76cfb1fe', '2019-03-29 11:16:08 826', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('8fbd60e0cd904ed8a333711da14b010a', '2019-03-28 14:51:17 858', '1', 0, '/ms/sysUser/addUser', '后管用户:添加后台用户', '{\"jackToken\":[\"27bde992cb97480b8e380e9412273325\"],\"address\":[\"\"],\"sex\":[\"\"],\"mobile\":[\"13455555555\"],\"cityId\":[\"440300\"],\"isAdmin\":[\"0\"],\"userName\":[\"王磊\"],\"roleList\":[\"1\",\"2\"],\"userId\":[\"\"],\"provinceId\":[\"440000\"],\"organizationId\":[\"001\"],\"isDisable\":[\"0\"],\"areaId\":[\"\"],\"passWd\":[\"\"],\"userLoginName\":[\"shuaizai88\"],\"userNameShow\":[\"王磊\"],\"email\":[\"\"]}', 41, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('9018a589d1874a028ccf162f3480d962', '2019-03-25 19:38:38 967', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"15e12171f1924454a30eb2a56f8ddf0f\"]}', 972, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('9200789f0ac54654baa37251515d6408', '2019-03-25 19:28:37 385', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"5058fef8a0dd4b6291a416232cee40eb\"]}', 972, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('954c292a5a82490ca1f1bd3daea1cb52', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('96045afc863f4f8cb7dd6199d4010837', '2019-03-28 10:47:51 502', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"月租户管理\"],\"namespace\":[\"#\"],\"menuUrl\":[\"#\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"2\"],\"orderIndex\":[\"5\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc008\"],\"fatherMenuId\":[\"\"],\"jackToken\":[\"81039867302a4a79ac045a0695544f0d\"]}', 30, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('972c09f597ac4febbaa477b636c16f3b', '2019-03-29 16:12:12 850', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('9a92505a6c614068aa907969cafb3d8d', '2019-03-25 19:38:16 821', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"15e12171f1924454a30eb2a56f8ddf0f\"]}', 972, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('9d0186054caf479493edf559f47b11d1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('9dbcddd65efb460a8a09cc25e283495a', '2019-03-25 21:32:02 541', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1042\"],\"menuName\":[\"操作日志\"],\"namespace\":[\"logAdminOperatorLog\"],\"menuUrl\":[\"/page/ms/system/log/log_admin_operator_log_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"9a5457114e14485a846b5a7bf04f7858\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"9\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"5dc4da6e41cf497aa0bacce9655a5900\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('9e89743e3b364aeab5470db00cd8d264', '2019-05-13 18:44:57 588', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"余姚\"],\"namespace\":[\"aaa\"],\"menuUrl\":[\"sss/sss/sss/sss\"],\"isDisable\":[\"1\"],\"menuState\":[\"1\"],\"image\":[\"f1d1ed4d2ec14ef49d31c7180cd98498\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"4\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc008\"],\"fatherMenuId\":[\"1085\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('a2a1afe437704d3fbd4864b106c38c98', '2019-03-29 17:17:57 912', '62b5870c510c4e9da3f72460001c42fa', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('a3cd110241084c4988d9053c971d2ff6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('a635644d4e55446c8516fdd0af76623a', '2019-05-13 18:48:08 768', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"出入管理\"],\"namespace\":[\"aaa\"],\"menuUrl\":[\"aaa/aa/a/s\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"7622fa29d3ed4112a2cad468051a7489\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"4\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc008\"],\"fatherMenuId\":[\"1085\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('a65b0dc05a9d4c80aeea21e59506ac8b', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('a70436c29b0645f680c1a3fb57301dbd', '2019-03-25 21:01:27 241', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuName\":[\"操作日志\"],\"namespace\":[\"logAdminOperatorLog\"],\"menuUrl\":[\"/page/ms/system/log/log_admin_operator_log_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"9\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"1739e714876445998432566574d0ae75\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('a82139ea9a4e400cad733037f088f723', '2019-05-18 18:02:14 086', '1', 4, '/ms/index', '登录', '不可见', 0, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('a9126002df634634b97f6451d821c237', '2019-05-18 17:49:53 386', '1', 3, '//ms/x/parking/info/cf0a05d652db11e98b5fd02788407b5e', '查看了停车场', '{\"id\":\"cf0a05d652db11e98b5fd02788407b5e\",\"groupCode\":null}', 1088, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('a9cc61aad56a4ad983762e77586bc845', '2019-03-25 19:30:46 667', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"5058fef8a0dd4b6291a416232cee40eb\"]}', 972, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('aacf369bb3bd4a88a4f8145ba6ed8a0e', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('ab6168657afd45c38830263eb3719205', '2019-03-25 21:15:01 078', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"5dc4da6e41cf497aa0bacce9655a5900\"]}', 972, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('ad410dd1a41e4a92bfe66a2fd94797c3', '2019-03-25 21:04:04 826', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('ae053227ec0344d6b21df64443e44f7c', '2019-05-13 18:43:14 252', '1', 1, '/ms/sysMenu/del', '菜单管理:删除', '{\"id\":[\"1092\"],\"jackToken\":[\"null\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('aed8d5d87432423cae323dfe0ccace68', '2019-05-13 18:17:22 235', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"1111\"],\"namespace\":[\"111\"],\"menuUrl\":[\"page/ms/index/index/aaa\"],\"isDisable\":[\"0\"],\"menuState\":[\"1\"],\"image\":[\"425533f6bb4449b9b522aff805cd46cf\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"4\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc008\"],\"fatherMenuId\":[\"30\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('b0d25953912a4c72bd6fd1478d7597a5', '2019-03-26 12:28:20 060', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('b0e1753d39264c78a80fd31fbb7c3826', '2019-05-18 17:29:57 216', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1085\"],\"menuName\":[\"demo\"],\"namespace\":[\"demo\"],\"menuUrl\":[\"#\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"2\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"menuType\":[\"2\"],\"fatherMenuId\":[\"0\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('b474430d1d1e4374ba9a1dafd70f1614', '2019-03-25 21:03:13 798', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1042\"],\"menuName\":[\"操作日志\"],\"namespace\":[\"1\"],\"menuUrl\":[\"/page/system/log/log_admin_operator_log_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"9\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"1739e714876445998432566574d0ae75\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('b5c83b5ed3bf4172937cda79f289d7e7', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('b71d9612c49742a1b70f10f93d0fbbe3', '2019-03-29 14:07:31 139', '62b5870c510c4e9da3f72460001c42fa', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('b8470db9752e4d16973edf8f8250b564', '2019-03-28 10:42:34 463', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"月租户管理\"],\"namespace\":[\"pay_monthly_record\"],\"menuUrl\":[\"/ms/pagex/pay/pay_monthly_record_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"2\"],\"orderIndex\":[\"5\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc008\"],\"fatherMenuId\":[\"\"],\"jackToken\":[\"81039867302a4a79ac045a0695544f0d\"]}', 30, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('ba41d720323c45a7bd54e1aa30acbab7', '2019-03-30 17:40:24 473', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"隐藏菜单\"],\"namespace\":[\"role\"],\"menuUrl\":[\"#\"],\"isDisable\":[\"0\"],\"menuState\":[\"1\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"2\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"1085\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('c1868876b3ce45d498dacf86bb2f965d', '2019-03-30 16:52:29 287', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1085\"],\"menuName\":[\"demo\"],\"namespace\":[\"demo\"],\"menuUrl\":[\"#\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"2\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"0\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('c311e1c5784e4e1d847c4160f0e6cc06', '2019-03-30 16:41:16 358', '1', 1, '/ms/sysMenu/del', '菜单管理:删除', '{\"id\":[\"1041\"],\"jackToken\":[\"null\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('c48769b9a18445c8b96fa0c1a9f0f24b', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('c52658fc189c4cffa5414b66cca50d53', '2019-03-29 20:48:24 714', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('c5c6f61f46fb4a0f90c3d18c0d722e22', '2019-03-27 16:10:54 159', '1', 4, '//ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('c80f507fe4824733aa4173db502fd362', '2019-03-29 16:41:57 792', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('c8d40ff062af4d8c8fde1c7cca0ebeac', '2019-03-25 19:46:20 619', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"15e12171f1924454a30eb2a56f8ddf0f\"]}', 972, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('ca3d419704e24917a7cba53520b01ebe', '2019-03-25 19:38:00 392', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1956\"],\"jackToken\":[\"15e12171f1924454a30eb2a56f8ddf0f\"]}', 972, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('cb32bf53cb504c479ffdd6de7c1176d0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('cbf4140fe0d440cb9bf30271a2c21063', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('ccc6e47ed3b54706b890ecb887066060', '2019-03-25 19:32:35 133', '1', 2, '/ms/sysMenuPermission/update', '菜单权限管理:更新', '{\"permissionName\":[\"删除\"],\"permissionId\":[\"1956\"],\"method\":[\"del\"],\"menuId\":[\"1042\"],\"permissionType\":[\"4\"],\"isDisable\":[\"0\"],\"jackToken\":[\"5058fef8a0dd4b6291a416232cee40eb\"]}', 972, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('ce6835de760c4774b71dda10300e60cd', '2019-03-30 16:38:00 019', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1085\"],\"menuName\":[\"demo1\"],\"namespace\":[\"demo\"],\"menuUrl\":[\"#\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"2\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"0\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('ce709ff864344af1900ac47b4f4ab519', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('d43828e37d644f50a7349c444843a933', '2019-03-28 14:06:22 685', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('d62bab719570440284c2ca4a371ce7e5', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('d8ea3a33542a435a8b3b8f462846f53c', '2019-03-28 10:38:07 858', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"月租户管理\"],\"namespace\":[\"pay_monthly_record\"],\"menuUrl\":[\"/ms/pagex/pay/pay_monthly_record_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"2\"],\"orderIndex\":[\"4\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc008\"],\"fatherMenuId\":[\"\"],\"jackToken\":[\"81039867302a4a79ac045a0695544f0d\"]}', 30, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('da3960fd0d374cb2a80d22f3773a2cd8', '2019-03-28 16:55:58 244', '1', 0, '/ms/sysMenu/add', '菜单管理:添加', '{\"menuName\":[\"test\"],\"namespace\":[\"testte\"],\"menuUrl\":[\"tttt\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"1\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"\"],\"jackToken\":[\"0805f70cd15743a5ae45ad8ea59d5214\"]}', 30, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('db67401ab90c4eab9e57221df6113c89', '2019-03-25 21:27:36 721', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1042\"],\"menuName\":[\"操作日志\"],\"namespace\":[\"logAdminOperatorLog\"],\"menuUrl\":[\"/page/ms/system/log/log_admin_operator_log_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"9\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"5dc4da6e41cf497aa0bacce9655a5900\"]}', 30, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('dc97f9efe9bb47e69946d7b363d009d1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('dcc323dac4584e289d65548845d11b3f', '2019-03-27 20:12:03 403', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('dcd8dfc85af748d9a961295d88ea6ab4', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('deccb87267084847a38a36133af5ae26', '2019-03-25 21:27:16 353', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1042\"],\"menuName\":[\"操作日志\"],\"namespace\":[\"logAdminOperatorLog\"],\"menuUrl\":[\"/page/ms/system/log/log_admin_operator_log_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"9\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"5dc4da6e41cf497aa0bacce9655a5900\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('ded2ac62a1ad4629bf2ad20e4cbdc388', '2019-03-29 18:10:20 615', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1026\"],\"menuName\":[\"月租户管理\"],\"namespace\":[\"pay_monthly_record\"],\"menuUrl\":[\"/ms/pagex/pay/pay_monthly_record_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"2\"],\"orderIndex\":[\"5\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc008\"],\"fatherMenuId\":[\"1033\"],\"jackToken\":[\"3091bb8e52b74b9290406623c985ad52\"]}', 30, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('e03516af80104a918bacc05d28e88358', '2019-03-25 21:31:23 896', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1042\"],\"menuName\":[\"操作日志\"],\"namespace\":[\"logAdminOperatorLog\"],\"menuUrl\":[\"/page/ms/system/log/log_admin_operator_log_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"789281fd3a3f49a1a76d9d189f675e8c\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"9\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"29\"],\"jackToken\":[\"5dc4da6e41cf497aa0bacce9655a5900\"]}', 30, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('e09eb1bab539413fa6ec2f47e24dff99', '2019-03-30 16:32:42 615', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1085\"],\"menuName\":[\"demo12\"],\"namespace\":[\"demo\"],\"menuUrl\":[\"#\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"2\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"0\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('e16437b07e2e4c258f26f21a24370d88', '2019-03-30 16:39:46 199', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1085\"],\"menuName\":[\"demo121\"],\"namespace\":[\"demo\"],\"menuUrl\":[\"#\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"2\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"0\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('e44cb838f41a4df486665bc7830a29f8', '2019-03-30 18:53:00 205', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1088\"],\"menuName\":[\"停车场管理\"],\"namespace\":[\"parking\"],\"menuUrl\":[\"/ms/pagex/parking_list.jsp?parent_park_id=0\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"1\"],\"orderIndex\":[\"3\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc009\"],\"fatherMenuId\":[\"1085\"],\"jackToken\":[\"\"]}', 30, '0:0:0:0:0:0:0:1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('ebd5e1bf119c48e2acf22e41c2a88de8', '2019-03-25 19:20:33 622', '1', 1, '/ms/sysMenu/del', '菜单管理:删除', '{\"id\":[\"1007\"],\"jackToken\":[\"5058fef8a0dd4b6291a416232cee40eb\"]}', 30, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('ee7ffa1a922c45e28eb7306912cc32e9', '2019-03-27 12:41:40 599', '1', 2, '/ms/sysMenu/update', '菜单管理:更新', '{\"menuId\":[\"1016\"],\"menuName\":[\"临时收费时段\"],\"namespace\":[\"park_temp_segment\"],\"menuUrl\":[\"/ms/pagex/park_temp_segment_list.jsp\"],\"isDisable\":[\"0\"],\"menuState\":[\"0\"],\"image\":[\"\"],\"serverNameId\":[\"2\"],\"orderIndex\":[\"3\"],\"systemId\":[\"55ff598ae42845d4b51ec2bc71bbc008\"],\"fatherMenuId\":[\"1013\"],\"jackToken\":[\"078fad71000e4a07a2187816c41cf2a7\"]}', 30, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('f302829c0ef5438bb0b7cf8e06fea488', '2019-03-26 14:02:32 200', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('f5a55a72f30e4c0493a7e7554c004c7c', '2019-03-27 16:21:05 615', '1', 4, '/ms/index', '登录', '不可见', 0, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('f958106a81a843bb947bb15361b749e4', '2019-03-25 21:15:04 490', '1', 1, '/ms/sysMenuPermission/del', '菜单权限管理:删除', '{\"id\":[\"1955\"],\"jackToken\":[\"5dc4da6e41cf497aa0bacce9655a5900\"]}', 972, '127.0.0.1', NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('fa673b86049047ccb5e3081521b998b0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('fbef48a359924b69a1ce32c76c94f592', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_log_admin_operator_log` VALUES ('fda91f542f394564b65669a29aeea84f', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for t_park_parking
@@ -273,7 +374,7 @@ CREATE TABLE `t_park_parking`  (
 -- ----------------------------
 -- Records of t_park_parking
 -- ----------------------------
-INSERT INTO `t_park_parking` VALUES ('cf0a05d652db11e98b5fd02788407b5e', '测试停车场', '', '1', '', '116.404177', '39.909652', '北京市东城区天安门广场', '0', '', '', '', '', '', '', '', '', '', '2019-03-30 19:06:13', '2019-03-30 19:06:31', '1', '1', '', 'b24d46ad28db400488345d683ab9139e', NULL, '', NULL, '0', '1', '1', '', '', '', '93629636204727632726423198178145', '1', 1, 1, 0, 1);
+INSERT INTO `t_park_parking` VALUES ('cf0a05d652db11e98b5fd02788407b5e', '测试停车场', '', '1', '', '116.404177', '39.909652', '北京市东城区天安门广场', '0', '', '', '', '', '', '', '', '', '', '2019-03-30 19:06:13', '2019-05-18 17:50:09', '1', '1', '', 'b24d46ad28db400488345d683ab9139e', NULL, '', NULL, '0', '1', '1', '', '', '', '93629636204727632726423198178145', '1', 1, 1, 0, 1);
 
 -- ----------------------------
 -- Table structure for t_park_parking_port
@@ -306,7 +407,8 @@ CREATE TABLE `t_park_parking_port`  (
 -- ----------------------------
 -- Records of t_park_parking_port
 -- ----------------------------
-INSERT INTO `t_park_parking_port` VALUES ('e4c14be052db11e98b5fd02788407b5e', 'cf0a05d652db11e98b5fd02788407b5e', '11', '1', '192.168.0.0', NULL, NULL, '0', '0', '0', '2019-03-30 19:06:49', '2019-03-30 19:06:53', '', '1', '测试端口', '', '', '1', '', 0);
+INSERT INTO `t_park_parking_port` VALUES ('7abd35d427a455f589a8613805bb09ea', 'cf0a05d652db11e98b5fd02788407b5e', '11', '1', '192.168.0.0', NULL, NULL, '0', '0', '0', NULL, '2019-05-16 16:26:56', '', '1', '测试端口', '', '1', '1', '', 0);
+INSERT INTO `t_park_parking_port` VALUES ('e4c14be052db11e98b5fd02788407b5e', 'cf0a05d652db11e98b5fd02788407b5e', '11', '1', '192.168.0.0', NULL, NULL, '0', '1', '0', '2019-03-30 19:06:49', '2019-05-16 16:27:06', '', '1', '测试端口', '1', '0', '1', '', 0);
 
 -- ----------------------------
 -- Table structure for t_service_area
@@ -4217,6 +4319,14 @@ INSERT INTO `t_service_file` VALUES ('5823a75946064f7e83c42879b120d378', 'Magic_
 INSERT INTO `t_service_file` VALUES ('d49d28c74f2c4fa8902390bc0f2adc4d', '下载.jpg', '.jpg', NULL, '2019/03/30');
 INSERT INTO `t_service_file` VALUES ('d2231c017ba64a299013c5a67f139dbc', 'Magic_Select_add_tool.mp4', '.mp4', NULL, '2019/03/30');
 INSERT INTO `t_service_file` VALUES ('b24d46ad28db400488345d683ab9139e', '下载.jpg', '.jpg', NULL, '2019/03/30');
+INSERT INTO `t_service_file` VALUES ('fdf3d5c9a64c4ef79cc348498b16a625', 'chapter6_4_1.png', '.png', NULL, '2019/05/13');
+INSERT INTO `t_service_file` VALUES ('6aac631d411741eb937633230ea5e7b0', 'chapter6_5_1.png', '.png', NULL, '2019/05/13');
+INSERT INTO `t_service_file` VALUES ('60297d1801c64f1da60feab144287856', 'chapter6_5_1.png', '.png', NULL, '2019/05/13');
+INSERT INTO `t_service_file` VALUES ('a0650823af2942488adb4b1e319e13f9', 'chapter6_5_1.png', '.png', NULL, '2019/05/13');
+INSERT INTO `t_service_file` VALUES ('3b5fca3a49e34c94bf79644c1c31c55e', 'chapter6_5_1.png', '.png', NULL, '2019/05/13');
+INSERT INTO `t_service_file` VALUES ('425533f6bb4449b9b522aff805cd46cf', 'chapter6_5_1.png', '.png', NULL, '2019/05/13');
+INSERT INTO `t_service_file` VALUES ('f1d1ed4d2ec14ef49d31c7180cd98498', 'chapter6_4_1.png', '.png', NULL, '2019/05/13');
+INSERT INTO `t_service_file` VALUES ('7622fa29d3ed4112a2cad468051a7489', 'chapter6_4_1.png', '.png', NULL, '2019/05/13');
 
 -- ----------------------------
 -- Table structure for t_service_order_log
@@ -4374,8 +4484,8 @@ INSERT INTO `t_service_wordbook` VALUES (123, '4', '园区服务', 'suggestion_c
 INSERT INTO `t_service_wordbook` VALUES (124, '1', '查询', 'button_type', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `t_service_wordbook` VALUES (125, '2', '添加', 'button_type', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `t_service_wordbook` VALUES (126, '3', '修改', 'button_type', 3, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_service_wordbook` VALUES (129, '0', '启用', 'is_disable', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_service_wordbook` VALUES (130, '1', '禁用', 'is_disable', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_service_wordbook` VALUES (129, '0', '启用', 'is_disable', 1, NULL, NULL, NULL, NULL, NULL, '', '');
+INSERT INTO `t_service_wordbook` VALUES (130, '1', '禁用', 'is_disable', 2, NULL, NULL, NULL, NULL, NULL, '', '');
 INSERT INTO `t_service_wordbook` VALUES (131, '4', '删除', 'button_type', 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `t_service_wordbook` VALUES (132, '1', '合资', 'ent_classify', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `t_service_wordbook` VALUES (133, '2', '独资', 'ent_classify', 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
@@ -4673,7 +4783,7 @@ CREATE TABLE `t_service_wordbook_group`  (
   `update_time` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新时间',
   `remarks` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`group_id`, `group_name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 150 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 141 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_service_wordbook_group
@@ -4817,7 +4927,7 @@ CREATE TABLE `t_ucenter_ms_menu`  (
   `father_menu_id` int(11) NULL DEFAULT NULL COMMENT '父菜单id',
   `menu_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '链接地址',
   `namespace` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Namespace',
-  `menu_type` varchar(1024) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单类型0 运营菜单  1 园区菜单',
+  `menu_type` varchar(1024) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单类型0 运营菜单  1 租户菜单',
   `is_disable` int(1) NULL DEFAULT NULL COMMENT '是否禁用 0:启用 1:禁用',
   `is_attention` int(1) NULL DEFAULT 0 COMMENT '是否关注，0不关注，1,关注',
   `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
@@ -4833,11 +4943,12 @@ CREATE TABLE `t_ucenter_ms_menu`  (
   `remarks` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   `system_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '所属系统',
   PRIMARY KEY (`menu_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1091 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'T_admin_Menu 菜单表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1100 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'T_admin_Menu 菜单表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_ucenter_ms_menu
 -- ----------------------------
+INSERT INTO `t_ucenter_ms_menu` VALUES (0, 'root', NULL, '#', NULL, '0', 0, 0, NULL, 1, -1, NULL, 0, '0', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `t_ucenter_ms_menu` VALUES (29, '系统管理', 0, '#', '', '0', 0, 0, '01ad9fd6c8194e79843ce9f220c136a3', 1, 1, '0', 0, '0', NULL, NULL, NULL, NULL, NULL, '55ff598ae42845d4b51ec2bc71bbc009');
 INSERT INTO `t_ucenter_ms_menu` VALUES (30, '菜单管理', 29, 'page/ms/ucenter/sys_main_frame.jsp', 'sysMenu', '0', 0, 0, 'c7228b3378a54e4e9b2058d2a90cbc2b', 1, 0, '0', 0, '0', NULL, NULL, NULL, NULL, NULL, '55ff598ae42845d4b51ec2bc71bbc009');
 INSERT INTO `t_ucenter_ms_menu` VALUES (40, '角色管理', 29, 'page/ms/ucenter/sys_role_main_frame.jsp', 'sysRole', '0', 0, 0, '9d13df63498845d1a3a802d69c89e409', 1, 1, '0', 0, '0', NULL, NULL, NULL, NULL, NULL, '55ff598ae42845d4b51ec2bc71bbc009');
@@ -4848,12 +4959,14 @@ INSERT INTO `t_ucenter_ms_menu` VALUES (972, '菜单权限管理', 29, '#', 'sys
 INSERT INTO `t_ucenter_ms_menu` VALUES (988, '地区管理', 29, 'page/ms/system/area/area_list.jsp', 'area', '0', 0, 0, '5a3c0e90e9c143af88a973b106319170', 1, 6, '0', 0, '0', NULL, NULL, NULL, NULL, NULL, '5099346ee2cb4bf980daa0dbef4d25aa');
 INSERT INTO `t_ucenter_ms_menu` VALUES (1042, '操作日志', 29, '/page/ms/system/log/log_admin_operator_log_list.jsp', 'logAdminOperatorLog', '0', 0, 0, 'b2321aae021d4e93b4630126121ae1ff', 1, 9, '0', 0, '0', NULL, NULL, '1', '2019-03-25 21:32:21', NULL, '55ff598ae42845d4b51ec2bc71bbc009');
 INSERT INTO `t_ucenter_ms_menu` VALUES (1043, '菜单权限', 29, '#', 'sysMenuPermission', '0', 0, 0, '', 1, 100, '0', 1, '0', NULL, NULL, '1', '2019-03-25 21:12:53', NULL, '55ff598ae42845d4b51ec2bc71bbc009');
-INSERT INTO `t_ucenter_ms_menu` VALUES (1085, 'demo', 0, '#', 'demo', NULL, 0, NULL, '', 1, 2, NULL, 0, '0', '1', '2019-03-30 16:31:57', '1', '2019-03-30 16:52:29', NULL, '55ff598ae42845d4b51ec2bc71bbc009');
+INSERT INTO `t_ucenter_ms_menu` VALUES (1085, 'demo', 0, '#', 'demo', '2', 0, NULL, '', 1, 2, NULL, 0, '0', '1', '2019-03-30 16:31:57', '1', '2019-05-18 17:29:57', NULL, '55ff598ae42845d4b51ec2bc71bbc009');
 INSERT INTO `t_ucenter_ms_menu` VALUES (1086, '表单演示', 1085, '/ms/pagex/student_list.jsp', 'student', NULL, 0, NULL, '', 1, 1, NULL, 0, '0', '1', '2019-03-30 16:53:58', '1', '2019-03-30 16:56:56', NULL, '55ff598ae42845d4b51ec2bc71bbc009');
 INSERT INTO `t_ucenter_ms_menu` VALUES (1087, '隐藏菜单', 1085, '#', 'role', NULL, 0, NULL, '', 1, 2, NULL, 1, '0', '1', '2019-03-30 17:40:24', '1', '2019-03-30 17:40:24', NULL, '55ff598ae42845d4b51ec2bc71bbc009');
 INSERT INTO `t_ucenter_ms_menu` VALUES (1088, '停车场管理', 1085, '/ms/pagex/parking_list.jsp?parent_park_id=0', 'parking', NULL, 0, NULL, '', 1, 3, NULL, 0, '0', '1', '2019-03-30 18:52:02', '1', '2019-03-30 18:53:00', NULL, '55ff598ae42845d4b51ec2bc71bbc009');
 INSERT INTO `t_ucenter_ms_menu` VALUES (1089, '停车场出入口管理', 1085, '/ms/pagex/parking_port_list.jsp', 'parking_port', NULL, 0, NULL, '', 1, 4, NULL, 0, '0', '1', '2019-03-30 18:52:41', '1', '2019-03-30 18:52:41', NULL, '55ff598ae42845d4b51ec2bc71bbc009');
-INSERT INTO `t_ucenter_ms_menu` VALUES (1090, 'root', NULL, '#', NULL, '0', 0, 0, NULL, 1, -1, NULL, 0, '0', NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_ucenter_ms_menu` VALUES (1091, '老师管理', 1085, '/ms/pagex/teacher_list.jsp', 'teacher', NULL, 0, NULL, '', 1, 5, NULL, 0, '0', '1', '2019-05-13 17:58:51', '1', '2019-05-13 18:19:08', NULL, '55ff598ae42845d4b51ec2bc71bbc009');
+INSERT INTO `t_ucenter_ms_menu` VALUES (1098, '操场管理', 1085, 'page/demo/playground_list.jsp', 'demoPlayground', NULL, 0, NULL, '', 1, 6, NULL, 0, '0', '1', '2019-05-15 12:00:39', '1', '2019-05-15 14:31:16', NULL, '55ff598ae42845d4b51ec2bc71bbc009');
+INSERT INTO `t_ucenter_ms_menu` VALUES (1099, '课程管理', 1085, 'page/demo/subject_list.jsp', 'demoSubject', NULL, 0, NULL, '', 1, 7, NULL, 0, '0', '1', '2019-05-16 15:50:55', '1', '2019-05-16 15:50:55', NULL, '55ff598ae42845d4b51ec2bc71bbc009');
 
 -- ----------------------------
 -- Table structure for t_ucenter_ms_menu_permission
@@ -4867,7 +4980,7 @@ CREATE TABLE `t_ucenter_ms_menu_permission`  (
   `is_disable` int(1) NULL DEFAULT NULL COMMENT '是否禁用 0:启用 1:禁用',
   `permission_type` int(1) NULL DEFAULT NULL COMMENT '权限类型12345，查询，添加，修改，删除，其他',
   PRIMARY KEY (`permission_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1977 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'T_admin_Menu_button 菜单按钮' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2001 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'T_admin_Menu_button 菜单按钮' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_ucenter_ms_menu_permission
@@ -5015,6 +5128,30 @@ INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1973, '添加', 'add', 1089, 
 INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1974, '查询', 'see', 1089, 0, 1);
 INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1975, '修改', 'update', 1089, 0, 3);
 INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1976, '删除', 'del', 1089, 0, 4);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1977, '添加', 'add', 1091, 0, 2);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1978, '查询', 'see', 1091, 0, 1);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1979, '修改', 'update', 1091, 0, 3);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1980, '删除', 'del', 1091, 0, 4);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1981, '添加', 'add', 1093, 0, 2);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1982, '查询', 'see', 1093, 0, 1);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1983, '修改', 'update', 1093, 0, 3);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1984, '删除', 'del', 1093, 0, 4);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1985, '添加', 'add', 1096, 0, 2);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1986, '查询', 'see', 1096, 0, 1);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1987, '修改', 'update', 1096, 0, 3);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1988, '删除', 'del', 1096, 0, 4);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1989, '添加', 'add', 1097, 0, 2);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1990, '查询', 'see', 1097, 0, 1);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1991, '修改', 'update', 1097, 0, 3);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1992, '删除', 'del', 1097, 0, 4);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1993, '添加', 'add', 1098, 0, 2);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1994, '查询', 'see', 1098, 0, 1);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1995, '修改', 'update', 1098, 0, 3);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1996, '删除', 'del', 1098, 0, 4);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1997, '添加', 'add', 1099, 0, 2);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1998, '查询', 'see', 1099, 0, 1);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (1999, '修改', 'update', 1099, 0, 3);
+INSERT INTO `t_ucenter_ms_menu_permission` VALUES (2000, '删除', 'del', 1099, 0, 4);
 
 -- ----------------------------
 -- Table structure for t_ucenter_ms_menu_permission_url_rela
@@ -5045,7 +5182,7 @@ CREATE TABLE `t_ucenter_ms_menu_server`  (
 -- ----------------------------
 -- Records of t_ucenter_ms_menu_server
 -- ----------------------------
-INSERT INTO `t_ucenter_ms_menu_server` VALUES (1, 'base', 'http://114.116.20.119:8081/');
+INSERT INTO `t_ucenter_ms_menu_server` VALUES (1, 'base', 'http://localhost:8081/');
 
 -- ----------------------------
 -- Table structure for t_ucenter_ms_model
@@ -5085,16 +5222,17 @@ CREATE TABLE `t_ucenter_ms_organization`  (
   `create_time` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '创建时间',
   `update_user` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新用户',
   `update_time` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新时间',
+  `group_code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '集团编码',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '机构管理表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_ucenter_ms_organization
 -- ----------------------------
-INSERT INTO `t_ucenter_ms_organization` VALUES ('001', '机构', '', '1', 0, '029c78e311014ff88d2eae8b7266d2fa', '1', '2018-09-13 16:49:17', '1', '2018-09-13 16:49:17');
-INSERT INTO `t_ucenter_ms_organization` VALUES ('001001', '机构1', '001', '1', 0, '3127f1dd14794211a22568fcbf89c72d', '1', '2018-09-13 17:08:06', '1', '2018-09-13 17:08:06');
-INSERT INTO `t_ucenter_ms_organization` VALUES ('001001001', '机构11', '001001', '1', 0, '029c78e311014ff88d2eae8b7266d2fa', '1', '2018-09-13 17:08:25', '1', '2018-09-13 17:08:25');
-INSERT INTO `t_ucenter_ms_organization` VALUES ('001002', '机构2', '001', '2', 0, '029c78e311014ff88d2eae8b7266d2fa', '1', '2018-09-13 17:08:15', '1', '2018-09-13 17:08:15');
+INSERT INTO `t_ucenter_ms_organization` VALUES ('001', '机构', '', '1', 0, '029c78e311014ff88d2eae8b7266d2fa', '1', '2018-09-13 16:49:17', '1', '2018-09-13 16:49:17', NULL);
+INSERT INTO `t_ucenter_ms_organization` VALUES ('001001', '机构1', '001', '1', 0, '3127f1dd14794211a22568fcbf89c72d', '1', '2018-09-13 17:08:06', '1', '2018-09-13 17:08:06', NULL);
+INSERT INTO `t_ucenter_ms_organization` VALUES ('001001001', '机构11', '001001', '1', 0, '029c78e311014ff88d2eae8b7266d2fa', '1', '2018-09-13 17:08:25', '1', '2018-09-13 17:08:25', NULL);
+INSERT INTO `t_ucenter_ms_organization` VALUES ('001002', '机构2', '001', '2', 0, '029c78e311014ff88d2eae8b7266d2fa', '1', '2018-09-13 17:08:15', '1', '2018-09-13 17:08:15', NULL);
 
 -- ----------------------------
 -- Table structure for t_ucenter_ms_role
@@ -5106,19 +5244,20 @@ CREATE TABLE `t_ucenter_ms_role`  (
   `remark` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   `is_disable` int(1) NOT NULL COMMENT '是否启用(0:启用 1:禁用)',
   `organization_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '所属机构',
-  `data_permissions` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '数据权限(资源类型，部门及小区)',
+  `data_permissions` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '数据权限(资源类型，部门及小区)',
   `create_user` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建人',
   `create_time` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建时间',
   `update_user` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '修改人',
   `update_time` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '修改时间',
+  `group_code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '集团编码',
   PRIMARY KEY (`role_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = ' T_admin_Role 平台角色表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_ucenter_ms_role
 -- ----------------------------
-INSERT INTO `t_ucenter_ms_role` VALUES (1, '1231', '12123', 0, '001', '{\"parkIds\":\"0d601eb23f0e11e99571d02788407b5e\"}', '1', '2019-03-25 21:35:49', '62b5870c510c4e9da3f72460001c42fa', '2019-03-29 14:46:25');
-INSERT INTO `t_ucenter_ms_role` VALUES (2, '2333', '', 0, '001', '{\"parkId\":\"0d601eb23f0e11e99571d02788407b5e\"}', '1', '2019-03-28 14:47:23', NULL, NULL);
+INSERT INTO `t_ucenter_ms_role` VALUES (1, '1231', '12123', 0, '001', '{\"parkIds\":\"0d601eb23f0e11e99571d02788407b5e\"}', '1', '2019-03-25 21:35:49', '62b5870c510c4e9da3f72460001c42fa', '2019-03-29 14:46:25', NULL);
+INSERT INTO `t_ucenter_ms_role` VALUES (2, '2333', '', 0, '001', '{\"parkId\":\"0d601eb23f0e11e99571d02788407b5e\"}', '1', '2019-03-28 14:47:23', NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for t_ucenter_ms_role_permission
@@ -5391,6 +5530,7 @@ CREATE TABLE `t_ucenter_ms_user`  (
   `create_time` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建时间',
   `update_user` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '更新用户',
   `update_time` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新时间',
+  `group_code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '集团编码-SAAS模式适用',
   PRIMARY KEY (`user_id`) USING BTREE,
   UNIQUE INDEX `user_login_name`(`user_login_name`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'T_admin_USER  平台用户表' ROW_FORMAT = Dynamic;
@@ -5398,6 +5538,6 @@ CREATE TABLE `t_ucenter_ms_user`  (
 -- ----------------------------
 -- Records of t_ucenter_ms_user
 -- ----------------------------
-INSERT INTO `t_ucenter_ms_user` VALUES ('1', 'admin', 'admin22', 'e10adc3949ba59abbe56e057f20f883e', '13455393733', 0, '12333@123.com', 0, 1, '510000', '510700', '510704', 'AAAA', '001', NULL, NULL, '1', '2018-12-26 18:21:06');
+INSERT INTO `t_ucenter_ms_user` VALUES ('1', 'admin', 'admin22', 'e10adc3949ba59abbe56e057f20f883e', '13455393733', 0, '12333@123.com', 0, 1, '510000', '510700', '510704', 'AAAA', '001', NULL, NULL, '1', '2018-12-26 18:21:06', NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;
