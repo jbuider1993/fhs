@@ -47,6 +47,12 @@ public class AutowareYLMSetBeanEvent implements ApplicationListener<ContextRefre
             return;
         }
         isInited = true;
+        new Thread(() -> {
+            initAutowareYLM(contextRefreshedEvent);
+        }).start();
+    }
+
+    public void initAutowareYLM(ContextRefreshedEvent contextRefreshedEvent){
         //spring容器初始化完成之后，就会自行此方法。
         // 获取到所有用@autowareYLM注释的class
         TypeFilter entityFilter = AnnotationTypeFilterBuilder.build(AutowareYLM.class);
@@ -88,8 +94,5 @@ public class AutowareYLMSetBeanEvent implements ApplicationListener<ContextRefre
                 }
             }
         }
-
-
     }
-
 }
