@@ -67,8 +67,12 @@
 <script type="text/javascript" src="${staticPath}js/time/timedropper.js"></script>
 <% } %>
 <!--time end-->
+<% if(isNotEmpty(bt)){ %>
 <script type="text/javascript" src="${staticPath}js/baidutemplate.js"></script>
+<% } %>
+<% if(isNotEmpty(qr)){ %>
 <script type="text/javascript" src="${staticPath}js/jquery.qrcode.min.js"></script>
+<% } %>
 <!-- um start -->
 <% if(isNotEmpty(um)){ %>
 <script type="text/javascript" src="${staticPath}/js/um/third-party/template.min.js"></script>
