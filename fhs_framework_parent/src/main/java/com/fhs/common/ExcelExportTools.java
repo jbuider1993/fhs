@@ -3,6 +3,7 @@ package com.fhs.common;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ExcelUtils;
 import com.fhs.common.utils.Logger;
 import com.fhs.common.utils.ReflectUtils;
@@ -13,6 +14,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -124,9 +128,19 @@ public class ExcelExportTools {
         XSSFSheet sheet = wb.createSheet();
         String[] titleArray = getExportTitleArray(request);
         ExcelUtils.initSheet07(sheet, rows, titleArray, null, null);
+        String excelName = "data_list.xlsx";
+        if(CheckUtils.isNotEmpty(request.getParameter("excelName")))
+        {
+            try {
+                excelName = URLDecoder.decode(request.getParameter("excelName"),"UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
         try {
+            response.setContentType("application/vnd.ms-excel;charset=UTF-8");
             response.setHeader("Content-Disposition",
-                    "attachment;filename=data.xlsx");
+                    "attachment;filename=" + URLEncoder.encode(excelName + ".xlsx","UTF-8"));
             wb.write(response.getOutputStream());
         } catch (IOException e) {
             LOG.error("导出excel出错，URI:" + request.getRequestURI());

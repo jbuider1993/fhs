@@ -1,8 +1,6 @@
 package com.fhs.base.action;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.fhs.common.ExcelExportTools;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.action.BaseAction;
@@ -17,8 +15,6 @@ import com.fhs.core.log.LogDesc;
 import com.fhs.core.page.Pager;
 import com.fhs.core.result.HttpResult;
 import com.fhs.ucenter.api.vo.SysUserVo;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -27,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -157,19 +152,7 @@ public class ModelSuperAction<T> extends BaseAction<T>
      */
     protected  void exportExcel(List<T> dataList,HttpServletRequest request, HttpServletResponse response)
     {
-        Object[][] rows = parseExportData(request,dataList);
-        XSSFWorkbook wb = new XSSFWorkbook();
-        XSSFSheet sheet = wb.createSheet();
-        String[] titleArray = getExportTitleArray(request);
-        ExcelUtils.initSheet07(sheet, rows, titleArray, null, null);
-        try {
-            response.setHeader("Content-Disposition",
-                    "attachment;filename=data.xlsx");
-            wb.write(response.getOutputStream());
-        } catch (IOException e) {
-            LOG.error("导出excel出错，URI:" + request.getRequestURI());
-            LOG.error(this,e);
-        }
+        ExcelExportTools.exportExcel(dataList,request,response);
     }
 
     /**
@@ -253,16 +236,7 @@ public class ModelSuperAction<T> extends BaseAction<T>
      * @return title集合
      */
     private String[] getExportTitleArray(HttpServletRequest request){
-        final Map<String,String> fieldMap = (Map<String, String>) request.getSession().getAttribute("exportField");
-        String[] titles = new String[fieldMap.size()];
-        Set<String> set = fieldMap.keySet();
-        int i = 0;
-        for(String field:set)
-        {
-            titles[i] = fieldMap.get(field);
-            i ++;
-        }
-        return titles;
+        return ExcelExportTools.getExportTitleArray(request);
     }
 
     /**
@@ -274,16 +248,7 @@ public class ModelSuperAction<T> extends BaseAction<T>
     @RequestMapping("setExportField")
     @ResponseBody
     public HttpResult setExportField(@RequestBody String fieldSett,HttpServletRequest request){
-        JSONArray fields =JSON.parseArray(fieldSett);
-        // key field value title
-        final Map<String,String> fieldMap = new LinkedHashMap<>();
-        JSONObject tempObj = null;
-        for(int i=0;i<fields.size();i++)
-        {
-            tempObj = fields.getJSONObject(i);
-            fieldMap.put(tempObj.getString("field"),tempObj.getString("title"));
-        }
-        request.getSession().setAttribute("exportField",fieldMap );
+        ExcelExportTools.setExportField(fieldSett,request);
         return HttpResult.success();
     }
 
