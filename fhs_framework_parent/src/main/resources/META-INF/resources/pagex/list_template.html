@@ -244,27 +244,28 @@
     //重新加载
     function reload() {
         var _reloadParam = {
-        <% for(param1 in filterParams){ %>
-             ${param1.name}:${param1.val},
-        <% } %>
-        between: {
-        <% for(param1 in filterParamsForBetween){ %>
-            ${param1.name}:${param1.val},
-        <% } %>
-        }
-    }
-        ;
+                <% for(param1 in filterParams){ %>
+                     ${param1.name}:${param1.val},
+                <% } %>
+            between: {
+                <% for(param1 in filterParamsForBetween){ %>
+                    ${param1.name}:${param1.val},
+                <% } %>
+            }
+        };
         if (isExitsFunction("extendsParam")) {
             var _extendsParam = extendsParam();
             for (key in _extendsParam) {
                 _reloadParam[key] = _extendsParam[key];
             }
         }
+        if (isExitsFunction("paramHandle")) {
+            _reloadParam = paramHandle(_reloadParam);
+        }
         $('#listGrid').datagrid('load', _reloadParam);
     }
 
-    //导出excel
-    function exportExcel() {
+    function getExcelFields(){
         var columnFields = $("#listGrid").datagrid('getColumnFields');
         var fieldArray = [];
         for (i = 0; i < columnFields.length; i++) {
@@ -277,14 +278,24 @@
                 fieldArray.push(appendFieldArray[i]);
             }
         }
+        return fieldArray;
+    }
+
+    //导出excel
+    function exportExcel() {
+        var _fieldArray = getExcelFields();
+        var _excelName = '${modelConfig.title}列表';
+        if (isExitsFunction('setExcelName')) {
+            _excelName = setExcelName();
+        }
         $.ajax({
             url: "${basePath}/ms/x/${namespace}/setExportField",
             type: "post",
             contentType: "application/json;charset=utf-8",
             dataType: "json",
-            data: json2str(fieldArray),
+            data: json2str(_fieldArray),
             success: function (result) {
-                window.location.href = "${basePath}/ms/x/${namespace}/pubExportExcel";
+                window.location.href = "${basePath}/ms/x/${namespace}/pubExportExcel?excelName=" + encodeURIComponent(_excelName);
             }
         });
     }
