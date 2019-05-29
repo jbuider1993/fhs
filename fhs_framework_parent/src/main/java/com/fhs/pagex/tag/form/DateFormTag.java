@@ -29,7 +29,12 @@ public class DateFormTag extends  EmptyFormTag{
         }
         else if(super.tagSett.containsKey("formart"))
         {
-            super.tagSett.put("onfocus","WdatePicker({dateFmt:\"" + super.tagSett.get("formart") + "\"})");
+            String onpickedSett = "";
+            if(super.tagSett.containsKey("onpicked"))
+            {
+                onpickedSett = ",onpicked:" + super.tagSett.get("onpicked");
+            }
+            super.tagSett.put("onfocus","WdatePicker({dateFmt:\"" + super.tagSett.get("formart") + "\","+onpickedSett+"})");
         }
         else
         {
@@ -56,6 +61,6 @@ public class DateFormTag extends  EmptyFormTag{
     @Override
     protected String[] getHandelKeys() {
         // 哪些参数是你这个控件特有的，我这个input没啥特有的控件，所以返回了空数组
-        return new String[]{"args","formart"};
+        return new String[]{"args","formart","onpicked"};
     }
 }
