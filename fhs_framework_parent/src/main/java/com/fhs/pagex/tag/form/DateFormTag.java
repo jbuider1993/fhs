@@ -34,7 +34,7 @@ public class DateFormTag extends  EmptyFormTag{
             {
                 onpickedSett = ",onpicked:" + super.tagSett.get("onpicked");
             }
-            super.tagSett.put("onfocus","WdatePicker({dateFmt:\"" + super.tagSett.get("formart") + "\","+onpickedSett+"})");
+            super.tagSett.put("onfocus","WdatePicker({dateFmt:\"" + super.tagSett.get("formart") + "\""+onpickedSett+"})");
         }
         else
         {
