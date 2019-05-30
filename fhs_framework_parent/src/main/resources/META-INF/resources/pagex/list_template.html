@@ -113,8 +113,12 @@
     <!--扩展js和css引入 end-->
 </head>
 <body>
-<table id="listGrid" title="${modelConfig.title}列表" class="easyui-datagrid"
-       fit="true" style="width: 90%;" url="${modelConfig.dataGridUrl}&${modelConfig.extendsParam}"
+<table id="listGrid" title="${modelConfig.title}列表"
+       fit="true" style="width: 90%;"
+        <% if(isEmpty(parameter.loadDft)){ %>
+         class="easyui-datagrid"
+         url="${modelConfig.dataGridUrl}&${modelConfig.extendsParam}"
+        <% } %>
        pagination="true" rownumbers="true" fitColumns="true"
        singleSelect="true" pageSize="10" striped="true" toolbar="#toolbar">
     <thead>
@@ -241,18 +245,18 @@
         openDialog('${basePath}/ms/pagex/${namespace}_add_update.jsp?isView=true&id=' + row.${modelConfig.pkeyCamel}, '查看');
     }
 
-    //重新加载
-    function reload() {
+    //获取参数
+    function getGridParam(){
         var _reloadParam = {
-                <% for(param1 in filterParams){ %>
-                     ${param1.name}:${param1.val},
-                <% } %>
-            between: {
-                <% for(param1 in filterParamsForBetween){ %>
-                    ${param1.name}:${param1.val},
-                <% } %>
-            }
-        };
+            <% for(param1 in filterParams){ %>
+            ${param1.name}:${param1.val},
+        <% } %>
+        between: {
+        <% for(param1 in filterParamsForBetween){ %>
+                ${param1.name}:${param1.val},
+            <% } %>
+        }
+    };
         if (isExitsFunction("extendsParam")) {
             var _extendsParam = extendsParam();
             for (key in _extendsParam) {
@@ -262,7 +266,13 @@
         if (isExitsFunction("paramHandle")) {
             _reloadParam = paramHandle(_reloadParam);
         }
-        $('#listGrid').datagrid('load', _reloadParam);
+        return _reloadParam;
+    }
+
+    //重新加载
+    function reload() {
+
+        $('#listGrid').datagrid('load', getGridParam());
     }
 
     function getExcelFields(){

@@ -1,6 +1,11 @@
 package com.fhs.pagex.common;
 
+import com.fhs.common.utils.EMap;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *  页面参数处理
@@ -15,16 +20,23 @@ import java.util.Map;
  */
 public class PageParamUtils {
 
+
     /**
-     * 把一些自己没有专门处理的 属性拼接起来
-     * 比如param中有10个属性 其中有五个没指定处理方式
-     * 这五个会被 拼接为 key="val"
-     * @param param 需要处理的参数
-     * @param appointArgs 指定自己用其他代码处理的参数
-     * @return 给拼成川的参数
+     * 获取参数map
+     * @param request request
+     * @return 参数map
      */
-    public static String parseOtherAttr(Map<String,Object> param, String ... appointArgs)
-    {
-        return null;
+    public static EMap<String, Object> getParameterMap(HttpServletRequest request) {
+        EMap<String, Object> resultMap = new EMap();
+        Map<String, String[]> tempMap = request.getParameterMap();
+        Set<String> keys = tempMap.keySet();
+        Iterator var5 = keys.iterator();
+
+        while(var5.hasNext()) {
+            String key = (String)var5.next();
+            resultMap.put(key, request.getParameter(key));
+        }
+
+        return resultMap;
     }
 }
