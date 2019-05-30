@@ -242,6 +242,24 @@ public class ExcelUtils
     }
 
     /**
+     * excel 自定义验证器
+     */
+    public static abstract  class ExcelValidor{
+
+        /**
+         * 验证参数是否符合要求
+         * @param param 参数
+         * @param valid 验证规则
+         * @param errorBuilder
+         * @param colName
+         * @param rowIndex
+         * @return
+         */
+        abstract boolean validParam(Object param,String valid,StringBuilder errorBuilder,char colName,int rowIndex);
+    }
+
+
+    /**
      * 根据列配置和excel input stream 将excel转换为对象
      *  本支撑暂时支持最多26列
      * @param clazz 需要将excel的数据转换为什么对象
@@ -253,6 +271,21 @@ public class ExcelUtils
      * @return 每一行都会被转换为一个集合
      */
     public static <T> List<T> formartExcelData(Class<T> clazz, InputStream is, String colSettStr, int titleRowNum, int colNum) throws IOException, IllegalAccessException, InstantiationException {
+        return formartExcelData( clazz,  is,  colSettStr,  titleRowNum,  colNum,null);
+    }
+
+    /**
+     * 根据列配置和excel input stream 将excel转换为对象
+     *  本支撑暂时支持最多26列
+     * @param clazz 需要将excel的数据转换为什么对象
+     * @param is excel的inputstream
+     * @param colSettStr 列配置
+     * @param titleRowNum 标题行
+     * @param colNum 一共多少列
+     * @param <T>  没啥
+     * @return 每一行都会被转换为一个集合
+     */
+    public static <T> List<T> formartExcelData(Class<T> clazz, InputStream is, String colSettStr, int titleRowNum, int colNum,ExcelValidor excelValidor) throws IOException, IllegalAccessException, InstantiationException {
 
         /*
             教程 colSett = [{'index':'a','trans':{'男':1,'女':2},'valid':['required','int','mobile','idNum','email','phone'],'field':'sex'}]
@@ -289,7 +322,15 @@ public class ExcelUtils
                 Object fieldVal = row[index-1];
                 String valid = tempColSett.getString("valid");
                 char colName = tempColSett.getString("index").charAt(0);
-                if(!validParam( fieldVal, valid, errorBuilder, colName, rowIndex + titleRowNum))
+                //如果指定了自定义校验算法又给了自定义验证器
+                if(ConverterUtils.toString(valid).contains("ex.") && excelValidor !=null){
+                    //使用自定义验证器
+                    if(!excelValidor.validParam( fieldVal, valid, errorBuilder, colName, rowIndex + titleRowNum))
+                    {
+                        continue;
+                    }
+                }
+                else if(!validParam( fieldVal, valid, errorBuilder, colName, rowIndex + titleRowNum))
                 {
                     continue;
                 }
