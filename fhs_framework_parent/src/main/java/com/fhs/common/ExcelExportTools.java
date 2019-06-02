@@ -25,14 +25,16 @@ import java.util.Set;
 public class ExcelExportTools {
 
     private static final Logger LOG = Logger.getLogger(ExcelExportTools.class);
+
+
+
     /**
      * 格式化导出数据
-     * @param request request
+     * @param fieldMap 字段
      * @param dataList 需要被格式化的数据
      * @return 格式化后的数据
      */
-    public static Object[][] parseExportData(HttpServletRequest request, List<?> dataList){
-        final Map<String,String> fieldMap = (Map<String, String>) request.getSession().getAttribute("exportField");
+    public static Object[][] parseExportData( final Map<String,String> fieldMap, List<?> dataList){
         final Object[][] rows = new Object[dataList.size()][fieldMap.size()];
         Set<String> fieldSet = fieldMap.keySet();
         String transFieldName = null;
@@ -74,6 +76,17 @@ public class ExcelExportTools {
             }
         }
         return  rows;
+    }
+
+    /**
+     * 格式化导出数据
+     * @param request request
+     * @param dataList 需要被格式化的数据
+     * @return 格式化后的数据
+     */
+    public static Object[][] parseExportData(HttpServletRequest request, List<?> dataList){
+        final Map<String,String> fieldMap = (Map<String, String>) request.getSession().getAttribute("exportField");
+        return parseExportData(  fieldMap, dataList);
     }
 
     /**
@@ -127,7 +140,7 @@ public class ExcelExportTools {
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet();
         String[] titleArray = getExportTitleArray(request);
-        ExcelUtils.initSheet07(sheet, rows, titleArray, null, null);
+        ExcelUtils.initSheet07(sheet, rows, titleArray, null, null,1);
         String excelName = "data_list.xlsx";
         if(CheckUtils.isNotEmpty(request.getParameter("excelName")))
         {
