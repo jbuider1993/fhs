@@ -43,7 +43,8 @@ public class SysOrganizationServiceImpl extends BaseServiceImpl<SysOrganization>
         String parentId = adminOrganization.getParentId();
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("parentId", parentId);
-        int ranking = findCountFromMap(map);
+        Integer ranking = dao.findRank(parentId);
+        ranking = ranking == null ? 0: ranking;
         ranking = ranking + 1;
         String id = parentId + StringUtil.formatCountWith0("", "%03d", ranking);
         adminOrganization.setRanking(ranking + "");
