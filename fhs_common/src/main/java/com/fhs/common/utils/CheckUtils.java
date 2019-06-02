@@ -59,6 +59,8 @@ public class CheckUtils
         return checkPattern(StringUtil.toString(obj).trim(), "^[-+]?[0-9]+(\\.[0-9]+)?$");
     }
 
+
+
     /**
      * 判断是否是正数
      *

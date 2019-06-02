@@ -4,10 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fhs.common.constant.Constant;
+import com.fhs.common.excel.ExcelValidor;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
 
@@ -113,9 +114,9 @@ public class ExcelUtils
         for (int i = 0; i < size; i++)
         {
             sheet = wb.createSheet(sheetNameList.get(i));
-            initSheet07(sheet, dataArrayList.get(i), titleArrayList.get(i), null, null);
+            initSheet07(sheet, dataArrayList.get(i), titleArrayList.get(i), null, null,1);
         }
-        writeExcel07(wb, filePath);
+        writeExcel(wb, filePath);
         log.debug("导出文件结束" + filePath);
     }
 
@@ -162,20 +163,6 @@ public class ExcelUtils
         return wb;
     }
 
-    /**
-     *
-     * <导出excel，根据数据和配置创建一个03版本的excel，该excel有多个sheet>
-     *
-     * @param filePath
-     * @param dataArray
-     * @param templatePath
-     */
-    public static void createExcel03(String filePath, List<Object[][]> dataArray, String templatePath,
-        int[][] styleArray, HSSFCellStyle[] cellStyleArray)
-    {
-        HSSFWorkbook wb = getWorkbook03(templatePath);
-        writeExcel03(wb, filePath);
-    }
 
     /**
      *
@@ -194,7 +181,26 @@ public class ExcelUtils
         int startRowNum = Constant.ONE;
         Object[][] titleArray = null;
         initSheet03(sheet, dataArray, titleArray, styleArray, cellStyleArray, startRowNum);
-        writeExcel03(wb, filePath);
+        writeExcel(wb, filePath);
+    }
+
+    /**
+     *
+     * <导出excel，根据数据和配置创建一个03版本的excel，只导出该excel的第一个sheet页
+     *
+     * @param dataArray
+     * @param templatePath
+     */
+    public static Workbook createOneSheetExcel03WorkBook( Object[][] dataArray, String templatePath,
+                                             int[][] styleArray, HSSFCellStyle[] cellStyleArray)
+    {
+        HSSFWorkbook wb = getWorkbook03(templatePath);
+        HSSFSheet sheet = null;
+        sheet = wb.getSheetAt(0);
+        int startRowNum = Constant.ONE;
+        Object[][] titleArray = null;
+        initSheet03(sheet, dataArray, titleArray, styleArray, cellStyleArray, startRowNum);
+        return wb;
     }
 
     /**
@@ -214,11 +220,10 @@ public class ExcelUtils
         sheet = wb.getSheetAt(0);
         int startRowNum = Constant.ONE;
         HSSFCellStyle style = wb.createCellStyle();
-        style.setFillBackgroundColor(HSSFColor.AQUA.index);
         cellStyleArray = new HSSFCellStyle[1];
         cellStyleArray[0] = style;
         initSheet03(sheet, dataArray, titleArray, styleArray, cellStyleArray, startRowNum);
-        writeExcel03(wb, filePath);
+        writeExcel(wb, filePath);
     }
 
     /**
@@ -238,25 +243,10 @@ public class ExcelUtils
         sheet = wb.getSheetAt(0);
         Object[][] titleArray = null;
         initSheet03(sheet, dataArray, titleArray, styleArray, cellStyleArray, startRowNum);
-        writeExcel03(wb, filePath);
+        writeExcel(wb, filePath);
     }
 
-    /**
-     * excel 自定义验证器
-     */
-    public static abstract  class ExcelValidor{
 
-        /**
-         * 验证参数是否符合要求
-         * @param param 参数
-         * @param valid 验证规则
-         * @param errorBuilder
-         * @param colName
-         * @param rowIndex
-         * @return
-         */
-        abstract boolean validParam(Object param,String valid,StringBuilder errorBuilder,char colName,int rowIndex);
-    }
 
 
     /**
@@ -285,7 +275,7 @@ public class ExcelUtils
      * @param <T>  没啥
      * @return 每一行都会被转换为一个集合
      */
-    public static <T> List<T> formartExcelData(Class<T> clazz, InputStream is, String colSettStr, int titleRowNum, int colNum,ExcelValidor excelValidor) throws IOException, IllegalAccessException, InstantiationException {
+    public static <T> List<T> formartExcelData(Class<T> clazz, InputStream is, String colSettStr, int titleRowNum, int colNum, ExcelValidor excelValidor) throws IOException, IllegalAccessException, InstantiationException {
 
         /*
             教程 colSett = [{'index':'a','trans':{'男':1,'女':2},'valid':['required','int','mobile','idNum','email','phone'],'field':'sex'}]
@@ -350,6 +340,11 @@ public class ExcelUtils
                     ReflectUtils.setValue(rowBean,tempColSett.getString("field"),ConverterUtils.toInt(fieldVal));
                     continue;
                 }
+                if((valid!=null && valid.contains("double")) || (tempColSett.containsKey("fieldTye") && "double".equals(tempColSett.getString("fieldTye"))))
+                {
+                    ReflectUtils.setValue(rowBean,tempColSett.getString("field"),ConverterUtils.toDouble(fieldVal));
+                    continue;
+                }
                 ReflectUtils.setValue(rowBean,tempColSett.getString("field"),fieldVal);
 
             }
@@ -393,6 +388,12 @@ public class ExcelUtils
 
         // 要求int但是不是int
         if(valid.contains("int") && (!CheckUtils.isNumber(param)))
+        {
+            errorBuilder.append("第" + rowIndex  + "行，第" + colName + "列必须为数字");
+            return false;
+        }
+        // 要求double但是不是double
+        if(valid.contains("double") && (!CheckUtils.isDouble(param)))
         {
             errorBuilder.append("第" + rowIndex  + "行，第" + colName + "列必须为数字");
             return false;
@@ -450,8 +451,8 @@ public class ExcelUtils
         }
         HSSFCellStyle style = wb.createCellStyle(); // 样式对象
 
-        style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直
-        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);// 水平
+        style.setVerticalAlignment(VerticalAlignment.CENTER);// 垂直
+        style.setAlignment(HorizontalAlignment.CENTER);// 水平
         int startRowNum = Constant.ONE;
         Object[][] titleArray = null;
         for (int i = 0; i < rowspan.length; i++)
@@ -460,7 +461,7 @@ public class ExcelUtils
             sheet.addMergedRegion(new CellRangeAddress(rowspan[i][0], rowspan[i][1], 1, 1));
         }
         initSheet03(sheet, dataArray, titleArray, styleArray, cellStyleArray, startRowNum);
-        writeExcel03(wb, filePath);
+        writeExcel(wb, filePath);
     }
 
     /**
@@ -493,8 +494,8 @@ public class ExcelUtils
         }
         HSSFCellStyle style = wb.createCellStyle(); // 样式对象
 
-        style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直
-        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);// 水平
+        style.setVerticalAlignment(VerticalAlignment.CENTER);// 垂直
+        style.setAlignment(HorizontalAlignment.CENTER);// 水平
         int startRowNum = Constant.ONE;
         Object[][] titleArray = null;
         for (int i = 0; i < rowspan.length; i++)
@@ -506,7 +507,21 @@ public class ExcelUtils
             }
         }
         initSheet03(sheet, dataArray, titleArray, styleArray, cellStyleArray, startRowNum);
-        writeExcel03(wb, filePath);
+        writeExcel(wb, filePath);
+    }
+
+    /**
+     *
+     * 根据数据创建WorkBook
+     * @param dataArray 数据集合
+     * @param templatePath 模板
+     */
+    public static Workbook createOneSheetExcel07WorkBook( Object[][] dataArray,String templatePath,int titleRowNum)
+    {
+        XSSFWorkbook wb = getWorkbook07(templatePath);
+        XSSFSheet sheet = wb.getSheetAt(0);
+        initSheet07(sheet, dataArray, null, null, null,titleRowNum);
+        return wb;
     }
 
     /**
@@ -517,12 +532,12 @@ public class ExcelUtils
      * @param dataArray
      */
     private static void createExcel07(String filePath, Object[][] dataArray, Object[] titleArray, int[][] styleArray,
-        XSSFCellStyle[] cellStyleArray)
+                                      XSSFCellStyle[] cellStyleArray)
     {
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet();
-        initSheet07(sheet, dataArray, titleArray, styleArray, cellStyleArray);
-        writeExcel07(wb, filePath);
+        initSheet07(sheet, dataArray, titleArray, styleArray, cellStyleArray,1);
+        writeExcel(wb, filePath);
     }
 
     /**
@@ -615,6 +630,7 @@ public class ExcelUtils
         }
     }
 
+
     /**
      * <初始化sheet中的数据>
      *
@@ -626,38 +642,27 @@ public class ExcelUtils
      * @param cellStyleArray 截止行
      */
     public static void initSheet07(XSSFSheet sheet, Object[][] dataArray, Object[] titleArray, int[][] styleArray,
-        XSSFCellStyle[] cellStyleArray)
+        XSSFCellStyle[] cellStyleArray,int titleRow)
     {
         XSSFRow row = sheet.createRow(0);
         XSSFCell cell = null;
         Object[] rowDataArray = null;
         Object cellData = null;
-
-        int startRowNum = titleArray.length;
-        for (int i = 0; i < startRowNum; i++)
+        if(titleArray!=null)
         {
-            cell = row.createCell(i);
-            cellData = titleArray[i];
-            if (cellData instanceof String)
+            titleRow = 1;
+            int startRowNum = titleArray.length;
+            for (int i = 0; i < startRowNum; i++)
             {
+                cell = row.createCell(i);
+                cellData = titleArray[i];
                 cell.setCellValue(ConverterUtils.toString(cellData));
             }
-            else if (cellData instanceof Integer)
-            {
-                cell.setCellValue(ConverterUtils.toInt(cellData));
-            }
-            else if (cellData instanceof Double)
-            {
-                cell.setCellValue(ConverterUtils.toDouble(cellData));
-            }
-            else if (cellData instanceof Date)
-            {
-                cell.setCellValue((Date)cellData);
-            }
         }
+
         for (int i = 0; i < dataArray.length; i++)
         {
-            row = sheet.createRow(i + 1);
+            row = sheet.createRow(i + titleRow);
             rowDataArray = dataArray[i];
             for (int j = 0; j < rowDataArray.length; j++)
             {
@@ -683,40 +688,7 @@ public class ExcelUtils
         }
     }
 
-    /**
-     * <将excel对象到处到文件中>
-     *
-     * @param wb excel对象
-     * @param filePath 到处路径
-     */
-    public static void writeExcel03(HSSFWorkbook wb, String filePath)
-    {
-        FileOutputStream fileOut = null;
-        try
-        {
-            fileOut = new FileOutputStream(filePath);
-            wb.write(fileOut);
-        }
-        catch (IOException ex)
-        {
-            log.error(ex);
-        }
-        finally
-        {
-            try
-            {
-                if (null != fileOut)
-                {
-                    fileOut.close();
-                }
 
-            }
-            catch (IOException e)
-            {
-                log.error(e);
-            }
-        }
-    }
 
     /**
      * <将excel对象到处到文件中>
@@ -724,7 +696,7 @@ public class ExcelUtils
      * @param wb excel对象
      * @param filePath 到处路径
      */
-    public static void writeExcel07(XSSFWorkbook wb, String filePath)
+    public static void writeExcel(Workbook wb, String filePath)
     {
         File file = new File(filePath);
         if (!file.exists())
@@ -983,7 +955,7 @@ public class ExcelUtils
         switch (cell.getCellType())
         {
         // 数值型
-            case Cell.CELL_TYPE_NUMERIC:
+            case NUMERIC:
                 if (HSSFDateUtil.isCellDateFormatted(cell))
                 {
                     // 如果是date类型则 ，获取该cell的date值
@@ -1008,11 +980,11 @@ public class ExcelUtils
                 }
                 break;
             // 字符串类型
-            case Cell.CELL_TYPE_STRING:
+            case STRING:
                 value = cell.getStringCellValue().toString();
                 break;
             // 公式类型
-            case Cell.CELL_TYPE_FORMULA:
+            case FORMULA:
                 // 读公式计算值
                 value = String.valueOf(cell.getNumericCellValue());
                 if (value.equals("NaN"))
@@ -1021,16 +993,16 @@ public class ExcelUtils
                 }
                 break;
             // 布尔类型
-            case Cell.CELL_TYPE_BOOLEAN:
+            case BOOLEAN:
                 value = " " + cell.getBooleanCellValue();
                 break;
             // 空值
-            case Cell.CELL_TYPE_BLANK:
+            case BLANK:
                 value = "";
                 log.error("excel出现空值");
                 break;
             // 故障
-            case Cell.CELL_TYPE_ERROR:
+            case ERROR:
                 value = "";
                 log.error("excel出现故障");
                 break;
