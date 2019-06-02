@@ -101,4 +101,8 @@
         </if>
     </select>
 
+    <select id="findRank" resultType="java.lang.Integer" parameterType="map">
+    SELECT MAX(ranking) FROM t_ucenter_ms_organization WHERE parent_id=#{parentId}
+    </select>
+
 </mapper>

@@ -180,7 +180,6 @@
 		WHERE m.is_disable = 0
 		AND m.is_disable = b.is_disable
 		AND u.user_id = #{userId}
-		AND m.menu_type = '0'
 		ORDER BY
 		m.father_menu_id,m.order_index
 	</select>
