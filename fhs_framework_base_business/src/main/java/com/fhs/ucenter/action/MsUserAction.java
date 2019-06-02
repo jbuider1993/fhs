@@ -1,6 +1,7 @@
 package com.fhs.ucenter.action;
 
 import com.fhs.base.action.ModelSuperAction;
+import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.group.Delete;
@@ -63,6 +64,7 @@ public class MsUserAction extends ModelSuperAction<SysUser>
                 sysUser.setCreateTime(DateUtils.formartDate(new Date(), DateUtils.DATETIME_PATTERN));
                 sysUser.setCreateUser(loginSysUser.getUserId());
                 sysUser.setGroupCode(loginSysUser.getGroupCode());
+                sysUser.setIsAdmin(Constant.INT_FALSE);
             }
             Map<String, Object> resultMap = sysUserService.addUser(sysUser);
             boolean retult = ConverterUtils.toBoolean(resultMap.get("retult"));
