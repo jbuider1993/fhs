@@ -72,7 +72,7 @@ public class SpringContextUtil implements ApplicationContextAware {
         try {
             return applicationContext.getBean(clazz);
         } catch (Exception e) {
-            logger.error("获取对象错误:",e);
+            logger.error("获取对象错误:" + e.getMessage());
             return null;
         }
     }
@@ -89,7 +89,7 @@ public class SpringContextUtil implements ApplicationContextAware {
         try {
             return (T)getTarget(applicationContext.getBean(clazz));
         } catch (Exception e) {
-            logger.error("获取对象错误:",e);
+            logger.error("获取对象错误:" + e.getMessage());
             return null;
         }
     }
@@ -154,14 +154,14 @@ public class SpringContextUtil implements ApplicationContextAware {
             try {
                 proxy = getJdkDynamicProxyTargetObject(proxy);
             } catch (Exception e) {
-                logger.error("获取对象错误:",e);
+                logger.error("获取对象错误:" + e.getMessage());
                 return proxy;
             }
         } else { //cglib
             try {
                 proxy = getCglibProxyTargetObject(proxy);
             } catch (Exception e) {
-                logger.error("获取对象错误:",e);
+                logger.error("获取对象错误:" + e.getMessage());
                 return proxy;
             }
         }

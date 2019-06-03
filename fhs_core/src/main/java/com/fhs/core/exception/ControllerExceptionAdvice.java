@@ -7,8 +7,12 @@ import com.fhs.common.utils.ThreadKey;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.result.PubResult;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,28 +20,27 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-/**
- * 统一异常处理器
- *
- * @Filename: ExceptionHandler.java
- * @Description:
- * @Version: 1.0
- * @Author: jackwong
- * @Email: wanglei@sxpartner.com
- * @History:<br>
- *               陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
- *
- */
-public class ExceptionHandler implements HandlerExceptionResolver
-{
+@ControllerAdvice
+public class ControllerExceptionAdvice {
 
     /** log */
-    private static final Logger LOG = Logger.getLogger(ExceptionHandler.class);
+    private static final Logger LOG = Logger.getLogger(ControllerExceptionAdvice.class);
 
-    public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler,
-        Exception ex)
+
+    @ExceptionHandler(Exception.class)
+    public ModelAndView handlerMaxUploadSizeExceededException(Exception ex) {
+        if (ex != null) {
+            return resolveException(ex);
+        }
+        return new ModelAndView("error").addObject("msg", "未知错误：" + ex);
+    }
+
+
+    private ModelAndView resolveException(Exception ex)
     {
-
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = servletRequestAttributes.getRequest();
+        HttpServletResponse response = servletRequestAttributes.getResponse();
         ModelAndView result = new ModelAndView();
         result.setViewName("platform/json");
         HttpResult httpResult = HttpResult.otherResult(PubResult.PARAM_ERROR);
@@ -78,6 +81,11 @@ public class ExceptionHandler implements HandlerExceptionResolver
             return null;
         }
         else if (ex instanceof DuplicateKeyException)
+        {
+            JsonUtils.outJson(response, HttpResult.otherResult(PubResult.PRIMARY_KEY_CONFLICT).asJson());
+            return null;
+        }
+        else if (ex instanceof MySQLIntegrityConstraintViolationException)
         {
             JsonUtils.outJson(response, HttpResult.otherResult(PubResult.PRIMARY_KEY_CONFLICT).asJson());
             return null;
