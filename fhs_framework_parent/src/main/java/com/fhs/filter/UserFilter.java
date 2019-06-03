@@ -28,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * c端用户登录过滤器
  */
 @ServletComponentScan
-@WebFilter(urlPatterns = {"/front/*","/page/h5/*","/page/pc/*","/b/page-h5/*"},filterName = "userFilter",asyncSupported = true)
+@WebFilter(urlPatterns = {"/front/*", "/page/h5/*", "/page/pc/*","/b/*"}, filterName = "userFilter", asyncSupported = true)
 public class UserFilter implements Filter {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserFilter.class);
     private static final String JSESSIONID_CODE = "JSESSIONID";
@@ -54,34 +54,35 @@ public class UserFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        if(frontUserService == null)
-        {
-            frontUserService = SpringContextUtil.getBeanByClassForApi (FeignFrontUserApiService.class);
+        if (frontUserService == null) {
+            frontUserService = SpringContextUtil.getBeanByClassForApi(FeignFrontUserApiService.class);
         }
 
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
-        if (!CheckUtils.isNullOrEmpty(request.getParameter("accessToken")))
-        {
+        String uri = request.getRequestURI();
+        //如果url 是beetl的，并且不包含h5和pc直接放行
+        if (uri.contains("/b/") && !uri.contains("/b/page-h5") && !uri.contains("/b/page-pc")) {
+            chain.doFilter(req, res);
+            return;
+        }
+        if (!CheckUtils.isNullOrEmpty(request.getParameter("accessToken"))) {
             // 如果验证通过则判断用户是否是vip如果不是vip但是又要vip 那么会 302 如果accessToken验证不通过 会302
-            if(login(request,response))
-            {
+            if (login(request, response)) {
                 chain.doFilter(req, res);
             }
-
             return;
         }
 
         //普通会员
-        boolean isUser = request.getRequestURI().contains("_u");
-        FrontUserVo user = (FrontUserVo) request.getSession ().getAttribute ("frontUser");
-        if (isUser && CheckUtils.isNullOrEmpty (user)){
-            send2Login(response,request);
+        boolean isUser = uri.contains("_u");
+        FrontUserVo user = (FrontUserVo) request.getSession().getAttribute("frontUser");
+        if (isUser && CheckUtils.isNullOrEmpty(user)) {
+            send2Login(response, request);
             return;
         }
-        chain.doFilter (req, res);
+        chain.doFilter(req, res);
     }
-
 
 
     @Override
@@ -91,64 +92,60 @@ public class UserFilter implements Filter {
 
 
     /**
-     *
      * @param request
      * @param response
      * @return
      * @throws IOException
      */
-    private boolean login(HttpServletRequest request, HttpServletResponse response) throws IOException
-    {
+    private boolean login(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
         String accessToken = request.getParameter("accessToken");
-        HttpResult<FrontUserVo> resultFrontUser = frontUserService.getSingleFrontUser (GetSingleFrontUserForm.builder().accessToken(accessToken).build());
-        if(resultFrontUser.getCode () != Constant.HPROSE_SUCCESS_CODE){
-            LOGGER.error ( "获取前端用户信息错误,accessToken为{}",  accessToken);
-            send2Login(response,request);
+        HttpResult<FrontUserVo> resultFrontUser = frontUserService.getSingleFrontUser(GetSingleFrontUserForm.builder().accessToken(accessToken).build());
+        if (resultFrontUser.getCode() != Constant.HPROSE_SUCCESS_CODE) {
+            LOGGER.error("获取前端用户信息错误,accessToken为{}", accessToken);
+            send2Login(response, request);
             return false;
         }
-        FrontUserVo frontUser = resultFrontUser.getData ( );//前端用户信息
-        if(frontUser == null )
-        {
-            send2Login(response,request);
+        FrontUserVo frontUser = resultFrontUser.getData();//前端用户信息
+        if (frontUser == null) {
+            send2Login(response, request);
             return false;
-        } else
-        {
-            CookieUtil.writeCookie("isUser","true",response);
+        } else {
+            CookieUtil.writeCookie("isUser", "true", response);
             session.setAttribute("frontUser", frontUser);
-            session.setAttribute("accessToken",accessToken);
+            session.setAttribute("accessToken", accessToken);
             sessionMap.put(accessToken, session);
-            sessionAccessTokenMap.put(session,accessToken);
+            sessionAccessTokenMap.put(session, accessToken);
             return true;
         }
     }
 
     /**
      * 跳转登陆页面
+     *
      * @param response
      * @param request
      * @throws IOException
      */
-    private void send2Login(HttpServletResponse response,HttpServletRequest request) throws IOException
-    {
+    private void send2Login(HttpServletResponse response, HttpServletRequest request) throws IOException {
         String extendsParam = "";
-        if (!CheckUtils.isNullOrEmpty(request.getQueryString())){
+        if (!CheckUtils.isNullOrEmpty(request.getQueryString())) {
             extendsParam = request.getQueryString();
-            String[] extendsParams = extendsParam.split ( "&" );
-            StringBuilder needExtendsParam = new StringBuilder (  );
-            for (int i = 0; i < extendsParams.length; i++){
-                if(!extendsParams[i].contains ( "accessToken" )){
-                    needExtendsParam.append ( extendsParams[i] );
-                    if (i != (extendsParams.length - 1)){
-                        needExtendsParam.append ( "&" );
+            String[] extendsParams = extendsParam.split("&");
+            StringBuilder needExtendsParam = new StringBuilder();
+            for (int i = 0; i < extendsParams.length; i++) {
+                if (!extendsParams[i].contains("accessToken")) {
+                    needExtendsParam.append(extendsParams[i]);
+                    if (i != (extendsParams.length - 1)) {
+                        needExtendsParam.append("&");
                     }
                 }
             }
-            extendsParam = needExtendsParam.toString ().length () == 0 ? "" : "?" + needExtendsParam.toString ();
+            extendsParam = needExtendsParam.toString().length() == 0 ? "" : "?" + needExtendsParam.toString();
         }
-        String callBack = "&callBack=" + URLEncoder.encode(request.getRequestURL() + extendsParam ,"utf-8");
-        LOGGER.info("redirect_login_url:" + EConfig.getPathPropertiesValue ("redirect_login_url"));
-        response.sendRedirect(EConfig.getPathPropertiesValue ("redirect_login_url") + callBack);
+        String callBack = "&callBack=" + URLEncoder.encode(request.getRequestURL() + extendsParam, "utf-8");
+        LOGGER.info("redirect_login_url:" + EConfig.getPathPropertiesValue("redirect_login_url"));
+        response.sendRedirect(EConfig.getPathPropertiesValue("redirect_login_url") + callBack);
     }
 
 }
