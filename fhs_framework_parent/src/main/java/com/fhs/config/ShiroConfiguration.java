@@ -4,20 +4,28 @@ import com.fhs.pagex.filter.PageXFilter;
 import com.fhs.shiro.ShiroCasRealm;
 import com.fhs.shiro.ShiroRealm;
 import io.buji.pac4j.filter.CallbackFilter;
+import io.buji.pac4j.filter.LogoutFilter;
 import io.buji.pac4j.realm.Pac4jRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.jasig.cas.client.session.SingleSignOutFilter;
+import org.jasig.cas.client.session.SingleSignOutHttpSessionListener;
 import org.pac4j.cas.client.CasClient;
 import org.pac4j.cas.config.CasConfiguration;
+import org.pac4j.cas.logout.DefaultCasLogoutHandler;
 import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 
 import javax.servlet.Filter;
 import java.util.LinkedHashMap;
@@ -62,12 +70,24 @@ public class ShiroConfiguration{
         configuration.setAcceptAnyProxy(true);
         CasClient casClient = new CasClient(configuration);
         casClient.setCallbackUrl(shiroServerUrlPrefix + "/callback?client_name=" + clientName);
+        if(isEnableCas)
+        {
+            configuration.setLogoutHandler(shiroCasLogoutHandler());
+        }
         casClient.setName(clientName);
         final Clients clients = new Clients(shiroServerUrlPrefix + "/callback?client_name=" + clientName, casClient);
         final Config config = new Config(clients);
         return config;
     }
 
+    /**
+     * 登出操作
+     * @return
+     */
+    public DefaultCasLogoutHandler shiroCasLogoutHandler(){
+        DefaultCasLogoutHandler logoutHandler = new DefaultCasLogoutHandler();
+        return logoutHandler;
+    }
 
     @Bean(name = "shiroRealm")
     public AuthorizingRealm shiroRealm() {
@@ -142,10 +162,45 @@ public class ShiroConfiguration{
             callbackFilter.setConfig(config());
             //callbackFilter.setDefaultUrl("/starter");
             filtersMap.put("casFilter", callbackFilter);
+            // 注销 拦截器
+            LogoutFilter logoutFilter = new LogoutFilter();
+            logoutFilter.setConfig(config());
+            logoutFilter.setCentralLogout(true);
+            logoutFilter.setLocalLogout(true);
+            logoutFilter.setDefaultUrl(shiroServerUrlPrefix + "/callback?client_name=" + clientName);
+            filtersMap.put("logout",logoutFilter);
         }
         shiroFilterFactoryBean.setFilters(filtersMap);
         loadShiroFilterChain(shiroFilterFactoryBean);
         return shiroFilterFactoryBean;
+    }
+
+    @Bean
+    @Order(Ordered.HIGHEST_PRECEDENCE)
+    public FilterRegistrationBean singleSignOutFilter() {
+        FilterRegistrationBean bean = new FilterRegistrationBean();
+        bean.setName("singleSignOutFilter");
+        SingleSignOutFilter singleSignOutFilter = new SingleSignOutFilter();
+        singleSignOutFilter.setCasServerUrlPrefix(shiroServerUrlPrefix);
+        singleSignOutFilter.setIgnoreInitConfiguration(true);
+        bean.setFilter(singleSignOutFilter);
+        bean.addUrlPatterns("/*");
+        bean.setEnabled(true);
+        return bean;
+    }
+
+    /**
+     * 注册单点登出的listener
+     *
+     * @return
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Bean
+    public ServletListenerRegistrationBean<?> singleSignOutHttpSessionListener() {
+        ServletListenerRegistrationBean bean = new ServletListenerRegistrationBean();
+        bean.setListener(new SingleSignOutHttpSessionListener());
+        bean.setEnabled(true);
+        return bean;
     }
 
     /**
@@ -159,6 +214,7 @@ public class ShiroConfiguration{
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
         if(isEnableCas) {
             filterChainDefinitionMap.put("/callback", "casFilter");
+            filterChainDefinitionMap.put("/logout", "logout");
         }
         filterChainDefinitionMap.put("/ms/pagex/*", "pagexFilter");
         //2.不拦截的请求
@@ -166,10 +222,8 @@ public class ShiroConfiguration{
         filterChainDefinitionMap.put("/js/**", "anon");
         filterChainDefinitionMap.put("/images/**", "anon");
         filterChainDefinitionMap.put("/page/**", "anon");
-
         //4.登录过的不拦截
         filterChainDefinitionMap.put("/ms/**", "authc");
-
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
     }
 
