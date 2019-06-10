@@ -14,10 +14,11 @@ import org.springframework.stereotype.Component;
  * @Version: 1.0
  */
 @Component
-public class TimeFormTag extends  EmptyFormTag{
+public class TimeFormTag extends  EmptyFormTag implements IOne2XTag{
 
     static{
         FormTagFactory.regTag("time", TimeFormTag.class);
+        FormTagFactory.regOne2XTag("time", TimeFormTag.class);
     }
 
     @Override
@@ -29,7 +30,7 @@ public class TimeFormTag extends  EmptyFormTag{
         resultHtmlBuilder.append(getOtherAttrValHtml());
         resultHtmlBuilder.append(formartPlaceholderHtml() + " />");
         resultHtmlBuilder.append(formartRequiredHtml());
-        resultHtmlBuilder.append("</div>");
+        resultHtmlBuilder.append(super.getEndDiv());
         return resultHtmlBuilder.toString();
     }
 

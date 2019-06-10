@@ -11,6 +11,7 @@ import com.fhs.pagex.service.IPageXService;
 import com.fhs.pagex.service.PagexDataService;
 import com.fhs.pagex.tag.form.BaseFormTag;
 import com.fhs.pagex.tag.form.FormTagFactory;
+import com.fhs.pagex.tag.form.IOne2XTag;
 import com.mybatis.jpa.common.ColumnNameUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
@@ -130,6 +131,12 @@ public class PagexAddService  implements IPageXService, InitializingBean {
             {
                 continue;
             }
+            if("one2x".equals(type))
+            {
+                formFieldBuilder.append(handelOne2X( readyJsListList ,loadSuccessList, onSaveList, overallJsList,
+                         pageAddSett, field, request,  response));
+                continue;
+            }
             fromTagClass = FormTagFactory.getTag(type);
             if (fromTagClass == null) {
                 LOG.error("系统不支持的列表type:" + type);
@@ -202,5 +209,65 @@ public class PagexAddService  implements IPageXService, InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         HandelPageXService.SIGEL.registerPageXService("add_update.jsp",this);
+    }
+
+    private String handelOne2X(List<String> readyJsListList ,List<String> loadSuccessList, List<String> onSaveList, List<String> overallJsList,
+                               PagexAddDTO pageAddSett,Map<String, Object> field,HttpServletRequest request, HttpServletResponse response){
+        // 头处理
+        // template处理
+        // load数据处理
+        // 保存数据处理
+        // 初始化
+        String xnamespace = ConverterUtils.toString(field.get("namespace"));
+        readyJsListList.add(xnamespace + "_ready()");
+        loadSuccessList.add(xnamespace + "_onload(info)");
+        onSaveList.add(xnamespace + "_onsave()");
+        //找到需要关联的dto
+        PagexAddDTO xAddDTO = PagexDataService.SIGNEL.getPagexAddDTOFromCache(xnamespace);
+        String type = null;
+        Class<? extends IOne2XTag> fromTagClass = null;
+        IOne2XTag tag = null;
+        List<Map<String,Object>> fieldList = new ArrayList<>();
+        String firstFieldName = null;
+        // 获取所有的表单字段
+        for (Map<String, Object> tempField : xAddDTO.getFormFieldSett()) {
+            type = ConverterUtils.toString(tempField.get("type"));
+            //如果type为空或者没有标记支持一对多显示则返回
+            if (CheckUtils.isNullOrEmpty(type) || !ConverterUtils.toBoolean(tempField.get("one2x"))) {
+                continue;
+            }
+            if(firstFieldName==null)
+            {
+                firstFieldName = ColumnNameUtil.underlineToCamel(ConverterUtils.toString(tempField.get("name")));
+            }
+            fromTagClass = FormTagFactory.getOne2XTag(type);
+            try {
+                tag = fromTagClass.newInstance();
+                tag.makeOne2XModel();
+                Map<String,Object> fieldSettMap = new HashMap<>();
+                fieldSettMap.putAll(tempField);
+                fieldSettMap.put("name", ColumnNameUtil.underlineToCamel(ConverterUtils.toString(fieldSettMap.get("name"))));
+                tag.setTagSett(fieldSettMap, request, response);
+                fieldSettMap.put("formHtml",tag.getFormHtml().replaceAll("xnamespace",xnamespace).replaceAll("'","\""));
+                fieldSettMap.put("setValue",tag.setValueJs());
+                fieldSettMap.put("getValue",tag.getValueJs());
+                fieldSettMap.put("loadSuccess",tag.one2XDataLoadSuccessJs());
+                fieldSettMap.put("save",tag.one2XSaveJs());
+                fieldList.add(fieldSettMap);
+            } catch (InstantiationException e) {
+                LOG.error(this, e);
+            } catch (IllegalAccessException e) {
+                LOG.error(this, e);
+            }
+        }
+        paramMap.put("tagSett",field);
+        paramMap.put("fieldList",fieldList);
+        paramMap.put("xnamespace",xnamespace);
+        paramMap.put("modelConfig",xAddDTO.getModelConfig());
+        paramMap.put("firstFieldName",firstFieldName);
+        paramMap.put("sourceModelConfig",pageAddSett.getModelConfig());
+
+        paramMap.put("otherFunctions",pageAddSett.getOtherFunctions());
+        return BeetlUtil.renderBeelt("/pagex/one2x_template.html",paramMap);
     }
 }

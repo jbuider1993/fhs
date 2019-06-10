@@ -27,6 +27,16 @@ import java.util.Map;
  */
 public abstract class BaseFormTag extends PagexBaseTag implements InitializingBean {
 
+    protected  boolean isOne2XModel = false;
+
+    /**
+     * 设置插件以一对多模式运行
+     */
+    public void makeOne2XModel()
+    {
+        isOne2XModel = true;
+    }
+
     /**
      * 格式化dataType务必使用格式化后的给最终输出的html赋值
      */
@@ -69,6 +79,10 @@ public abstract class BaseFormTag extends PagexBaseTag implements InitializingBe
      * 格式化id和name 的html
      */
     protected String formartIdNameHtml(){
+        if(isOne2XModel)
+        {
+            return " id='" + tagSett.get("name") + "_<@=xnamespace_index @>'";
+        }
         return " id='" + tagSett.get("name") + "' name='"+ tagSett.get("name") + "' ";
     }
 
@@ -99,6 +113,11 @@ public abstract class BaseFormTag extends PagexBaseTag implements InitializingBe
      * @return
      */
     protected String getTitleHtml(){
+        //一对多模式不输出标题div
+        if(isOne2XModel)
+        {
+            return "";
+        }
         String rowClass =  isNewRow() ?  "bigLabelDiv" : "fitemDiv";
         if(!isNewRow())
         {
@@ -202,6 +221,18 @@ public abstract class BaseFormTag extends PagexBaseTag implements InitializingBe
         Map<String,Object> paramMap = new HashMap<>();
         paramMap.put("tagSett",this.tagSett);
         return paramMap;
+    }
+
+    /**
+     * 获取结束div在isOne2XModel=true的时候输出孔
+     * @return
+     */
+    protected String getEndDiv(){
+        if(isOne2XModel)
+        {
+            return "";
+        }
+        return "</div>";
     }
 
     /*

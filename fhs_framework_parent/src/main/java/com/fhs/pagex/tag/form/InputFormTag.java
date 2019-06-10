@@ -14,10 +14,11 @@ import org.springframework.stereotype.Component;
  * @Version: 1.0
  */
 @Component
-public class InputFormTag extends  EmptyFormTag{
+public class InputFormTag extends  EmptyFormTag implements IOne2XTag{
 
     static{
         FormTagFactory.regTag("input",InputFormTag.class);
+        FormTagFactory.regOne2XTag("input",InputFormTag.class);
     }
 
     @Override
@@ -32,7 +33,7 @@ public class InputFormTag extends  EmptyFormTag{
         resultHtmlBuilder.append(getOtherAttrValHtml());
         resultHtmlBuilder.append(formartPlaceholderHtml() + " />");
         resultHtmlBuilder.append(formartRequiredHtml());
-        resultHtmlBuilder.append("</div>");
+        resultHtmlBuilder.append(getEndDiv());
         return resultHtmlBuilder.toString();
     }
 
@@ -47,4 +48,6 @@ public class InputFormTag extends  EmptyFormTag{
         // 哪些参数是你这个控件特有的，我这个input没啥特有的控件，所以返回了空数组
         return new String[]{};
     }
+
+
 }

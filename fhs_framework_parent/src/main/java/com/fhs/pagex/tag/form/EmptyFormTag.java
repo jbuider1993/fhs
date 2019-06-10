@@ -40,4 +40,34 @@ public abstract class EmptyFormTag extends BaseFormTag{
         return "";
     }
 
+
+    public String getFormHtml() {
+        return getContentHtml();
+    }
+
+
+    public String one2XDataLoadSuccessJs() {
+        return null;
+    }
+
+
+    public String one2XSaveJs() {
+        return null;
+    }
+
+
+    public String one2XOverallJs() {
+        return null;
+    }
+
+
+    public String setValueJs() {
+        return "val(";
+    }
+
+
+    public String getValueJs() {
+        return "val()";
+    }
+
 }

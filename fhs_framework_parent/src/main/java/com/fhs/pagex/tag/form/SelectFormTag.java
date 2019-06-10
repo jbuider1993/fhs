@@ -16,9 +16,10 @@ import org.springframework.stereotype.Component;
  * @Version: 1.0
  */
 @Component
-public class SelectFormTag extends BaseEasyuiCombo {
+public class SelectFormTag extends BaseEasyuiCombo  implements IOne2XTag{
     static {
         FormTagFactory.regTag("select", SelectFormTag.class);
+        FormTagFactory.regOne2XTag("select",SelectFormTag.class);
     }
 
     @Override
@@ -61,5 +62,26 @@ public class SelectFormTag extends BaseEasyuiCombo {
     @Override
     protected String[] getHandelKeys() {
         return new String[0];
+    }
+
+
+
+
+    public String setValueJs() {
+        //多选
+        if(ConverterUtils.toBoolean(tagSett.get("multiple")))
+        {
+            return "combobox('setValues',";
+        }
+        return "combobox('setValue',";
+    }
+
+
+    public String getValueJs() {
+        if(ConverterUtils.toBoolean(tagSett.get("multiple")))
+        {
+            return "combobox('getValues') + ''";
+        }
+        return "combobox('getValue')";
     }
 }

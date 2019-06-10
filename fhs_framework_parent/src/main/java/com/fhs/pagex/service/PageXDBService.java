@@ -1,5 +1,9 @@
 package com.fhs.pagex.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.fhs.pagex.dto.PagexAddDTO;
 import com.mybatis.jpa.cache.JpaTools;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.bean.SuperBean;
@@ -57,13 +61,56 @@ public class PageXDBService {
 
     /**
      * 插入一条数据到db
-     * @param param 参数
+     * @param paramMap 参数
      * @param namespace namespace
      * @return
      */
-    public int insert(Map<String,Object> param, String namespace)
+    public int insert(EMap<String,Object> paramMap, String namespace)
     {
-        return sqlsession.insert(getSqlNamespace() + namespace + "_insertPageX",param);
+        return sqlsession.insert(getSqlNamespace() + namespace + "_insertPageX",paramMap);
+    }
+
+    /**
+     * 处理一对多
+     * @param paramMap 参数
+     * @param namespace namespace
+     */
+    private void insertAndUpdateX(EMap<String,Object> paramMap, String namespace)
+    {
+        PagexAddDTO addDTO = PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace);
+        Map<String,Object> modelConfig = addDTO.getModelConfig();
+        //是否存在一对多
+        if(ConverterUtils.toBoolean(addDTO.getModelConfig().get("isOne2X")))
+        {
+            String createUser =paramMap.getStr("createUser");
+            String groupCode = paramMap.getStr("groupCode");
+            String pkey = paramMap.getStr("pkey");String[] namespaces = ConverterUtils.toString(modelConfig.get("xNamespaces")).split(",");
+            JSONArray tempJsonArray = null;
+            //遍历一对多的数据然后插入
+            for(String xNamespace : namespaces)
+            {
+                //取出fkey的列名字
+                String fkeyField = ConverterUtils.toString(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace).getModelConfig().get("fkey"));
+                String pkeyField = ConverterUtils.toString(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace).getModelConfig().get("pkey"));
+                tempJsonArray = JSON.parseArray(ConverterUtils.toString(paramMap.get(xNamespace)));
+                for(int i =0;i<tempJsonArray.size();i++)
+                {
+                    JSONObject extendsChild = tempJsonArray.getJSONObject(i);
+                    if(CheckUtils.isNotEmpty(extendsChild.get(pkeyField)))
+                    {
+                        sqlsession.update(getSqlNamespace() + namespace + "_updatePageX",paramMap);
+                    }
+                    else
+                    {
+                        extendsChild.put("pkey",StringUtil.getUUID());
+                        extendsChild.put(fkeyField,pkey);
+                        extendsChild.put("createUser",createUser);
+                        extendsChild.put("groupCode",groupCode);
+                        sqlsession.insert(getSqlNamespace() + xNamespace + "_insertPageX",extendsChild);
+                    }
+                }
+            }
+        }
     }
 
     /**

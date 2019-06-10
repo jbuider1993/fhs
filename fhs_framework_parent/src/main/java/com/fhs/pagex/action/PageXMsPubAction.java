@@ -71,11 +71,12 @@ public class PageXMsPubAction extends PageXBaseAction{
     public HttpResult<Boolean> add(@PathVariable("namespace")String namespace, HttpServletRequest request, HttpServletResponse response)
     {
         checkPermiessAndNamespace( namespace,"add");
-        Map<String,Object> paramMap = super.getParameterMap(request);
+        EMap<String,Object> paramMap = super.getParameterMap(request);
         SysUserVo user = getSessionUser( request);
         paramMap.put("createUser",user.getUserId());
         paramMap.put("groupCode",user.getGroupCode());
         paramMap.put("updateUser",user.getUserId());
+        paramMap.put("pkey",StringUtil.getUUID());
         super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
         addLog( namespace, "添加", paramMap, request, LogDesc.ADD);
         service.insert(paramMap,namespace);

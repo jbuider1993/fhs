@@ -29,10 +29,13 @@ public abstract  class BaseEasyuiCombo extends EmptyFormTag{
         StringBuilder resultHtmlBuilder = new StringBuilder();
         boolean multiple = ConverterUtils.toBoolean(tagSett.get("multiple"));
         if(multiple){
-            resultHtmlBuilder.append("<div class='fitem'>");
-            resultHtmlBuilder.append(" <input type='hidden' " );
-            resultHtmlBuilder.append(formartIdNameHtml());;
-            resultHtmlBuilder.append("/>");
+            if(!isOne2XModel)
+            {
+                resultHtmlBuilder.append("<div class='fitem'>");
+                resultHtmlBuilder.append(" <input type='hidden' " );
+                resultHtmlBuilder.append(formartIdNameHtml());;
+                resultHtmlBuilder.append("/>");
+            }
             if(name == null)
             {
                 name = ConverterUtils.toString(super.tagSett.get("name"));
@@ -48,7 +51,7 @@ public abstract  class BaseEasyuiCombo extends EmptyFormTag{
         resultHtmlBuilder.append(formartEasyuiDataOptions());
         resultHtmlBuilder.append(formartPlaceholderHtml() + " />");
         resultHtmlBuilder.append(formartRequiredHtml());
-        resultHtmlBuilder.append("</div>");
+        resultHtmlBuilder.append(super.getEndDiv());
         if(multiple){
             resultHtmlBuilder.append("</div>");
         }

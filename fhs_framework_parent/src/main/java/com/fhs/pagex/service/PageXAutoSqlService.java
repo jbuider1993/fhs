@@ -172,7 +172,6 @@ public class PageXAutoSqlService {
 
                     valueFieldBuilder.append(",#{" + ColumnNameUtil.underlineToCamel(name) + "}");
                 }
-
             }
         }
         String groupCodeSql = "";
@@ -182,7 +181,7 @@ public class PageXAutoSqlService {
             groupCodeValSql = ",#{groupCode}";
         }
         sqlBuilder.append(",`create_time`,`create_user`,`update_time`,`update_user`  " + groupCodeSql + ")  VALUES ("
-                + ("uuid".equals(modelConfig.get("type")) ? "REPLACE(UUID(), '-', '')" : "null"));
+                + ("uuid".equals(modelConfig.get("type")) ? "#{pkey}" : "null"));
         sqlBuilder.append(valueFieldBuilder);
         if (sqlBuilder.length() != 0) {
             sqlBuilder.append(",");
