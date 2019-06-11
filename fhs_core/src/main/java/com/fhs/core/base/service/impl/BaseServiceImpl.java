@@ -1,11 +1,17 @@
 package com.fhs.core.base.service.impl;
 
+import com.alicp.jetcache.Cache;
+import com.alicp.jetcache.anno.CreateCache;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.fhs.common.utils.ConverterUtils;
+import com.fhs.common.utils.DateUtils;
 import com.fhs.common.utils.Logger;
+import com.fhs.common.utils.ReflectUtils;
 import com.fhs.core.base.bean.SuperBean;
 import com.fhs.core.base.dao.BaseDao;
 import com.fhs.core.base.service.BaseService;
+import com.fhs.core.cache.annotation.Cacheable;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.strategy.GenInfo;
 import com.fhs.core.trans.TransService;
@@ -32,17 +38,26 @@ import java.util.*;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public abstract class BaseServiceImpl<T>  implements BaseService<T>
-{
+public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
     protected final Logger log = Logger.getLogger(this.getClass());
+
+    /**
+     * 缓存 默认时间：半个小时
+     */
+    @CreateCache(expire = 1800, name = "docache")
+    private Cache<String, T> doCache;
+
+    /**
+     * 判断自己是否需要支持自动缓存
+     */
+    private boolean isCacheable;
 
     @Autowired
     protected TransService transService;
 
     /**
      * 利用spring4新特性泛型注入
-     *
      */
     @Autowired
     protected BaseDao<T> baseDao;
@@ -57,74 +72,68 @@ public abstract class BaseServiceImpl<T>  implements BaseService<T>
     @Autowired
     private SqlSessionTemplate sqlsession;
 
+    public BaseServiceImpl() {
+        //判断自己是否需要支持缓存
+        this.isCacheable = this.getClass().isAnnotationPresent(Cacheable.class);
+    }
+
     @Override
-    public int addFromMap(Map<String, Object> info)
-    {
+    public int addFromMap(Map<String, Object> info) {
 
         return baseDao.addFromMap(info);
     }
 
     @Override
     @GenInfo
-    public int add(T bean)
-    {
+    public int add(T bean) {
         return baseDao.add(bean);
     }
 
     @Override
-    public boolean updateFormMap(Map<String, Object> map)
-    {
+    public boolean updateFormMap(Map<String, Object> map) {
         return baseDao.updateFormMap(map) > 0;
     }
 
     @Override
-    public boolean update(T bean)
-    {
+    public boolean update(T bean) {
         return baseDao.update(bean) > 0;
     }
 
     @Override
-    public boolean updateJpa(T bean)
-    {
+    public boolean updateJpa(T bean) {
         return baseDao.updateSelectiveById(bean) > 0;
     }
 
     @Override
-    public boolean deleteFromMap(Map<String, Object> map)
-    {
+    public boolean deleteFromMap(Map<String, Object> map) {
         return baseDao.deleteFromMap(map) > 0;
     }
 
     @Override
-    public boolean delete(T bean)
-    {
+    public boolean delete(T bean) {
         return baseDao.delete(bean) > 0;
     }
 
     @Override
-    public int findCountFromMap(Map<String, Object> map)
-    {
+    public int findCountFromMap(Map<String, Object> map) {
         return baseDao.findCountFromMap(map);
     }
 
     @Override
-    public int findCount(T bean)
-    {
+    public int findCount(T bean) {
         return baseDao.findCount(bean);
     }
 
     @Override
-    public int findCountJpa(T bean)
-    {
-        return (int)baseDao.selectCountJpa(bean);
+    public int findCountJpa(T bean) {
+        return (int) baseDao.selectCountJpa(bean);
     }
 
     @SuppressWarnings({"unchecked"})
     @Override
-    public List<T> findForList(T bean)
-    {
+    public List<T> findForList(T bean) {
         List<T> result = baseDao.selectPageJpa(bean, -1, -1);
-        transService.transMore((List<SuperBean<?>>)result);
+        transService.transMore((List<SuperBean<?>>) result);
         return result;
     }
 
@@ -136,170 +145,190 @@ public abstract class BaseServiceImpl<T>  implements BaseService<T>
      */
     @SuppressWarnings({"unchecked"})
     @Override
-    public List<T> findForList(T bean, int pageStart, int pageSize)
-    {
+    public List<T> findForList(T bean, int pageStart, int pageSize) {
         List<T> result = baseDao.selectPageJpa(bean, pageStart, pageSize);
-        transService.transMore((List<SuperBean<?>>)result);
+        transService.transMore((List<SuperBean<?>>) result);
         return result;
     }
 
     @SuppressWarnings({"unchecked"})
     @Override
-    public List<T> findForListFromMap(Map<String, Object> map)
-    {
+    public List<T> findForListFromMap(Map<String, Object> map) {
         List<T> result = baseDao.findForListFromMap(map);
-        transService.transMore((List<SuperBean<?>>)result);
+        transService.transMore((List<SuperBean<?>>) result);
         return result;
     }
 
     @Override
-    public List<Map<String, Object>> findMapList(Map<String, Object> map)
-    {
+    public List<Map<String, Object>> findMapList(Map<String, Object> map) {
         return baseDao.findMapList(map);
     }
 
     @Override
-    public T findBeanFromMap(Map<String, Object> map)
-    {
+    public T findBeanFromMap(Map<String, Object> map) {
         return baseDao.findBeanFromMap(map);
     }
 
     @Override
-    public T findBean(T bean)
-    {
+    public T findBean(T bean) {
         return baseDao.findBean(bean);
     }
 
     @Override
-    public T findBeanById(Object id)
-    {
+    public T findBeanById(Object id) {
         T bean = baseDao.selectByIdJpa(id);
-        transService.transOne((SuperBean<?>)bean);
+        transService.transOne((SuperBean<?>) bean);
         return bean;
     }
 
     @Override
-    public int updateBatch(List<Map<String, Object>> list)
-    {
+    public int updateBatch(List<Map<String, Object>> list) {
         return baseDao.updateBatch(list);
     }
 
     @Override
-    public int addBatch(Map<String, Object> paramMap)
-    {
+    public int addBatch(Map<String, Object> paramMap) {
         return baseDao.addBatch(paramMap);
     }
 
 
-
     @GenInfo
     @Override
-    public int insertSelective(T entity)
-    {
+    public int insertSelective(T entity) {
+        addCache(entity);
         return baseDao.insertSelective(entity);
     }
 
+    /**
+     * 添加缓存
+     *
+     * @param entity 实体类
+     */
+    private void addCache(T entity) {
+        if (this.isCacheable && JpaTools.persistentMetaMap.containsKey(entity.getClass().getName())) {
+            String pkey = getPkeyVal(entity);
+            this.doCache.put(pkey, entity);
+        }
+    }
+
+    /**
+     * 获取主键
+     *
+     * @param entity do
+     * @return 主键值
+     */
+    private String getPkeyVal(T entity) {
+        return ConverterUtils.toString(ReflectUtils.getValue(entity, JpaTools.persistentMetaMap.get(entity.getClass().getName()).getPrimaryColumnMeta().getProperty()));
+    }
+
     @GenInfo
     @Override
-    public  int insertJpa(T entity)
-    {
+    public int insertJpa(T entity) {
         return baseDao.insertJpa(entity);
     }
 
     @GenInfo
     @Override
-    public int insert(T entity)
-    {
+    public int insert(T entity) {
         return baseDao.insertJpa(entity);
     }
 
     @Override
-    public int batchInsert(List<T> list)
-    {
+    public int batchInsert(List<T> list) {
         return baseDao.batchInsert(list);
     }
 
     @Override
-    public int deleteById(Object primaryValue)
-    {
+    public int deleteById(Object primaryValue) {
+        if (this.isCacheable) {
+            this.doCache.remove(ConverterUtils.toString(primaryValue));
+        }
         return baseDao.deleteByIdJpa(primaryValue);
     }
 
     @Override
-    public int updateById(T entity)
-    {
+    public int updateById(T entity) {
+        updateCache(entity);
         return baseDao.updateByIdJpa(entity);
     }
 
     @Override
-    public int updateSelectiveById(T entity)
-    {
+    public int updateSelectiveById(T entity) {
+        updateCache(entity);
         return baseDao.updateSelectiveById(entity);
     }
 
+    private void updateCache(T entity) {
+        if (this.isCacheable) {
+            String pkey = this.getPkeyVal(entity);
+            this.doCache.remove(pkey);
+            this.doCache.put(pkey, entity);
+        }
+    }
+
     @Override
-    public int batchUpdate(List<T> entity)
-    {
+    public int batchUpdate(List<T> entity) {
         return baseDao.batchUpdate(entity);
     }
 
     @Override
-    public T selectById(Object primaryValue)
-    {
+    public T selectById(Object primaryValue) {
+        if (this.isCacheable) {
+            String pkey = ConverterUtils.toString(primaryValue);
+            T result = this.doCache.get(pkey);
+            if (result == null) {
+                result = baseDao.selectByIdJpa(primaryValue);
+                if (result != null) {
+                    this.doCache.put(pkey, result);
+                }
+            }
+            return result;
+        }
         return baseDao.selectByIdJpa(primaryValue);
     }
 
     @Override
-    public List<T> selectPage(T entity, long pageStart, long pageSize)
-    {
+    public List<T> selectPage(T entity, long pageStart, long pageSize) {
         List<T> result = baseDao.selectPageJpa(entity, pageStart, pageSize);
-        transService.transMore((List<SuperBean<?>>)result);
+        transService.transMore((List<SuperBean<?>>) result);
         return result;
     }
 
     @Override
-    public List<T> selectPageForOrder(T entity, long pageStart, long pageSize,String orderBy)
-    {
-        List<T> result = baseDao.selectPageForOrder(entity, pageStart, pageSize,orderBy);
-        transService.transMore((List<SuperBean<?>>)result);
+    public List<T> selectPageForOrder(T entity, long pageStart, long pageSize, String orderBy) {
+        List<T> result = baseDao.selectPageForOrder(entity, pageStart, pageSize, orderBy);
+        transService.transMore((List<SuperBean<?>>) result);
         return result;
     }
 
 
-
     @Override
-    public long selectCount(T entity)
-    {
+    public long selectCount(T entity) {
         return baseDao.selectCountJpa(entity);
     }
 
     @Override
-    public List<T> select()
-    {
+    public List<T> select() {
         return baseDao.select();
     }
 
     @Override
-    public int batchInsertCatTable(List<T> list, @CatTableFlag String flag)
-    {
+    public int batchInsertCatTable(List<T> list, @CatTableFlag String flag) {
         return baseDao.batchInsertCatTable(list, flag);
     }
 
     @Override
-    public T selectByIdCatTable(String id, @CatTableFlag String catTableFlag)
-    {
+    public T selectByIdCatTable(String id, @CatTableFlag String catTableFlag) {
         return baseDao.selectByIdCatTable(id, catTableFlag);
     }
 
     @Override
-    public T selectBean(T param)
-    {
+    public T selectBean(T param) {
         return baseDao.selectBean(param);
     }
 
 
-    public int deleteBean(T entity)
-    {
+    public int deleteBean(T entity) {
         return baseDao.deleteBean(entity);
     }
 
@@ -310,7 +339,7 @@ public abstract class BaseServiceImpl<T>  implements BaseService<T>
         try {
             nestedServiceImpl.insertOnetoX(entity);
         } catch (IllegalAccessException e) {
-            log.error(this,e);
+            log.error(this, e);
         }
         return result;
     }
@@ -321,25 +350,22 @@ public abstract class BaseServiceImpl<T>  implements BaseService<T>
         try {
             nestedServiceImpl.deleteOneToX(entity);
         } catch (IllegalAccessException e) {
-            log.error(this,e);
+            log.error(this, e);
         }
         return result;
     }
 
-    public  List<T> selectNested(T entity,long pageStart,long pageSize)
-    {
-        return baseDao.selectNested(entity,pageStart,pageSize);
+    public List<T> selectNested(T entity, long pageStart, long pageSize) {
+        return baseDao.selectNested(entity, pageStart, pageSize);
     }
 
 
-    public List<T> selectNestedForOrder(T entity,long pageStart,long pageSize, String orderBy)
-    {
-        return baseDao.selectNestedForOrder(entity,pageStart,pageSize,orderBy);
+    public List<T> selectNestedForOrder(T entity, long pageStart, long pageSize, String orderBy) {
+        return baseDao.selectNestedForOrder(entity, pageStart, pageSize, orderBy);
     }
 
-    public  Where<T> getWhereBuilder(String name)
-    {
-        return new Where<T>(sqlsession,this,name);
+    public Where<T> getWhereBuilder(String name) {
+        return new Where<T>(sqlsession, this, name);
     }
 
     /**
@@ -350,13 +376,10 @@ public abstract class BaseServiceImpl<T>  implements BaseService<T>
      * @Version: 1.0
      * @Author: jackwang
      * @Email: wanglei@sxpartner.com
-     * @History:<br>
-     *               陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
-     *
+     * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
      */
     @SuppressWarnings("hiding")
-    public class Where<T>
-    {
+    public class Where<T> {
         private SqlSessionTemplate sqlsession;
 
 
@@ -376,32 +399,31 @@ public abstract class BaseServiceImpl<T>  implements BaseService<T>
         private Map<String, Object> paramMap = new HashMap<>();
 
         /**
-         *do的class name
+         * do的class name
          */
         private String modelName;
 
         /**
-         *是否需要拼sql
+         * 是否需要拼sql
          */
         boolean isInitSql;
 
         /**
-         *分表信息
+         * 分表信息
          */
         private String catTableInfo = "";
 
         /**
-         *sql的namespace
+         * sql的namespace
          */
         private String nameSpace;
 
-        private Where(SqlSessionTemplate sqlsession, BaseService<T> baseService, String name)
-        {
+        private Where(SqlSessionTemplate sqlsession, BaseService<T> baseService, String name) {
             this.sqlsession = sqlsession;
-            modelName =  ((ParameterizedType) baseService.getClass().getGenericSuperclass()).getActualTypeArguments()[0].getTypeName();
-            this.name= name;
+            modelName = ((ParameterizedType) baseService.getClass().getGenericSuperclass()).getActualTypeArguments()[0].getTypeName();
+            this.name = name;
             nameSpace = JpaTools.statementAdapterMap.get(modelName).getNameSpace();
-            this.isInitSql =  (!exist.contains(nameSpace + "." +name));
+            this.isInitSql = (!exist.contains(nameSpace + "." + name));
 
         }
 
@@ -409,29 +431,25 @@ public abstract class BaseServiceImpl<T>  implements BaseService<T>
          * =
          *
          * @param field 字段名
-         * @param val 值
+         * @param val   值
          * @return where对象
          */
-        public Where<T> eq(String field, Object val)
-        {
+        public Where<T> eq(String field, Object val) {
             setParam(field, val);
-            if (isInitSql)
-            {
+            if (isInitSql) {
                 MybatisColumnMeta column = JpaTools.persistentMetaMap.get(modelName).getColumnMetaMap().get(field);
                 initIF(field, val);
                 whereParam.append(
-                    " AND " + column.getColumnName() + " = #{" + field + ",jdbcType=" + column.getJdbcType() + "} ");
+                        " AND " + column.getColumnName() + " = #{" + field + ",jdbcType=" + column.getJdbcType() + "} ");
                 whereParam.append(" </if> ");
             }
             return this;
 
         }
 
-        private void initIF(String field, Object val)
-        {
+        private void initIF(String field, Object val) {
             whereParam.append(" <if test=\"");
-            if (String.class == val.getClass())
-            {
+            if (String.class == val.getClass()) {
                 whereParam.append(field + "  !='' and   ");
             }
             whereParam.append(field + " !=null \"> ");
@@ -443,8 +461,7 @@ public abstract class BaseServiceImpl<T>  implements BaseService<T>
          * @param field
          * @param val
          */
-        private void setParam(String field, Object val)
-        {
+        private void setParam(String field, Object val) {
             paramMap.put(field, val);
         }
 
@@ -452,18 +469,16 @@ public abstract class BaseServiceImpl<T>  implements BaseService<T>
          * !=
          *
          * @param field 字段名
-         * @param val 值
+         * @param val   值
          * @return where对象
          */
-        public Where<T> nEq(String field, Object val)
-        {
+        public Where<T> nEq(String field, Object val) {
             setParam(field, val);
-            if (isInitSql)
-            {
+            if (isInitSql) {
                 MybatisColumnMeta column = JpaTools.persistentMetaMap.get(modelName).getColumnMetaMap().get(field);
                 initIF(field, val);
                 whereParam.append(
-                    " AND " + column.getColumnName() + " != #{" + field + ",jdbcType=" + column.getJdbcType() + "} ");
+                        " AND " + column.getColumnName() + " != #{" + field + ",jdbcType=" + column.getJdbcType() + "} ");
                 whereParam.append(" </if> ");
             }
             return this;
@@ -473,14 +488,12 @@ public abstract class BaseServiceImpl<T>  implements BaseService<T>
          * like %?%
          *
          * @param field 字段名
-         * @param val 值
+         * @param val   值
          * @return where对象
          */
-        public Where<T> like(String field, Object val)
-        {
+        public Where<T> like(String field, Object val) {
             setParam(field, val);
-            if (isInitSql)
-            {
+            if (isInitSql) {
                 MybatisColumnMeta column = JpaTools.persistentMetaMap.get(modelName).getColumnMetaMap().get(field);
                 initIF(field, val);
                 whereParam.append(" AND " + column.getColumnName() + " LIKE  concat('%',#{" + field + "},'%')");
@@ -493,14 +506,12 @@ public abstract class BaseServiceImpl<T>  implements BaseService<T>
          * like %?
          *
          * @param field 字段名
-         * @param val 值
+         * @param val   值
          * @return where对象
          */
-        public Where<T> lLike(String field, Object val)
-        {
+        public Where<T> lLike(String field, Object val) {
             setParam(field, val);
-            if (isInitSql)
-            {
+            if (isInitSql) {
                 MybatisColumnMeta column = JpaTools.persistentMetaMap.get(modelName).getColumnMetaMap().get(field);
                 initIF(field, val);
                 whereParam.append(" AND " + column.getColumnName() + " LIKE  concat('%',#{" + field + "})");
@@ -513,14 +524,12 @@ public abstract class BaseServiceImpl<T>  implements BaseService<T>
          * like ?%
          *
          * @param field 字段名
-         * @param val 值
+         * @param val   值
          * @return where对象
          */
-        public Where<T> rLike(String field, Object val)
-        {
+        public Where<T> rLike(String field, Object val) {
             setParam(field, val);
-            if (isInitSql)
-            {
+            if (isInitSql) {
                 MybatisColumnMeta column = JpaTools.persistentMetaMap.get(modelName).getColumnMetaMap().get(field);
                 initIF(field, val);
                 whereParam.append(" AND " + column.getColumnName() + " LIKE  concat(#{" + field + "},'%')");
@@ -531,12 +540,12 @@ public abstract class BaseServiceImpl<T>  implements BaseService<T>
 
         /**
          * 设置分表标志
+         *
          * @param field 字段名
-         * @param val 值
+         * @param val   值
          * @return this
          */
-        public Where<T> setCatTableFlag(String field, Object val)
-        {
+        public Where<T> setCatTableFlag(String field, Object val) {
             setParam(field, val);
             catTableInfo = "_${" + field + "}";
             return this;
@@ -548,12 +557,10 @@ public abstract class BaseServiceImpl<T>  implements BaseService<T>
          *
          * @return
          */
-        public T selectOne()
-        {
+        public T selectOne() {
             String sqlId = nameSpace + "." + name;
             //如果sql id不存在
-            if (isInitSql)
-            {
+            if (isInitSql) {
                 initSql("select");
             }
             return sqlsession.selectOne(sqlId, paramMap);
@@ -564,12 +571,10 @@ public abstract class BaseServiceImpl<T>  implements BaseService<T>
          *
          * @return
          */
-        public List<T> selectList()
-        {
+        public List<T> selectList() {
             String sqlId = nameSpace + "." + name;
             //如果sql id不存在
-            if (isInitSql)
-            {
+            if (isInitSql) {
                 initSql("select");
             }
             return sqlsession.selectList(sqlId, paramMap);
@@ -580,12 +585,10 @@ public abstract class BaseServiceImpl<T>  implements BaseService<T>
          *
          * @return
          */
-        public Integer delete()
-        {
+        public Integer delete() {
             String sqlId = modelName + "." + name;
             //如果sql id不存在
-            if (isInitSql)
-            {
+            if (isInitSql) {
                 initSql("delete");
             }
             return sqlsession.delete(sqlId, paramMap);
@@ -593,10 +596,10 @@ public abstract class BaseServiceImpl<T>  implements BaseService<T>
 
         /**
          * 初始化sql
+         *
          * @param type sql类型
          */
-        private void initSql(String type)
-        {
+        private void initSql(String type) {
             whereParam.append("</where>");
             MybatisStatementAdapter adapter = JpaTools.statementAdapterMap.get(modelName);
             // 方法名
@@ -606,12 +609,11 @@ public abstract class BaseServiceImpl<T>  implements BaseService<T>
             PersistentMeta persistentMeta = JpaTools.persistentMetaMap.get(modelName);
 
             SqlCommandType sqlCommandType = null;
-            String fromPreSql  = null;
-            switch (type)
-            {
+            String fromPreSql = null;
+            switch (type) {
                 case "select":
                     sqlCommandType = SqlCommandType.SELECT;
-                    fromPreSql = " SELECT " + persistentMeta.getColumnNames() ;
+                    fromPreSql = " SELECT " + persistentMeta.getColumnNames();
                     adapter.setResultMapId(ResultMapConstants.DEFAULT_NAMESPACE + "." + persistentMeta.getEntityName());
                     // 返回值类型
                     adapter.setResultType(persistentMeta.getType());
@@ -646,10 +648,9 @@ public abstract class BaseServiceImpl<T>  implements BaseService<T>
     /**
      * 初始化namespace
      */
-    public void initNamespace(){
-        if(nameSpace == null)
-        {
-            String modelName =  ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0].getTypeName();
+    public void initNamespace() {
+        if (nameSpace == null) {
+            String modelName = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0].getTypeName();
             nameSpace = JpaTools.statementAdapterMap.get(modelName).getNameSpace();
         }
     }
@@ -661,7 +662,7 @@ public abstract class BaseServiceImpl<T>  implements BaseService<T>
 
     @Override
     public int callSqlIdForInt(String sqlId, Object param) {
-        return sqlsession.selectOne(nameSpace + "." + sqlId,param);
+        return sqlsession.selectOne(nameSpace + "." + sqlId, param);
     }
 
     @Override
@@ -706,11 +707,11 @@ public abstract class BaseServiceImpl<T>  implements BaseService<T>
 
     @Override
     public IPage<T> selectPageMP(IPage<T> page, Wrapper<T> queryWrapper) {
-        return baseDao.selectPage(page,queryWrapper);
+        return baseDao.selectPage(page, queryWrapper);
     }
 
     @Override
     public IPage<Map<String, Object>> selectMapsPageMP(IPage<T> page, Wrapper<T> queryWrapper) {
-        return baseDao.selectMapsPage(page,queryWrapper);
+        return baseDao.selectMapsPage(page, queryWrapper);
     }
 }
