@@ -119,7 +119,10 @@
          class="easyui-datagrid"
          url="${modelConfig.dataGridUrl}&${modelConfig.extendsParam}"
         <% } %>
-       pagination="true" rownumbers="true" fitColumns="true"
+        <% if(isEmpty(parameter.disablePager)){ %>
+            pagination="true"
+        <% } %>
+       rownumbers="true" fitColumns="true"
        singleSelect="true" pageSize="10" striped="true" toolbar="#toolbar">
     <thead>
     <tr>
