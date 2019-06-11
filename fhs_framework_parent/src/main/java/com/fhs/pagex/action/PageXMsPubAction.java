@@ -152,7 +152,7 @@ public class PageXMsPubAction extends PageXBaseAction{
     public HttpResult<Boolean> update(@PathVariable("namespace")String namespace, @PathVariable("id")String id,HttpServletRequest request, HttpServletResponse response)
     {
         checkPermiessAndNamespace( namespace,"update");
-        Map<String,Object> paramMap = super.getParameterMap(request);
+        EMap<String,Object> paramMap = super.getParameterMap(request);
         paramMap.put("id",id);
         paramMap.put("groupCode", MultiTenancyContext.getProviderId());
         paramMap.put("updateUser",getSessionUser( request).getUserId());

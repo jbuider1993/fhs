@@ -53,7 +53,7 @@
            <% } %>
                 if($('#${xnamespace}_pkey_' + i).length>0)
                 {
-                    _rowData.${modelConfig.pkey} = $('#${xnamespace}_pkey_' + i).val();
+                    _rowData.pkey = $('#${xnamespace}_pkey_' + i).val();
                 }
             }
         }
@@ -81,7 +81,7 @@
                    $('#${xnamespace}_id').append('<input type="hidden" id="' + _tempId + '">');
                    $('#'+_tempId).val(_item.${modelConfig.pkey});
                    <% for(field in fieldList){ %>
-                       $('#${field.name}_' + i).${field.setValue}_item.${field.name});
+                       $('#${field.name}_' +  ${xnamespace}_index).${field.setValue}_item.${field.name});
                    <% } %>
                })
            },

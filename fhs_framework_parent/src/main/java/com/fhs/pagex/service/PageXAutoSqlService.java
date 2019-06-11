@@ -53,6 +53,8 @@ public class PageXAutoSqlService {
         parseSql("insertPageX", namespace, "insert", insertSql);
         String deleteSql = autoDel(pagexAddDTO);
         parseSql("delPageX", namespace, "delete", deleteSql);
+        deleteSql = autoDelForFkey(pagexAddDTO);
+        parseSql("delFkeyPageX", namespace, "delete", deleteSql);
         String updateSql = autoUpdateSql(pagexAddDTO);
         parseSql("updatePageX", namespace, "update", updateSql);
         String findSql = autoFind(pagexAddDTO);
@@ -200,6 +202,19 @@ public class PageXAutoSqlService {
         Map<String, Object> modelConfig = pagexAddDTO.getModelConfig();
         StringBuilder sqlBuilder = new StringBuilder(" DELETE FROM  " + modelConfig.get("table") + " WHERE ");
         sqlBuilder.append(modelConfig.get("pkey") + " = #{id}");
+        return sqlBuilder.toString();
+    }
+
+    /**
+     * 自动生成删除的sql-用于一对多
+     *
+     * @param pagexAddDTO pagexAddDTO
+     * @return 根据id删除数的sql
+     */
+    public String autoDelForFkey(PagexAddDTO pagexAddDTO) {
+        Map<String, Object> modelConfig = pagexAddDTO.getModelConfig();
+        StringBuilder sqlBuilder = new StringBuilder(" DELETE FROM  " + modelConfig.get("table") + " WHERE ");
+        sqlBuilder.append(modelConfig.get("fkey") + " = #{fkey}");
         return sqlBuilder.toString();
     }
 
@@ -372,8 +387,8 @@ public class PageXAutoSqlService {
         //是否为多租户模式
         if (ConverterUtils.toBoolean(addDTO.getModelConfig().get("isMultiTenant"))) {
             sqlBuilder.append(" <if test=\"");
-            sqlBuilder.append( " groupCode !='' and   ");
-            sqlBuilder.append( " groupCode !=null \"> ");
+            sqlBuilder.append(" groupCode !='' and   ");
+            sqlBuilder.append(" groupCode !=null \"> ");
             sqlBuilder.append(" AND group_code <![CDATA[=]]> #{groupCode}");
             sqlBuilder.append("</if>");
 

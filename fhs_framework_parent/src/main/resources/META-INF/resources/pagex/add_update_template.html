@@ -74,14 +74,7 @@ include("/page/tags/form_include.html"){}
     function save() {
         var flag = true;
 
-        // 如果自定义校验方法没有校验正确，则也校验下form里面内容是否正确
-        //保存数据加载
-        if (isExitsFunction("onSave")) {
-            flag = onSave();
-            if(typeof (flag) == 'undefined') {
-                flag = true;
-            }
-        }
+
         <!--每个tag在onSaveList的时候执行的方法  -->
         <% for(onSave in tagOnSaveList){ %>
             if(!${onSave})
@@ -89,6 +82,14 @@ include("/page/tags/form_include.html"){}
                 flag = false;
             }
         <% } %>
+        // 如果自定义校验方法没有校验正确，则也校验下form里面内容是否正确
+        //保存数据加载
+        if (flag && isExitsFunction("onSave")) {
+            flag = onSave();
+            if(typeof (flag) == 'undefined') {
+                flag = true;
+            }
+        }
         if(!flag)
         {
             addUpdateForm.check();

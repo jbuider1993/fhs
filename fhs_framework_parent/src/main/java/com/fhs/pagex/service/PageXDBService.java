@@ -10,6 +10,7 @@ import com.fhs.core.base.bean.SuperBean;
 import com.fhs.core.exception.BusinessException;
 import com.fhs.core.trans.TransService;
 import com.fhs.pagex.bean.DefaultPageXBean;
+import com.mybatis.jpa.common.ColumnNameUtil;
 import org.apache.commons.collections.map.HashedMap;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +68,7 @@ public class PageXDBService {
      */
     public int insert(EMap<String,Object> paramMap, String namespace)
     {
+        insertAndUpdateX(paramMap,namespace,true);
         return sqlsession.insert(getSqlNamespace() + namespace + "_insertPageX",paramMap);
     }
 
@@ -75,39 +77,54 @@ public class PageXDBService {
      * @param paramMap 参数
      * @param namespace namespace
      */
-    private void insertAndUpdateX(EMap<String,Object> paramMap, String namespace)
+    private void insertAndUpdateX(EMap<String,Object> paramMap, String namespace,boolean isAdd)
     {
         PagexAddDTO addDTO = PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace);
         Map<String,Object> modelConfig = addDTO.getModelConfig();
+
+
         //是否存在一对多
         if(ConverterUtils.toBoolean(addDTO.getModelConfig().get("isOne2X")))
         {
-            String createUser =paramMap.getStr("createUser");
+            String createUser = isAdd ? paramMap.getStr("createUser") : paramMap.getStr("updateUser");
             String groupCode = paramMap.getStr("groupCode");
-            String pkey = paramMap.getStr("pkey");String[] namespaces = ConverterUtils.toString(modelConfig.get("xNamespaces")).split(",");
+            String pkey = isAdd ? paramMap.getStr("pkey") : paramMap.getStr(modelConfig.get("pkey"));
+            List<String> namespaces = new ArrayList<>();
+            List<Map<String,Object>> fields =  addDTO.getFormFieldSett();
+            //把所有的namespace拿到
+            for(Map<String,Object> field:fields)
+            {
+                if("one2x".equals(field.get("type")))
+                {
+                    namespaces.add(ConverterUtils.toString(field.get("namespace")));
+                }
+            }
+            // ConverterUtils.toString(modelConfig.get("xNamespaces")).split(",");
             JSONArray tempJsonArray = null;
+            Map<String,String> deleteFKeyParam = new HashMap<>();
+            deleteFKeyParam.put("fkey",pkey);
             //遍历一对多的数据然后插入
             for(String xNamespace : namespaces)
             {
+
+                sqlsession.delete(getSqlNamespace() + xNamespace + "_delFkeyPageX",deleteFKeyParam);
                 //取出fkey的列名字
-                String fkeyField = ConverterUtils.toString(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace).getModelConfig().get("fkey"));
-                String pkeyField = ConverterUtils.toString(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace).getModelConfig().get("pkey"));
+                String fkeyField = ColumnNameUtil.underlineToCamel(ConverterUtils.toString(PagexDataService.SIGNEL.getPagexAddDTOFromCache(xNamespace).getModelConfig().get("fkey")));
+                String pkeyField = ConverterUtils.toString(PagexDataService.SIGNEL.getPagexAddDTOFromCache(xNamespace).getModelConfig().get("pkey"));
                 tempJsonArray = JSON.parseArray(ConverterUtils.toString(paramMap.get(xNamespace)));
                 for(int i =0;i<tempJsonArray.size();i++)
                 {
                     JSONObject extendsChild = tempJsonArray.getJSONObject(i);
-                    if(CheckUtils.isNotEmpty(extendsChild.get(pkeyField)))
-                    {
-                        sqlsession.update(getSqlNamespace() + namespace + "_updatePageX",paramMap);
-                    }
-                    else
+                    //没有id就生成一个
+                    if(!extendsChild.containsKey("pkey"))
                     {
                         extendsChild.put("pkey",StringUtil.getUUID());
-                        extendsChild.put(fkeyField,pkey);
-                        extendsChild.put("createUser",createUser);
-                        extendsChild.put("groupCode",groupCode);
-                        sqlsession.insert(getSqlNamespace() + xNamespace + "_insertPageX",extendsChild);
                     }
+                    extendsChild.put(fkeyField,pkey);
+                    extendsChild.put("updateUser",createUser);
+                    extendsChild.put("createUser",createUser);
+                    extendsChild.put("groupCode",groupCode);
+                    sqlsession.insert(getSqlNamespace() + xNamespace + "_insertPageX",extendsChild);
                 }
             }
         }
@@ -175,12 +192,13 @@ public class PageXDBService {
 
     /**
      * 获取bena的json
-     * @param param 过滤参数
+     * @param paramMap 过滤参数
      * @param namespace namespace
      * @return 更新了几行默认是1
      */
-    public int update(Map<String,Object> param, String namespace){
-        return sqlsession.update(getSqlNamespace() + namespace + "_updatePageX",param);
+    public int update(EMap<String,Object> paramMap, String namespace){
+        insertAndUpdateX(paramMap,namespace,false);
+        return sqlsession.update(getSqlNamespace() + namespace + "_updatePageX",paramMap);
     }
 
     /**
