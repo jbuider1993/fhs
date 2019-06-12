@@ -77,4 +77,23 @@ public class FrontUserApiServiceCloud implements FeignFrontUserApiService {
         boolean result = 0 < frontUserService.updateSelectiveById(UcenterFrontUser.builder().userId(frontUserVo.getUserId()).mobile(frontUserVo.getMobile()).realName(frontUserVo.getRealName()).build());
         return HttpResult.success(result);
     }
+
+    @RequestMapping("/add")
+    public HttpResult<Boolean> add(@RequestBody FrontUserVo frontUserVo) {
+        UcenterFrontUser user = new UcenterFrontUser();
+        BeanUtils.copyProperties(frontUserVo,user);
+        user.preInsert(null);
+        return HttpResult.success(frontUserService.insertJpa(user)>0);
+    }
+
+    @RequestMapping("/find")
+    public HttpResult<FrontUserVo> find(@RequestBody FrontUserVo frontUserVo) {
+        UcenterFrontUser user = new UcenterFrontUser();
+        BeanUtils.copyProperties(frontUserVo,user);
+        user = frontUserService.selectBean(user);
+        BeanUtils.copyProperties(user,frontUserVo);
+        return HttpResult.success(frontUserVo);
+    }
+
+
 }
