@@ -34,4 +34,20 @@ public interface FeignFrontUserApiService {
     @RequestLine("POST /api/frontUser/update")
     HttpResult<Boolean> update(@RequestBody FrontUserVo frontUserVo);
 
+    /**
+     * 添加用户信息
+     * @param frontUserVo 用户vo
+     * @return 是否添加成功
+     */
+    @RequestLine("POST /api/frontUser/add")
+    HttpResult<Boolean> add(@RequestBody FrontUserVo frontUserVo);
+
+    /**
+     * 使用给定的参数当做参数过滤用户
+     * @param frontUserVo 用户vo
+     * @return 用户vo
+     */
+    @RequestLine("POST /api/frontUser/find")
+    HttpResult<FrontUserVo> find(@RequestBody FrontUserVo frontUserVo);
+
 }
