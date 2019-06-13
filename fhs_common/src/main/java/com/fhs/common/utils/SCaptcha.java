@@ -28,7 +28,7 @@ public class SCaptcha
     // 验证码图片Buffer
     private BufferedImage buffImg = null;
 
-    private char[] codeSequence = { '0', '1' ,'2', '3', '4', '5', '6', '7', '8', '9' };
+    private static char[] codeSequence = { '0', '1' ,'2', '3', '4', '5', '6', '7', '8', '9' };
 
     // 生成随机数
     private static  Random random = new Random();
@@ -111,6 +111,20 @@ public class SCaptcha
             randomCode.append(strRand);
         }
         code = randomCode.toString();
+    }
+    /**
+     * 生成几位随机数
+     * @param length 几位
+     * @return 随机数
+     */
+    public static String getRandomCode(int length)
+    {
+        StringBuffer randomCode = new StringBuffer();
+        for (int i = 0; i < length; i++) {
+            randomCode.append(String.valueOf(codeSequence[random
+                    .nextInt(codeSequence.length)]));
+        }
+        return randomCode.toString();
     }
 
     /** 获取随机颜色 */
