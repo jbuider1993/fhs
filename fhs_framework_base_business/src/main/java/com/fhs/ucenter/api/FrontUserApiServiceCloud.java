@@ -91,6 +91,10 @@ public class FrontUserApiServiceCloud implements FeignFrontUserApiService {
         UcenterFrontUser user = new UcenterFrontUser();
         BeanUtils.copyProperties(frontUserVo,user);
         user = frontUserService.selectBean(user);
+        if(user==null)
+        {
+            return HttpResult.error(null);
+        }
         BeanUtils.copyProperties(user,frontUserVo);
         return HttpResult.success(frontUserVo);
     }
