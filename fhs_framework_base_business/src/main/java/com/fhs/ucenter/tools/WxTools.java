@@ -5,12 +5,14 @@ import com.fhs.common.utils.Logger;
 import com.fhs.core.exception.ParamException;
 import com.fhs.ucenter.bean.UcenterMpSett;
 import com.fhs.ucenter.service.UcenterMpSettService;
+import com.fhs.wx.WxMpInRedisConfigStorage;
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;
 import me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +35,9 @@ public class WxTools
      *key 编码 val 是对应的WxMpService
      */
     private Map<String, WxMpService> wxMpServiceMap = new HashMap<>();
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      *key 编码 val 是对应的WxMpMessageRouter
@@ -77,7 +82,7 @@ public class WxTools
         {
             throw new ParamException("找不到对应的配置:" + code);
         }
-        WxMpInMemoryConfigStorage config = new WxMpInMemoryConfigStorage();
+        WxMpInRedisConfigStorage config = new WxMpInRedisConfigStorage(redisTemplate);
         config.setAppId(mpSett.getAppId()); // 设置微信公众号的appid
         config.setSecret(mpSett.getAppSecret()); // 设置微信公众号的app corpSecret
         config.setToken(mpSett.getToken()); // 设置微信公众号的token
