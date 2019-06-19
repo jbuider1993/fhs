@@ -45,8 +45,13 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     /**
      * 缓存 默认时间：半个小时
      */
-    @CreateCache(expire = 1800, name = "docache")
+    @CreateCache(expire = 1800, name = "docache:")
     private Cache<String, T> doCache;
+
+    /**
+     * do的namespace
+     */
+    private String namespace;
 
     /**
      * 判断自己是否需要支持自动缓存
@@ -75,6 +80,10 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     public BaseServiceImpl() {
         //判断自己是否需要支持缓存
         this.isCacheable = this.getClass().isAnnotationPresent(Cacheable.class);
+        if(isCacheable) {
+            this.namespace =this.getClass().getAnnotation(Cacheable.class).value();
+        }
+
     }
 
     @Override
@@ -207,7 +216,7 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     private void addCache(T entity) {
         if (this.isCacheable && JpaTools.persistentMetaMap.containsKey(entity.getClass().getName())) {
             String pkey = getPkeyVal(entity);
-            this.doCache.put(pkey, entity);
+            this.doCache.put(namespace + ":" + pkey, entity);
         }
     }
 
@@ -241,7 +250,7 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     @Override
     public int deleteById(Object primaryValue) {
         if (this.isCacheable) {
-            this.doCache.remove(ConverterUtils.toString(primaryValue));
+            this.doCache.remove(namespace + ":" + ConverterUtils.toString(primaryValue));
         }
         return baseDao.deleteByIdJpa(primaryValue);
     }
@@ -261,8 +270,8 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     private void updateCache(T entity) {
         if (this.isCacheable) {
             String pkey = this.getPkeyVal(entity);
-            this.doCache.remove(pkey);
-            this.doCache.put(pkey, entity);
+            this.doCache.remove(namespace + ":" + pkey);
+            this.doCache.put(namespace + ":" + pkey, entity);
         }
     }
 
@@ -275,11 +284,11 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     public T selectById(Object primaryValue) {
         if (this.isCacheable) {
             String pkey = ConverterUtils.toString(primaryValue);
-            T result = this.doCache.get(pkey);
+            T result = this.doCache.get(namespace + ":" + pkey);
             if (result == null) {
                 result = baseDao.selectByIdJpa(primaryValue);
                 if (result != null) {
-                    this.doCache.put(pkey, result);
+                    this.doCache.put(namespace + ":" + pkey, result);
                 }
             }
             return result;
