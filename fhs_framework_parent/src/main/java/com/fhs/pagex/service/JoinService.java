@@ -80,6 +80,7 @@ public class JoinService implements InitializingBean {
             }
             String tempNameSpace = null;
             String camaelColumn = null;
+            //遍历所有需要join的字段
             for(String column:columnSet)
             {
                 Set<String> columnVal = new HashSet<>();
