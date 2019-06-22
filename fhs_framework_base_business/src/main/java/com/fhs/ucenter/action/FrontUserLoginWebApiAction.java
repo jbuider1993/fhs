@@ -221,7 +221,7 @@ public class FrontUserLoginWebApiAction implements InitializingBean {
             // 不存在的时候 构建地址 让用户去请求openId
             String url = EConfig.getPathPropertiesValue("basePath") + "/webApi/front/getOpenIdLogin";
             String wxUrl = wxTools.getWxMpService(code).oauth2buildAuthorizationUrl(url,
-                    "snsapi_userinfo",
+                    "snsapi_base",
                     null);
             try {
                 response.sendRedirect(wxUrl);
