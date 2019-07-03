@@ -12,58 +12,55 @@
 <jsp:include page="/page/ms/common/form_include.jsp"></jsp:include>
 	<!--修改个人信息-->
 	<div id="updateUserInfoDiv">
-		<form id="updateUserInfoForm" method="post">
-			<div class="fitem">
-				<hfs:input  maxLenth="20" name="userName" dataType="s2-10" title="用户名" required="true" />
-				<hfs:input  maxLenth="255" name="email" dataType="e|empty" title="邮箱"  />
-			</div>
-			<div class="fitem">
-				<hfs:input  maxLenth="20" name="mobile" dataType="*,m" title="手机号" required="true" />
-			</div>
-
-		</form>
+        <div class="fitem">
+            <input id="userId" name="userId" hidden="true"/>
+            <hfs:input  maxLenth="20" name="userName" dataType="s2-10" title="用户名" required="true" />
+            <hfs:input  maxLenth="20" name="userLoginName" dataType="/^[a-zA-Z0-9_]{1,}$/" title="登录名" required="true" />
+        </div>
+        <div class="fitem">
+            <hfs:input  maxLenth="20" name="mobile" dataType="*,m" title="手机号" required="true" />
+            <hfs:input name="sex" title="性别" />
+        </div>
+        <div class="fitem">
+            <hfs:input  maxLenth="255" name="email" dataType="e|empty" title="邮箱"  />
+            <hfs:province name="provinceId" areaName="areaId" cityName="cityId" required="false" title="省份" />
+        </div>
+        <div class="fitem">
+            <hfs:input  maxLenth="255" name="organizationId" title="所属机构" required="true" />
+        </div>
 	</div>
 	<div id="dlg-buttons">
 		<center>
-			<a href="javascript:void(0)" class="easyui-linkbutton btn btn-suc l-btn l-btn-small"
-				onclick="save()">提交</a> <a href="javascript:void(0)"
+			 <a href="javascript:void(0)"
 				class="easyui-linkbutton btn btn-can l-btn l-btn-small" onclick="top.closeDialog();">关闭</a>
 		</center>
 	</div>
 
 <script type="text/javascript">
-	var url_temp = "${basePath}ms/sysUser/updateOwnUserInfo";
-	var updateUserInfoForm = null;
+    var isInitProvinceId = false;
 	$(document).ready(function() {
-		//form验证。
-        updateUserInfoForm = $('#updateUserInfoForm').Validform({
-			tiptype : 5
-		});
-        $('#userName').val('${sessionUser.userName}');
-        $('#email').val('${sessionUser.email}');
-        $('#mobile').val('${sessionUser.mobile}');
-		// 如果是编辑页面，就初始化一些数据
+        renderView("updateUserInfoDiv");
+        getOwnUserInfo();
 	})
 
-	function save() {
-
-		$('#updateUserInfoForm').form('submit', {
-			url : url_temp,
-			onSubmit : function() {
-				return (updateUserInfoForm.check());
-			},
-			success : function(d) {
-				d = $.parseJSON(d);
-				if (d.result) {
-					Ealert('修改成功');
-                    setTimeout(function(){top.closeDialog()},2000);
-				} else {
-					EalertE('修改失败，请联系管理员');
-				}
-			}
-		});
-
-	}
+    function getOwnUserInfo() {
+        $.ajax({
+            type: 'get',
+            url: "${basePath}ms/sysUser/getOwnUserInfo",
+            dataType: 'json',
+            async:false,
+            success: function(res){
+                $("#userId").val(res.userId);
+                $("input[name='userName']").val(res.userName);
+                $("input[name='userLoginName']").val(res.userLoginName);
+                $("input[name='mobile']").val(res.mobile)
+                $("input[name='sex']").val(res.transMap.sexName);
+                $("input[name='email']").val(res.email);
+                $("input[name='organizationId']").val(res.transMap.organizationIdOrganizationName);
+                $("input[name='provinceId']").val(res.provinceId);
+            }
+        });
+    }
 </script>
 <c:if test="${param.isFrame==true}">
 	</body>

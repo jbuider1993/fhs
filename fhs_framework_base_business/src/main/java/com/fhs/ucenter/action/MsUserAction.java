@@ -387,4 +387,15 @@ public class MsUserAction extends ModelSuperAction<SysUser>
         return bean;
     }
 
+	/**
+     * 获取自己的个人信息
+     * @param request
+     * @return
+     */
+    @RequestMapping("getOwnUserInfo")
+    @ResponseBody
+    public SysUser getOwnUserInfo(HttpServletRequest request){
+        return sysUserService.findSysUserById(super.getSessionuser(request).getUserId());
+    }
+
 }
