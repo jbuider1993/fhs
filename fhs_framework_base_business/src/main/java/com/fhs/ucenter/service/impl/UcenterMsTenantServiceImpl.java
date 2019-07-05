@@ -32,7 +32,7 @@ public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenant>
     public int insert(UcenterMsTenant tenant) {
         SysUser adminUser = new SysUser();
         adminUser.setGroupCode(tenant.getGroupCode());
-        adminUser.setPassword(Md5Util.MD5(tenant.getGroupCode()+"123456"));
+        adminUser.setPassword(Md5Util.MD5(tenant.getGroupCode()+"123456").toLowerCase());
         adminUser.setUserId(StringUtil.getUUID());
         adminUser.setIsAdmin(Constant.INT_TRUE);
         adminUser.setUserName(tenant.getTenantName());

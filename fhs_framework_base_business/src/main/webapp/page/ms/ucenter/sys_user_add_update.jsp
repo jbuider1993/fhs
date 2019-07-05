@@ -20,6 +20,7 @@
 		<hfs:wordBook name="sex" title="性别" code="sex"  />
 	</div>
 	<div class="fitem">
+		<input type="hidden" id="passWd" name="passWd"/>
 		<hfs:input  maxLenth="64" name="password" title="密码" required="true" type="password" />
 		<hfs:wordBook name="isDisable" title="状态" code="is_disable" required="true" />
 	</div>
