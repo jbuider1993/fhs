@@ -3,6 +3,7 @@ package com.fhs.config;
 import com.fhs.pagex.filter.PageXFilter;
 import com.fhs.shiro.ShiroCasRealm;
 import com.fhs.shiro.ShiroRealm;
+import com.fhs.shiro.cache.ShiroSpringCacheManager;
 import io.buji.pac4j.filter.CallbackFilter;
 import io.buji.pac4j.filter.LogoutFilter;
 import io.buji.pac4j.realm.Pac4jRealm;
@@ -26,6 +27,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.JacksonJsonRedisSerializer;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import javax.servlet.Filter;
 import java.util.LinkedHashMap;
@@ -103,17 +111,35 @@ public class ShiroConfiguration{
         return new ShiroRealm();
     }
 
-    @Bean(name = "ehCacheManager")
-    public EhCacheManager ehCacheManager() {
-        EhCacheManager ehCacheManager = new EhCacheManager();
-        return ehCacheManager;
+
+
+    /**
+     * 自定义的缓存管理器
+     * @return  自定义缓存管理器
+     */
+    @Bean(name = "shiroSpringCacheManager")
+    public ShiroSpringCacheManager shiroSpringCacheManager( RedisConnectionFactory factory) {
+        RedisTemplate template = new RedisTemplate();
+        template.setConnectionFactory(factory);
+        //定义key的序列化方式
+        JdkSerializationRedisSerializer valSerializer =new JdkSerializationRedisSerializer();
+        template.setValueSerializer(valSerializer);
+        GenericJackson2JsonRedisSerializer keySerializer = new GenericJackson2JsonRedisSerializer();
+        template.setKeySerializer(keySerializer);
+        template.afterPropertiesSet();
+        RedisCacheManager rcm = new RedisCacheManager(template);
+        //设置缓存过期时间
+        rcm.setDefaultExpiration(60);//秒
+        ShiroSpringCacheManager cacheManager = new ShiroSpringCacheManager();
+        cacheManager.setCacheManager(rcm);
+        return cacheManager;
     }
 
     @Bean(name = "securityManager")
-    @DependsOn("shiroRealm")
-    public DefaultWebSecurityManager securityManager() {
+    @DependsOn({"shiroRealm","shiroSpringCacheManager"})
+    public DefaultWebSecurityManager securityManager(RedisConnectionFactory factory) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setCacheManager(ehCacheManager());// 用户授权/认证信息Cache, 采用EhCache 缓存
+        securityManager.setCacheManager(shiroSpringCacheManager(factory));// 用户授权/认证信息Cache, 采用EhCache 缓存
        /*if (isEnableCas) {
             securityManager.setSubjectFactory(new CasSubjectFactory());
         }*/
@@ -121,6 +147,8 @@ public class ShiroConfiguration{
         securityManager.setRealm(shiroRealm());
         return securityManager;
     }
+
+
 
     /**
      * 使用工厂模式，创建并初始化ShiroFilter

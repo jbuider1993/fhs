@@ -3,16 +3,16 @@ package com.fhs.common;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.fhs.common.utils.CheckUtils;
-import com.fhs.common.utils.ExcelUtils;
-import com.fhs.common.utils.Logger;
-import com.fhs.common.utils.ReflectUtils;
+import com.fhs.common.utils.*;
 import com.fhs.core.base.bean.SuperBean;
+import com.fhs.core.config.EConfig;
 import com.fhs.core.result.HttpResult;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -160,4 +160,29 @@ public class ExcelExportTools {
             LOG.error("导出excel出错",e);
         }
     }
+
+
+    /**
+     * 有数据导出excel by jackwang
+     * @param dataList  数据集合
+     * @param request request
+     */
+    public static File exportExcel(List<?> dataList, HttpServletRequest request)
+    {
+        Object[][] rows = parseExportData(request,dataList);
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet = wb.createSheet();
+        String[] titleArray = getExportTitleArray(request);
+        ExcelUtils.initSheet07(sheet, rows, titleArray, null, null,1);
+        try {
+            File excelFile = new File(EConfig.getPathPropertiesValue("saveFilePath") + "/temp/excel/" + StringUtil.getUUID() + ".xlsx");
+            wb.write(new FileOutputStream(excelFile));
+        } catch (IOException e) {
+            LOG.error("导出excel出错",e);
+        }
+        return null;
+    }
+
+
+
 }
