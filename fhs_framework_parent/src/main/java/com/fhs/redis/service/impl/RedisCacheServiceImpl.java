@@ -1,7 +1,6 @@
 package com.fhs.redis.service.impl;
 
 import com.fhs.common.constant.Constant;
-import com.fhs.core.db.DataSource;
 import com.fhs.redis.service.RedisCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -120,6 +119,7 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
         this.addSet(key, (E[])objSet.toArray());
     }
 
+
     @Override
     public boolean addStr(final String key, final String value)
     {
@@ -214,11 +214,15 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
         });
     }
 
+    /**
+     * 根据key获取set集合
+     * @param key key
+     * @return
+     */
     @Override
     public Set<E> getSet(String key)
     {
-        // TODO Auto-generated method stub
-        return null;
+        return redisTemplate.opsForSet().members(key);
     }
 
     @Override
