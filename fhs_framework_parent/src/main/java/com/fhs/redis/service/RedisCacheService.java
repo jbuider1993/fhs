@@ -62,6 +62,13 @@ public interface RedisCacheService<E>
     void addSet(String key, Set<E> objSet);
 
     /**
+     * 添加value 到set中
+     * @param key
+     * @param value
+     */
+    void addSet(String key, E value);
+
+    /**
      * 添加一个list到集合中
      *
      * @param key key
@@ -70,7 +77,22 @@ public interface RedisCacheService<E>
     void addSet(String key, List<E> list);
 
     /**
-     * 获取一个set（暂时无用）
+     * 判断set中有无value 有true
+     * @param key
+     * @param value
+     * @return
+     */
+    boolean contains(String key, Object value);
+
+    /**
+     * 删除set集合中指定的value
+     * @param key
+     * @param value
+     */
+    void removeSetValue(String key, Object value);
+
+    /**
+     * 获取一个set
      *
      * @param key key
      * @return key对应的set
@@ -123,21 +145,21 @@ public interface RedisCacheService<E>
      * @param key key
      * @param timeout 超时时间  秒
      */
-    boolean expire(String key,int timeout);
+    boolean expire(String key, int timeout);
 
     /**
      * 从队列头插入值
      * @param key
      * @param value
      */
-    void leftPush(String key,E value);
+    void leftPush(String key, E value);
 
     /**
      * 从队列尾部插入值
      * @param key
      * @param value
      */
-    void rightPush(String key,E value);
+    void rightPush(String key, E value);
 
     /**
      * 从头开始取值

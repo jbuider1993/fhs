@@ -112,6 +112,12 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
         this.addSet(key, (E[])list.toArray());
     }
 
+    @Override
+    public void addSet(String key, E value)
+    {
+        redisTemplate.opsForSet().add(key,value);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public void addSet(String key, List<E> objSet)
@@ -119,6 +125,17 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
         this.addSet(key, (E[])objSet.toArray());
     }
 
+    @Override
+    public boolean contains(String key, Object value)
+    {
+        return redisTemplate.opsForSet().isMember(key,value);
+    }
+
+    @Override
+    public void removeSetValue(String key, Object value)
+    {
+        redisTemplate.opsForSet().remove(key, value);
+    }
 
     @Override
     public boolean addStr(final String key, final String value)
@@ -214,11 +231,6 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
         });
     }
 
-    /**
-     * 根据key获取set集合
-     * @param key key
-     * @return
-     */
     @Override
     public Set<E> getSet(String key)
     {
