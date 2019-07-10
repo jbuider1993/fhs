@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,8 +49,10 @@ public class WordBookTransServiceImpl implements ITransTypeService,InitializingB
             String bookCode = StringUtil.toString(ReflectUtils.getValue(obj, tempField.getName()));
             String key = tempTrans.key().contains("KEY_") ? StringUtil.toString(ReflectUtils.getValue(obj, tempTrans.key().replace("KEY_", ""))) : tempTrans.key();
             obj.getTransMap().put(tempField.getName() + "Name", redisCacheService.getStr(BASE_TRANS_KEY + key + bookCode));
+            /*
+            这块翻译影响性能
             obj.getTransMap().put(tempField.getName() + "NameTW", redisCacheService.getStr(BASE_TRANS_KEY + key + bookCode + "_TW"));
-            obj.getTransMap().put(tempField.getName() + "NameEN", redisCacheService.getStr(BASE_TRANS_KEY + key + bookCode+ "_EN"));
+            obj.getTransMap().put(tempField.getName() + "NameEN", redisCacheService.getStr(BASE_TRANS_KEY + key + bookCode+ "_EN"));*/
         }
     }
 
