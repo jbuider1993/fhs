@@ -6,6 +6,7 @@ import com.fhs.common.utils.Logger;
 import com.fhs.core.config.EConfig;
 import com.fhs.pagex.service.JoinService;
 import com.fhs.pagex.service.PagexDataService;
+import com.fhs.pagex.trans.PageXTransServiceImpl;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * 自动读取js内容，刷新到缓存中定时任务
@@ -46,6 +48,9 @@ public class RefreshCacheTask implements InitializingBean,Runnable,ApplicationCo
     @Autowired
     private JoinService joinService;
 
+    @Autowired
+    private PageXTransServiceImpl pageXTransService;
+
     /**
      * 资源加载器
      */
@@ -58,6 +63,7 @@ public class RefreshCacheTask implements InitializingBean,Runnable,ApplicationCo
         {
             new Thread(() -> {
                 this.refresh();
+                pageXTransService.refreshPageXCache(new HashMap<>());
             }).start();
         }
         catch(Exception e)
@@ -114,6 +120,7 @@ public class RefreshCacheTask implements InitializingBean,Runnable,ApplicationCo
                 path = path.substring(path.indexOf("/pagex/"));
                 PagexDataService.SIGNEL.getAddPageExtendsHtmlPathMap().put(resource.getFilename().replace(".html",""),path);
             }
+
         } catch (IOException e) {
             LOG.error(e);
         }
