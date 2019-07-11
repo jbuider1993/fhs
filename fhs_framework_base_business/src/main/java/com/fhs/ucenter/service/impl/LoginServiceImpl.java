@@ -102,9 +102,11 @@ public class LoginServiceImpl implements LoginService
     @Override
     public String addBindAndUser(UcenterFrontUser user, String openId, int openIdType) {
         user.setUserId(StringUtil.getUUID());
+        user.preInsert(null);
         userService.insertJpa(user);
         UcenterFrontUserBind bind = UcenterFrontUserBind.builder().id(StringUtil.getUUID()).authOpenid(openId)
                 .authOpenidType(openIdType).userId(user.getUserId()).build();
+        bind.preInsert(null);
         userBindService.insertJpa(bind);
         return user.getUserId();
     }

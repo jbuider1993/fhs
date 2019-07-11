@@ -1,5 +1,7 @@
 package com.fhs.ucenter.api;
 
+import com.fhs.common.utils.CheckUtils;
+import com.fhs.common.utils.Logger;
 import com.fhs.core.db.DataSource;
 import com.fhs.core.exception.ParamChecker;
 import com.fhs.core.exception.ParamException;
@@ -33,6 +35,8 @@ import java.util.Map;
 @DataSource("ucenter")
 public class FrontUserApiServiceCloud implements FeignFrontUserApiService {
 
+    private static final Logger LOG = Logger.getLogger(FrontUserApiServiceCloud.class);
+
     @Autowired
     private LoginService loginService;
 
@@ -50,7 +54,7 @@ public class FrontUserApiServiceCloud implements FeignFrontUserApiService {
         {
             userId = loginService.getUserIdByAccessToken(getSingleFrontUserForm.getAccessToken());
         }
-        if(userId == null)
+        if(CheckUtils.isNullOrEmpty(userId))
         {
             throw new ParamException("用户id和用户accessToken都没传或者无效");
         }
