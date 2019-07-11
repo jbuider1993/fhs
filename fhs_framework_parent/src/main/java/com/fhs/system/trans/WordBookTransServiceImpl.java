@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 字典翻译服务
@@ -28,6 +30,11 @@ public class WordBookTransServiceImpl implements ITransTypeService,InitializingB
      * redis 的key
      */
     private static final String BASE_TRANS_KEY = "service:wordbook:trans:";
+
+    /**
+     * 用来放字典缓存的map
+     */
+    private static Map<String,String> wordBookTransMap = new HashMap<>();
 
     /**
      * redis 缓存服务
@@ -48,7 +55,9 @@ public class WordBookTransServiceImpl implements ITransTypeService,InitializingB
             tempTrans = tempField.getAnnotation(Trans.class);
             String bookCode = StringUtil.toString(ReflectUtils.getValue(obj, tempField.getName()));
             String key = tempTrans.key().contains("KEY_") ? StringUtil.toString(ReflectUtils.getValue(obj, tempTrans.key().replace("KEY_", ""))) : tempTrans.key();
-            obj.getTransMap().put(tempField.getName() + "Name", redisCacheService.getStr(BASE_TRANS_KEY + key + bookCode));
+            //sex_0/1  男 女
+            obj.getTransMap().put(tempField.getName() + "Name", wordBookTransMap.get(key + "_" + bookCode));
+
             /*
             这块翻译影响性能
             obj.getTransMap().put(tempField.getName() + "NameTW", redisCacheService.getStr(BASE_TRANS_KEY + key + bookCode + "_TW"));
@@ -63,12 +72,22 @@ public class WordBookTransServiceImpl implements ITransTypeService,InitializingB
         {
             transOne(obj, toTransList);
         }
-
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
         //注册自己为一个服务
         TransService.registerTransType(Constant.WORD_BOOK, this);
+        TransMessageListener.regTransRefresher(Constant.WORD_BOOK,this::refreshWordBookCache);
+    }
+
+    /**
+     * 根据消息刷新自己的缓存
+     * 如果消息中包含key=xx 则只刷新这个key的缓存 如果不包含key则刷新全部缓存
+     * @param message
+     */
+    public void refreshWordBookCache(Map<String,Object> message)
+    {
+        //调用base的接口
     }
 }

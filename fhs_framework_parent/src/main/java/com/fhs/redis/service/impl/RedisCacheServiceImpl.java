@@ -287,6 +287,10 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
         return redisTemplate.boundValueOps(key).increment(-1);
     }
 
+    @Override
+    public void convertAndSend(String channel, String message) {
+        redisTemplate.convertAndSend(channel,message);
+    }
 
     @Override
     public Long getForListSize(String key)

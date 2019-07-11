@@ -203,4 +203,11 @@ public interface RedisCacheService<E>
      * @param key
      */
     public long incrSub(String key) ;
+
+    /**
+     * 给redis 的channel 发送 message
+     * @param channel
+     * @param message
+     */
+     void convertAndSend(String channel,String message);
 }
