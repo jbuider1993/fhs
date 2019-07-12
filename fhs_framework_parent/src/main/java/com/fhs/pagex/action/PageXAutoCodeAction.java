@@ -6,6 +6,7 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.pagex.service.PageXAutoJavaService;
 import com.fhs.pagex.service.PageXAutoSqlService;
 import com.fhs.pagex.service.PagexDataService;
+import com.fhs.pagex.trans.PageXTransServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
@@ -30,6 +32,9 @@ public class PageXAutoCodeAction implements ApplicationRunner {
 
     @Autowired
     private PageXAutoSqlService pageXAutoSqlService;
+
+    @Autowired
+    private PageXTransServiceImpl pageXTransService;
 
     @RequestMapping("/autoJavaAndSql")
     @ResponseBody
@@ -58,6 +63,7 @@ public class PageXAutoCodeAction implements ApplicationRunner {
                 }).start();
             }
             countDownLatch.await();
+
         }
         return HttpResult.success(true);
     }
@@ -67,8 +73,9 @@ public class PageXAutoCodeAction implements ApplicationRunner {
         new Thread(() -> {
             try {
                 autoCode(null);
+                pageXTransService.refreshPageXCache(new HashMap<>());
             } catch (Exception e) {
-                LOGGER.error(e);
+                LOGGER.error("生成代码或者刷新pagex缓存错误:",e);
             }
         }).start();
     }

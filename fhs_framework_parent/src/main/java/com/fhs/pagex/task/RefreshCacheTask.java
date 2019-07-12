@@ -12,13 +12,13 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 /**
  * 自动读取js内容，刷新到缓存中定时任务
@@ -32,6 +32,7 @@ import java.util.HashMap;
  * @Version: 1.0
  */
 @Component
+@DependsOn("persistentEnhancerScaner")
 public class RefreshCacheTask implements InitializingBean,Runnable,ApplicationContextAware {
     private ApplicationContext applicationContext;
 
@@ -48,8 +49,7 @@ public class RefreshCacheTask implements InitializingBean,Runnable,ApplicationCo
     @Autowired
     private JoinService joinService;
 
-    @Autowired
-    private PageXTransServiceImpl pageXTransService;
+
 
     /**
      * 资源加载器
@@ -63,7 +63,7 @@ public class RefreshCacheTask implements InitializingBean,Runnable,ApplicationCo
         {
             new Thread(() -> {
                 this.refresh();
-                pageXTransService.refreshPageXCache(new HashMap<>());
+
             }).start();
         }
         catch(Exception e)

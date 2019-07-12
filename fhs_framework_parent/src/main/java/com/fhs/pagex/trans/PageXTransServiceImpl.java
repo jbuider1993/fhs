@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.ConverterUtils;
+import com.fhs.common.utils.Logger;
 import com.fhs.common.utils.ReflectUtils;
 import com.fhs.common.utils.StringUtil;
 import com.fhs.core.base.bean.SuperBean;
@@ -19,6 +20,7 @@ import com.mybatis.jpa.common.ColumnNameUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +32,8 @@ import java.util.Set;
  */
 @Component
 public class PageXTransServiceImpl implements ITransTypeService, InitializingBean {
+
+    private static final Logger LOGGER = Logger.getLogger(PageXTransServiceImpl.class);
 
     /**
      * key namespace + _ + pkey value 是对应的缓存字段
@@ -52,7 +56,7 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
             String pkey = StringUtil.toString(ReflectUtils.getValue(obj, tempField.getName()));
             String namespace = tempTrans.key();
             String alias = null;
-            // 如果是port#in alias == in namespace =port
+            // 如果是port#in alias == in namespace = port
             if(namespace.contains("#"))
             {
                 alias = namespace.substring(namespace.indexOf("#")+1);
@@ -113,12 +117,20 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
      */
     public void refreshOneNamespace(String namespace)
     {
-        String rows =  pageXDBService.findListPage(new HashMap<>(),namespace);
+        LOGGER.info("开始刷新pagex缓存:" + namespace);
+        Map<String,Object> paramMap = new HashMap<>();
+        paramMap.put("start",Constant.PAGE_ALL);
         PagexListSettDTO pagexListSettDTO = PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace);
-        JSONArray rowsJson = JSON.parseArray(rows);
-        JSONObject row = null;
         String pkeyField = ConverterUtils.toString(pagexListSettDTO.getModelConfig().get("pkeyCamel"));
         JSONObject joinColumns = JSON.parseObject(ConverterUtils.toString(pagexListSettDTO.getModelConfig().get("joinColumns")));
+        //没有配置则代表不需要提供翻译给其他的代码
+        if(joinColumns==null)
+        {
+            return;
+        }
+        JSONObject row = null;
+        String rows =  pageXDBService.findListPage(paramMap,namespace);
+        JSONArray rowsJson = JSON.parseArray(rows);
         String fieldCamel = null;
         String pkeyVal  = null;
         String fielVal = null;
@@ -137,5 +149,6 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
             }
             pageXCacheMap.put(namespace+"_"+pkeyVal,tempCacheTransMap);
         }
+        LOGGER.info("刷新pagex缓存完成:" + namespace);
     }
 }
