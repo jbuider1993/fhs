@@ -1,5 +1,6 @@
 package com.fhs.system.api.cloud;
 
+import com.fhs.common.constant.Constant;
 import com.fhs.core.result.HttpResult;
 import com.fhs.system.api.FeignWordBookApiService;
 import com.fhs.system.bean.Wordbook;
@@ -29,7 +30,7 @@ public class WordBookgApiServiceCloud implements FeignWordBookApiService {
     public HttpResult<List<WordbookVO>> getWordBookList(String wordBookGroupCode) {
         Wordbook param = new Wordbook();
         param.setWordbookGroupCode(wordBookGroupCode);
-        List<Wordbook> wordbookList  = wordBookService.findForList(param);
+        List<Wordbook> wordbookList  = wordBookService.selectPage(param, Constant.PAGE_ALL,Constant.PAGE_ALL);
         List<WordbookVO> result = new ArrayList<>();
         wordbookList.forEach(wordbook -> {
             WordbookVO temp =  new WordbookVO();
