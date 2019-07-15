@@ -5,6 +5,7 @@ import com.fhs.common.utils.Logger;
 import com.fhs.common.utils.MapUtils;
 import com.fhs.core.base.action.BaseAction;
 import com.fhs.core.result.HttpResult;
+import com.fhs.redis.service.RedisCacheService;
 import com.fhs.system.bean.ServiceWordbookGroup;
 import com.fhs.system.bean.Wordbook;
 import com.fhs.system.service.WordBookService;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +41,9 @@ public class WordbookAction extends BaseAction<Wordbook>
 
     @Autowired
     private WordBookService wordBookService;
+
+    @Autowired
+    private RedisCacheService<String> redisCacheService;
 
     /**
      * 查询字典值
@@ -268,7 +273,10 @@ public class WordbookAction extends BaseAction<Wordbook>
     {
         try
         {
-            wordbookAndGroupService.refreshRedisCache(wordbook);
+            Map<String,String> message = new HashMap<>();
+            message.put("transType","wordbook");
+            message.put("wordbookGroupCode",wordbook.getWordbookGroupCode());
+            redisCacheService.convertAndSend("trans", JsonUtils.map2json(message));
         }
         catch (Exception e)
         {
