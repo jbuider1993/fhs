@@ -561,8 +561,19 @@ public class DateUtils {
      * @return source大于目录，返回true,否则返回false
      */
     public static boolean compareDate(String source, String target) {
+        return compareDate( source,  target, DATETIME_PATTERN_DATE);
+    }
+
+    /**
+     * 比较两个yyyy-MM-dd HH:mm:SS 大小
+     *
+     * @param source source
+     * @param target target
+     * @return source大于目录，返回true,否则返回false
+     */
+    public static boolean compareDate(String source, String target,String formart) {
         try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATETIME_PATTERN_DATE);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formart);
             Date sourceDate = simpleDateFormat.parse(source);
             Date targetDate = simpleDateFormat.parse(target);
             if (sourceDate.getTime() > targetDate.getTime()) {
