@@ -63,6 +63,11 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
                 namespace = namespace.substring(0,namespace.indexOf("#"));
             }
             Map<String,String> transCache = pageXCacheMap.get(namespace + "_" + pkey);
+            if(transCache==null)
+            {
+                LOGGER.error(namespace + "_" + pkey + "未翻译成功");
+                return;
+            }
             if(alias != null)
             {
                 Map<String,String> tempMap =new HashMap<>();
@@ -88,7 +93,7 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
     public void afterPropertiesSet() throws Exception {
         //注册自己为一个服务
         TransService.registerTransType("pagex", this);
-        TransMessageListener.regTransRefresher(Constant.WORD_BOOK,this::refreshPageXCache);
+        TransMessageListener.regTransRefresher("pagex",this::refreshPageXCache);
     }
 
     /**

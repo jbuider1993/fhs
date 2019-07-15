@@ -13,6 +13,7 @@ import com.fhs.core.log.LogDesc;
 import com.fhs.core.result.HttpResult;
 import com.fhs.pagex.dto.PageXTreeDTO;
 import com.fhs.pagex.service.PagexDataService;
+import com.fhs.redis.service.RedisCacheService;
 import com.fhs.system.api.FeignlogAdminOperatorLogApiService;
 import com.fhs.system.bean.LogAdminOperatorLogVo;
 import com.fhs.ucenter.api.service.FeignSysMenuApiService;
@@ -21,6 +22,7 @@ import com.fhs.ucenter.api.vo.SysUserVo;
 import com.mybatis.jpa.context.DataPermissonContext;
 import com.mybatis.jpa.context.MultiTenancyContext;
 import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,6 +65,9 @@ public class PageXMsPubAction extends PageXBaseAction{
      */
     private Map<String, SysMenuVo> namesapceMenuMap = new HashMap<>();
 
+    @Autowired
+    private RedisCacheService<String> redisCacheService;
+
     /**
      * 添加-后台只做重复校验，不做参数格式校验
      * @param namespace namespace
@@ -70,6 +75,7 @@ public class PageXMsPubAction extends PageXBaseAction{
     @RequestMapping("{namespace}/add")
     public HttpResult<Boolean> add(@PathVariable("namespace")String namespace, HttpServletRequest request, HttpServletResponse response)
     {
+
         checkPermiessAndNamespace( namespace,"add");
         EMap<String,Object> paramMap = super.getParameterMap(request);
         SysUserVo user = getSessionUser( request);
@@ -80,8 +86,21 @@ public class PageXMsPubAction extends PageXBaseAction{
         super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
         addLog( namespace, "添加", paramMap, request, LogDesc.ADD);
         service.insert(paramMap,namespace);
+        refreshPageXTransCache(namespace);
         return HttpResult.success(true);
 
+    }
+
+    /**
+     * 刷新namespace 翻译缓存
+     * @param namespace namespace
+     */
+    private void refreshPageXTransCache(String namespace)
+    {
+        Map<String,String> message = new HashMap<>();
+        message.put("transType","pagex");
+        message.put("namespace",namespace);
+        redisCacheService.convertAndSend("trans", JsonUtils.map2json(message));
     }
 
     /**
@@ -159,6 +178,7 @@ public class PageXMsPubAction extends PageXBaseAction{
         addLog( namespace, "更新", paramMap, request, LogDesc.UPDATE);
         super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
         int i = service.update(paramMap,namespace);
+        refreshPageXTransCache(namespace);
         return HttpResult.success(i!=0);
     }
 
@@ -182,6 +202,7 @@ public class PageXMsPubAction extends PageXBaseAction{
         paramMap.put("id",id);
         addLog( namespace, "删除", paramMap, request, LogDesc.DEL);
         int i = service.del(id,namespace);
+        refreshPageXTransCache(namespace);
         return HttpResult.success(i!=0);
     }
 

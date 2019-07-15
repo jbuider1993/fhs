@@ -85,7 +85,10 @@ public class RedisConfig extends CachingConfigurerSupport {
     //表示监听一个频道
     @Bean
     MessageListenerAdapter listenerAdapter(TransMessageListener receiver){
-        return new MessageListenerAdapter(receiver,"handelMsg");
+        MessageListenerAdapter result = new MessageListenerAdapter(receiver,"handelMsg");
+        JdkSerializationRedisSerializer valSerializer =new JdkSerializationRedisSerializer();
+        result.setSerializer(valSerializer);
+        return result;
     }
 
 

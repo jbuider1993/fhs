@@ -88,8 +88,8 @@ public class WordBookTransServiceImpl implements ITransTypeService,InitializingB
             wordBookService = SpringContextUtil.getBeanByClassForApi(FeignWordBookApiService.class);
         }
         String wordbookGroupcode = null;
-        if(message!=null && message.containsKey("wordbookGroupcode")){
-             wordbookGroupcode = ConverterUtils.toString(message.get("wordbookGroupcode"));
+        if(message!=null && message.containsKey("wordbookGroupCode")){
+             wordbookGroupcode = ConverterUtils.toString(message.get("wordbookGroupCode"));
 
         }
         HttpResult<List<WordbookVO>> result = wordBookService.getWordBookList(wordbookGroupcode);
