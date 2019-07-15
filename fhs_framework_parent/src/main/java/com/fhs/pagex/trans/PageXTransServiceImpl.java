@@ -63,24 +63,24 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
                 namespace = namespace.substring(0,namespace.indexOf("#"));
             }
             Map<String,String> transCache = pageXCacheMap.get(namespace + "_" + pkey);
-            if(transCache==null)
-            {
-                LOGGER.error(namespace + "_" + pkey + "未翻译成功");
-                return;
+            if(transCache == null){
+                continue;
             }
-            if(alias != null)
+            if(alias != null )
             {
                 Map<String,String> tempMap =new HashMap<>();
                 Set<String> keys = transCache.keySet();
                 for(String key : keys)
                 {
-                    tempMap.put(alias + "_" + key,transCache.get(key));
+                    //tempMap.put(alias + "_" + key,transCache.get(key));
+                    tempMap.put(alias + key.substring(0, 1).toUpperCase() + key.substring(1),transCache.get(key));
                 }
                 transCache = tempMap;
             }
             obj.getTransMap().putAll(transCache);
         }
     }
+
 
     @Override
     public void transMore(List<? extends SuperBean<?>> objList, List<Field> toTransList) {
@@ -93,7 +93,7 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
     public void afterPropertiesSet() throws Exception {
         //注册自己为一个服务
         TransService.registerTransType("pagex", this);
-        TransMessageListener.regTransRefresher("pagex",this::refreshPageXCache);
+        TransMessageListener.regTransRefresher(Constant.WORD_BOOK,this::refreshPageXCache);
     }
 
     /**
@@ -156,4 +156,8 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
         }
         LOGGER.info("刷新pagex缓存完成:" + namespace);
     }
+
+
 }
+
+
