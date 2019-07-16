@@ -277,6 +277,7 @@ public class WordbookAction extends BaseAction<Wordbook>
             message.put("transType","wordbook");
             message.put("wordbookGroupCode",wordbook.getWordbookGroupCode());
             redisCacheService.convertAndSend("trans", JsonUtils.map2json(message));
+            wordbookAndGroupService.refreshRedisCache(wordbook);
         }
         catch (Exception e)
         {
