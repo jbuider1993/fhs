@@ -27,13 +27,13 @@ fhs:
     entity-package: com.**.**.bean
     mapper-package: com.**.**.dao
   safe:
-    enable-xss: true
+    enable-xss: true #xss注入控制
   session:
     timeout: 1800
   task:
     default-lock-Minutes: 10
     pool-size: 10
-  transcatoin:
+  transcatoin: #声明式事物 类名包含service的，但是不包含api，action,dao的类开启
     contains: service
     not-contains: api;action;dao
     #声明式事物管理，具体请访问官网
@@ -114,7 +114,7 @@ jetcache:
       limit: 100
       keyConvertor: fastjson
       expireAfterWriteInMillis: 300000
-  remote:
+  remote: #阿里的jetcache2级缓存
     default:
       type: redis
       keyConvertor: fastjson
