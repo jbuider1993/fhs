@@ -1,34 +1,45 @@
-   目前开源社区中有各种各样的快速开发平台，一般都包含了基础的菜单，角色，用户，日志，权限，字典，在加一个代码生成器，就算快速开发平台了，同质化很严重，实际在代码开发的时候，比自己公司搭建的框架省不了多少事，FHS 追求高效开发，更关注开发效率和质量，除了上述功能之外还包含以下特性：
 
-- 1   mybatis jpa
+#    FHS-Framework 简介
+ **fhs-framwork是一个集成了国内外诸多优秀开源项目的快速开发平台，除了在常规快速开发平台提供 用户，角色，权限，菜单，字典，操作日志，代码生成器 等功能的基础上，还在以下方面为您的快速开发做出了努力。**
+ 
+ 
+#### 1. 项目基础框架搭建期 
+&#8194;&#8194;&#8194;&#8194;导入一份sql，copy一个pom稍作修改，copy3个配置文件稍作修改，copy一个springboot启动类稍作修改即可完成框架搭建。
+ 
+#### 2. DB接入方面
+##### - &#8194;&#8194;&#8194;&#8194;减少手写sql
+   
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;fhs 使用了Mybatis Jpa+Mybatis Plus 框架来帮大家自动生成常见sql，Mybatis Jpa是fhs-opensource下的一款基于Mybatis的JPA的实现，为了补足复杂sql的生成，Mybatis Jpa 又对Mybatis Plus做了兼容，可以使用Mybatis Plus的注解来实现sql自动生成，有了Mybatis Jpa+Mybatis Plus 实现80%的单表查询无需写一行sql的效果
+ 
+##### - &#8194;&#8194;&#8194;&#8194;数据源路由
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;通过简单的配置即可实现分库，分表，读写分离操作。
 
-     是mybatis 对于jpa注解的一种实现，可以不写一行代码实现crud + 批处理，一对一，一对多，数据权限，分页操作，如果你习惯了mybatis plus，他本身继承了mybatis plus，兼容mp所有注解，你可以用jpa注解，也可以用mp注解，复杂的查询交给mp，简单的用mpj。
+##### - &#8194;&#8194;&#8194;&#8194;声明式事物
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;  add，update，del，save 开头的service方法，会默认开启事物，自定义部分请使用注解。
 
-- 2  数据权限
+##### - &#8194;&#8194;&#8194;&#8194;数据权限控制
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194; 通过简单的配置即可实现组合或者单一数据权限控制
 
-    通过几行配置即可完成数据权限接入，支持多重数据权限，比如通过资源  部门，和分类  做双重数据权限过滤
+#### 3. 日常业务方面
 
-- 3 数据源路由
+##### - &#8194;&#8194;&#8194;&#8194;大量的base类使用
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;通过继承即可完成大部分CRUD操作。
+##### - &#8194;&#8194;&#8194;&#8194;提供常见的工具类
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;日期，日志，反射，网络，校验，文件等等。
+##### - &#8194;&#8194;&#8194;&#8194;其他
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;统一验证框架处理器，统一异常处理器，控制器返回数据json字段过滤器，xss,csrf拦截器等等
 
-    支持分库分表读者分离，简单的配置下就好。
-    分库支持不同的业务在不同的表中，或者相同的表在不同的库中，根据一个标志动态切换数据源，基于aop+自定义datasource
+#### 4. 前端封装
+##### - &#8194;&#8194;&#8194;&#8194;给Easyui,Jquery Validform，My97做了整容手术
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;Easyui是一款颜值稍低但是功能强大上手容易开发效率极高的UI框架，为了让其能不被大家抛弃，继续让他发光发热，我们为其定制了一套BootStrap皮肤,效果堪比Layui。
+##### - &#8194;&#8194;&#8194;&#8194;使用Beetl标签技术对常见的表单控件做了封装
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;后台程序员有句俗话叫做后端10分钟，前端2小时。前端是很多人不愿意碰触的，于是有了很多公司一个项目要招聘2波人，后端专门写后端，前端专门写前段，但是明明一个人就能搞定的事情，非得要2个人？使用fhs的标签，所有的控件做到了统一化，不需要自己写js去初始化，去做校验，去赋值，只要使用了标签，标签中初始化，布局html，赋值，获取值，校验的js就都包含了，很大程度上降低了前端的学习和使用成本。
+##### - &#8194;&#8194;&#8194;&#8194;一款帮你写代码的引擎-PAGEX
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;使用市面上的代码生成器，你做一个CRUD的需要多久呢？如果加上Excel导出，校验，列点击排序这些功能呢？如果要加数据权限，分库，支持多租户呢？要写多少后台代码，写多少sql，写多少js和html？使用pagex，你只需要定义一个JS，你需要的java类框架在运行期(非生成到硬盘上噢)直接给你编译为class扔到classLoader了，Html JS SQL 后台接口 按照指定的路径请求引擎也帮你自动生成，而你无需担心JS被暴露，因为JS仅仅被PAGEX引擎加载当做配置文件用的，既然是配置文件为何选择JS呢？第一：JAVA有JS引擎，可以执行JS代码；第二：JS中有JSON格式，做配置比XML和YML方便，比Properties强大；第三：很多CRUD我们需要自己写一些JS方法，来控制一些插件的隐藏显示以及一些前端业务，把他们写到JS文件中总比写到XML中强很多倍吧。
 
-- 4  声明式事物
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;PAGEX可以通过简单的配置自动生成CRUD代码，可实现导入，字段排序，数据权限，租户权限，字典翻译，表关联，各类表单插件一行json配置等功能，更让人惊喜的是，pagex的js可以通过Idea 的EasyCode插件自动生成，然后稍作改动就可以使用了。
 
-     add，update，del，save 开头的service方法，会默认开启事物，自定义部分请使用注解。
-	 
-- 5   美化版本的easyui+Jquery Validform
-
-     论开发效率，easyui可以称王，谈到他每次大家都说他丑，于是我们花费了大量时间去美化essyui，定制出了一套类  layui的皮肤，解决easyui颜值问题，针对于easyui检验框架不好用，时间插件不够强大的问题，我们定制了my97 和Jquery Validform，使用更简单，一行代码搞定检验(我说他是现有的，最好用的校验框架，不服来辩)。
-
-- 6   jsp+beetl 双模板引擎支持 + 标签封装
-    
-	fhs关注效率，前端copy代码很常见，但是copy完了有了bug可能会忘记改其他的地方，copy我代码的人不知道，我也不知道谁copy了我，自定义标签解决了这个问题，他把一个表单内容，封装简化到了极致，程序员不需要知道百度地图如何对接，省市区级联怎么做，um编辑器怎么做，上传怎么做，一行代码统统搞定（每个表单元素一行代码）。
-
-- 7   放大招pagex 引擎，让java开发速度超过c#  php（java新玩法，专利设计）
-    
-	想到java，就想到重启，JREBEl，能做到大部分时候不重启，想用jfinal，又怕生态不是太好（生态可以，但是没办法和spring比），pagex，是把一张表通过一段js描述出来，来配置表名字，中文备注，列表有什么属性，每个字段宽度多少，是否需要关键查询，是否需要字典翻译，过滤条件有哪些是like  between 还是等于，自定义按钮名称和点击事件配置，表单元素配置，给h5 app 门户网站开的api 接收什么where条件参数，返回数据包含哪些字段，不包含哪些字段，表在哪个库中（一个项目连接多个库适用），一个js文件搞定，不需要写java，sql，都在运行时候根据js配置动态生成了（动态生成sql放到mybatis中，动态生成java代码并且编译为class并读取），js修改后自动刷新内存中的缓存，无需重启，你可以做到在项目运行阶段，直接加一个无多少业务的CRUD+API功能到你的系统中来。
-	下面是我们的一个月租户CRUD的demo。
+&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;&#8194;下面是使用PAGEX引擎的一个我们项目中月租户类型管理的demo
 ```javascript
 
     var modelConfig= {title:'月租户类型',pkey:'id',type:'uuid',orderBy:'update_time Desc',
@@ -38,13 +49,13 @@
         listFieldSett:function(){
     	  return [
     		  {name:'lease_name',title:'类型名称',width:'20%',align:'center'},
-              {name:'park_id',title:'停车场名称',width:'20%',isJoin:true,namespace:'parking',showField:'transMap.parkName',align:'center'},
-              {name:'is_disable',title:'是否禁用',width:'10%',formart:'formatRowColor',align:'center',trans:'book',key:'is_disable',showField:'transMap.is_disableName'},
-              {name:'create_user',title:'创建人',width:'8%',align:'center',trans:'user',showField:'transMap.create_userUserName'},
+              {name:'park_id',title:'停车场名称',width:'20%',isJoin:true,namespace:'parking',showField:'transMap.parkName',align:'center'},//自动表关联
+              {name:'is_disable',title:'是否禁用',width:'10%',formart:'formatRowColor',align:'center',trans:'book',key:'is_disable',showField:'transMap.is_disableName'},//字典翻译
+              {name:'create_user',title:'创建人',width:'8%',align:'center',trans:'user',showField:'transMap.create_userUserName'},//用户翻译
               {name:'create_time',title:'创建时间',width:'10%',align:'center'},
               {name:'update_user',title:'更新人',width:'8%',align:'center',trans:'user',showField:'transMap.create_userUserName'},
               {name:'update_time',title:'更新时间',width:'10%',align:'center'},
-              {name:'is_sync',title:'是否已下发',width:'5%',align:'center',trans:'book',key:'yesOrNo',showField:'transMap.is_syncName'},
+              {name:'is_sync',title:'是否已下发',width:'5%',align:'center',trans:'book',key:'yesOrNo',showField:'transMap.is_syncName'},//字典翻译
       ]},
       isColumnButton:function(){
     	  return  false;
@@ -52,7 +63,7 @@
       filters:function(){
           return [
               {name:'park_id',type:'select',url:'${path.basePath}/ms/x/parking/findListData',
-                  valuefield:'id',textfield:'parkName',title:'停车场'},
+                  valuefield:'id',textfield:'parkName',title:'停车场'},//下拉插件
               {name:'lease_name',type:'input',title:'出入口名称',filterType:'like'},
     	  ];      
       }, 
@@ -98,26 +109,33 @@
        }
     }
 ```
+#### 5. 翻译服务
+ &#8194;&#8194;&#8194;&#8194;翻译服务用于根据表中存放的id来翻译出对应的文字给做客户做显示使用，系统默认实现对省市区，后台用户，部门，字典的翻译支持，您通过简单的几行js配置即可把自己的表维护的翻译服务中，翻译服务使用进程缓存，当数据有更新的时候会自动重新加载(支持分布式)，有着很高的效率，可减少表关联sql的书写。
+ 
+ &#8194;&#8194;&#8194;&#8194;自定义表加入到翻译服务demo(使用pagex方法):
+  ```javascript
+  var modelConfig= {title:'停车场',pkey:'id',type:'uuid',orderBy:'update_time Desc',
+    namespace:"parking",table:'t_park_parking',trans:true,extendsParam:'parent_park_id=${param.parent_park_id}',
+    joinColumns:JSON.stringify({park_name:'parkName'}),db:"park",dp:JSON.stringify({id:'parkIds'}),isMultiTenant:true};
 
-- 8  翻译服务
+  ```
+ &#8194;&#8194;&#8194;&#8194;使用：
+ 
+```javascript
+   {name:'park_id',title:'停车场名称',width:'20%',trans:'pagex',key:'parking',showField:'transMap.parkName',align:'center'},//自动表关联
+ ```
+ &#8194;&#8194;&#8194;&#8194;或者在java代码中使用
+```java
+      @Trans(type="pagex",key="parking")
+	  private String parkId;
+ ```
+#### 6. c端支持
+ &#8194;&#8194;&#8194;&#8194;支持微信，支付宝 用户自动登陆接入。
+ 
+#### 7.支持分布式和单机部署模式
 
-    在项目中，我们很多列表中都可能要显示状态，数据创建人姓名，省市区 名字，难道都要关键查询吗？答案是否定的no！ 你可以通过翻译服务来把id翻译成给客户看的翻译结果，做翻译只需要一个注解，系统会自动把翻译结果放到对象中来，用于给客户显示，通过实现翻译接口，你可以实现自己的翻译类型。
-	
-
-- 9  c端支持
-
-     支持微信，支付宝 用户自动登陆。
-	 
-- 10 支持分布式部署，又支持单机部署
-	 
-     项目集成了分布式模式和单机模式2种模式，分布式模式依赖比较多，需要安装apollo(分布式配置中心)，CAS，redis，启动文件服务jar包，静态文件jar包，eureka jar包。
-	 单机模式，可以把文件服务的依赖，静态文件的依赖，都添加到自己项目的依赖中，可以关闭apollo，使用本地配置文件启动，当然，单机模式必须使用redis，因为翻译服务和spring session以及中间用到的一些分布式任务调度，分布式锁都用到了redis。
-	 
-	 
-	 
-      
-
-
+ &#8194;&#8194;&#8194;&#8194;项目集成了分布式模式和单机模式2种模式，分布式模式依赖比较多，需要安装apollo(分布式配置中心)，CAS，redis，启动文件服务jar包，静态文件jar包，eureka jar包。
+	 单机模式，可以把文件服务的依赖，静态文件的依赖，都添加到自己项目的依赖中，可以不依赖apollo，使用本地配置文件启动。。
 
 #### 技术栈
 - 前端:Easyui(美化过的Easyui),Layui(首页)，Validform，My 97(定制过主题)。
@@ -127,22 +145,18 @@
 - 模板引擎：beetl+JSP
 - 无后端业务的快速开发引擎:PAGEX
 - 分布式配置：Apollo
+- 缓存：jetcache+spring data cache
+- 分布式任务：shedlock
 
-#### 安装教程
-
-1. 单机版本
-   导入 db_init.sql 到数据库
-   直接checkout fhs_mini  然后在ylm文件中配置数据库，redis，直接跑即可。
-   默认用户名admin 密码123456
 
 
 #### 使用说明
 
-1. 操作手册请访问  http://fhs-opensource.com/  (建设中)
-2. 注意事项：pagex会在运行时动态生成java代码并且编译成class，在idea中，pagex生成java代码可直接编译通过，但是在线上环境，需要把tools.jar copy到jre的lib目录下，并且创建一个classpath的文件夹，存放编译java的时候的依赖。
-2. 本快速开发平台还在开发阶段，很多bug还没修复，很多老代码还没改，不建议在正式项目中使用，等项目正式版发布在使用。我们欢迎您帮我们改几个bug，然后把代码反馈给我们。
-3.clone 我们代码，然后把common，core，api,base_business,mini_admin，parent导入到idea中，配置mini_admin ylm文件中的redis信息和数据库信息，直接运行mini_admin 的 FhsMiniAdminApplication 即可。
-4.如果你修改了默认端口号，请修改path.properties和js.properties中的内容。
+ &#8194;&#8194;&#8194;&#8194;1. 早期写的部分 文档   http://114.116.20.119/  (建设中)
+
+ &#8194;&#8194;&#8194;&#8194;2  新出炉的文档 https://gitee.com/fhs-opensource/fhs-framework/wikis/pages
+
+  
 
 #### 参与贡献获取技术支持
 官方QQ 群：976278956
