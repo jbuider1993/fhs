@@ -149,8 +149,8 @@ public class DateUtils {
      * @return 相差的分钟数
      */
     public static Integer getSubMinute(String bigDate, String minDate) {
-        return (int) (DateUtils.parseStr(bigDate, DateUtils.DATETIME_PATTERN).getTime() -
-                DateUtils.parseStr(minDate, DateUtils.DATETIME_PATTERN).getTime()) / 1000 / 60;
+        return (int) ((DateUtils.parseStr(bigDate, DateUtils.DATETIME_PATTERN).getTime() -
+                DateUtils.parseStr(minDate, DateUtils.DATETIME_PATTERN).getTime()) / 1000 / 60);
     }
 
     /**
