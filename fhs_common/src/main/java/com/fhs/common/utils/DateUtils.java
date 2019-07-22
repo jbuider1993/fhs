@@ -13,8 +13,10 @@ package com.fhs.common.utils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 /**
@@ -108,6 +110,25 @@ public class DateUtils {
             }
         }
         return resultLinkList;
+    }
+
+    /**
+     * 计算现在到某一个日期的间隔天数
+     * @param endDate
+     * @return
+     */
+    public static long getSubDasy(Date endDate,Date start){
+        String[] currentStr = new SimpleDateFormat("yyyy-MM-dd").format(start).split("-");
+        String[] endStr = new SimpleDateFormat("yyyy-MM-dd").format(endDate).split("-");
+        Integer currentYear = Integer.parseInt(currentStr[0]);
+        Integer currentMonth = Integer.parseInt(currentStr[1]);
+        Integer currentDay = Integer.parseInt(currentStr[2]);
+        Integer endYear = Integer.parseInt(endStr[0]);
+        Integer endMonth = Integer.parseInt(endStr[1]);
+        Integer endDay = Integer.parseInt(endStr[2]);
+        LocalDate endLocalDate = LocalDate.of(endYear,endMonth,endDay);
+        LocalDate startLocalDate = LocalDate.of(currentYear,currentMonth,currentDay);
+        return startLocalDate.until(endLocalDate, ChronoUnit.DAYS);
     }
 
     /**
