@@ -7,6 +7,7 @@ import com.fhs.core.base.action.BaseAction;
 import com.fhs.core.db.ReadWriteDataSourceDecision;
 import com.fhs.pagex.dto.PagexBaseDTO;
 import com.fhs.pagex.service.JoinService;
+import com.fhs.pagex.service.ListExtendsHanleService;
 import com.fhs.pagex.service.PageXDBService;
 import com.fhs.pagex.service.PagexDataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class PageXBaseAction extends BaseAction {
 
     @Autowired
     protected JoinService joinService;
+
+    @Autowired
+    protected ListExtendsHanleService listExtendsHanleService;
 
     /**
      * 根据modelconfig中的db配置，来设置本操作连接的数据库
@@ -51,6 +55,7 @@ public class PageXBaseAction extends BaseAction {
         JSONArray rows = JSONObject.parseArray(resultJson);
         this.setDB(PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace));
         rows = joinService.initJoinData(rows, namespace);
+        listExtendsHanleService.processingData(namespace,rows);
         return rows;
     }
 }

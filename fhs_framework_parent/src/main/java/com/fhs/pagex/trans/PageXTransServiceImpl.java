@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fhs.common.constant.Constant;
-import com.fhs.common.utils.ConverterUtils;
-import com.fhs.common.utils.Logger;
-import com.fhs.common.utils.ReflectUtils;
-import com.fhs.common.utils.StringUtil;
+import com.fhs.common.utils.*;
 import com.fhs.core.base.bean.SuperBean;
 import com.fhs.core.trans.ITransTypeService;
 import com.fhs.core.trans.Trans;
@@ -54,6 +51,10 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
             tempField.setAccessible(true);
             tempTrans = tempField.getAnnotation(Trans.class);
             String pkey = StringUtil.toString(ReflectUtils.getValue(obj, tempField.getName()));
+            if(CheckUtils.isNullOrEmpty(pkey))
+            {
+                continue;
+            }
             String namespace = tempTrans.key();
             String alias = null;
             // 如果是port#in alias == in namespace = port
@@ -64,6 +65,7 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
             }
             Map<String,String> transCache = pageXCacheMap.get(namespace + "_" + pkey);
             if(transCache == null){
+                LOGGER.error("pagex trans缓存未命中:" + namespace + "_" + pkey);
                 continue;
             }
             if(alias != null )

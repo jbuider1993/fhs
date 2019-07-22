@@ -11,5 +11,5 @@ public interface JsRefreshListener {
      * @param namespace  namespace
      * @param js 新的js内容
      */
-    public void jsRefresh(String namespace,String js);
+    void jsRefresh(String namespace,String js);
 }

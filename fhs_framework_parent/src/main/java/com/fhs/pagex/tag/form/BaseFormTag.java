@@ -160,7 +160,7 @@ public abstract class BaseFormTag extends PagexBaseTag implements InitializingBe
     public abstract  String saveJs();
 
     /**
-     * 全局js  这里写的js 不会被套到document ready 而是直接输出到<script>标签下面，所以千万不要写错了
+     * 全局js  这里写的js 不会被套到document ready 而是直接输出到<  script  >标签下面，所以千万不要写错了
      */
     public abstract  String overallJs();
 
