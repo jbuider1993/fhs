@@ -95,7 +95,7 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
     public void afterPropertiesSet() throws Exception {
         //注册自己为一个服务
         TransService.registerTransType("pagex", this);
-        TransMessageListener.regTransRefresher(Constant.WORD_BOOK,this::refreshPageXCache);
+        TransMessageListener.regTransRefresher("pagex",this::refreshPageXCache);
     }
 
     /**
