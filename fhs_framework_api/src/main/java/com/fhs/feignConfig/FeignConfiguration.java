@@ -2,8 +2,16 @@ package com.fhs.feignConfig;
 
 import feign.Contract;
 import feign.Logger;
+import feign.RequestInterceptor;
+import feign.RequestTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 
 /**
  * @Filename: FeignConfiguration.java
@@ -17,7 +25,15 @@ import org.springframework.context.annotation.Configuration;
  *
  */
 @Configuration
-public class FeignConfiguration {
+public class FeignConfiguration implements RequestInterceptor {
+
+    @Value("${fhs.api.password:fhs-framework}")
+    private String apiToken;
+
+    public String getApiToken(){
+        return apiToken;
+    }
+
     @Bean
     public Contract myFeignConfiguration()
     {
@@ -26,5 +42,10 @@ public class FeignConfiguration {
     @Bean
     public Logger.Level feignLoggerLevel() {
         return Logger.Level.FULL;
+    }
+
+    @Override
+    public void apply(RequestTemplate template) {
+        template.header("apiToken",apiToken);
     }
 }
