@@ -62,4 +62,14 @@ public class SysUserVo extends BaseVo {
      * 集团编码-saas模式适用
      */
     private String groupCode;
+
+    /**
+     * 是否启用
+     */
+    private Integer isDisable;
+
+    /**
+     * 密码
+     */
+    private String  password;
 }

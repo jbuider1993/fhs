@@ -23,11 +23,21 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 @FeignClient(value = "system", configuration=FeignConfiguration.class)
 public interface FeignSysRoleApiService {
 
+
+
     /**
-     * 根据用户ID获取角色数据权限
-     * @param userId 用户ID
-     * @return HttpResult 角色数据权限
+     * 根据用户id获取角色
+     * @param userId 用户id
+     * @return HttpResult 角色列表
      */
-    @RequestLine("GET /api/sysRole/getRoleDataPermissions?userId={userId}")
-    HttpResult<String> getRoleDataPermissions(@Param("userId") String userId);
+    @RequestLine("GET /api/sysRole/getRoleListPermissions?userId={userId}")
+    HttpResult<String> getRoleListPermissions(@Param("userId") String userId);
+
+    /**
+     * 根据id查询角色
+     * @param id 角色id
+     * @return HttpResult 角色对象
+     */
+    @RequestLine("GET /api/sysRole/getRoleById?id={id}")
+    HttpResult<String> getRoleById(@Param("id") String id);
 }

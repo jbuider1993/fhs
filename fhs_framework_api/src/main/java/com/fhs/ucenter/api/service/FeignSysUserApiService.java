@@ -79,4 +79,12 @@ public interface FeignSysUserApiService {
      */
     @RequestLine("GET /api/sysUser/getSysUserByUserId")
     HttpResult<SysUserVo> getSysUserByUserId(SysUserForm sysUserForm);
+
+    /**
+     * 根据组织id查询用户
+     * @param organizationId 组织id
+     * @return 用户列表
+     */
+    @RequestLine("GET /api/sysUser/getSysUserByOrganizationId?organizationId={organizationId}")
+    HttpResult<List<SysUserVo>> getSysUserByOrganizationId(@Param("organizationId")String organizationId);
 }
