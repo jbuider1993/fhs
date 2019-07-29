@@ -9,3 +9,6 @@
 https://gitee.com/makejava/EasyCode
 
 然后根据EasyCode 生成代码
+
+使用教程：https://www.cnblogs.com/chafe/p/9506001.html
+
