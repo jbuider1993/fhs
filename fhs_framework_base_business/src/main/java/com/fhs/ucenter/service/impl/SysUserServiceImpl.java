@@ -663,6 +663,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
         return resultMap;
     }
 
+
     private List<String> getPermissionUrlByUserId(String userId) {
         return sysUserDAO.getPermissionUrlByUserId(userId);
     }

@@ -19,6 +19,7 @@ import com.fhs.core.group.Delete;
 import com.fhs.core.group.Update;
 import com.fhs.core.trans.Trans;
 import com.fhs.core.trans.TransTypes;
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
@@ -38,6 +39,7 @@ import java.util.List;
  */
 @Entity
 @Data
+@Builder
 @Table(name = "t_ucenter_ms_user")
 @TransTypes(types = {Constant.WORD_BOOK, Constant.SYS_ORGANIZATION_INFO})
 public class SysUser extends BaseDO<SysUser> {

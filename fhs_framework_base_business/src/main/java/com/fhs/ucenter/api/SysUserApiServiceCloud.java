@@ -155,7 +155,7 @@ public class SysUserApiServiceCloud implements FeignSysUserApiService {
     {
         ParamChecker.isNotNullOrEmpty(organizationId,"userId不能为空");
         List<SysUserVo> voList = new ArrayList<>();
-        List<SysUser> sysUserList=sysUserService.getSysUserByOrganizationId(organizationId);
+        List<SysUser> sysUserList=sysUserService.findForList(SysUser.builder().organizationId(organizationId).build());
         BeanUtils.copyProperties(sysUserList, voList);
         return HttpResult.success(voList);
     }
