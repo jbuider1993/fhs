@@ -145,4 +145,19 @@ public class SysUserApiServiceCloud implements FeignSysUserApiService {
         return HttpResult.success(vo);
     }
 
+    /**
+     * 获取用户的数据权限
+     * @param organizationId  组织id
+     * @return 用户列表
+     */
+    @GetMapping("/getSysUserByOrganizationId")
+    public HttpResult<List<SysUserVo>> getSysUserByOrganizationId(@RequestParam("organizationId")String organizationId)
+    {
+        ParamChecker.isNotNullOrEmpty(organizationId,"userId不能为空");
+        List<SysUserVo> voList = new ArrayList<>();
+        List<SysUser> sysUserList=sysUserService.getSysUserByOrganizationId(organizationId);
+        BeanUtils.copyProperties(sysUserList, voList);
+        return HttpResult.success(voList);
+    }
+
 }

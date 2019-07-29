@@ -8,6 +8,7 @@ import com.fhs.core.db.DataSource;
 import com.fhs.core.result.HttpResult;
 import com.fhs.ucenter.api.service.FeignSysRoleApiService;
 import com.fhs.ucenter.bean.SysRole;
+import com.fhs.ucenter.bean.SysUser;
 import com.fhs.ucenter.service.SysRoleService;
 import com.fhs.ucenter.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +41,14 @@ public class SysRoleApiServiceCloud implements FeignSysRoleApiService {
     @Autowired
     private SysUserService userService;
 
+
     /**
      * 角色服务
      */
     @Autowired
     private SysRoleService roleService;
+
+
 
     /**
      * 根据用户ID获取角色数据权限
@@ -52,61 +56,40 @@ public class SysRoleApiServiceCloud implements FeignSysRoleApiService {
      * @return HttpResult 角色数据权限
      */
     @Override
-    @GetMapping("/getRoleDataPermissions")
-    public HttpResult<String> getRoleDataPermissions(@RequestParam("userId") String userId) {
+    @GetMapping("/getRoleListPermissions")
+    public HttpResult<String> getRoleListPermissions(@RequestParam("userId") String userId) {
         if(CheckUtils.isNullOrEmpty(userId))
         {
             return HttpResult.error(null, "用户ID不可为空");
         }
-        Map<String, Set<String>> resultMap = new HashMap<>();
         List<SysRole> roles = roleService.findRolesByUserId(userId);
-        if(roles != null && roles.size() > 0)
-        {
-            Set<String> resourcetypesSet = new HashSet<>();
-            Set<String> deptsSet = new HashSet<>();
-            Set<String> projectsSet = new HashSet<>();
-            // 遍历，组合各角色数据权限
-            for (SysRole sysRole : roles)
-            {
-                String dataPermissions = sysRole.getDataPermissions();
-                if(CheckUtils.isNotEmpty(dataPermissions))
-                {
-                    JSONObject jsonObject = JSON.parseObject(dataPermissions);
-                    String resourcetypes = jsonObject.getString(SysRoleService.RESOURCETYPES);
-                    if(CheckUtils.isNotEmpty(resourcetypes))
-                    {
-                        List<String> list = JSON.parseArray(resourcetypes, String.class);
-                        for(String str : list)
-                        {
-                            resourcetypesSet.add(str);
-                        }
-                    }
-                    String depts = jsonObject.getString(SysRoleService.DEPTS);
-                    if(CheckUtils.isNotEmpty(depts))
-                    {
-                        List<String> list = JSON.parseArray(depts, String.class);
-                        for(String str : list)
-                        {
-                            deptsSet.add(str);
-                        }
-                    }
-                    String projects = jsonObject.getString(SysRoleService.PROJECTS);
-                    if(CheckUtils.isNotEmpty(projects))
-                    {
-                        List<String> list = JSON.parseArray(projects, String.class);
-                        for(String str : list)
-                        {
-                            projectsSet.add(str);
-                        }
-                    }
-                }
-
-            }
-            resultMap.put(SysRoleService.RESOURCETYPES, resourcetypesSet);
-            resultMap.put(SysRoleService.DEPTS, deptsSet);
-            resultMap.put(SysRoleService.PROJECTS, projectsSet);
+        SysUser sysUser = userService.selectById(userId);
+        List<Map<String,Object>> mapList=new ArrayList<>();
+        for (SysRole sysRole:roles) {
+            Map<String,Object> map=new HashMap<>();
+            map.put("roleId",sysRole.getRoleId());
+            map.put("userId",sysUser.getUserId());
+            map.put("fullname",sysUser.getUserName());
+            map.put("roleName",sysRole.getRoleName());
+            map.put("alias",sysRole.getRoleId());
+            mapList.add(map);
         }
-        return HttpResult.success(JsonUtils.map2json(resultMap));
+        return HttpResult.success(JsonUtils.list2json(mapList));
     }
 
+    @Override
+    @GetMapping("/getRoleById")
+    public HttpResult<String> getRoleById(@RequestParam("id") String id) {
+        if(CheckUtils.isNullOrEmpty(id))
+        {
+            return HttpResult.error(null, "角色ID不可为空");
+        }
+        SysRole sysRole = roleService.findBeanById(id);
+        Map<String,Object> map=new HashMap<>();
+        map.put("roleId",sysRole.getRoleId());
+        map.put("roleName",sysRole.getRoleName());
+        map.put("isDisable",sysRole.getRoleName());
+        map.put("alias",sysRole.getRoleId());
+        return HttpResult.success(JsonUtils.object2json(map));
+    }
 }
