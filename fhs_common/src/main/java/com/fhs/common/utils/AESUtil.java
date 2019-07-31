@@ -15,6 +15,9 @@ import java.security.SecureRandom;
  * @author jackwong
  */
 public class AESUtil {
+
+    private  static Logger LOG = Logger.getLogger(AESUtil.class);
+
     /**
      * 加密
      *
@@ -42,18 +45,8 @@ public class AESUtil {
             cipher.init(Cipher.ENCRYPT_MODE, key);// 初始化
             byte[] result = cipher.doFinal(byteContent);
             return Base64.encodeBase64String(result);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            LOG.error("解密错误:"  + content + ",pass:" + password,e);
         }
         return null;
     }
@@ -81,18 +74,8 @@ public class AESUtil {
             cipher.init(Cipher.DECRYPT_MODE, key);// 初始化
             byte[] result = cipher.doFinal(Base64.decodeBase64(content));
             return new String(result,"utf-8"); // 加密
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            LOG.error("加密错误:"  + content + ",pass:" + password,e);
         }
         return null;
     }
