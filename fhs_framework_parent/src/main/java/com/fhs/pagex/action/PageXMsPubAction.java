@@ -328,7 +328,6 @@ public class PageXMsPubAction extends PageXBaseAction{
     @RequestMapping("{namespace}/findListData")
     public JSONArray findListData(@PathVariable("namespace")String namespace, HttpServletRequest request, HttpServletResponse response)
     {
-        checkPermiessAndNamespace( namespace,"see");
         Map<String,Object> paramMap =super.getParameterMap(request);
         paramMap.put("start", Constant.PAGE_ALL);
         paramMap.put("dataPermissin", DataPermissonContext.getDataPermissonMap());
