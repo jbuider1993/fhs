@@ -9,14 +9,17 @@ import com.fhs.core.base.bean.SuperBean;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
+import com.fhs.core.exception.YZBNotLogException;
 import com.fhs.core.group.Add;
 import com.fhs.core.group.Update;
 import com.fhs.core.log.LogDesc;
 import com.fhs.core.page.Pager;
 import com.fhs.core.result.HttpResult;
 import com.fhs.ucenter.api.vo.SysUserVo;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -317,21 +320,12 @@ public class ModelSuperAction<T> extends BaseAction<T>
         {
             if (!check.hasErrors())
             {
-                try
+                if (e instanceof BaseDO)
                 {
-                    if (e instanceof BaseDO)
-                    {
-                        BaseDO<?> baseDo = (BaseDO<?>)e;
-                        baseDo.preInsert(getSessionuser(request).getUserId());
-                    }
-
-                    baseService.insert(e);
+                    BaseDO<?> baseDo = (BaseDO<?>)e;
+                    baseDo.preInsert(getSessionuser(request).getUserId());
                 }
-                catch (Exception e1)
-                {
-                    LOG.error("数据插入错误:" + JsonUtils.bean2json(e),e1);
-                    return HttpResult.error();
-                }
+                baseService.insert(e);
                 return HttpResult.success();
             }
             return HttpResult.error(null,JsonUtils.list2json(check.getAllErrors()));
