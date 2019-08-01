@@ -35,9 +35,10 @@ public interface SysMenuService extends BaseService<SysMenu>
     /**
      * 获取菜单树集合并组建json
      * @param menuType 根据菜单类型获取菜单树
+     * @param groupCode 集团编码
      * @return
      */
-    List<TreeData>  findMenuTreeToJson(Integer menuType);
+    List<TreeData>  findMenuTreeToJson(Integer menuType,String groupCode);
 
     /**
      * 获取菜单树集合并组建json

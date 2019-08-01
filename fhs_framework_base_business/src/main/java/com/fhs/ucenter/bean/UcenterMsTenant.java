@@ -64,11 +64,14 @@ public class UcenterMsTenant extends BaseDO<UcenterMsTenant> {
     @TableField("email")
     private String email;
 
+    @TableField("system_ids")
+    private String systemIds;
+
 
     public UcenterMsTenant() {
     }
 
-    public UcenterMsTenant(String groupCode, String id, String tenantName, String contacts, String mobile, String logo, String remark, String email) {
+    public UcenterMsTenant(String groupCode, String id, String tenantName, String contacts, String mobile, String logo, String remark, String email, String systemIds) {
         this.groupCode = groupCode;
         this.id = id;
         this.tenantName = tenantName;
@@ -77,5 +80,6 @@ public class UcenterMsTenant extends BaseDO<UcenterMsTenant> {
         this.logo = logo;
         this.remark = remark;
         this.email = email;
+        this.systemIds = systemIds;
     }
 }

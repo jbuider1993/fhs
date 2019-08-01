@@ -155,6 +155,9 @@
         <if test="menuType !=null">
         AND (m.menu_type=#{menuType} OR m.menu_type=2)
         </if>
+        <if test="systemIds != null and systemIds != ''">
+            AND system_id IN(${systemIds})
+        </if>
         ORDER BY
         father_menu_id,order_index
     </select>

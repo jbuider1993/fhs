@@ -2,15 +2,15 @@ package com.fhs.ucenter.service.impl;
 
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
+import com.fhs.common.utils.StringUtil;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
+import com.fhs.core.config.EConfig;
 import com.fhs.core.db.DataSource;
-import com.fhs.ucenter.bean.SysMenu;
-import com.fhs.ucenter.bean.SysMenuPermission;
-import com.fhs.ucenter.bean.TreeData;
-import com.fhs.ucenter.bean.TreeModel;
+import com.fhs.ucenter.bean.*;
 import com.fhs.ucenter.dao.SysMenuDAO;
 import com.fhs.ucenter.dao.SysMenuPermissionDAO;
 import com.fhs.ucenter.service.SysMenuService;
+import com.fhs.ucenter.service.UcenterMsTenantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -34,6 +34,9 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenu> implements SysM
 
     @Autowired
     private SysMenuPermissionDAO adminMenuButtonDAO;
+
+    @Autowired
+    private UcenterMsTenantService tenantService;
 
     private int ZERO = 0;
 
@@ -70,15 +73,27 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenu> implements SysM
      * 获取菜单树json 数据
      */
     @Override
-    public List<TreeData> findMenuTreeToJson(Integer menuType)
+    public List<TreeData> findMenuTreeToJson(Integer menuType,String groupCode)
     {
-    	List<TreeData> list = dao.findMenuTreesByMenuType(menuType+"");
+
 		TreeData root = new TreeData();
 		root.setName("root");
 		root.setId("0");
 		root.setMenuLevel(0);
+
+		Map<String,Object > paramMap = new HashMap<String,Object>();
+		//saas模式过滤子系统
+		if(ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isSaasModel")))
+		{
+			String systemIds = tenantService.selectBean(UcenterMsTenant.builder().groupCode(groupCode).build()).getSystemIds();
+			if(systemIds!=null)
+			{
+				paramMap.put("systemIds", StringUtil.getStrToIn(systemIds.split(",")));
+			}
+		}
+		List<TreeData> list = dao.findMenuTreesByMenuType(paramMap);
 		list.add(0,root);
-        List<SysMenuPermission> buttons = adminMenuButtonDAO.findForListFromMap(new HashMap<String,Object>());
+        List<SysMenuPermission> buttons = adminMenuButtonDAO.findForListFromMap(new HashMap<>());
         // 标记哪些按钮id属于哪些菜单
         Map<String,Set<Integer>> buttonMap = new HashMap<>();
         Set<Integer> buttonTypeSet = null;
@@ -223,7 +238,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenu> implements SysM
     @Override
     public List<TreeData> findMenuTreeToJson(String menuType)
     {
-        List<TreeData> list = dao.findMenuTreesByMenuType(menuType);
+        List<TreeData> list = dao.findMenuTreesByMenuType(new HashMap<>());
         List<SysMenuPermission> buttons = adminMenuButtonDAO.findForListFromMap(new HashMap<String,Object>());
         Map<Integer,Set<Integer>> buttonMap = new HashMap<>();
         Set<Integer> buttonTypeSet = null;

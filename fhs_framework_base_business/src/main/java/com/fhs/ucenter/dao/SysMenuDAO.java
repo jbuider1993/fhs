@@ -36,10 +36,10 @@ public interface SysMenuDAO extends BaseDao<SysMenu>
 
     /**
      * 根据MenuType查询菜单集合
-     * @param menuType
+     * @param paramMap
      * @return
      */
-    List<TreeData> findMenuTreesByMenuType(@Param(value = "menuType") String menuType);
+    List<TreeData> findMenuTreesByMenuType(Map<String,Object> paramMap);
 
     /**
      * 更加父id获取子节点数据

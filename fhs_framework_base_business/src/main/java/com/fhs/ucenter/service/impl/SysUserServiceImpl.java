@@ -17,6 +17,7 @@ import com.fhs.ucenter.dao.SysUserDAO;
 import com.fhs.ucenter.service.SysMenuService;
 import com.fhs.ucenter.service.SysRoleService;
 import com.fhs.ucenter.service.SysUserService;
+import com.fhs.ucenter.service.UcenterMsTenantService;
 import com.google.common.collect.HashMultimap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,6 +59,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
 
     @Autowired
     private SysUserService sysUserService;
+
+    @Autowired
+    private UcenterMsTenantService tenantService;
 
     @Override
     public SysUser login(SysUser adminUser) {
@@ -478,21 +482,29 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
     @Override
     public List<LeftMenu> getMenu(SysUser user, String menuType) {
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> paramMap = new HashMap<String, Object>();
         //如果是saas模式需要判断菜单类型
         if(ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isSaasModel")))
         {
             //如果不是运营者的集团编码，只能是租户，如果是运营者的编码可以按照参数请求的来
             if(EConfig.getOtherConfigPropertiesValue("operator_group_code").equals(user.getGroupCode()))
             {
-                map.put("menuType", menuType);
+                paramMap.put("menuType", menuType);
             }
             else
             {
-                map.put("menuType", SysMenuService.MENU_TYPE_TENANT);
+                paramMap.put("menuType", SysMenuService.MENU_TYPE_TENANT);
+                if(ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isSaasModel")))
+                {
+                    String systemIds = tenantService.selectBean(UcenterMsTenant.builder().groupCode(user.getGroupCode()).build()).getSystemIds();
+                    if(systemIds!=null)
+                    {
+                        paramMap.put("systemIds", StringUtil.getStrToIn(systemIds.split(",")));
+                    }
+                }
             }
         }
-        List<SysMenu> menuList = sysUserDAO.selectMenuAll(map);
+        List<SysMenu> menuList = sysUserDAO.selectMenuAll(paramMap);
         menuList = menuFilter(user, menuList);
         Map<Integer, LeftMenu> leftMenuMap = new HashMap<>();
         // 遍历AdminMenu转换为LeftMenu

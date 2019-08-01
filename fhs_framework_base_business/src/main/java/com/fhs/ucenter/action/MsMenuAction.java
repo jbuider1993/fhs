@@ -164,7 +164,7 @@ public class MsMenuAction extends ModelSuperAction<SysMenu>
     public void findMenuRootTrees(HttpServletRequest request, HttpServletResponse reponse, SysMenu adminMenu)
     {
         Integer menuType = 0;// 平台菜单
-        List<TreeData> treeList = sysMenuService.findMenuTreeToJson(menuType);
+        List<TreeData> treeList = sysMenuService.findMenuTreeToJson(menuType,super.getSessionuser(request).getGroupCode());
         String jsonTree = JsonUtils.list2json(treeList);
         super.outWrite(jsonTree, reponse);
     }
