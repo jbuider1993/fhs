@@ -38,7 +38,18 @@ var listPage = {
                     success:function(_rep){
                         if(_rep.code==200)
                         {
-                            swal("密码已经修改为:" + _rep.data);
+                            //swal("密码已经修改为:" + _rep.data);
+                            $.messager.show({
+                                title:'密码修改成功',
+                                msg:'新密码:' + _rep.data,
+                                showType:'fade',
+                                width:500,
+                                height:500,
+                                style:{
+                                    right:'',
+                                    bottom:''
+                                }
+                            });
                         }
                         else{
                             EalertE(_rep.message);
