@@ -125,13 +125,19 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
     public void refreshOneNamespace(String namespace)
     {
         LOGGER.info("开始刷新pagex缓存:" + namespace);
+        if(!PagexDataService.SIGNEL.getAllJsNamespace().contains(namespace))
+        {
+            LOGGER.info("本系统无需刷新此缓存namespace:" + namespace);
+            return ;
+        }
+
         Map<String,Object> paramMap = new HashMap<>();
         paramMap.put("start",Constant.PAGE_ALL);
         PagexListSettDTO pagexListSettDTO = PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace);
         String pkeyField = ConverterUtils.toString(pagexListSettDTO.getModelConfig().get("pkeyCamel"));
         JSONObject joinColumns = JSON.parseObject(ConverterUtils.toString(pagexListSettDTO.getModelConfig().get("joinColumns")));
         //没有配置则代表不需要提供翻译给其他的代码
-        if(joinColumns==null)
+        if(joinColumns==null || CheckUtils.isNotEmpty(pagexListSettDTO.getModelConfig().get("notTrans")))
         {
             return;
         }
