@@ -314,6 +314,7 @@ public class PageXMsPubAction extends PageXBaseAction{
         List<JSONObject> dataList = new ArrayList<>();
         JSONArray jsonArray = JSON.parseArray(resultJson);
         jsonArray = joinService.initJoinData(jsonArray,namespace);
+        listExtendsHanleService.processingData(namespace,jsonArray);
         for(int i = 0;i<jsonArray.size();i++)
         {
             dataList.add(jsonArray.getJSONObject(i));
