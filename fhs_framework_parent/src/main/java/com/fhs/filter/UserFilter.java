@@ -103,6 +103,7 @@ public class UserFilter implements Filter {
         HttpResult<FrontUserVo> resultFrontUser = frontUserService.getSingleFrontUser(GetSingleFrontUserForm.builder().accessToken(accessToken).build());
         if (resultFrontUser.getCode() != Constant.HPROSE_SUCCESS_CODE) {
             LOGGER.error("获取前端用户信息错误,accessToken为{}", accessToken);
+            LOGGER.error("获取前端用户信息错误,返回结果为{}", resultFrontUser);
             send2Login(response, request);
             return false;
         }
