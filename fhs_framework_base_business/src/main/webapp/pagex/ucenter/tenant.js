@@ -56,6 +56,8 @@ var add = {
             {name: 'group_code', title: '租户编码', type: 'input', required: true},
             {name: 'contacts', title: '联系人', type: 'input', required: true},
             {name: 'mobile', title: '电话', type: 'input',dataType:'tel|tel_p'},
+            {name: 'system_ids', title: '子系统', type: 'select',required:true,valueField:'id',
+                textField:'text',url:' ${path.basePath}/ms/sysSystem/getSystemComBoxData',multiple:true},
             {name:'email',title:'邮箱',type:'bigInput',dataType:'e'},
             {name:'logo',title:'图片',type:'up',placeholder:'请上传图片'},
             {name:'remark',title:'备注',type:'text'},
