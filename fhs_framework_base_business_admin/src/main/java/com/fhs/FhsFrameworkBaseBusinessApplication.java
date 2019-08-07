@@ -1,5 +1,7 @@
 package com.fhs;
 
+import com.alicp.jetcache.anno.config.EnableCreateCacheAnnotation;
+import com.alicp.jetcache.anno.config.EnableMethodCache;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,6 +15,8 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 
 @SpringBootApplication()
 @MapperScan(basePackages = {"com.fhs.*.dao", "com.fhs.*.*.dao"})
+@EnableMethodCache(basePackages = {"com.xhb","com.fhs"})
+@EnableCreateCacheAnnotation
 @EnableConfigurationProperties
 @PropertySource("classpath:config.properties")
 @EnableCircuitBreaker
