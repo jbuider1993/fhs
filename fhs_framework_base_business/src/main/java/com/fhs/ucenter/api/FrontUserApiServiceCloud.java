@@ -53,6 +53,7 @@ public class FrontUserApiServiceCloud implements FeignFrontUserApiService {
         if(userId == null)
         {
             userId = loginService.getUserIdByAccessToken(getSingleFrontUserForm.getAccessToken());
+            LOG.info("根据accessToken" + getSingleFrontUserForm.getAccessToken() + "获取到的userId为:" + userId);
         }
         if(CheckUtils.isNullOrEmpty(userId))
         {

@@ -1,5 +1,8 @@
 package com.fhs.ucenter.service.impl;
 
+import com.alicp.jetcache.Cache;
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.anno.CreateCache;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.Logger;
@@ -13,6 +16,7 @@ import com.fhs.ucenter.bean.UcenterFrontUserBind;
 import com.fhs.ucenter.service.LoginService;
 import com.fhs.ucenter.service.UcenterFrontUserBindService;
 import com.fhs.ucenter.service.UcenterFrontUserService;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -33,9 +37,10 @@ public class LoginServiceImpl implements LoginService
     private static final Logger LOGGER = Logger.getLogger(LoginServiceImpl.class);
 
     /**
-     * client token和access token的redis key
+     * 缓存 默认时间：半个小时
      */
-    private static final String CLIENT_TOKEN_ACCESS_TOKEN_KEY = "ucenter:client_token_access_token:";
+    @CreateCache(expire = 1800, name = "frontuser:token",cacheType = CacheType.BOTH)
+    private Cache<String, String> frontUserTokenMap;
 
     /**
      * ACCESS_TOKEN 和 userid的rediskey
@@ -66,7 +71,7 @@ public class LoginServiceImpl implements LoginService
     private UcenterFrontUserBindService userBindService;
 
 
-
+    private Integer timeOutSecond;
 
     /**
      * 根据userid登录
@@ -85,10 +90,17 @@ public class LoginServiceImpl implements LoginService
         {
             throw new ParamException("用户id无效:" + userId);
         }
+        if(timeOutSecond == null)
+        {
+            timeOutSecond = ConverterUtils.toInt(EConfig.getOtherConfigPropertiesValue("access_token_time_out_second"));
+            LOGGER.info("读取access_token_time_out_second:" + timeOutSecond);
+        }
         String accessToken = StringUtil.getUUID();
         redisCacheService.addStr(ACCESS_TOKEN_USER_KEY + accessToken, userId);
+        frontUserTokenMap.put(accessToken,userId);
+        LOGGER.info("添加accessToken:" + accessToken);
         redisCacheService.expire(ACCESS_TOKEN_USER_KEY + accessToken,
-                ConverterUtils.toInt(EConfig.getOtherConfigPropertiesValue("access_token_time_out_second")));
+                timeOutSecond);
         HttpServletRequest request =
             ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
         if (request != null)
@@ -114,8 +126,11 @@ public class LoginServiceImpl implements LoginService
     @Override
     public String getUserIdByAccessToken(String accessToken)
     {
-        String userId = redisCacheService.getStr(ACCESS_TOKEN_USER_KEY + accessToken);
-        return userId;
+        if(CheckUtils.isNotEmpty(frontUserTokenMap.get(accessToken)))
+        {
+            return frontUserTokenMap.get(accessToken);
+        }
+        return redisCacheService.getStr(ACCESS_TOKEN_USER_KEY + accessToken);
     }
 
 

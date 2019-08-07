@@ -14,6 +14,7 @@ import com.fhs.redis.service.RedisCacheService;
 import com.fhs.ucenter.bean.*;
 import com.fhs.ucenter.dao.SysMenuDAO;
 import com.fhs.ucenter.dao.SysUserDAO;
+import com.fhs.ucenter.dto.SysUserOrgDTO;
 import com.fhs.ucenter.service.SysMenuService;
 import com.fhs.ucenter.service.SysRoleService;
 import com.fhs.ucenter.service.SysUserService;
@@ -673,6 +674,28 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
             }
         }
         return resultMap;
+    }
+
+    @Override
+    public List<SysUserOrgDTO> getUserOrgTreeList(String groupCode) {
+        List<SysUserOrgDTO> dbRecord = sysUserDAO.getUserOrgTreeList(groupCode);
+
+        //找不到爸爸的才会放到此里面
+        List<SysUserOrgDTO> result = new ArrayList<>();
+
+        Map<String,SysUserOrgDTO> fatherDTO = new HashMap<>();
+        for(SysUserOrgDTO user : dbRecord)
+        {
+            fatherDTO.put(user.getId(),user);
+            if(fatherDTO.containsKey(user.getParentId()))
+            {
+                fatherDTO.get(user.getParentId()).getChildren().add(user);
+            }
+            else{
+                result.add(user);
+            }
+        }
+        return result;
     }
 
 

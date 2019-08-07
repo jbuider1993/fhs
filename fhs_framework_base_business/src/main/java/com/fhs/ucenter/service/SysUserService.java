@@ -7,6 +7,8 @@ import com.fhs.ucenter.bean.LeftMenu;
 import com.fhs.ucenter.bean.SysMenu;
 import com.fhs.ucenter.bean.SysMenuPermission;
 import com.fhs.ucenter.bean.SysUser;
+import com.fhs.ucenter.dto.SysUserOrgDTO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -236,5 +238,12 @@ public interface SysUserService extends BaseService<SysUser>
      * @return 用户数据权限信息
      */
     Map<String,String> findUserDataPermissions(String userId);
+
+    /**
+     * 根据集团编码获取集团下所有的用户tree
+     * @param groupCode 集团编码
+     * @return 集团下所有的用户tree
+     */
+    List<SysUserOrgDTO> getUserOrgTreeList(String groupCode);
 
 }

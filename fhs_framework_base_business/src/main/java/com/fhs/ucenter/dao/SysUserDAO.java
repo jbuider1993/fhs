@@ -4,6 +4,7 @@ import com.fhs.core.base.dao.BaseDao;
 import com.fhs.ucenter.bean.SysMenu;
 import com.fhs.ucenter.bean.SysMenuPermission;
 import com.fhs.ucenter.bean.SysUser;
+import com.fhs.ucenter.dto.SysUserOrgDTO;
 import com.mybatis.jpa.annotation.MapperDefinition;
 import com.mybatis.jpa.annotation.MultiTenancyCheck;
 import com.mybatis.jpa.annotation.NotMultiTenancyCheck;
@@ -271,4 +272,11 @@ public interface SysUserDAO extends BaseDao<SysUser>
      */
     @NotMultiTenancyCheck
     List<String> getPermissionUrlAll();
+
+    /**
+     * 根据集团编码获取集团下所有的用户
+     * @param groupCode 集团编码
+     * @return 集团下所有的用户
+     */
+    List<SysUserOrgDTO> getUserOrgTreeList(@Param("groupCode") String groupCode);
 }

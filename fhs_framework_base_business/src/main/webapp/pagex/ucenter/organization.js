@@ -6,7 +6,7 @@ var modelConfig = {
     namespace: "organization",
     table: 't_ucenter_ms_organization',
     trans: true,
-    extendsParam: 'parent_id=${param.parent_id}',
+    extendsParam: 'parent_id=${param.parentId}',
 };
 var listPage = {
     listFieldSett: function () {
@@ -98,7 +98,7 @@ tree = {
     key: function () {
         return {
             namekey: 'name',
-            fidkey: 'parent_id'
+            fidkey: 'parentId'
         }
     }
 }

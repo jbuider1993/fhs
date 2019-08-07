@@ -12,6 +12,7 @@ import com.fhs.ucenter.api.vo.SysUserVo;
 import com.fhs.ucenter.bean.SysUser;
 import com.fhs.ucenter.service.SysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.beetl.ext.fn.Json;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -38,7 +39,19 @@ public class MsUserAction extends ModelSuperAction<SysUser>
     Logger LOG = Logger.getLogger(MsUserAction.class);
 
     @Autowired
-    SysUserService sysUserService;
+    private SysUserService sysUserService;
+
+    /**
+     * 获取用户jsontree 用于easyui下拉tree数据源
+     * @param  request request
+     * @param response response
+     */
+    @RequestMapping("getUserTree")
+    public void getUserTree(HttpServletRequest request,HttpServletResponse response)
+    {
+        super.outJsonp(JsonUtils.list2json(sysUserService.getUserOrgTreeList(super.getSessionuser(request).getGroupCode())),
+                response,request);
+    }
 
     /**
      * 添加平台用户
