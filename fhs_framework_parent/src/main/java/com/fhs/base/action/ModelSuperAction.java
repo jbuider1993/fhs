@@ -7,6 +7,7 @@ import com.fhs.core.base.action.BaseAction;
 import com.fhs.core.base.bean.BaseDO;
 import com.fhs.core.base.bean.SuperBean;
 import com.fhs.core.base.service.BaseService;
+import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.exception.YZBNotLogException;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -305,6 +307,11 @@ public class ModelSuperAction<T> extends BaseAction<T>
     }
 
     /**
+     * groupcode字段
+     */
+    private Field groupCodeField ;
+
+    /**
      * 添加
      *
      * @param e bean
@@ -323,6 +330,12 @@ public class ModelSuperAction<T> extends BaseAction<T>
                 if (e instanceof BaseDO)
                 {
                     BaseDO<?> baseDo = (BaseDO<?>)e;
+                    //如果是saas模式，并且bean中包含groupcode字段，则给其设置值
+                    if(ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isSaasModel"))
+                            && ReflectUtils.getDeclaredField(e.getClass(),"groupCode")!=null && ReflectUtils.getValue(e,"groupCode")==null)
+                    {
+                        ReflectUtils.setValue(e,"groupCode",getSessionuser(request).getGroupCode());
+                    }
                     baseDo.preInsert(getSessionuser(request).getUserId());
                 }
                 baseService.insert(e);
