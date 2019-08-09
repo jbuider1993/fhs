@@ -59,9 +59,26 @@ public class SelectFormTag extends BaseEasyuiCombo  implements IOne2XTag{
         return "";
     }
 
+    public String formartDefault(){
+        StringBuilder sb  = new StringBuilder("function(_data){");
+        if(tagSett.containsKey("dftIndex"))
+        {
+            sb.append( "        var _vf = $(this).combobox('options').valueField;\n" +
+                    " $(this).combobox('setValue', eval('_data["+tagSett.get("dftIndex")+"].' + _vf));");
+
+        }
+        if(tagSett.containsKey("dftVal"))
+        {
+            sb.append("$(this).combobox('setValue','" + tagSett.get("dftVal") +"');");
+
+        }
+        sb.append("}");
+        return sb.toString();
+    }
+
     @Override
     protected String[] getHandelKeys() {
-        return new String[0];
+        return new String[]{"dftIndex","dftVal"};
     }
 
 

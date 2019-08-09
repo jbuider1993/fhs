@@ -26,6 +26,10 @@ public abstract  class BaseEasyuiCombo extends EmptyFormTag{
 
     @Override
     public String getContentHtml() {
+        if(!tagSett.containsKey("onLoadSuccess"))
+        {
+            tagSett.put("onLoadSuccess",formartDefault());
+        }
         StringBuilder resultHtmlBuilder = new StringBuilder();
         boolean multiple = ConverterUtils.toBoolean(tagSett.get("multiple"));
         if(multiple){
@@ -58,6 +62,10 @@ public abstract  class BaseEasyuiCombo extends EmptyFormTag{
         return resultHtmlBuilder.toString();
     }
 
+    public String formartDefault()
+    {
+        return "function(){}";
+    }
 
 
     @Override
