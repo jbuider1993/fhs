@@ -20,6 +20,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+/**
+ * 控制器异常统一处理器
+ * by wanglei
+ */
 @ControllerAdvice
 public class ControllerExceptionAdvice {
 

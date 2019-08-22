@@ -4,12 +4,15 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 
+/**
+ * 其他的控制器校验aop
+ */
 @Aspect
 public class OrdinaryActionParamCheckAop extends ParamCheckAop{
     /**
      * 定义切入点
      */
-    @Pointcut("execution(* com.fhs.*.action.*.*(..) )")
+    @Pointcut("execution(* com.*.*.action.*.*(..) )")
     public void checkParam(){
 
     }

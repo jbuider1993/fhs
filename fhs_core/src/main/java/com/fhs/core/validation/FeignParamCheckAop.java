@@ -6,7 +6,7 @@ import org.aspectj.lang.annotation.*;
 
 /**
  *
- * 参数校验aop
+ * spring cloud接口调用参数校验aop
  * @author qh
  */
 @Aspect
@@ -17,7 +17,7 @@ public class FeignParamCheckAop extends ParamCheckAop{
     /**
      * 定义切入点
      */
-    @Pointcut("execution(* com.fhs.*.api..*.*(..) )")
+    @Pointcut("execution(* com.*.*.api..*.*(..) )")
     public void checkParam(){
 
     }
