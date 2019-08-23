@@ -728,6 +728,42 @@ public class DateUtils {
     }
 
     /**
+     * 集合中 多个字段的 日期格式
+     * @param needFormartData 需要转换信息的
+     * @param sourceFormart 源日期格式
+     * @param targetFormart 目标日期格式
+     * @param fields 字段集合
+     * @return 转换好日期格式的集合
+     */
+    public static <T> List<T> formartListFieldDate(List<T> needFormartData,String sourceFormart,String targetFormart,String... fields)
+    {
+        needFormartData.forEach(obj->{
+            for(String field:fields)
+            {
+                String dateStr = ConverterUtils.toString(ReflectUtils.getValue(obj,field),null);
+                if(dateStr==null)
+                {
+                    continue;
+                }
+                ReflectUtils.setValue(obj,field,convert( dateStr, sourceFormart,targetFormart));
+            }
+        });
+        return needFormartData;
+    }
+
+    /**
+     * 转换日期格式从sourceFormart 转换为targetFormart
+     * @param dateStr 日期字符串
+     * @param sourceFormart 源格式
+     * @param targetFormart 转换后的格式
+     * @return
+     */
+    public static String convert(String dateStr,String sourceFormart,String targetFormart)
+    {
+        return  DateUtils.formartDate(DateUtils.parseStr(dateStr,sourceFormart),targetFormart);
+    }
+
+    /**
      * 时间倒叙排列
      *
      * @param list
