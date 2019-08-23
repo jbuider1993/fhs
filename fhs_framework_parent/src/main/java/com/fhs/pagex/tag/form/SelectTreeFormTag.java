@@ -21,13 +21,9 @@ public class SelectTreeFormTag extends  BaseEasyuiCombo {
     }
 
     @Override
-    public String getEasyuiClass() {
-        return "easyui-combotree";
+    public String getEasyuiComboType() {
+        return "combotree";
     }
 
 
-    @Override
-    protected String[] getHandelKeys() {
-        return new String[0];
-    }
 }

@@ -1,7 +1,9 @@
 package com.fhs.pagex.tag.form;
 
+import com.fhs.common.utils.Logger;
 import com.fhs.pagex.common.BeetlUtil;
 import org.springframework.stereotype.Component;
+
 
 /**
  * 下拉列表标签 easyui combogrid
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SelectGridFormTag extends  InputFormTag {
+
+    private static final Logger LOG = Logger.getLogger(SelectGridFormTag.class);
     static
     {
         FormTagFactory.regTag("selectGrid",SelectGridFormTag.class);
@@ -46,7 +50,7 @@ public class SelectGridFormTag extends  InputFormTag {
             request.setAttribute("tagSett",super.tagSett);
             return BeetlUtil.renderBeelt("/pagex/tags/select_grid_tag.html",super.getBeetlParamMap());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("渲染select_grid出错:",e);
         }
         return "";
     }

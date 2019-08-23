@@ -23,82 +23,9 @@ public class SelectFormTag extends BaseEasyuiCombo  implements IOne2XTag{
     }
 
     @Override
-    public String getEasyuiClass() {
-        return "easyui-combobox";
-    }
-
-    @Override
-    public String overallJs() {
-        if(!ConverterUtils.toBoolean(tagSett.get("multiple")))
-        {
-            return "";
-        }
-        //这块js给你当做全局变量，比如你储存一个全局变量，就可以把代码写到这里
-        return "function  setSelectHiddenValue_" + name + "(){" +
-                "$('#" + name + "').val($('#" + name + "_select').combobox('getValues')+'');" +
-                "return true;}";
-    }
-
-    @Override
-    public String loadSuccessJs() {
-        // 如果不是多选 return "";
-        if (ConverterUtils.toBoolean(tagSett.get("multiple"))) {
-            return "if(info." + name + " && info." + name + " !=''){" +
-                    " $('#" + name + "_select').combobox('setValues',info." + name + ".split(','))}";
-        }
-        return "";
-    }
-
-    @Override
-    public String saveJs() {
-        //当点击保存的时候需要执行的js，比如图片的value获取，图片的必填校验，UE的必填校验都写到这里
-        //写必填校验的时候记得用EalertE 记得验证不通过 使用return来组织程序继续往下面执行。
-        if (ConverterUtils.toBoolean(tagSett.get("multiple"))) {
-            return "setSelectHiddenValue_" + name + "()";
-        }
-        return "";
-    }
-
-    public String formartDefault(){
-        StringBuilder sb  = new StringBuilder("function(_data){");
-        if(tagSett.containsKey("dftIndex"))
-        {
-            sb.append( "        var _vf = $(this).combobox('options').valueField;\n" +
-                    " $(this).combobox('setValue', eval('_data["+tagSett.get("dftIndex")+"].' + _vf));");
-
-        }
-        if(tagSett.containsKey("dftVal"))
-        {
-            sb.append("$(this).combobox('setValue','" + tagSett.get("dftVal") +"');");
-
-        }
-        sb.append("}");
-        return sb.toString();
-    }
-
-    @Override
-    protected String[] getHandelKeys() {
-        return new String[]{"dftIndex","dftVal"};
+    public String getEasyuiComboType() {
+        return "combobox";
     }
 
 
-
-
-    public String setValueJs() {
-        //多选
-        if(ConverterUtils.toBoolean(tagSett.get("multiple")))
-        {
-            return "combobox('setValues',";
-        }
-        return "combobox('setValue',";
-    }
-
-
-    public String getValueJs() {
-        if(ConverterUtils.toBoolean(tagSett.get("multiple")))
-        {
-            return "combobox('getValues') + ''";
-        }
-        return "combobox('getValue')";
-    }
 }
