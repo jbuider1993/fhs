@@ -23,23 +23,19 @@ public class JsonFormatterFilter extends BeforeFilter {
     //转换器配置
     private VoConverterObject converterObject;
 
-    public  JsonFormatterFilter(VoConverterObject converterObject){
+    public JsonFormatterFilter(VoConverterObject converterObject) {
         this.converterObject = converterObject;
     }
 
     @Override
     public void writeBefore(Object o) {
 
-        if(o instanceof HttpResult)
-        {
-            o = ((HttpResult)o).getData();
-
+        if (o instanceof HttpResult) {
+            return;
         }
-        if(o instanceof Collection)
-        {
-            Collection<?> objs = (Collection<?>)o;
-            for(Object obj:objs)
-            {
+        if (o instanceof Collection) {
+            Collection<?> objs = (Collection<?>) o;
+            for (Object obj : objs) {
                 writeObject(o);
             }
             return;
@@ -49,34 +45,29 @@ public class JsonFormatterFilter extends BeforeFilter {
 
     /**
      * 写一个obejct
-     * @param obj  obj
+     *
+     * @param obj obj
      */
-    private void writeObject(Object obj){
-        if(obj == null)
-        {
+    private void writeObject(Object obj) {
+        if (obj == null) {
             return;
         }
         boolean isSuperBean = obj instanceof SuperBean;
         SuperBean superBean = null;
-        if(isSuperBean)
-        {
-            superBean = (SuperBean)obj;
+        if (isSuperBean) {
+            superBean = (SuperBean) obj;
         }
         String[] settings = converterObject.getSettings();
         String[] kAsKey = null;
-        for(String setting : settings)
-        {
+        for (String setting : settings) {
             kAsKey = setting.split(":");
-            if(kAsKey[KEY].contains("transMap.") && isSuperBean)
-            {
-                super.writeKeyValue(kAsKey[AS_KEY],superBean.getTransMap().get(kAsKey[KEY].replace("transMap.","")));
-            }else
-            {
-                super.writeKeyValue(kAsKey[AS_KEY],ReflectUtils.getValue(obj,kAsKey[KEY]));
+            if (kAsKey[KEY].contains("transMap.") && isSuperBean) {
+                super.writeKeyValue(kAsKey[AS_KEY], superBean.getTransMap().get(kAsKey[KEY].replace("transMap.", "")));
+            } else {
+                super.writeKeyValue(kAsKey[AS_KEY], ReflectUtils.getValue(obj, kAsKey[KEY]));
             }
         }
     }
-
 
 
 }
