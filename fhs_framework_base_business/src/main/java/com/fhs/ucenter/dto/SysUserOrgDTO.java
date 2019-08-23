@@ -13,7 +13,7 @@ public class SysUserOrgDTO {
     /**
      * 名字
      */
-    private String name;
+    private String text;
     /**
      * id
      */
@@ -33,9 +33,8 @@ public class SysUserOrgDTO {
 
     public SysUserOrgDTO(){}
 
-
-    public SysUserOrgDTO(String name, String id, String parentId, Integer isUser, List<SysUserOrgDTO> children) {
-        this.name = name;
+    public SysUserOrgDTO(String text, String id, String parentId, Integer isUser, List<SysUserOrgDTO> children) {
+        this.text = text;
         this.id = id;
         this.parentId = parentId;
         this.isUser = isUser;
