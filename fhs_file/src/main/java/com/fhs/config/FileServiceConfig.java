@@ -1,8 +1,8 @@
 package com.fhs.config;
 
-import com.fhs.fileStorage.FileStorage;
-import com.fhs.fileStorage.impl.AliyunOSSFileStorage;
-import com.fhs.fileStorage.impl.DiskFileStorage;
+import com.fhs.file.storage.FileStorage;
+import com.fhs.file.storage.impl.AliyunOSSFileStorage;
+import com.fhs.file.storage.impl.DiskFileStorage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
