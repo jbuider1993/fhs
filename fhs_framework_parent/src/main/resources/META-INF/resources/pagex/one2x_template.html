@@ -5,7 +5,7 @@
 <div id="${xnamespace}_id">
 
 </div>
-<table id="${xnamespace}_table" class="pubTable" style="width:50%;">
+<table id="${xnamespace}_table" class="pubTable" style="max-width:80%;">
     <tr>
         <!--遍历所有的头-->
         <% for(field in fieldList){ %>
@@ -14,14 +14,14 @@
             </th>
         <% } %>
 
-        <th style="width:70px;">
+        <th style="width:150px;">
             <a href="javascript:void(0)" style="background-color: #1ab394;padding: 5px;border-radius: 2px;color: white;" onclick="${xnamespace}_addRow()">添加</a>
         </th>
     </tr>
 </table>
 
 <script id="${xnamespace}_add" type="text/html">
-    <tr>
+    <tr id="<@=trId @>">
         <% for(field in fieldList){ %>
         <td>${field.formHtml}</td>
         <% } %>
@@ -30,10 +30,12 @@
 </script>
 <script>
     var ${xnamespace}_index = 0;
+
     function ${xnamespace}_addRow(){
         ${xnamespace}_index++;
-        $('#${xnamespace}_table').append(baidu.template('${xnamespace}_add',{}));
-
+        var _tempTRId = 'pagex_tr_${xnamespace}_'+ ${xnamespace}_index;
+        $('#${xnamespace}_table').append(baidu.template('${xnamespace}_add',{trId:_tempTRId}));
+        $.parser.parse('#' + _tempTRId);
     }
 
     function ${xnamespace}_onsave(){

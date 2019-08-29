@@ -20,6 +20,7 @@ public class WordBookFormTag extends  SelectFormTag{
     static
     {
         FormTagFactory.regTag("book",WordBookFormTag.class);
+        FormTagFactory.regOne2XTag("book",WordBookFormTag.class);
     }
 
     @Override
