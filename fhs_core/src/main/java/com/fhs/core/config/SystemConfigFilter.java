@@ -12,6 +12,8 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -81,7 +83,16 @@ public class SystemConfigFilter implements Filter, InitializingBean
         if(isDisableApollo)
         {
             Properties jsConfig = new Properties();
-            InputStream in = SystemConfigFilter.class.getClassLoader().getResourceAsStream("js.properties");
+            InputStream in = null;
+            File jsFile = new File(EConfig.getPath() + "/js.properties");
+            if(jsFile.exists())
+            {
+                in = new FileInputStream(jsFile);
+            }
+            else{
+                in = SystemConfigFilter.class.getClassLoader().getResourceAsStream("js.properties");
+            }
+
             jsConfig.load(in);
             for(Object key : jsConfig.keySet())
             {
