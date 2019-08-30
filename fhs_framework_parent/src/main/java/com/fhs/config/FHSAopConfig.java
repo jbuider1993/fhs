@@ -2,7 +2,7 @@ package com.fhs.config;
 
 import com.fhs.aop.ActionInterceptAndCreateLogAop;
 import com.fhs.core.validation.FeignParamCheckAop;
-import com.fhs.core.validation.ParamCheckAop;
+import com.fhs.core.validation.OrdinaryActionParamCheckAop;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,8 +14,8 @@ public class FHSAopConfig {
      * @return
      */
     @Bean
-    public ParamCheckAop getParamCheckAop(){
-        return  new ParamCheckAop();
+    public OrdinaryActionParamCheckAop getParamCheckAop(){
+        return  new OrdinaryActionParamCheckAop();
     }
 
     /**
