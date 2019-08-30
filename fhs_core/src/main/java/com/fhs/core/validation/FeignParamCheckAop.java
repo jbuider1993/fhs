@@ -34,6 +34,7 @@ public class FeignParamCheckAop extends ParamCheckAop{
      * @throws Throwable
      */
     @Around("checkParam()")
+    @Override
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
         return super.doAround(joinPoint);
     }

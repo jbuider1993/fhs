@@ -24,7 +24,7 @@ import java.util.concurrent.Executors;
  * 参数校验aop
  * @author qh
  */
-public class ParamCheckAop {
+public abstract class ParamCheckAop {
 
     private static Properties messageProperties  = new Properties();
 

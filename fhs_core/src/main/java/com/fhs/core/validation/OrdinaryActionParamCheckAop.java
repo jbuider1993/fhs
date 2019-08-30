@@ -8,11 +8,12 @@ import org.aspectj.lang.annotation.*;
  * 其他的控制器校验aop
  */
 @Aspect
-public class OrdinaryActionParamCheckAop extends ParamCheckAop{
+public class OrdinaryActionParamCheckAop extends ParamCheckAop {
     /**
      * 定义切入点
+     * com.xhb.tour.action
      */
-    @Pointcut("execution(* com.*.*.action.*.*(..) )")
+    @Pointcut("execution(* com.*.*.action..*.*(..) )")
     public void checkParam(){
 
     }
@@ -28,6 +29,7 @@ public class OrdinaryActionParamCheckAop extends ParamCheckAop{
      * @throws Throwable
      */
     @Around("checkParam()")
+    @Override
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
         return super.doAround(joinPoint);
     }
@@ -39,5 +41,6 @@ public class OrdinaryActionParamCheckAop extends ParamCheckAop{
     @AfterReturning("checkParam()")
     public void doAfterReturning(JoinPoint joinPoint) {
     }
+
 
 }
