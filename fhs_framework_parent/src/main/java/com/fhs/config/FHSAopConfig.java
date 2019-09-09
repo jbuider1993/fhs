@@ -39,7 +39,8 @@ public class FHSAopConfig {
     /**
      * ucenter前端用户权限校验aop
      * @return
-     *//*
+     */
+    /*
     @Bean
     public PermissionCheckAop getPermissionCheckAop(){
         return new PermissionCheckAop();
