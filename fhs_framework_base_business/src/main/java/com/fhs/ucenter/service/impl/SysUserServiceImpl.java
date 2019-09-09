@@ -475,8 +475,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
         userList.forEach(sysUser -> {
             if (!StringUtil.isEmpty(sysUser.getUserName())) {
                 redisCacheService.remove("ucenter:sysuser:username:" + sysUser.getUserId());
-                redisCacheService.addStr("ucenter:sysuser:username:", sysUser.getUserName());
-                redisCacheService.addStr("ucenter:sysuser:userheader:", EConfig.getPathPropertiesValue("fhs_file_basePath") + "/downLoad/file?fileId=" + sysUser.getHeader());
+                redisCacheService.remove("ucenter:sysuser:userheader:" + sysUser.getUserId());
+                redisCacheService.addStr("ucenter:sysuser:username:"+ sysUser.getUserId(), sysUser.getUserName());
+                redisCacheService.addStr("ucenter:sysuser:userheader:"+ sysUser.getUserId(), EConfig.getPathPropertiesValue("fhs_file_basePath") + "/downLoad/file?fileId=" + sysUser.getHeader());
             }
         });
         return HttpResult.success();
