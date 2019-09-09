@@ -16,7 +16,7 @@
 		province_id AS provinceId,
 		city_id AS cityId,
 		area_id AS areaId,
-		address,
+		address,header,
 		organization_id AS organizationId,
 		create_user AS createUser,
 		create_time AS createTime,
@@ -344,7 +344,7 @@
         user_id AS userId,
         user_login_name AS
         userLoginName,
-        password,
+        password,header,
         email,is_admin AS isAdmin,
         is_disable
         AS isDisable,
