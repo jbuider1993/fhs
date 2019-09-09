@@ -20,7 +20,7 @@ public class SinglePictureUploadTag extends BaseFormTag
 {
 
     // 默认class
-    private final String defaultClassName = "ueEditorText";
+    private final String defaultClassName = "singlePictureUpload";
 
     /** 宽度. */
     private Integer width;
