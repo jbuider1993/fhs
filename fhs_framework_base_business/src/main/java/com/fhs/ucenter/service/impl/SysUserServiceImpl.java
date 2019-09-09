@@ -357,6 +357,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
     /**
      * 验证登录名是否存在
      */
+    @Override
     public boolean validataLoginName(SysUser adminUser) {
         int count = sysUserDAO.getAdminUserCountByLoginName(adminUser);
         return count <= 0;
@@ -473,8 +474,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUser> implements SysU
         List<SysUser> userList = this.select();
         userList.forEach(sysUser -> {
             if (!StringUtil.isEmpty(sysUser.getUserName())) {
-                redisCacheService.remove(Constant.USER_NAME + sysUser.getUserId());
-                redisCacheService.addStr(Constant.USER_NAME + sysUser.getUserId(), sysUser.getUserName());
+                redisCacheService.remove("ucenter:sysuser:username:" + sysUser.getUserId());
+                redisCacheService.addStr("ucenter:sysuser:username:", sysUser.getUserName());
+                redisCacheService.addStr("ucenter:sysuser:userheader:", EConfig.getPathPropertiesValue("fhs_file_basePath") + "/downLoad/file?fileId=" + sysUser.getHeader());
             }
         });
         return HttpResult.success();

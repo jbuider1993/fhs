@@ -167,6 +167,9 @@ public class SysUser extends BaseDO<SysUser> {
     @Trans(type = Constant.SYS_ORGANIZATION_INFO, key = Constant.SYS_ORGANIZATION_NAME)
     private String organizationId;
 
+    @Column(name = "header")
+    private String header;
+
     /**
      * 状态
      */
@@ -206,7 +209,7 @@ public class SysUser extends BaseDO<SysUser> {
     public SysUser() {
     }
 
-    public SysUser(String userId, String userIdE, String userLoginName, String userName, String password, String mobile, String groupCode, String email, Integer isDisable, Integer isAdmin, String provinceId, String cityId, String areaId, String address, Integer sex, String organizationId, String state, String[] roleList, String oldPassword, String newPassword, Integer menuType, List<SysRole> roles, String checkCode) {
+    public SysUser(String userId, String userIdE, String userLoginName, String userName, String password, String mobile, String groupCode, String email, Integer isDisable, Integer isAdmin, String provinceId, String cityId, String areaId, String address, Integer sex, String organizationId, String header, String state, String[] roleList, String oldPassword, String newPassword, Integer menuType, List<SysRole> roles, String checkCode) {
         this.userId = userId;
         this.userIdE = userIdE;
         this.userLoginName = userLoginName;
@@ -223,6 +226,7 @@ public class SysUser extends BaseDO<SysUser> {
         this.address = address;
         this.sex = sex;
         this.organizationId = organizationId;
+        this.header = header;
         this.state = state;
         this.roleList = roleList;
         this.oldPassword = oldPassword;
