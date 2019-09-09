@@ -116,6 +116,7 @@
     function refreshRedisCache(){
         $.ajax({
             url : '${basePath}ms/sysUser/refreshRedisCache',
+			dataType:'json',
             success : function(data){
                 if(data.code == 200)
                 {

@@ -28,6 +28,7 @@
 		<hfs:input  maxLenth="255" name="email" dataType="e|empty" title="邮箱"  />
 		<hfs:province name="provinceId" areaName="areaId" cityName="cityId" required="false" title="省份" />
 	</div>
+
 	<div class="fitem">
 		<div class="fitemDiv">
 			<label>所属机构:</label>
@@ -57,7 +58,9 @@
                 			</select>
                 			<span class="form-field-required">*</span>
 	       </div>
+
 	</div>
+	<hfs:singlePictureUpload    name="header" title="头像" height="200" width="200"/>
 </form>
 <hfst:readyTag nameSpace="sysUser" idField="userId"/>
 <script type="text/javascript">
@@ -65,6 +68,7 @@
     var isInitProvinceId = false;
 
     $(function() {
+		inituploadifyHeader("headerInput","上传头像");
         $("#saveButten").show();
         $("#organizationId").combotree({
             onChange:function(){
@@ -98,7 +102,8 @@
     var url_temp = "${basePath}ms/sysUser/addUser";
     function save() {
             $('#userName').val($('#userNameShow').val());
-
+			//保存数据
+			$('#header').val($('#headerInputVal').val());
             $('#addUpdateForm').form('submit', {
                 url : url_temp,
                 onSubmit : function() {
@@ -173,14 +178,7 @@
         var sourceVals =$("#roleList").combobox('getValues');
         reloadRoles($('#organizationId').combotree('getValue'));
         $("#roleList").combobox('setValues',sourceVals);
-    }
-    function saveFormHandler(info) {
-        //保存数据
-    }
-    function saveAfterSuccessHandler() {
-        //保存成功处理
-    }
-    function saveAfterErrorHandler() {
-        //保存失败后处理
+		initHeader("headerInput", info.header);
+		$('#headerInputVal').val(info.header);
     }
 </script>
