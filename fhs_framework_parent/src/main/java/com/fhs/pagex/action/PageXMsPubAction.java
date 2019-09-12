@@ -12,6 +12,7 @@ import com.fhs.core.exception.ParamException;
 import com.fhs.core.log.LogDesc;
 import com.fhs.core.result.HttpResult;
 import com.fhs.pagex.dto.PageXTreeDTO;
+import com.fhs.pagex.dto.TreeDTO;
 import com.fhs.pagex.service.PagexDataService;
 import com.fhs.redis.service.RedisCacheService;
 import com.fhs.system.api.FeignlogAdminOperatorLogApiService;
@@ -227,6 +228,50 @@ public class PageXMsPubAction extends PageXBaseAction{
     }
 
     /**
+     *  获取ztree数据
+     * @param namespace namespace
+     */
+    @RequestMapping("{namespace}/ztreeData")
+    public JSONArray ztreeData(@PathVariable("namespace")String namespace, HttpServletRequest request, HttpServletResponse response)
+    {
+        checkPermiessAndNamespace( namespace,"see");
+        PageXTreeDTO treeDTO = PagexDataService.SIGNEL.getPageXTreeDTOFromCache(namespace);
+        if(treeDTO==null)
+        {
+            throw new ParamException("namespace:" + namespace + "不支持tree");
+        }
+        String fidField = ConverterUtils.toString(treeDTO.getKeySettMap().get("fidkey"));
+        String pkey =  ConverterUtils.toString(treeDTO.getModelConfig().get("pkey"));
+        JSONArray result = new JSONArray();
+
+        //祖宗的id
+        String fkeyVal = request.getParameter("pid");
+        // 所有的都查询出来
+        JSONArray jsonArray = getAllListPage(namespace);
+        if(CheckUtils.isNullOrEmpty(fkeyVal))
+        {
+            return jsonArray;
+        }
+        //所有的 fkeyVal 的后辈都在这个集合中
+        Set<String> posteritySet = new HashSet<>();
+
+        JSONObject temp = null;
+
+        //下面这段程序的名字叫做 他是不是我祖宗
+        for(int i=0;i<jsonArray.size();i++)
+        {
+            temp = jsonArray.getJSONObject(i);
+            //如果传进来的fkeyVal 是我的爸爸，就把我添加到返回的集合去  || 我爸爸是人家后辈，我肯定也是人家后辈
+            if(temp.getString(fidField).equals(fkeyVal) || posteritySet.contains(temp.getString(fidField)))
+            {
+                result.add(temp);
+                posteritySet.add(temp.getString(pkey));//他都是我爸爸了，我肯定是他的后辈
+            }
+        }
+        return result;
+    }
+
+    /**
      * 将导出的列配置信息缓存到session中
      * @param fieldSett 导出配置
      * @param request request
@@ -314,11 +359,11 @@ public class PageXMsPubAction extends PageXBaseAction{
         }
     }
 
-	    /**
+	/**
      *  获取ztree数据
      * @param namespace namespace
      */
-    @RequestMapping("{namespace}/ztreeData")
+    @RequestMapping("{namespace}/getTree")
     public List<TreeDTO> getTree(@PathVariable("namespace")String namespace, HttpServletRequest request){
         checkPermiessAndNamespace( namespace,"see");
         JSONArray jsonArray = getAllListPage(namespace);
