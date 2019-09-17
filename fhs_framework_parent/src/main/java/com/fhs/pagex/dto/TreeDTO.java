@@ -10,7 +10,7 @@ public class TreeDTO {
     /**
      * 名字
      */
-    private String name;
+    private String text;
     /**
      * id
      */

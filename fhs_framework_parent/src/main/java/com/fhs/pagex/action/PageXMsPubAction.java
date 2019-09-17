@@ -387,7 +387,7 @@ public class PageXMsPubAction extends PageXBaseAction{
             TreeDTO tree = new TreeDTO();
             tree.setId(jsonArray.getJSONObject(i).getString(pkey));
             tree.setParentId(jsonArray.getJSONObject(i).getString(fidField));
-            tree.setName(jsonArray.getJSONObject(i).getString(namekey));
+            tree.setText(jsonArray.getJSONObject(i).getString(namekey));
             map.put(tree.getId(),tree);
             //找爸爸
             if(map.containsKey(tree.getParentId())){
