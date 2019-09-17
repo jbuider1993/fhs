@@ -10,12 +10,15 @@
  */
 package com.fhs.common.utils;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -726,6 +729,34 @@ public class DateUtils {
         ListSort(beforeDateList);
         return beforeDateList;
     }
+
+    /**
+     * 计算开始和结束相差的月份(小数)
+     * @param startDate  开始日期
+     * @param endDate 结束日期
+     * @param dateFormart 格式化
+     * @return 相差的月份
+     */
+    public static BigDecimal computeMonth(String startDate, String endDate,String dateFormart) {
+        LocalDate beginDateTime = LocalDate.parse(startDate, DateTimeFormatter.ofPattern(dateFormart));
+        //结束时间plusDays(1)加一天
+        LocalDate endDateTime = LocalDate.parse(endDate, DateTimeFormatter.ofPattern(dateFormart)).plusDays(1);
+        if (beginDateTime.isAfter(endDateTime)) {
+            throw new IllegalArgumentException("结束时间不能小于等于开始时间");
+        }
+        //获取结束时间当月的天数
+        int endDateLengthOfMonth = LocalDate.parse(endDate, DateTimeFormatter.ofPattern(dateFormart)).lengthOfMonth();
+        //计算月差
+        Period pe = Period.between(beginDateTime, endDateTime);
+        int year = pe.getYears();
+        int month = pe.getMonths();
+        int day = pe.getDays();
+        BigDecimal decimal = new BigDecimal(String.valueOf(day)).divide(new BigDecimal(endDateLengthOfMonth), 2, 4);
+        BigDecimal monthNum = decimal.add(new BigDecimal(year * 12 + month));
+        return monthNum;
+    }
+
+  
 
     /**
      * 集合中 多个字段的 日期格式
