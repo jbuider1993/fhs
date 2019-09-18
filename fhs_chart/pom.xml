@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 	<version>1.0.0</version>
 
-	<name>common</name>
+	<name>fhs_chart</name>
 	<url>https://gitee.com/fhs-opensource/fhs_chart</url>
 
 	<properties>
