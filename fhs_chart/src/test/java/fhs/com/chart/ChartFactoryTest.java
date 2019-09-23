@@ -1,4 +1,4 @@
-package cn.lym.jfreechart;
+package fhs.com.chart;
 
 import java.io.File;
 import java.util.Vector;
@@ -62,7 +62,7 @@ public class ChartFactoryTest {
 		String valueAxisLabel = "Rainfall (mm)";
 		JFreeChart chart = ChartFactory.createBarLineChart(title,
 				categoryAxisLabel, valueAxisLabel,"test", series,seriesline, categories);
-		File file = new File("D:\\jfreechart\\barLineChart.jpeg");
+		File file = new File("barLineChart.jpeg");
 		int width = 1024;
 		int height = 420;
 		ChartUtilities.saveChartAsJPEG(file, chart, width, height);
@@ -85,6 +85,7 @@ public class ChartFactoryTest {
 		int width = 1024;
 		int height = 420;
 		ChartUtilities.saveChartAsJPEG(file, chart, width, height);
+
 	}
 
 	/**
