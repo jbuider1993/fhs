@@ -23,6 +23,21 @@ public interface Constant
      */
     int VERIFYING_CODE_NUM =5;
 
+    /**
+     * 大于
+     */
+    int BIGGER = 1;
+
+    /**
+     * 小于
+     */
+    int SMALL = -1;
+
+    /**
+     * 等于
+     */
+    int EQUAL = 0;
+
 
     /**
      * 0
