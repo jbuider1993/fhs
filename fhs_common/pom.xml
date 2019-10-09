@@ -86,6 +86,7 @@
 			<version>4.1.0</version>
 		</dependency>
 
+
 		<!--邮件 -->
 		<dependency>
 			<groupId>javax.mail</groupId>
@@ -143,6 +144,14 @@
 			<version>1.8.12.RELEASE</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.jacob</groupId>
+			<artifactId>jacob</artifactId>
+			<version>RELEASE</version>
+			<scope>compile</scope>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
