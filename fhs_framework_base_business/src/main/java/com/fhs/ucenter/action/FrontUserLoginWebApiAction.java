@@ -315,7 +315,7 @@ public class FrontUserLoginWebApiAction implements InitializingBean {
     /**
      * 支付宝oauth2 登录url
      */
-    private static  final  String ALIPAY_OAUTH2_URL = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?";
+    private static    String ALIPAY_OAUTH2_URL = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?";
 
     /**
      * 支付宝oauth 登录
@@ -332,7 +332,7 @@ public class FrontUserLoginWebApiAction implements InitializingBean {
         {
             UcenterAlipaySett alipaySett =alipaySettService.selectBean(UcenterAlipaySett.builder().extendsCode(code).build());
             AlipayClient alipayClient =
-                    new DefaultAlipayClient("https://openapi.alipay.com/gateway.do",
+                    new DefaultAlipayClient(EConfig.getOtherConfigPropertiesValue("alipay_gateway_service_url"),
                             alipaySett.getAppId(),alipaySett.getAppPrivateKey(),
                             "json", "UTF-8", alipaySett.getAlipayKey(), "RSA2");
             alipayClientMap.put(code,alipayClient);
@@ -364,8 +364,14 @@ public class FrontUserLoginWebApiAction implements InitializingBean {
         String businessCode = (String)request.getSession().getAttribute("code");
         try {
             AlipaySystemOauthTokenResponse alipayResponse =  alipayClientMap.get(businessCode).execute(getUserIdRequest);
-            String alipayUserId = alipayResponse.getUserId();
-            handleAlipayUserIdLogin(alipayUserId,alipayResponse.getAccessToken() ,businessCode,request,response);
+            if(alipayResponse.isSuccess()){
+                String alipayUserId = alipayResponse.getUserId();
+                handleAlipayUserIdLogin(alipayUserId,alipayResponse.getAccessToken() ,businessCode,request,response);
+            }
+            else{
+                LOGGER.error("支付宝方法调用错误,参数:" + JsonUtils.bean2json(getUserIdRequest) + ",返回结果:" + JsonUtils.bean2json(alipayResponse));
+                throw  new ParamException(alipayResponse.getSubMsg());
+            }
         } catch (AlipayApiException e) {
             LOGGER.error("支付宝方法调用错误",e);
             throw new BusinessException(e.getErrMsg());
@@ -421,6 +427,13 @@ public class FrontUserLoginWebApiAction implements InitializingBean {
         //key配置UA
         OAUTH_HANDEL_MAP.put("micromessenger",this::wxMPHandleLogin);
         OAUTH_HANDEL_MAP.put("alipayclient",this::alipayHandleLogin);
+        if(!ConverterUtils.toBoolean(EConfig.getOtherConfigPropertiesValue("isDevModel")))
+        {
+            ALIPAY_OAUTH2_URL = "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?";
+        }
+        else{
+            ALIPAY_OAUTH2_URL = EConfig.getPathPropertiesValue("alipay_oauth2_url");
+        }
     }
 }
 
