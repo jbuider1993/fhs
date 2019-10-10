@@ -756,7 +756,7 @@ public class DateUtils {
         return monthNum;
     }
 
-
+  
 
     /**
      * 集合中 多个字段的 日期格式
@@ -820,28 +820,6 @@ public class DateUtils {
                 return 0;
             }
         });
-    }
-
-    /**
-     * 分钟数转x天x小时x分钟
-     * @param menuts    分钟数
-     * @return
-     */
-
-    public static String timeCount(int menuts){
-        StringBuilder builder = new StringBuilder();
-        if(menuts > 0){
-            int dayMenuts = (60 * 24);
-            int day = menuts / dayMenuts;
-            int hour = (menuts - (day*dayMenuts))/60 ;
-            int min = menuts -((day*dayMenuts))-hour*60 ;
-            builder.append(day != 0 ? day + "天" : "");
-            builder.append(hour != 0 ? hour + "小时" : "");
-            builder.append(min != 0 ? min + "分钟" : "");
-        }else{
-            builder.append("0分钟");
-        }
-        return builder.toString();
     }
 
 }
