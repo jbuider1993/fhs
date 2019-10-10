@@ -705,15 +705,11 @@
 
     <!-- 获取用户tree的list数据(处理后可为tree数据) -->
     <select id="getUserOrgTreeList" resultType="com.fhs.ucenter.dto.SysUserOrgDTO" parameterType="map">
-
-        SELECT * FROM(select id,name as text,parent_id AS parentId,0 AS isUser,create_time FROM t_ucenter_ms_organization
+        SELECT id,name as text,parent_id AS parentId,0 AS isUser,create_time FROM t_ucenter_ms_organization
         WHERE group_code=#{groupCode}
         UNION
-
         SELECT  user_id,user_name AS text,organization_id AS parentId,1 AS isUser,create_time  FROM t_ucenter_ms_user
         WHERE group_code=#{groupCode}
-        ) temp ORDER BY create_time
-
 	</select>
 
 </mapper>
