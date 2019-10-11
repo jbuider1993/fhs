@@ -426,13 +426,10 @@ public class HttpUtils {
      * @return
      */
 
-    private static String imageRootPath = "D:\\";
-    public static String download(String httpUrlStr, String fileName) {
-        return download(httpUrlStr, fileName, imageRootPath);
-    }
+ 
 
     @SuppressWarnings("finally")
-    private static String download(String httpUrlStr, String fileName, String savePath) {
+    public static String download(String httpUrlStr, String fileName, String savePath) {
         InputStream is = null;
         OutputStream os = null;
         String filePath = null;
