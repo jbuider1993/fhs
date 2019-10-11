@@ -28,9 +28,10 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.cert.CertificateException;
@@ -421,8 +422,8 @@ public class HttpUtils {
      * 下载图片
      *
      * @param httpUrlStr
-     * @param subFolderName
-     * @param filename
+     * @param savePath
+     * @param fileName
      * @return
      */
 
