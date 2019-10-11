@@ -8,6 +8,7 @@ import com.fhs.common.excel.ExcelValidor;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
@@ -224,6 +225,28 @@ public class ExcelUtils
         cellStyleArray[0] = style;
         initSheet03(sheet, dataArray, titleArray, styleArray, cellStyleArray, startRowNum);
         writeExcel(wb, filePath);
+    }
+
+    /**
+     * 获取一个exccel所有的sheet的名字，支持03和07 版本的excel
+     * @param filePath excel文件路径
+     * @return
+     */
+    public static List<String> getSheetNames(String filePath)
+    {
+        Workbook workbook = null;
+        if(filePath.endsWith("xlsx"))
+        {
+            workbook =  getWorkbook03(filePath);
+        }
+        else{
+            workbook =  getWorkbook07(filePath);
+        }
+        List<String> sheetNames=  new ArrayList<>();
+        for (int i = 0; i < workbook.getNumberOfSheets(); i++) {//获取每个Sheet表
+            sheetNames.add(workbook.getSheetAt(i).getSheetName());
+        }
+        return sheetNames;
     }
 
     /**
