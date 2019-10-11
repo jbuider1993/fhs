@@ -28,9 +28,10 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.cert.CertificateException;
@@ -416,6 +417,71 @@ public class HttpUtils {
         }
         return httpStr;
     }
+	
+	/**
+     * 下载图片
+     *
+     * @param httpUrlStr
+     * @param savePath
+     * @param fileName
+     * @return
+     */
+
+ 
+
+    @SuppressWarnings("finally")
+    public static String download(String httpUrlStr, String fileName, String savePath) {
+        InputStream is = null;
+        OutputStream os = null;
+        String filePath = null;
+        try {
+            filePath = savePath + File.separator + fileName;
+            LOG.info(String.format("下载图片... url = {%s}, filePath = {%s} ", httpUrlStr, filePath));
+            // 构造URL
+            URL url = new URL(httpUrlStr);
+            // 打开连接
+            URLConnection con = url.openConnection();
+            //设置请求超时为5s
+            con.setConnectTimeout(5 * 1000);
+            // 输入流
+            is = con.getInputStream();
+            // 1K的数据缓冲
+            byte[] bs = new byte[1024];
+            // 读取到的数据长度
+            int len;
+            // 输出的文件流
+            File sf = new File(savePath);
+
+            if (!sf.exists()) {
+                sf.mkdirs();
+            }
+            os = new FileOutputStream(filePath);
+            // 开始读取
+            while ((len = is.read(bs)) != -1) {
+                os.write(bs, 0, len);
+            }
+            LOG.info(String.format("下载图片成功 图片存放路径 = {%s}", filePath));
+        } catch (MalformedURLException e) {
+            LOG.error("下载图片失败 : " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            LOG.error("普通异常下载图片失败 : " + e.getMessage());
+        } finally {
+            // 完毕，关闭所有链接
+            try {
+                if (null != os) {
+                    os.close();
+                }
+                if (null != is) {
+                    is.close();
+                }
+            } catch (IOException e) {
+                LOG.error("下载图片关闭流失败: " + e.getMessage());
+            }
+            return filePath;
+        }
+    }
+
 
 
     /**
