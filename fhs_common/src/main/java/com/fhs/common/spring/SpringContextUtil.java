@@ -34,6 +34,7 @@ public class SpringContextUtil implements ApplicationContextAware {
     private static Logger logger = Logger.getLogger(SpringContextUtil.class);
     private static ApplicationContext applicationContext = null;
 
+    @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         logger.info("------SpringContextUtil setApplicationContext-------");
         SpringContextUtil.applicationContext = applicationContext;
