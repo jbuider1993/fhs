@@ -330,6 +330,28 @@ public class DateUtils {
     }
 
     /**
+     * 分钟数转x天x小时x分钟
+     * @param menuts    分钟数
+     * @return
+     */
+
+    public static String timeCount(int menuts){
+        StringBuilder builder = new StringBuilder();
+        if(menuts > 0){
+            int dayMenuts = (60 * 24);
+            int day = menuts / dayMenuts;
+            int hour = (menuts - (day*dayMenuts))/60 ;
+            int min = menuts -((day*dayMenuts))-hour*60 ;
+            builder.append(day != 0 ? day + "天" : "");
+            builder.append(hour != 0 ? hour + "小时" : "");
+            builder.append(min != 0 ? min + "分钟" : "");
+        }else{
+            builder.append("0分钟");
+        }
+        return builder.toString();
+    }
+
+    /**
      * 两个时间相差距离多少天多少小时多少分多少秒
      *
      * @param str1 时间参数 1 格式：1990-01-01 12:00:00
