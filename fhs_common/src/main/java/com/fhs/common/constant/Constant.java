@@ -103,6 +103,11 @@ public interface Constant
     int SMALL =-1;
 
     /**
+     * 等于
+     */
+    int EQUAL = 0;
+
+    /**
      * 已经失效/过期的界面
      */
     String OLD = "old";
