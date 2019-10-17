@@ -92,7 +92,15 @@ public interface Constant
      */
     String FOOTER = "footer";
 
+    /**
+     * 大
+     */
+    int BIGGER = 1;
 
+    /**
+     * 小
+     */
+    int SMALL =-1;
 
     /**
      * 已经失效/过期的界面
