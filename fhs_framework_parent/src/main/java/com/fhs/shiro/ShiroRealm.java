@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 /**
- * fhs_mini版本
- *
+ * fhs 非cas的时候使用
+ * by jackwong
  */
 public class ShiroRealm extends AuthorizingRealm
 {

@@ -3,12 +3,12 @@ package com.fhs.config;
 import com.fhs.pagex.filter.PageXFilter;
 import com.fhs.shiro.ShiroCasRealm;
 import com.fhs.shiro.ShiroRealm;
+import com.fhs.shiro.StatelessSecurityManager;
 import com.fhs.shiro.cache.ShiroSpringCacheManager;
 import io.buji.pac4j.filter.CallbackFilter;
 import io.buji.pac4j.filter.LogoutFilter;
 import io.buji.pac4j.realm.Pac4jRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -31,9 +31,7 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.JacksonJsonRedisSerializer;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import javax.servlet.Filter;
 import java.util.LinkedHashMap;
@@ -56,6 +54,12 @@ public class ShiroConfiguration{
      */
     @Value("${shiro.cas.shiroServerUrlPrefix:}")
     private String shiroServerUrlPrefix;
+
+    /*
+     * 当前工程对外提供的服务地址
+     */
+    @Value("${fhs.usevue:false}")
+    private boolean useVue;
 
     private String clientName = "sso";
 
@@ -139,6 +143,10 @@ public class ShiroConfiguration{
     @DependsOn({"shiroRealm","shiroSpringCacheManager"})
     public DefaultWebSecurityManager securityManager(RedisConnectionFactory factory) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        if(this.useVue)
+        {
+            securityManager = new StatelessSecurityManager();
+        }
         securityManager.setCacheManager(shiroSpringCacheManager(factory));// 用户授权/认证信息Cache, 采用EhCache 缓存
        /*if (isEnableCas) {
             securityManager.setSubjectFactory(new CasSubjectFactory());
