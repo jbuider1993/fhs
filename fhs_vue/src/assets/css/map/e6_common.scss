@@ -1,0 +1,141 @@
+@import "theme";
+.clearfix {
+  zoom: 1;
+}
+.clearfix:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  height: 0px;
+}
+a {
+  color: $--main-color;
+}
+a:hover {
+  color: $--main-hover-color;
+}
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+.amap-marker-label {
+  border: 0;
+  background-color: transparent;
+}
+.e6-marker-label {
+  background: $--white-color;
+  border: 1px solid #cdcdcd;
+  padding: 3px 5px;
+  border-radius: 3px;
+  font-size: 12px;
+  line-height: 12px;
+  margin-left: 2px;
+  word-break: keep-all;
+  white-space: nowrap;
+}
+.win-info {
+  height: 200px;
+  position: relative;
+}
+.win-info .win-table {
+  height: calc(100% - 35px);
+}
+.win-table {
+  max-height: 200px;
+  overflow: auto;
+  padding-right: 3px;
+}
+.win-table table td {
+  font-size: 12px;
+  padding: 3px;
+}
+.win-table table td:first-child {
+  text-align: right;
+}
+.win-table table td h2 {
+  font-size: 12px;
+  font-weight: 700;
+  color: #5a667d;
+  margin: 0;
+  width: 60px;
+}
+.win-table table td a {
+  color: $--main-color;
+  &:hover{
+    color: $--main-hover-color;
+  }
+}
+.win-oper {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  border-radius: 5px;
+  background: $--grayBg-color;
+}
+.win-oper a {
+  float: left;
+  padding: 2px 5px;
+  border-radius: 3px;
+  text-decoration: none;
+  margin: 3px;
+}
+.win-oper a i {
+  color: $--main-color;
+  font-size: 18px;
+  &:hover{
+    color: $--main-hover-color;
+  }
+}
+.win-oper a:hover {
+  background: $--white-color;
+  box-shadow: 0 0 3px #adadad;
+}
+.win-comText {
+  font-size: 14px;
+  padding: 3px;
+  min-width: 200px;
+  min-height: 50px;
+}
+.cOperMenu {
+  background-color: $--white-color;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+  color: dimgrey;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  width: 28px;
+  height: 30px;
+  font-size: 12px;
+}
+.cOperMenu > i {
+  font-size: 14px;
+}
+.cOperMenu > i.a_icon-tiaosepan {
+  font-size: 19px;
+}
+.cOperMenu > i.blue {
+  color: #409eff;
+}
+.cOperMenu.wAuto {
+  width: auto;
+  padding: 0 6px;
+}
+.cOperMenu.wAuto > span {
+  margin-left: 5px;
+}
+.iconInp {
+  .el-input__suffix {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: $--main-color;
+    &:hover {
+      color: $--main-hover-color;
+    }
+  }
+}

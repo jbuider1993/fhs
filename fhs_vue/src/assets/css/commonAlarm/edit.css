@@ -1,0 +1,48 @@
+/*
+通用报警新增页面样式
+作成：qmm
+时间：2018-12-20
+*/
+.my-tree {
+  width: 210px;
+  line-height: 28px;
+  margin-right: 10px
+}
+
+.alarm-table {
+  width: 100%;
+}
+
+.alarm-table tr {
+  border-bottom: 1px gainsboro solid;
+  min-height:5px;
+}
+
+.alarm-table tr td {
+  vertical-align: top;
+  height: auto;
+  padding-top: 5px;
+  padding-bottom: 10px;
+}
+
+.alarm-table tr td p{
+  margin-top: 13px;
+}
+
+.alarm-table tr td input{
+
+}
+
+.common-alarm-div{
+  height: 600px;
+  overflow: auto;
+}
+
+.alarm-form-input{
+  width:350px
+}
+
+.common-alarm-btndiv{
+  margin: 50px 0px;
+  text-align: center;
+}
