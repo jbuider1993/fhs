@@ -11,6 +11,8 @@
           href="${staticPath}css/common.css"/>
     <link rel="stylesheet" type="text/css"
           href="${staticPath}css/loading_preloader.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="${staticPath}js/pop_menu/pop_menu.css"/>
     <script type="text/javascript" src="${staticPath}js/jquery.min.js"></script>
 
     <script type="text/javascript" src="${staticPath}js/json2.js"></script>
@@ -150,6 +152,7 @@
 
 <div id="toolbar">
     <div style="margin-bottom: 5px;">
+        <div style="float: left;">
         ${filtersHtml}
         <#shiro name="${namespace}:see">
             <a href="javascript:void(0)" class="easyui-linkbutton searchBTN"
@@ -199,7 +202,11 @@
                 >${button.title}</a>
             </#shiro>
         <% } %>
-
+        </div>
+        <div style="float: right">
+            <img src="${staticPath}/images/sett.png" width="30" style="padding-top: 10px;padding-left: 10px;" height="30"  id="columnSettLogo"/>
+        </div>
+        <div style="clear: both"></div>
     </div>
 </div>
 <div id="addOrUpdateDialog" class="easyui-dialog" title="添加/修改${modelConfig.title}"
@@ -215,11 +222,62 @@
 
 
 </body>
-
+<script type="text/javascript" src="${staticPath}js/pop_menu/pop_menu.js"></script>
 <script type="text/javascript">
 
     //全局变量
     var overallVariable = {};
+
+    var columnStatus = {};
+
+    //设置列状态
+    function setColumn(_field,_isChecked){
+        console.log(_field + _isChecked);
+        columnStatus[_field] = _isChecked;
+        if(_isChecked){
+            $("#listGrid").datagrid("showColumn", _field); // 设置隐藏列
+        }else{
+            $("#listGrid").datagrid("hideColumn", _field); // 设置隐藏列
+        }
+       localStorage.setItem('datagrid_columnsett_${namespace}',json2str(columnStatus));
+    }
+
+    //显示列设置
+    function showColumnSett(e){
+        var items = [
+            <% for(field in listFields){ %>
+
+                { title: '${field.title}',  fn: setColumn, clickFun: 'setColumn',val:<% if(field.showField == null){ %>_fieldName='${field.camelName}'<% }else{%>'${field.showField}'<% } %> },
+            <% } %>
+        ];
+        basicContext.show(items, e)
+        $('.cloumnCheckbox').prop('checked',true);
+        $('.cloumnCheckbox').each(function(){
+            if(columnStatus[this.value]===false){
+                $(this).prop('checked',false);
+                $("#listGrid").datagrid("hideColumn",this.value); // 设置隐藏列
+            }
+        });
+        console.log(e);
+    }
+
+    // 列设置
+    $(function () {
+        var _columnStatusCache = localStorage.getItem('datagrid_columnsett_${namespace}');
+        if(_columnStatusCache){
+            columnStatus = str2json(_columnStatusCache);
+            setTimeout(function(){
+                for(_key in columnStatus)
+                {
+                    if(columnStatus[_key]===false) {
+                        $("#listGrid").datagrid("hideColumn",_key); // 设置隐藏列
+                    }
+                }
+            },200);
+        }
+        var _btn = document.getElementById('columnSettLogo');
+        _btn.onclick = showColumnSett;
+    });
 
     // 去掉禁用的按钮
     $(function () {
