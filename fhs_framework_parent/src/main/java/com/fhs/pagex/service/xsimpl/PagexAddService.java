@@ -42,11 +42,7 @@ public class PagexAddService  implements IPageXService, InitializingBean {
 
     private static final Logger LOG = Logger.getLogger(PagexAddService.class);
 
-    /**
-     * 向html传递的Map
-     */
 
-    private Map<String,Object> paramMap;
 
     /**
      * 拼接html
@@ -65,8 +61,8 @@ public class PagexAddService  implements IPageXService, InitializingBean {
         }*/
         PagexAddDTO pageAddSett = PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace);
         //formHtml
-        paramMap = new HashMap<>();
-        String formHtml = createFormHtml(request, response, pageAddSett);
+        Map<String,Object> paramMap = new HashMap<>();
+        String formHtml = createFormHtml(request, response, pageAddSett,paramMap);
         //save_url
         if(!pageAddSett.getModelConfig().containsKey("saveUrl"))
         {
@@ -108,7 +104,7 @@ public class PagexAddService  implements IPageXService, InitializingBean {
      * @param pageAddSett 添加页配置
      * @return 表单内容
      */
-    public String createFormHtml(HttpServletRequest request, HttpServletResponse response, PagexAddDTO pageAddSett) {
+    public String createFormHtml(HttpServletRequest request, HttpServletResponse response, PagexAddDTO pageAddSett,Map<String,Object> paramMap) {
         String type = null;
         Class fromTagClass = null;
         BaseFormTag formTag = null;
@@ -134,7 +130,7 @@ public class PagexAddService  implements IPageXService, InitializingBean {
             if("one2x".equals(type))
             {
                 formFieldBuilder.append(handelOne2X( readyJsListList ,loadSuccessList, onSaveList, overallJsList,
-                         pageAddSett, field, request,  response));
+                         pageAddSett, field, request,  response,paramMap));
                 continue;
             }
             fromTagClass = FormTagFactory.getTag(type);
@@ -212,7 +208,7 @@ public class PagexAddService  implements IPageXService, InitializingBean {
     }
 
     private String handelOne2X(List<String> readyJsListList ,List<String> loadSuccessList, List<String> onSaveList, List<String> overallJsList,
-                               PagexAddDTO pageAddSett,Map<String, Object> field,HttpServletRequest request, HttpServletResponse response){
+                               PagexAddDTO pageAddSett,Map<String, Object> field,HttpServletRequest request, HttpServletResponse response,Map<String,Object> paramMap){
         // 头处理
         // template处理
         // load数据处理
