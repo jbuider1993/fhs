@@ -67,7 +67,7 @@ public class   PagexListService implements IPageXService, InitializingBean {
         if(!listPageSett.getModelConfig().containsKey("delUrl"))
         {
             listPageSett.getModelConfig().put("delUrl", EConfig.getPathPropertiesValue("basePath") +
-                    "/ms/x/" + namespace + "/del");
+                    "/ms/x/" + namespace + "/del/");
         }
         StringBuilder formFieldSetts = new StringBuilder("");
         List<Map<String, Object>> fieldSettList = PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace).getFormFieldSett();
