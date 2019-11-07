@@ -48,7 +48,7 @@ public class TemplateConfigSettFilter implements Filter {
             }
             keys = EConfig.OTHER_CONFIG.stringPropertyNames();
             for (String key : keys) {
-                shared.put(key, EConfig.PATH.get(key));
+                shared.put(key, EConfig.OTHER_CONFIG.get(key));
                 req.getServletContext().setAttribute(key, EConfig.OTHER_CONFIG.get(key));
             }
             // beetl共享变量，所有的模板都能访问到
