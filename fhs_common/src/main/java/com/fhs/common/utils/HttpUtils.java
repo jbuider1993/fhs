@@ -28,10 +28,9 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
-import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.cert.CertificateException;
@@ -49,7 +48,9 @@ import java.util.*;
 @SuppressWarnings("deprecation")
 public class HttpUtils {
 
-    //日志输出
+    /**
+     * 日志输出
+     */
     private static final Logger LOG = Logger.getLogger(HttpUtils.class);
 
     private static PoolingHttpClientConnectionManager connMgr;
@@ -104,10 +105,11 @@ public class HttpUtils {
         StringBuffer param = new StringBuffer();
         int i = 0;
         for (String key : params.keySet()) {
-            if (i == 0)
+            if (i == 0) {
                 param.append("?");
-            else
+            } else {
                 param.append("&");
+            }
             param.append(key).append("=").append(params.get(key));
             i++;
         }
@@ -148,18 +150,80 @@ public class HttpUtils {
      */
     public static String doPost(String apiUrl, Map<String, ?> params) {
 
-        String httpStr = null;
         HttpPost httpPost = new HttpPost(apiUrl);
-        CloseableHttpResponse response = null;
 
+        List<NameValuePair> pairList = new ArrayList<>(params.size());
+        for (Map.Entry<String, ?> entry : params.entrySet()) {
+            NameValuePair pair = new BasicNameValuePair(entry.getKey(), entry.getValue().toString());
+            pairList.add(pair);
+        }
+        httpPost.setEntity(new UrlEncodedFormEntity(pairList, Charset.forName("UTF-8")));
+        setThreadKey(apiUrl, params);
+
+        return getData(httpPost);
+    }
+
+    /**
+     * 发送 POST 请求（HTTP），JSON形式
+     *
+     * @param apiUrl
+     * @param json   json对象
+     * @return
+     */
+    public static String doPost(String apiUrl, Object json) {
+        if (apiUrl.startsWith("https")) {
+            return doPostSSL(apiUrl, json);
+        }
+        HttpPost httpPost = new HttpPost(apiUrl);
+
+        // 解决中文乱码问题
+        StringEntity stringEntity = new StringEntity(json.toString(), "UTF-8");
+        stringEntity.setContentEncoding("UTF-8");
+        stringEntity.setContentType("application/json");
+        httpPost.setEntity(stringEntity);
+        setThreadKey(apiUrl, json);
+
+        return getData(httpPost);
+    }
+
+    /**
+     * 发送 POST 请求（HTTP），JSON形式,携带header
+     *
+     * @param apiUrl
+     * @param json    json对象
+     * @param headers 头部信息
+     * @return
+     */
+    public static String doPost(String apiUrl, Object json, Map<String, String> headers) {
+
+        HttpPost httpPost = new HttpPost(apiUrl);
+
+        //设置请求的头信息
+        Set<Map.Entry<String, String>> sets = headers.entrySet();
+        Iterator<Map.Entry<String, String>> it = sets.iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, String> header = it.next();
+            httpPost.setHeader(header.getKey(), header.getValue());
+        }
+        StringEntity stringEntity = new StringEntity(json.toString(), "UTF-8");
+        stringEntity.setContentEncoding("UTF-8");
+        stringEntity.setContentType("application/json");
+        httpPost.setEntity(stringEntity);
+        setThreadKey(apiUrl, json);
+
+        return getData(httpPost);
+    }
+
+    /**
+     * POST发送请求，处理数据
+     *
+     * @param httpPost 请求实例
+     * @return
+     */
+    private static String getData(HttpPost httpPost) {
+        String httpStr = null;
+        CloseableHttpResponse response = null;
         try {
-            List<NameValuePair> pairList = new ArrayList<>(params.size());
-            for (Map.Entry<String, ?> entry : params.entrySet()) {
-                NameValuePair pair = new BasicNameValuePair(entry.getKey(), entry.getValue().toString());
-                pairList.add(pair);
-            }
-            httpPost.setEntity(new UrlEncodedFormEntity(pairList, Charset.forName("UTF-8")));
-            setThreadKey(apiUrl, params);
             response = httpClient.execute(httpPost);
             int statusCode = response.getStatusLine().getStatusCode();
             LOG.infoMsg("请求成功,请求返回状态码:{}", statusCode);
@@ -183,49 +247,6 @@ public class HttpUtils {
     }
 
     /**
-     * 发送 POST 请求（HTTP），JSON形式
-     *
-     * @param apiUrl
-     * @param json   json对象
-     * @return
-     */
-    public static String doPost(String apiUrl, Object json) {
-        if (apiUrl.startsWith("https")) {
-            return doPostSSL(apiUrl, json);
-        }
-        String httpStr = null;
-        HttpPost httpPost = new HttpPost(apiUrl);
-        CloseableHttpResponse response = null;
-
-        try {
-            StringEntity stringEntity = new StringEntity(json.toString(), "UTF-8");// 解决中文乱码问题
-            stringEntity.setContentEncoding("UTF-8");
-            stringEntity.setContentType("application/json");
-            httpPost.setEntity(stringEntity);
-            setThreadKey(apiUrl, json);
-            response = httpClient.execute(httpPost);
-            int statusCode = response.getStatusLine().getStatusCode();
-            LOG.infoMsg("请求成功,请求返回状态码:{}", statusCode);
-            if (statusCode == 200) {
-                HttpEntity entity = response.getEntity();
-                httpStr = EntityUtils.toString(entity, "UTF-8");
-            }
-            LOG.infoMsg("请求结果:{}", httpStr);
-        } catch (IOException e) {
-            LOG.infoMsg("请求失败，{}", e.getMessage());
-        } finally {
-            if (response != null) {
-                try {
-                    EntityUtils.consume(response.getEntity());
-                } catch (IOException e) {
-                    LOG.infoMsg("请求失败，{}", e.getMessage());
-                }
-            }
-        }
-        return httpStr;
-    }
-
-    /**
      * 发送 SSL POST 请求（HTTPS），K-V形式
      *
      * @param apiUrl API接口URL
@@ -234,41 +255,16 @@ public class HttpUtils {
      */
     public static String doPostSSL(String apiUrl, Map<String, Object> params) {
         HttpPost httpPost = new HttpPost(apiUrl);
-        CloseableHttpResponse response = null;
-        String httpStr = null;
 
-        try {
-            List<NameValuePair> pairList = new ArrayList<NameValuePair>(params.size());
-            for (Map.Entry<String, Object> entry : params.entrySet()) {
-                NameValuePair pair = new BasicNameValuePair(entry.getKey(), entry.getValue().toString());
-                pairList.add(pair);
-            }
-            httpPost.setEntity(new UrlEncodedFormEntity(pairList, Charset.forName("utf-8")));
-            setThreadKey(apiUrl, params);
-            response = httpClient.execute(httpPost);
-            int statusCode = response.getStatusLine().getStatusCode();
-            LOG.infoMsg("请求成功,请求返回状态码:{}", statusCode);
-            if (statusCode != HttpStatus.SC_OK) {
-                return null;
-            }
-            HttpEntity entity = response.getEntity();
-            if (entity == null) {
-                return null;
-            }
-            httpStr = EntityUtils.toString(entity, "utf-8");
-            LOG.infoMsg("请求结果:{}", httpStr);
-        } catch (Exception e) {
-            LOG.error("请求失败, Exception : " + e.getMessage());
-        } finally {
-            if (response != null) {
-                try {
-                    EntityUtils.consume(response.getEntity());
-                } catch (IOException e) {
-                    LOG.error("请求失败,IOException : " + e.getMessage());
-                }
-            }
+        List<NameValuePair> pairList = new ArrayList<NameValuePair>(params.size());
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            NameValuePair pair = new BasicNameValuePair(entry.getKey(), entry.getValue().toString());
+            pairList.add(pair);
         }
-        return httpStr;
+        httpPost.setEntity(new UrlEncodedFormEntity(pairList, Charset.forName("utf-8")));
+        setThreadKey(apiUrl, params);
+
+        return getDataSSL(httpPost);
     }
 
     /**
@@ -281,15 +277,21 @@ public class HttpUtils {
     public static String doPostSSL(String apiUrl, Object json) {
 
         HttpPost httpPost = new HttpPost(apiUrl);
+
+        // 解决中文乱码问题
+        StringEntity stringEntity = new StringEntity(json.toString(), "UTF-8");
+        stringEntity.setContentEncoding("UTF-8");
+        stringEntity.setContentType("application/json");
+        httpPost.setEntity(stringEntity);
+        setThreadKey(apiUrl, json);
+
+        return getDataSSL(httpPost);
+    }
+
+    private static String getDataSSL(HttpPost httpPost) {
         CloseableHttpResponse response = null;
         String httpStr = null;
-
         try {
-            StringEntity stringEntity = new StringEntity(json.toString(), "UTF-8");// 解决中文乱码问题
-            stringEntity.setContentEncoding("UTF-8");
-            stringEntity.setContentType("application/json");
-            httpPost.setEntity(stringEntity);
-            setThreadKey(apiUrl, json);
             response = httpClient.execute(httpPost);
             int statusCode = response.getStatusLine().getStatusCode();
             LOG.infoMsg("请求成功,请求返回状态码:{}", statusCode);
@@ -315,6 +317,7 @@ public class HttpUtils {
         }
         return httpStr;
     }
+
 
     /**
      * 创建SSL安全连接
@@ -373,7 +376,8 @@ public class HttpUtils {
 
     /**
      * 上传文件
-     * @param apiUrl url
+     *
+     * @param apiUrl  url
      * @param fileMap 文件map
      * @return 服务器返回结果
      */
@@ -417,71 +421,6 @@ public class HttpUtils {
         }
         return httpStr;
     }
-	
-	/**
-     * 下载图片
-     *
-     * @param httpUrlStr
-     * @param savePath
-     * @param fileName
-     * @return
-     */
-
- 
-
-    @SuppressWarnings("finally")
-    public static String download(String httpUrlStr, String fileName, String savePath) {
-        InputStream is = null;
-        OutputStream os = null;
-        String filePath = null;
-        try {
-            filePath = savePath + File.separator + fileName;
-            LOG.info(String.format("下载图片... url = {%s}, filePath = {%s} ", httpUrlStr, filePath));
-            // 构造URL
-            URL url = new URL(httpUrlStr);
-            // 打开连接
-            URLConnection con = url.openConnection();
-            //设置请求超时为5s
-            con.setConnectTimeout(5 * 1000);
-            // 输入流
-            is = con.getInputStream();
-            // 1K的数据缓冲
-            byte[] bs = new byte[1024];
-            // 读取到的数据长度
-            int len;
-            // 输出的文件流
-            File sf = new File(savePath);
-
-            if (!sf.exists()) {
-                sf.mkdirs();
-            }
-            os = new FileOutputStream(filePath);
-            // 开始读取
-            while ((len = is.read(bs)) != -1) {
-                os.write(bs, 0, len);
-            }
-            LOG.info(String.format("下载图片成功 图片存放路径 = {%s}", filePath));
-        } catch (MalformedURLException e) {
-            LOG.error("下载图片失败 : " + e.getMessage());
-            e.printStackTrace();
-        } catch (Exception e) {
-            LOG.error("普通异常下载图片失败 : " + e.getMessage());
-        } finally {
-            // 完毕，关闭所有链接
-            try {
-                if (null != os) {
-                    os.close();
-                }
-                if (null != is) {
-                    is.close();
-                }
-            } catch (IOException e) {
-                LOG.error("下载图片关闭流失败: " + e.getMessage());
-            }
-            return filePath;
-        }
-    }
-
 
 
     /**
@@ -492,8 +431,8 @@ public class HttpUtils {
     public static void main(String[] args)
             throws Exception {
 
-        Map<String,File> fileMap = new HashMap<>();
-        fileMap.put("Filedata",new File("G:\\document\\停车项目\\图片\\logo.jpg"));
+        Map<String, File> fileMap = new HashMap<>();
+        fileMap.put("Filedata", new File("G:\\document\\停车项目\\图片\\logo.jpg"));
         String doPostSSL = uploadFile("http://file.fhs.xhb.com//upload/file", fileMap);
         System.out.println(doPostSSL);
     }
