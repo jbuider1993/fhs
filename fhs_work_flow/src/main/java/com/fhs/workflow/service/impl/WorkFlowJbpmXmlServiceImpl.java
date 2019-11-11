@@ -25,6 +25,7 @@ import com.fhs.common.utils.*;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.config.EConfig;
 import com.fhs.workflow.bean.WorkFlowJbpmXml;
+import com.fhs.workflow.dao.WorkFlowJbpmXmlDAO;
 import com.fhs.workflow.service.WorkFlowJbpmXmlService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.DeploymentBuilder;
@@ -46,15 +47,17 @@ public class WorkFlowJbpmXmlServiceImpl extends BaseServiceImpl<WorkFlowJbpmXml>
     private static final String jbpmFilePath = EConfig.getPathPropertiesValue("jbpmFilePath");
     
     private static final Logger LOG = Logger.getLogger(WorkFlowJbpmXmlServiceImpl.class);
-   
+
+    //private WorkFlowJbpmXmlDAO
 
 	@Autowired
 	private DBPubService<WorkFlowJbpmXml> dbpubService;
 
 	@Autowired
 	private RepositoryService repositoryService;
+
     @Override
-    public void releaseWorkFlow(WorkFlowJbpmXml workFlowJbpmXml) {
+    public void releaseWorkFlow(String xmlId) {
         try {
             workFlowJbpmXml = dbpubService.get(workFlowJbpmXml);
             String xmlFileName = StringUtil.getUUID() + ".bpmn";
