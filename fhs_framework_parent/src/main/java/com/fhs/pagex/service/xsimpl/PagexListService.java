@@ -52,6 +52,7 @@ public class   PagexListService implements IPageXService, InitializingBean {
      * @param namespace 命名空间
      * @return 列表页HTML
      */
+    @Override
     public String service(HttpServletRequest request, HttpServletResponse response,String js,String namespace) throws NoSuchMethodException, ScriptException {
         StringBuilder htmlBuilder = new StringBuilder();
         PagexListSettDTO listPageSett =  PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace);
