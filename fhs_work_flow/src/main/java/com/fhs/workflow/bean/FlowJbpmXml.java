@@ -90,11 +90,15 @@ public class FlowJbpmXml extends BaseDO<FlowJbpmXml> {
     @TableField("img")
     private String img;
 
+    // 版本
+    @TableField("version")
+    private Integer version;
+
 
     public FlowJbpmXml() {
     }
 
-    public FlowJbpmXml(String id, String name, String key, Integer server, Integer isPagex, String uri, String namespace, Integer status, String xml) {
+    public FlowJbpmXml(String id, String name, String key, Integer server, Integer isPagex, String uri, String namespace, Integer status, String xml, String img, Integer version) {
         this.id = id;
         this.name = name;
         this.key = key;
@@ -104,5 +108,7 @@ public class FlowJbpmXml extends BaseDO<FlowJbpmXml> {
         this.namespace = namespace;
         this.status = status;
         this.xml = xml;
+        this.img = img;
+        this.version = version;
     }
 }

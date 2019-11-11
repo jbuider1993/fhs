@@ -56,15 +56,15 @@ public class FlowJbpmXmlServiceImpl extends BaseServiceImpl<FlowJbpmXml>   imple
             FileUtils.writeByteArrayToFile(new File(EConfig.getPathPropertiesValue("jbpmFilePath") + pngName), Base64Util.getByteFromBase64(workFlowJbpmXml.getImg()));
             // 创建发布配置对象
             DeploymentBuilder builder = repositoryService.createDeployment();
-            pngName = catImg(EConfig.getPathPropertiesValue("jbpmFilePath") + xmlFileName,EConfig.getPathPropertiesValue("jbpmFilePath") + pngName);
+           // pngName = catImg(EConfig.getPathPropertiesValue("jbpmFilePath") + xmlFileName,EConfig.getPathPropertiesValue("jbpmFilePath") + pngName);
             // 设置发布信息
             // 添加部署规则的显示别名
             // 添加规则文件
             // 添加规则图片  不添加会自动产生一个图片不推荐
             builder
                     .name(workFlowJbpmXml.getName())
-                    .addClasspathResource("jbpm/" + xmlFileName)
-                    .addClasspathResource("jbpm/" + pngName);
+                    .addClasspathResource("jbpm/" + xmlFileName);
+                    //.addClasspathResource("jbpm/" + pngName);
             // 完成发布
             builder.deploy();
             super.updateSelectiveById(FlowJbpmXml.builder().id(xmlId).status(FlowJbpmXmlService.STATUS_HAS_DEPLOY).build());
