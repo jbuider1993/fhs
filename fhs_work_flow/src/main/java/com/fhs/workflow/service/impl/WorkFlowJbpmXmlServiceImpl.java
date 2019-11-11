@@ -24,6 +24,7 @@ import javax.imageio.stream.ImageInputStream;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.config.EConfig;
+import com.fhs.core.exception.ParamChecker;
 import com.fhs.workflow.bean.WorkFlowJbpmXml;
 import com.fhs.workflow.dao.WorkFlowJbpmXmlDAO;
 import com.fhs.workflow.service.WorkFlowJbpmXmlService;
@@ -44,14 +45,13 @@ import org.springframework.stereotype.Service;
 @Service("workFlowJbpmXmlServiceImpl")
 public class WorkFlowJbpmXmlServiceImpl extends BaseServiceImpl<WorkFlowJbpmXml> implements WorkFlowJbpmXmlService
 {
-    private static final String jbpmFilePath = EConfig.getPathPropertiesValue("jbpmFilePath");
+
     
     private static final Logger LOG = Logger.getLogger(WorkFlowJbpmXmlServiceImpl.class);
 
-    //private WorkFlowJbpmXmlDAO
+    @Autowired
+    private WorkFlowJbpmXmlDAO jbpmXmlDAO;
 
-	@Autowired
-	private DBPubService<WorkFlowJbpmXml> dbpubService;
 
 	@Autowired
 	private RepositoryService repositoryService;
@@ -59,19 +59,23 @@ public class WorkFlowJbpmXmlServiceImpl extends BaseServiceImpl<WorkFlowJbpmXml>
     @Override
     public void releaseWorkFlow(String xmlId) {
         try {
-            workFlowJbpmXml = dbpubService.get(workFlowJbpmXml);
+            WorkFlowJbpmXml workFlowJbpmXml = jbpmXmlDAO.selectByIdJpa(xmlId);
+            ParamChecker.isNotNullOrEmpty(workFlowJbpmXml,"id无效");
             String xmlFileName = StringUtil.getUUID() + ".bpmn";
             String pngName = StringUtil.getUUID() + ".png";
-            FileUtils.write(new File(jbpmFilePath + xmlFileName), workFlowJbpmXml.getProcessDescriptor(),"utf-8");
-            FileUtils.writeByteArrayToFile(new File(jbpmFilePath + pngName),Base64Util.getByteFromBase64(workFlowJbpmXml.getXmlImgBase64()));
+            FileUtils.write(new File(EConfig.getPathPropertiesValue("jbpmFilePath") + xmlFileName), workFlowJbpmXml.getProcessDescriptor(),"utf-8");
+            FileUtils.writeByteArrayToFile(new File(EConfig.getPathPropertiesValue("jbpmFilePath") + pngName),Base64Util.getByteFromBase64(workFlowJbpmXml.getXmlImgBase64()));
            // 创建发布配置对象
             DeploymentBuilder builder = repositoryService.createDeployment();
-            pngName = catImg(jbpmFilePath + xmlFileName,jbpmFilePath + pngName);
+            pngName = catImg(EConfig.getPathPropertiesValue("jbpmFilePath") + xmlFileName,EConfig.getPathPropertiesValue("jbpmFilePath") + pngName);
             // 设置发布信息
+            // 添加部署规则的显示别名
+            // 添加规则文件
+            // 添加规则图片  不添加会自动产生一个图片不推荐
             builder
-            .name(workFlowJbpmXml.getProcessName())// 添加部署规则的显示别名
-            .addClasspathResource("jbpm/" + xmlFileName)// 添加规则文件
-            .addClasspathResource("jbpm/" + pngName);// 添加规则图片  不添加会自动产生一个图片不推荐
+            .name(workFlowJbpmXml.getProcessName())
+            .addClasspathResource("jbpm/" + xmlFileName)
+            .addClasspathResource("jbpm/" + pngName);
             // 完成发布
             builder.deploy();
         } catch (Exception e) {
@@ -114,7 +118,7 @@ public class WorkFlowJbpmXmlServiceImpl extends BaseServiceImpl<WorkFlowJbpmXml>
         } 
         maxX+=100;
         String pngName =  StringUtil.getUUID() + ".png";
-        String outputFile = jbpmFilePath + pngName;
+        String outputFile = EConfig.getPathPropertiesValue("jbpmFilePath") + pngName;
         OutputStream os = new  FileOutputStream(new File(outputFile));
         cutPNG(new FileInputStream(new File(pngPath)), os,0,  
                 0, maxX, maxY);
@@ -142,9 +146,7 @@ public class WorkFlowJbpmXmlServiceImpl extends BaseServiceImpl<WorkFlowJbpmXml>
             imageStream = ImageIO.createImageInputStream(input);  
             reader.setInput(imageStream, true);  
             ImageReadParam param = reader.getDefaultReadParam();  
-              
-            System.out.println(reader.getWidth(0));  
-            System.out.println(reader.getHeight(0));  
+
               
             Rectangle rect = new Rectangle(x, y, width, height);  
             param.setSourceRegion(rect);  
@@ -156,51 +158,7 @@ public class WorkFlowJbpmXmlServiceImpl extends BaseServiceImpl<WorkFlowJbpmXml>
     }
     
  
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    @Override
-    public String getWorkFlowTreeJson(DbParam param) {
-        //几乎就查询所有的了
-        param.setSize(1000000);
-        List<Map<String,Object>> resultList = new ArrayList<>();
-        try {
-            List<WorkFlowJbpmXml> workFlowList =  dbpubService.getListByEntity(WorkFlowJbpmXml.class, param);
-            Map<Integer,Map<String,Object>> workFlowTypeMap = new HashMap<>();
-            Integer workFlowTypeId = 0;
-            Map<String,Object> workFlowType = null;
-            Map<String,Object>  workFlowMap = null;
-            List<Map<String,Object>> childrenList = null;
-            for(WorkFlowJbpmXml tempWrokFlow : workFlowList)
-            {
-                workFlowTypeId = tempWrokFlow.getTypeId();
-                if(workFlowTypeMap.containsKey(workFlowTypeId))
-                {
-                    workFlowType = workFlowTypeMap.get(workFlowTypeId);
-                    workFlowMap = MapUtils.bean2Map(tempWrokFlow);
-                    workFlowMap.put("name",workFlowMap.get("processName"));
-                    ((List)workFlowType.get("children")).add(workFlowMap);
-                }
-                else
-                {
-                    workFlowType = new HashMap<>();
-                    workFlowType.put("name", tempWrokFlow.getTransMap().get("typeIdName"));
-                    childrenList = new ArrayList<>();
-                    workFlowMap = MapUtils.bean2Map(tempWrokFlow);
-                    workFlowMap.put("name",workFlowMap.get("processName"));
-                    childrenList.add(workFlowMap);
-                    workFlowType.put("children", childrenList);
-                    workFlowTypeMap.put(workFlowTypeId, workFlowType);
-                }
-            }
-            Set<Integer> keys = workFlowTypeMap.keySet();
-            for(Integer typeId : keys)
-            {
-                resultList.add(workFlowTypeMap.get(typeId));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return JsonUtils.list2json(resultList);
-    }
+
     
    
 }

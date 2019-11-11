@@ -17,17 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.jack.base.controller.SuperAction;
-import com.jack.base.dao.db.DbParam;
-import com.jack.base.dao.db.WhereValue;
-import com.jack.base.dao.enums.DbOperEnum;
-import com.jack.base.service.DBPubService;
-import com.jack.common.constant.Constant;
-import com.jack.common.utils.JsonUtils;
-import com.jack.form.bean.FormDesign;
-import com.jack.workflow.bean.WorkFlowJbpmXml;
-import com.jack.workflow.service.WorkFlowJbpmXmlService;
-
 /**
  * 流程xml管理
  * @author  wanglei
@@ -37,7 +26,7 @@ import com.jack.workflow.service.WorkFlowJbpmXmlService;
 @RequestMapping("workFlowJbpmXml")
 public class WorkFlowJbpmXmlAction extends ModelSuperAction<WorkFlowJbpmXml>
 {
-	@Resource(name = "workFlowJbpmXmlServiceImpl")
+	@Autowired
 	private WorkFlowJbpmXmlService workFlowJbpmXmlService;
 
 	
@@ -57,37 +46,8 @@ public class WorkFlowJbpmXmlAction extends ModelSuperAction<WorkFlowJbpmXml>
     } 
     
     
-    /**
-     * 获取已经发布的数据tree
-     * @param request request
-     * @param response response
-     */
-    @RequestMapping("getWorkFlowTree")
-    @RequiresPermissions("workFlowJbpmXml:see")
-    public void getWorkFlowTree(HttpServletRequest request, HttpServletResponse response)
-    { 
-        DbParam param = super.getPageParamsMap(request);
-        param.getWheres().add(new WhereValue("isPubForm", DbOperEnum.OPERA_EQ, Constant.INT_TRUE + ""));
-        String resultJson = workFlowJbpmXmlService.getWorkFlowTreeJson(param);
-        super.outWriteJson(resultJson, response);
-    } 
+
     
-    /**
-     * 获取第一个页面数据
-     * @param request request
-     * @param response response
-     * @throws Exception 
-     */
-    @RequestMapping("getFirstForm")
-    public void getFirstForm(HttpServletRequest request, HttpServletResponse response) throws Exception
-    { 
-        WorkFlowJbpmXml workFlowJbpmXml = super.getDBpubService().get(WorkFlowJbpmXml.class, request.getParameter("id"));
-        String formName = workFlowJbpmXml.getFormName();
-        DbParam dbParam = new DbParam();
-        dbParam.getWheres().add(new WhereValue("name", DbOperEnum.OPERA_EQ, formName));
-        FormDesign formDesign = formDBPubService.getEntity(FormDesign.class, dbParam);
-        super.outWriteJson(JsonUtils.bean2json(formDesign), response);
-    } 
-    
+
     
 }

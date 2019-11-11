@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service("WorkFlowTaskServiceImpl")
-public class WorkFlowTaskServiceImpl extends BaseServiceImpl<Map<String,Object>> implements WorkFlowTaskService {
+public class WorkFlowTaskServiceImpl  implements WorkFlowTaskService {
 
     @Autowired
     private WorkFlowTaskDAO workFlowTaskDAO;
@@ -32,6 +32,15 @@ public class WorkFlowTaskServiceImpl extends BaseServiceImpl<Map<String,Object>>
         return workFlowTaskDAO.findNeedClaimTaskCount(paramMap);
     }
 
-  
+    @Override
+    public List<Map<String, Object>> findNeedComplateTask(Map<String, Object> paramMap) {
+        return workFlowTaskDAO.findNeedComplateTask(paramMap);
+    }
+
+    @Override
+    public int findNeedComplateTaskCount(Map<String, Object> paramMap) {
+        return workFlowTaskDAO.findNeedComplateTaskCount(paramMap);
+    }
+
 
 }

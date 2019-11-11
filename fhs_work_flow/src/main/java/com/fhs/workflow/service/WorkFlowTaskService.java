@@ -11,7 +11,8 @@ import com.fhs.core.base.service.BaseService;
  * @author wanglei
  *
  */
-public interface WorkFlowTaskService extends BaseService<Map<String, Object>> {
+public interface WorkFlowTaskService {
+
     /**
      * 查询代签收任务
      * 
@@ -29,4 +30,19 @@ public interface WorkFlowTaskService extends BaseService<Map<String, Object>> {
      * @return 代签收总数
      */
     int findNeedClaimTaskCount(Map<String, Object> paramMap);
+
+    /**
+     * 查询待办任务
+     * @param paramMap 参数map
+     * @return 代签收map集合
+     */
+    List<Map<String,Object>> findNeedComplateTask(Map<String, Object> paramMap);
+
+
+    /**
+     * 查询待办任务总数
+     * @param paramMap 参数map
+     * @return 代签收总数
+     */
+    int findNeedComplateTaskCount(Map<String, Object> paramMap);
 }

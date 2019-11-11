@@ -18,6 +18,5 @@ public interface WorkFlowJbpmXmlService extends BaseService<WorkFlowJbpmXml>
      * @param xmlId 工作流配置对象
      */
     void releaseWorkFlow(String xmlId);
- 
 
 }

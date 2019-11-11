@@ -7,3 +7,26 @@ server:
 mybatis-plus:
   mapperLocations: classpath*:mapper/*/*.xml
   typeAliasesPackage: com.fhs.workflow.bean;
+
+eureka:
+  instance:
+    appname: flow
+
+
+spring:
+  session:
+    store-type: none
+
+  #Activiti property configuration
+  activiti:
+    database-schema-update: false
+    job-executor-activate: true
+    history-level: full
+    check-process-definitions: false
+    ext:
+      database-schema-update: false
+  jpa:
+    show-sql: true
+fhs:
+  activiti:
+    createtb: true

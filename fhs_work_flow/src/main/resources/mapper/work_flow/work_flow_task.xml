@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.fhs.workflow.dao.WorkFlowTaskDAO">
-	<select id="findForListFromMap" parameterType="java.util.Map"
+	<select id="findNeedComplateTask" parameterType="java.util.Map"
 		resultType="map">
 		SELECT
 		`ID_`,
@@ -48,7 +48,7 @@
 		</if>
 	</select>
 
-	<select id="findCountFromMap" parameterType="map" resultType="java.lang.Integer">
+	<select id="findNeedComplateTaskCount" parameterType="map" resultType="java.lang.Integer">
 		SELECT
 		 COUNT(1)
 		FROM

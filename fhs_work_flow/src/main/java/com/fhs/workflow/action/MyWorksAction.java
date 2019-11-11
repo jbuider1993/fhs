@@ -9,6 +9,11 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.fhs.base.action.ModelSuperAction;
+import com.fhs.common.constant.Constant;
+import com.fhs.core.base.action.BaseAction;
+import com.fhs.core.page.Pager;
+import com.fhs.core.result.HttpResult;
+import com.fhs.ucenter.api.vo.SysUserVo;
 import com.fhs.workflow.bean.HistoryTask;
 import com.fhs.workflow.service.WorkFlowTaskService;
 import org.activiti.bpmn.model.BpmnModel;
@@ -31,6 +36,7 @@ import org.activiti.spring.ProcessEngineFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
 /**
@@ -38,9 +44,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author wanglei
  *
  */
-@Controller
+@RestController
 @RequestMapping("myWorks")
-public class MyWorksAction extends ModelSuperAction {
+public class MyWorksAction extends BaseAction {
 
     @Autowired
     private TaskService taskService;
@@ -62,21 +68,21 @@ public class MyWorksAction extends ModelSuperAction {
     HistoryService historyService;
 
 
-    /**
+   /**
      * 查询待完成的工作
      * @param request
      * @param response
      * @throws Exception
      */
     @RequestMapping("getNeedComplateTask")
-    public void getNeedComplateTask(HttpServletRequest request, HttpServletResponse response) throws Exception
+    public Pager<Map<String, Object>> getNeedComplateTask(HttpServletRequest request, HttpServletResponse response) throws Exception
     { 
         Map<String,Object> paramMap = super.getPageTurnNum(request);
-        List<Map<String, Object>>  dataList = workFlowTaskService.findForListFromMap(paramMap);
-        int count = workFlowTaskService.findCountFromMap(paramMap);
-        super.writeJsonForPager(dataList, count, response);
+        List<Map<String, Object>>  dataList = workFlowTaskService.findNeedComplateTask(paramMap);
+        int count = workFlowTaskService.findNeedComplateTaskCount(paramMap);
+        return new Pager(count,dataList);
     } 
-    
+
     /**
      * 查询待签收的工作
      * @param request
@@ -84,12 +90,12 @@ public class MyWorksAction extends ModelSuperAction {
      * @throws Exception
      */
     @RequestMapping("getNeedClaimTask")
-    public void getNeedClaimTask(HttpServletRequest request, HttpServletResponse response) throws Exception
+    public  Pager<Map<String, Object>>  getNeedClaimTask(HttpServletRequest request, HttpServletResponse response) throws Exception
     { 
         Map<String,Object> paramMap = super.getPageTurnNum(request);
         List<Map<String, Object>>  dataList = workFlowTaskService.findNeedClaimTask(paramMap);
         int count = workFlowTaskService.findNeedClaimTaskCount(paramMap);
-        super.writeJsonForPager(dataList, count, response);
+        return new Pager(count,dataList);
     } 
     
     /**
@@ -99,11 +105,21 @@ public class MyWorksAction extends ModelSuperAction {
      * @throws Exception
      */
     @RequestMapping("claimTask")
-    public void claimTask(HttpServletRequest request, HttpServletResponse response) throws Exception
+    public HttpResult<Boolean> claimTask(HttpServletRequest request, HttpServletResponse response) throws Exception
     { 
-        taskService.claim(request.getParameter("taskId"), super.getSessionuser(request).getUserLoginName());
-        super.outToClient(true, response);
-    } 
+        taskService.claim(request.getParameter("taskId"), getSessionuser(request).getUserLoginName());
+         return HttpResult.success(true);
+    }
+
+    /**
+     * 获取session里面的user
+     *
+     * @param request 请求对象
+     * @return session里面的user
+     */
+    private SysUserVo getSessionuser(HttpServletRequest request) {
+        return (SysUserVo)request.getSession().getAttribute(Constant.SESSION_USER);
+    }
     
     
     /**
@@ -113,7 +129,7 @@ public class MyWorksAction extends ModelSuperAction {
      * @throws Exception
      */
     @RequestMapping("getHistoryTask")
-    public void getHistoryTask(HttpServletRequest request, HttpServletResponse response) throws Exception
+    public  Pager<Map<String, Object>> getHistoryTask(HttpServletRequest request, HttpServletResponse response) throws Exception
     { 
         String processInstanceId = request.getParameter("processInstanceId");  
         List<HistoricTaskInstance> list = historyService
@@ -123,6 +139,7 @@ public class MyWorksAction extends ModelSuperAction {
         
         Map<String, HistoryTask> taskMap = new HashMap<>();
         HistoryTask tempTask = null;
+        //流程变量
         Map<String, Object>  variablesMap = null;
         Set<String> keys = null;
         for(HistoricTaskInstance historicTaskInstance : list)
@@ -140,7 +157,7 @@ public class MyWorksAction extends ModelSuperAction {
                 }
             }
         }
-        super.writeJsonForPager(list, list.size(), response);
+        return new Pager(list.size(),list);
     } 
     
     

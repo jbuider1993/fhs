@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 	<head>
-		<jsp:include page="/page/common/js_css_include.jsp"></jsp:include>
+		<jsp:include page="/page/ms/common/js_css_include.jsp"></jsp:include>
 	</head>
 
 	<body>
