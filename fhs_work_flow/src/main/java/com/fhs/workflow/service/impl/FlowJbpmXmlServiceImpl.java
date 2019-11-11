@@ -67,6 +67,7 @@ public class FlowJbpmXmlServiceImpl extends BaseServiceImpl<FlowJbpmXml>   imple
                     .addClasspathResource("jbpm/" + pngName);
             // 完成发布
             builder.deploy();
+            super.updateSelectiveById(FlowJbpmXml.builder().id(xmlId).status(FlowJbpmXmlService.STATUS_HAS_DEPLOY).build());
         } catch (Exception e) {
             LOG.error("流程部署出错");
             LOG.error(this, e);

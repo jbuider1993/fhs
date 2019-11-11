@@ -11,6 +11,10 @@ import com.fhs.core.base.service.BaseService;
  */
 public interface FlowJbpmXmlService extends BaseService<FlowJbpmXml>{
 
+    /**
+     * 已发布
+     */
+    int STATUS_HAS_DEPLOY = 1;
 
     /**
      * 发布工作流到引擎中，将状态改为已发布

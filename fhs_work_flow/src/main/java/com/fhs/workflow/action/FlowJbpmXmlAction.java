@@ -31,7 +31,7 @@ public class FlowJbpmXmlAction extends ModelSuperAction<FlowJbpmXml> {
      * @param xmlId 里面包含id即可
      */
     @RequestMapping("releaseWorkFlow")
-    @RequiresPermissions("workFlowJbpmXml:releaseWorkFlow")
+    @RequiresPermissions("flowJbpmXml:releaseWorkFlow")
     public HttpResult<Boolean> releaseWorkFlow(String  xmlId)
     {
         ParamChecker.isNotNull(xmlId,"id不能为空");
