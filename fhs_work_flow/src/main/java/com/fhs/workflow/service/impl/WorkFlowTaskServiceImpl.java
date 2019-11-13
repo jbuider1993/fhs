@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.fhs.core.base.service.impl.BaseServiceImpl;
+import com.fhs.workflow.bean.FlowTask;
 import com.fhs.workflow.dao.WorkFlowTaskDAO;
 import com.fhs.workflow.service.WorkFlowTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class WorkFlowTaskServiceImpl  implements WorkFlowTaskService {
     private WorkFlowTaskDAO workFlowTaskDAO;
     
     @Override
-    public List<Map<String, Object>> findNeedClaimTask(Map<String, Object> paramMap) {
+    public List<FlowTask> findNeedClaimTask(Map<String, Object> paramMap) {
         return workFlowTaskDAO.findNeedClaimTask(paramMap);
     }
 
@@ -33,7 +34,7 @@ public class WorkFlowTaskServiceImpl  implements WorkFlowTaskService {
     }
 
     @Override
-    public List<Map<String, Object>> findNeedComplateTask(Map<String, Object> paramMap) {
+    public List<FlowTask> findNeedComplateTask(Map<String, Object> paramMap) {
         return workFlowTaskDAO.findNeedComplateTask(paramMap);
     }
 

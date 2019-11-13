@@ -1,8 +1,6 @@
 package com.fhs.workflow.dao;
 
-import com.fhs.core.base.dao.BaseDao;
-import com.fhs.workflow.bean.WorkFlowListener;
-import com.mybatis.jpa.annotation.MapperDefinition;
+import com.fhs.workflow.bean.FlowTask;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,7 +21,7 @@ public interface WorkFlowTaskDAO
      * @param paramMap 参数map
      * @return 代签收map集合
      */
-    List<Map<String,Object>> findNeedClaimTask(Map<String, Object> paramMap);
+    List<FlowTask> findNeedClaimTask(Map<String, Object> paramMap);
     
     /**
      * 查询待签收任务总数
@@ -37,7 +35,7 @@ public interface WorkFlowTaskDAO
      * @param paramMap 参数map
      * @return 代签收map集合
      */
-    List<Map<String,Object>> findNeedComplateTask(Map<String, Object> paramMap);
+    List<FlowTask> findNeedComplateTask(Map<String, Object> paramMap);
 
 
     /**

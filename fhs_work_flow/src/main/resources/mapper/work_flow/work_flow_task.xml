@@ -2,45 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.fhs.workflow.dao.WorkFlowTaskDAO">
 	<select id="findNeedComplateTask" parameterType="java.util.Map"
-		resultType="map">
+		resultType="flowTask">
 		SELECT
-		`ID_`,
-		`REV_`,
-		`EXECUTION_ID_`,
-		`PROC_INST_ID_`,
-		`PROC_DEF_ID_`,
-		`NAME_`,
-		`PARENT_TASK_ID_`,
-		`DESCRIPTION_`,
-		`TASK_DEF_KEY_`,
-		`OWNER_`,
-		`ASSIGNEE_`,
-		`DELEGATION_`,
-		`PRIORITY_`,
-		DATE_FORMAT(`CREATE_TIME_`,'%Y-%m-%d %H:%i:%s') CREATE_TIME_,
-		`DUE_DATE_`,
-		`CATEGORY_`,
-		`SUSPENSION_STATE_`,
-		`TENANT_ID_`,
-		`FORM_KEY_` ,
-		`id`,
+		`ID_` as taskId,
+		`NAME_` as taskName,
+		`OWNER_` as taskOwner,
+		`ASSIGNEE_` as assignee,
+		`PRIORITY_` as priority,
+		DATE_FORMAT(`CREATE_TIME_`,'%Y-%m-%d %H:%i:%s') taskCreateTime,
+		`DUE_DATE_` dueDate,
+		`CATEGORY_` category,
+		`SUSPENSION_STATE_` suspensionSate,
+		`FORM_KEY_` formKey,
+		`id` as fhsInstanceId,
 		`title`,
-		`creator`,
-		`creator_id`,
-		DATE_FORMAT(`create_datetime`,'%Y-%m-%d %H:%i:%s') `create_datetime`,
-		`work_flow_type_id`,
-		`work_flow_id`,
-		`process_instance_id`,
-		`form_id`,
-		`form_key`,
-		`extend_json`
+		`create_user`,
+		i.create_time instanceCreateTime,
+		`activiti_process_instance_id` as activitiInstanceId
 		FROM
-		`act_ru_task` t LEFT JOIN
-		t_work_flow_instance i
+		`act_ru_task` t LEFT JOIN 	t_flow_instance i
 		ON
-		t.PROC_INST_ID_ = i.process_instance_id
-		WHERE 1
-		= 1
+		t.PROC_INST_ID_ = i.activiti_process_instance_id
 		<include refid="sqlWhere" />
 		ORDER BY CREATE_TIME_ DESC
 		<if test="start!= null and end != null">
@@ -53,65 +35,51 @@
 		 COUNT(1)
 		FROM
 		`act_ru_task` t LEFT JOIN
-		t_work_flow_instance i
+		t_flow_instance i
 		ON
-		t.PROC_INST_ID_ = i.process_instance_id
-		WHERE 1
-		= 1
+		t.PROC_INST_ID_ = i.activiti_process_instance_id
+
 		<include refid="sqlWhere" />
 	</select>
 
 	<sql id="sqlWhere">
-		<if test="creator!=null and creator !='' ">
-			AND creator = #{creator}
-		</if>
-		<if test="title !=null and title !='' ">
-			AND title LIKE '%${title}%'
-		</if>
-		<if test="taskTime !=null and taskTime !='' ">
-			AND  to_days(`CREATE_TIME_`) = to_days('${taskTime}')
-		</if>
-		<if test="instanceTime !=null and instanceTime !='' ">
-			AND  to_days(`create_datetime`) = to_days('${instanceTime}')
-		</if>
-		<if test="userLoginName !=null and userLoginName !='' ">
-			AND  `ASSIGNEE_` = #{userLoginName}
-		</if>
+		<where>
+			<if test="createUser!=null and createUser !='' ">
+				AND create_user = #{createUser}
+			</if>
+			<if test="title !=null and title !='' ">
+				AND title LIKE '%${title}%'
+			</if>
+			<if test="taskTime !=null and taskTime !='' ">
+				AND  to_days(`CREATE_TIME_`) = to_days('${taskTime}')
+			</if>
+			<if test="instanceTime !=null and instanceTime !='' ">
+				AND  to_days(`create_time`) = to_days('${instanceTime}')
+			</if>
+			<if test="loginUserId !=null and loginUserId !='' ">
+				AND  `ASSIGNEE_` = #{loginUserId}
+			</if>
+		</where>
 	</sql>
 
 
-	<select id="findNeedClaimTask" parameterType="map" resultType="map">
+	<select id="findNeedClaimTask" parameterType="map" resultType="flowTask">
 		SELECT DISTINCT
-		RES1.`ID_`,
-		RES1.`REV_`,
-		RES1.`EXECUTION_ID_`,
-		RES1.`PROC_INST_ID_`,
-		RES1.`PROC_DEF_ID_`,
-		RES1.`NAME_`,
-		RES1.`PARENT_TASK_ID_`,
-		RES1.`DESCRIPTION_`,
-		RES1.`TASK_DEF_KEY_`,
-		RES1.`OWNER_`,
-		RES1.`ASSIGNEE_`,
-		RES1.`DELEGATION_`,
-		RES1.`PRIORITY_`,
-		DATE_FORMAT(RES1.`CREATE_TIME_`,'%Y-%m-%d %H:%i:%s') CREATE_TIME_,
-		RES1.`DUE_DATE_`,
-		RES1.`CATEGORY_`,
-		RES1.`SUSPENSION_STATE_`,
-		RES1.`TENANT_ID_`,
-		RES1.`FORM_KEY_` ,
-		instance.`id`,
-		instance.`title`,
-		instance.`creator`,
-		instance.`creator_id`,
-		DATE_FORMAT(instance.`create_datetime`,'%Y-%m-%d %H:%i:%s') `create_datetime`,
-		instance.`work_flow_type_id`,
-		instance.`work_flow_id`,
-		instance.`process_instance_id`,
-		instance.`form_id`,
-		instance.`form_key`,
-		instance.`extend_json`
+		`ID_` as taskId,
+		`NAME_` as taskName,
+		`OWNER_` as taskOwner,
+		`ASSIGNEE_` as assignee,
+		`PRIORITY_` as priority,
+		DATE_FORMAT(`CREATE_TIME_`,'%Y-%m-%d %H:%i:%s') taskCreateTime,
+		`DUE_DATE_` dueDate,
+		`CATEGORY_` category,
+		`SUSPENSION_STATE_` suspensionSate,
+		`FORM_KEY_` formKey,
+		`id` as fhsInstanceId,
+		`title`,
+		`create_user`,
+		i.create_time instanceCreateTime,
+		`activiti_process_instance_id` as activitiInstanceId
 		
 		<include refid="needClaimWhere"></include>
 		ORDER BY RES1.CREATE_TIME_ DESC
@@ -143,18 +111,7 @@
 		RES1.ASSIGNEE_ IS NULL
 		AND I.TYPE_ = 'candidate' AND (
 		I.USER_ID_ =
-		#{userLoginName}
-		OR I.GROUP_ID_ IN (
-		SELECT
-		ur.`role_id`
-		FROM
-		t_admin_user U
-		LEFT JOIN
-		t_admin_role_user_rela ur ON U.user_id = ur.`user_id`
-		WHERE
-		U.user_login_name
-		= #{userLoginName}
-		)
-		)
+		#{userId}
+		OR I.GROUP_ID_ IN (dataPermissin.ruleIdForIn))
 	</sql>
 </mapper>

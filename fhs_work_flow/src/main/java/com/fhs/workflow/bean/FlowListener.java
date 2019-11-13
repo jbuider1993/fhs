@@ -26,7 +26,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 /**
  * 监听器(FlowListener)实体类
  *
- * @author sb生成的代码
+ * @author jackwong
  * @since 2019-11-11 14:28:44
  */
 

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 监听器(FlowListener)表服务实现类
  *
- * @author sb生成的代码
+ * @author jackwong
  * @since 2019-11-11 14:28:44
  */
 @Service("flowListenerService")

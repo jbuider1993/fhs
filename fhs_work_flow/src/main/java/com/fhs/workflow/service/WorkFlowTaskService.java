@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.fhs.core.base.service.BaseService;
+import com.fhs.workflow.bean.FlowTask;
 
 /**
  * 任务service 主要用来查询任务使用，完成任务或者签收以及其他操作使用引擎自带的taskservice操作
@@ -20,7 +21,7 @@ public interface WorkFlowTaskService {
      *            参数map
      * @return 代签收map集合
      */
-    List<Map<String, Object>> findNeedClaimTask(Map<String, Object> paramMap);
+    List<FlowTask> findNeedClaimTask(Map<String, Object> paramMap);
 
     /**
      * 查询代签收任务总数
@@ -36,7 +37,7 @@ public interface WorkFlowTaskService {
      * @param paramMap 参数map
      * @return 代签收map集合
      */
-    List<Map<String,Object>> findNeedComplateTask(Map<String, Object> paramMap);
+    List<FlowTask> findNeedComplateTask(Map<String, Object> paramMap);
 
 
     /**
