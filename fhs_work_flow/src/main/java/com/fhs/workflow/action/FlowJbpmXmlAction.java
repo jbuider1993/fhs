@@ -16,11 +16,11 @@ import com.fhs.base.action.ModelSuperAction;
 /**
  * 流程列表-xml(FlowJbpmXml)表控制层
  *
- * @author sb生成的代码
+ * @author jackwong
  * @since 2019-11-11 14:29:04
  */
 @RestController
-@RequestMapping("/ms/flowJbpmXml")
+@RequestMapping("/ms/flow_jbpm_xml")
 public class FlowJbpmXmlAction extends ModelSuperAction<FlowJbpmXml> {
 
     @Autowired
@@ -31,7 +31,7 @@ public class FlowJbpmXmlAction extends ModelSuperAction<FlowJbpmXml> {
      * @param xmlId 里面包含id即可
      */
     @RequestMapping("releaseWorkFlow")
-    @RequiresPermissions("flowJbpmXml:releaseWorkFlow")
+    @RequiresPermissions("flow_jbpm_xml:releaseWorkFlow")
     public HttpResult<Boolean> releaseWorkFlow(String  xmlId)
     {
         ParamChecker.isNotNull(xmlId,"id不能为空");

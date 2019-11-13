@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 /**
  * 监听器(FlowListener)表数据库访问层
  *
- * @author sb生成的代码
+ * @author jackwong
  * @since 2019-11-11 14:28:44
  */
 @MapperDefinition(domainClass = FlowListener.class, orderBy = " update_time DESC")

@@ -31,7 +31,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 /**
  * 流程列表-xml(FlowJbpmXml)实体类
  *
- * @author sb生成的代码
+ * @author jackwong
  * @since 2019-11-11 14:29:04
  */
 
@@ -54,8 +54,8 @@ public class FlowJbpmXml extends BaseDO<FlowJbpmXml> {
     @NotEmpty
     @NotNull(message = "流程key字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "流程key字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
-    @TableField("key")
-    private String key;
+    @TableField("process_key")
+    private String processKey;
 
     //表单在哪个服务器上
     @NotNull(message = "表单在哪个服务器上字段不可为null", groups = {Update.class, Delete.class})
@@ -98,10 +98,10 @@ public class FlowJbpmXml extends BaseDO<FlowJbpmXml> {
     public FlowJbpmXml() {
     }
 
-    public FlowJbpmXml(String id, String name, String key, Integer server, Integer isPagex, String uri, String namespace, Integer status, String xml, String img, Integer version) {
+    public FlowJbpmXml(String id, String name, String processKey, Integer server, Integer isPagex, String uri, String namespace, Integer status, String xml, String img, Integer version) {
         this.id = id;
         this.name = name;
-        this.key = key;
+        this.processKey = processKey;
         this.server = server;
         this.isPagex = isPagex;
         this.uri = uri;
