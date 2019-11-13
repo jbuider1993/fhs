@@ -32,4 +32,19 @@ public interface FlowTaskHistoryService extends BaseService<FlowTaskHistory>{
      */
     int RESULT_PASS = 0;
 
+    /**
+     * 驳回
+     */
+    int RESULT_BACK = 1;
+
+    /**
+     * 人工终止
+     */
+    int RESULT_END = 2;
+
+    /**
+     * 撤销申请
+     */
+    int RESULT_REVOKE = 3;
+
 }

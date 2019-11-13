@@ -81,11 +81,13 @@ public class FlowCoreServiceImpl implements FlowCoreService {
         flowInstance.setFormPkey(businessKey);
         flowInstance.setExtFormParam(JsonUtils.map2json(extFormParam));
         flowInstance.setTitle(variables.containsKey("title") ? ConverterUtils.toString(variables.get("title")) : flowJbpmXml.getName());
+        flowInstance.setStatus(FlowInstanceService.STATUS_RUNNING);
         flowInstance.preInsert(userId);
         ProcessInstance processInstance = this.runtimeService.startProcessInstanceByKey(flowJbpmXml.getProcessKey() + version, businessKey, variables);
+        checkProProcessInstanceIsEnd(processInstance.getId(),null);
         flowInstance.setActivitiProcessInstanceId(processInstance.getId());
         FlowTaskHistory taskHistory = FlowTaskHistory.builder().id(StringUtil.getUUID()).taskFinishTime(flowInstance.getCreateTime()).instanceId(flowInstance.getActivitiProcessInstanceId())
-                .title("开始节点").status(FlowTaskHistoryService.STATUS_FINISH).build();
+                .title("开始节点").status(FlowTaskHistoryService.STATUS_FINISH).result(FlowTaskHistoryService.RESULT_SUBMIT).build();
         taskHistory.preInsert(userId);
         taskHistory.setAssigneeUserId(userId);
         flowInstanceService.insertJpa(flowInstance);
@@ -96,10 +98,11 @@ public class FlowCoreServiceImpl implements FlowCoreService {
             task.setAssignee(userId);
             taskService.complete(task.getId(), variables);
             taskHistory = FlowTaskHistory.builder().id(StringUtil.getUUID()).taskFinishTime(flowInstance.getCreateTime()).instanceId(flowInstance.getActivitiProcessInstanceId())
-                    .title("提交").status(FlowTaskHistoryService.STATUS_FINISH).build();
+                    .title("提交").status(FlowTaskHistoryService.STATUS_FINISH).result(FlowTaskHistoryService.RESULT_SUBMIT).build();
             taskHistory.preInsert(userId);
             taskHistory.setAssigneeUserId(userId);
             taskHistoryService.insertJpa(taskHistory);
+            checkProProcessInstanceIsEnd(task.getProcessInstanceId(),null);
         }
         return flowInstance.getId();
     }
@@ -149,6 +152,7 @@ public class FlowCoreServiceImpl implements FlowCoreService {
 
     @Override
     public void updateBackProcess(String taskId, String activityId, Map<String, Object> variables) throws Exception {
+        variables.put("result",FlowTaskHistoryService.RESULT_BACK);
         if (CheckUtils.isNullOrEmpty(activityId)) {
             throw new ParamException("驳回目标节点ID为空！");
         }
@@ -231,6 +235,7 @@ public class FlowCoreServiceImpl implements FlowCoreService {
      */
 
     /**
+     * 驳回或者完成当前任务
      * @param taskId     当前任务ID
      * @param variables  流程变量
      * @param activityId 流程转向执行任务节点ID<br>
@@ -243,29 +248,30 @@ public class FlowCoreServiceImpl implements FlowCoreService {
         if (variables == null) {
             variables = new HashMap<String, Object>();
         }
+        Task task = this.findTaskById(taskId);
+        checkProProcessInstanceIsEnd(task.getProcessInstanceId(),null);
+        FlowTaskHistory history = this.taskHistoryService.selectBean(FlowTaskHistory.builder().taskId(taskId).build());
+        if (history != null) {
+            history.setTaskFinishTime(DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN));
+            history.setStatus(FlowTaskHistoryService.STATUS_FINISH);
+            history.setUseTime((int) (System.currentTimeMillis() - task.getCreateTime().getTime()) / 1000 / 60);
+            history.setRemark(ConverterUtils.toString(variables.get("remark")));
+            history.setResult(ConverterUtils.toInteger(variables.get("result")));
+            taskHistoryService.updateById(history);
+            //创建一个扔进去
+        } else {
+            history = FlowTaskHistory.builder().id(StringUtil.getUUID()).taskFinishTime((DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN)))
+                    .instanceId(task.getProcessInstanceId()).title(task.getName()).status(FlowTaskHistoryService.STATUS_FINISH).assigneeUserId(task.getAssignee())
+                    .build();
+            history.setUseTime((int) (System.currentTimeMillis() - task.getCreateTime().getTime()) / 1000 / 60);
+            history.setRemark(ConverterUtils.toString(variables.get("remark")));
+            history.setResult(ConverterUtils.toInteger(variables.get("result")));
+            history.setCreateTime(DateUtils.formartDate(task.getCreateTime(), DateUtils.DATETIME_PATTERN));
+            taskHistoryService.insertJpa(history);
+        }
         // 跳转节点为空，默认提交操作
         if (CheckUtils.isNullOrEmpty(activityId)) {
-            Task task = this.findTaskById(taskId);
             taskService.complete(taskId, variables);
-            FlowTaskHistory history = this.taskHistoryService.selectBean(FlowTaskHistory.builder().taskId(taskId).build());
-            if (history != null) {
-                history.setTaskFinishTime(DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN));
-                history.setStatus(FlowTaskHistoryService.STATUS_FINISH);
-                history.setUseTime((int) (System.currentTimeMillis() - task.getCreateTime().getTime()) / 1000 / 60);
-                history.setRemark(ConverterUtils.toString(variables.get("remark")));
-                history.setResult(ConverterUtils.toInteger(variables.get("result")));
-                taskHistoryService.updateById(history);
-                //创建一个扔进去
-            } else {
-                history = FlowTaskHistory.builder().id(StringUtil.getUUID()).taskFinishTime((DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN)))
-                        .instanceId(task.getProcessInstanceId()).title(task.getName()).status(FlowTaskHistoryService.STATUS_FINISH).assigneeUserId(task.getAssignee())
-                        .build();
-                history.setUseTime((int) (System.currentTimeMillis() - task.getCreateTime().getTime()) / 1000 / 60);
-                history.setRemark(ConverterUtils.toString(variables.get("remark")));
-                history.setResult(ConverterUtils.toInteger(variables.get("result")));
-                history.setCreateTime(DateUtils.formartDate(task.getCreateTime(), DateUtils.DATETIME_PATTERN));
-                taskHistoryService.insertJpa(history);
-            }
         } else {// 流程转向操作
             turnTransition(taskId, activityId, variables);
         }
@@ -351,6 +357,27 @@ public class FlowCoreServiceImpl implements FlowCoreService {
      * ************************************************以下为查询流程驳回节点核心逻辑***************************************************************************<br>
      * ***************************************************************************************************************************************************<br>
      */
+
+
+    /**
+     * 判断流程是否已经结束，如果已经结束则更新自定义的instance表
+     * @param processInstanceId  流程实例id
+     */
+    private void checkProProcessInstanceIsEnd(String processInstanceId,String taskId){
+        if(processInstanceId!=null){
+            processInstanceId = this.findTaskById(taskId).getProcessInstanceId();
+        }
+        ProcessInstance processInstance = runtimeService
+                .createProcessInstanceQuery().processInstanceId(processInstanceId)
+                .singleResult();
+        //代表结束了，就去更新instance状态
+        if(processInstance==null){
+            FlowInstance instance = this.flowInstanceService.findBean(FlowInstance.builder().activitiProcessInstanceId(processInstanceId).build());
+            if(instance!=null){
+                this.flowInstanceService.updateSelectiveById(FlowInstance.builder().id(instance.getId()).status(FlowInstanceService.STATUS_END).build());
+            }
+        }
+    }
 
     /**
      * 迭代循环流程树结构，查询当前节点可驳回的任务节点

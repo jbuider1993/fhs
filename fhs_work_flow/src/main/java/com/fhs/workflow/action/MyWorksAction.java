@@ -11,9 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fhs.base.action.ModelSuperAction;
 import com.fhs.common.constant.Constant;
+import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.core.base.action.BaseAction;
 import com.fhs.core.exception.ParamChecker;
+import com.fhs.core.exception.ParamException;
 import com.fhs.core.page.Pager;
 import com.fhs.core.result.HttpResult;
 import com.fhs.ucenter.api.vo.SysUserVo;
@@ -199,18 +201,31 @@ public class MyWorksAction extends BaseAction {
 
     /**
      * 驳回
-     *
      * @param taskId  任务id
+     * @param isPre 驳回到上一任务，如果指定任务id为空并且这里设置为false的话则驳回到第一个任务
+     * @param activityId 指定任务
      * @param request 请求
      * @return
      */
     @RequestMapping("backTask")
-    public HttpResult<Boolean> backProcess(String taskId, String activityId, HttpServletRequest request) throws Exception {
+    public HttpResult<Boolean> backProcess(String taskId, String activityId,boolean isPre, HttpServletRequest request) throws Exception {
         ParamChecker.isNotNullOrEmpty(taskId, "任务id不能为空");
-       // ParamChecker.isNotNullOrEmpty(activityId, "目标节点id不能为空");
+        if(CheckUtils.isNullOrEmpty(activityId)){
+            List<ActivityImpl> activityList = flowCoreService.findBackAvtivity(taskId);
+            if(activityList.isEmpty()){
+                throw  new ParamException("当前任务不可驳回，因为无可驳回任务点");
+            }
+            // 获取上一个任务
+            if(isPre){
+                activityId = activityList.get(activityList.size()-1).getId();
+
+            //获取第一个任务
+            }else{
+                activityId = activityList.get(0).getId();
+            }
+        }
         Map<String, Object> paramMap = super.getParameterMap(request);
-        List<ActivityImpl> list = flowCoreService.findBackAvtivity(taskId);
-        //flowCoreService.updateBackProcess(taskId, activityId, paramMap);
+        flowCoreService.updateBackProcess(taskId, activityId, paramMap);
         return HttpResult.success(true);
     }
 

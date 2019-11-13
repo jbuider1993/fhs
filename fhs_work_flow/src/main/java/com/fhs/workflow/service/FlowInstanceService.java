@@ -11,6 +11,16 @@ import com.fhs.core.base.service.BaseService;
  */
 public interface FlowInstanceService extends BaseService<FlowInstance>{
 
-    
-
+    /**
+     * 进行中
+     */
+    int STATUS_RUNNING = 0;
+    /**
+     * 结束
+     */
+    int STATUS_END = 1;
+    /**
+     * 撤回
+     */
+    int STATUS_REVOKE = 2;
 }
