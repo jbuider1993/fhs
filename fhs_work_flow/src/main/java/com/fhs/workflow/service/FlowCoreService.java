@@ -3,6 +3,7 @@ package com.fhs.workflow.service;
 import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -84,16 +85,7 @@ public interface FlowCoreService {
     void updateBackProcess(String taskId, String activityId,
                             Map<String, Object> variables) throws Exception;
 
-    /**
-     * 取回流程
-     *
-     * @param taskId
-     *            当前任务ID
-     * @param activityId
-     *            取回节点ID
-     * @throws Exception
-     */
-    void updateCallBackProcess(String taskId, String activityId)throws Exception ;
+
 
     /**
      * 办结流程(特权人直接审批通过等)
@@ -122,4 +114,12 @@ public interface FlowCoreService {
      *            被转办人Code
      */
     void updateTransferAssignee(String taskId, String userId);
+
+    /**
+     * 撤回
+     * @param taskId 任务id
+     * @param userId 操作撤回的用户id
+     * @param  variables 流程变量
+     */
+    void updateWithdraw(String taskId, String userId, Map<String, Object> variables) throws Exception;
 }

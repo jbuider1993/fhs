@@ -1,0 +1,2 @@
+1 本项目部分代码基于agilebpm和ESTDesigner 修改如果要商用本项目，请联系两个开源项目的作者购买
+2 fhs_work_flow是免费的，随意商用

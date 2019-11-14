@@ -50,6 +50,9 @@ public class FlowTask extends SuperBean<FlowTask> {
 
     private String fhsInstanceId;
 
+    //流程引擎实例id
+    private String activitiInstanceId;
+
     // 标题
     private String title;
 
@@ -59,7 +62,7 @@ public class FlowTask extends SuperBean<FlowTask> {
     public FlowTask() {
     }
 
-    public FlowTask(String taskId, String taskName, String taskOwner, String assignee, Integer priority, String taskCreateTime, String instanceCreateTime, String dueDate, String category, String suspensionSate, String formKey, String fhsInstanceId, String title, String createUser) {
+    public FlowTask(String taskId, String taskName, String taskOwner, String assignee, Integer priority, String taskCreateTime, String instanceCreateTime, String dueDate, String category, String suspensionSate, String formKey, String fhsInstanceId, String activitiInstanceId, String title, String createUser) {
         this.taskId = taskId;
         this.taskName = taskName;
         this.taskOwner = taskOwner;
@@ -72,6 +75,7 @@ public class FlowTask extends SuperBean<FlowTask> {
         this.suspensionSate = suspensionSate;
         this.formKey = formKey;
         this.fhsInstanceId = fhsInstanceId;
+        this.activitiInstanceId = activitiInstanceId;
         this.title = title;
         this.createUser = createUser;
     }

@@ -47,4 +47,9 @@ public interface FlowTaskHistoryService extends BaseService<FlowTaskHistory>{
      */
     int RESULT_REVOKE = 3;
 
+    /**
+     * 撤销回审批
+     */
+    int RESULT_WITHDRAW = 4;
+
 }

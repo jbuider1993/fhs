@@ -13,6 +13,7 @@ import com.fhs.base.action.ModelSuperAction;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
+import com.fhs.common.utils.FileUtils;
 import com.fhs.core.base.action.BaseAction;
 import com.fhs.core.exception.ParamChecker;
 import com.fhs.core.exception.ParamException;
@@ -21,6 +22,7 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.ucenter.api.vo.SysUserVo;
 import com.fhs.workflow.bean.FlowTask;
 import com.fhs.workflow.bean.HistoryTask;
+import com.fhs.workflow.service.BpmImageService;
 import com.fhs.workflow.service.FlowCoreService;
 import com.fhs.workflow.service.WorkFlowTaskService;
 import com.fhs.workflow.vo.BackAvtivityVO;
@@ -34,12 +36,11 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.activiti.engine.impl.context.Context;
+import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
-import org.activiti.image.ProcessDiagramGenerator;
+import org.activiti.image.impl.DefaultProcessDiagramGenerator;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -76,6 +77,9 @@ public class MyWorksAction extends BaseAction {
 
     @Autowired
     private FlowCoreService flowCoreService;
+
+    @Autowired
+    private BpmImageService bpmImageService;
 
 
     /**
@@ -146,7 +150,6 @@ public class MyWorksAction extends BaseAction {
                 .createHistoricTaskInstanceQuery()
                 .processInstanceId(processInstanceId)
                 .list();
-
         Map<String, HistoryTask> taskMap = new HashMap<>();
         HistoryTask tempTask = null;
         //流程变量
@@ -166,6 +169,29 @@ public class MyWorksAction extends BaseAction {
         }
         return new Pager(list.size(), list);
     }
+
+    /**
+     * 撤回审批的任务
+     * @param taskId 历史任务的taskid
+     * @return 是否撤回成功
+     */
+    @RequestMapping("withdraw")
+    public HttpResult<Boolean> withdraw(String taskId,HttpServletRequest request) throws Exception {
+        flowCoreService.updateWithdraw(taskId,this.getSessionuser(request).getUserId(),super.getParameterMap(request));
+        return HttpResult.success(true);
+    }
+
+    /**
+     * 撤销申请
+     * @param taskId 历史任务的taskid
+     * @return 是否撤回成功
+     */
+    @RequestMapping("revoke")
+    public HttpResult<Boolean> revoke(String taskId,HttpServletRequest request) throws Exception {
+        // 撤销申请
+        return HttpResult.success(true);
+    }
+
 
     /**
      * 查找可回退节点
@@ -230,6 +256,7 @@ public class MyWorksAction extends BaseAction {
     }
 
 
+
     /**
      * 获取工作流图片
      *
@@ -244,90 +271,14 @@ public class MyWorksAction extends BaseAction {
         ParamChecker.isNotNullOrEmpty(processInstanceId,"实例id为必传");
         //获取历史流程实例
         HistoricProcessInstance processInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
-        ParamChecker.isNotNullOrEmpty(processInstanceId,"实例id无效");
-        //获取流程图
-        BpmnModel bpmnModel = repositoryService.getBpmnModel(processInstance.getProcessDefinitionId());
-        processEngineConfiguration = processEngine.getProcessEngineConfiguration();
-        Context.setProcessEngineConfiguration((ProcessEngineConfigurationImpl) processEngineConfiguration);
+        ParamChecker.isNotNullOrEmpty(processInstance,"实例id无效");
+        String procDefId = processInstance.getProcessDefinitionId();
+        InputStream imageStream = bpmImageService.draw(procDefId,processInstanceId);
+        FileUtils.downloadInputStream(imageStream,response,"workflow.png");
 
-        ProcessDiagramGenerator diagramGenerator = processEngineConfiguration.getProcessDiagramGenerator();
-        ProcessDefinitionEntity definitionEntity = (ProcessDefinitionEntity) repositoryService.getProcessDefinition(processInstance.getProcessDefinitionId());
-
-        List<HistoricActivityInstance> highLightedActivitList = historyService.createHistoricActivityInstanceQuery().processInstanceId(processInstanceId).list();
-        //高亮环节id集合
-        List<String> highLightedActivitis = new ArrayList<String>();
-        //高亮线路id集合
-        List<String> highLightedFlows = getHighLightedFlows(definitionEntity, highLightedActivitList);
-
-        for (HistoricActivityInstance tempActivity : highLightedActivitList) {
-            String activityId = tempActivity.getActivityId();
-            highLightedActivitis.add(activityId);
-        }
-        InputStream imageStream = diagramGenerator.generateDiagram(bpmnModel, "png", highLightedActivitis, highLightedFlows, processEngine.getProcessEngineConfiguration().getActivityFontName(),
-                processEngine.getProcessEngineConfiguration().getLabelFontName(), null, null, 1.0);
-
-        // 输出资源内容到相应对象
-        byte[] b = new byte[1024];
-        int len;
-        while ((len = imageStream.read(b, 0, 1024)) != -1) {
-            response.getOutputStream().write(b, 0, len);
-        }
     }
 
 
-    /**
-     * 获取需要高亮的线
-     * 这段是copy的
-     *
-     * @param processDefinitionEntity
-     * @param historicActivityInstances
-     * @return
-     */
-    private List<String> getHighLightedFlows(
-            ProcessDefinitionEntity processDefinitionEntity,
-            List<HistoricActivityInstance> historicActivityInstances) {
-
-        List<String> highFlows = new ArrayList<String>();// 用以保存高亮的线flowId
-        for (int i = 0; i < historicActivityInstances.size() - 1; i++) {// 对历史流程节点进行遍历
-            ActivityImpl activityImpl = processDefinitionEntity
-                    .findActivity(historicActivityInstances.get(i)
-                            .getActivityId());// 得到节点定义的详细信息
-            List<ActivityImpl> sameStartTimeNodes = new ArrayList<ActivityImpl>();// 用以保存后需开始时间相同的节点
-            ActivityImpl sameActivityImpl1 = processDefinitionEntity
-                    .findActivity(historicActivityInstances.get(i + 1)
-                            .getActivityId());
-            // 将后面第一个节点放在时间相同节点的集合里
-            sameStartTimeNodes.add(sameActivityImpl1);
-            for (int j = i + 1; j < historicActivityInstances.size() - 1; j++) {
-                HistoricActivityInstance activityImpl1 = historicActivityInstances
-                        .get(j);// 后续第一个节点
-                HistoricActivityInstance activityImpl2 = historicActivityInstances
-                        .get(j + 1);// 后续第二个节点
-                if (activityImpl1.getStartTime().equals(
-                        activityImpl2.getStartTime())) {
-                    // 如果第一个节点和第二个节点开始时间相同保存
-                    ActivityImpl sameActivityImpl2 = processDefinitionEntity
-                            .findActivity(activityImpl2.getActivityId());
-                    sameStartTimeNodes.add(sameActivityImpl2);
-                } else {
-                    // 有不相同跳出循环
-                    break;
-                }
-            }
-            List<PvmTransition> pvmTransitions = activityImpl
-                    .getOutgoingTransitions();// 取出节点的所有出去的线
-            for (PvmTransition pvmTransition : pvmTransitions) {
-                // 对所有的线进行遍历
-                ActivityImpl pvmActivityImpl = (ActivityImpl) pvmTransition
-                        .getDestination();
-                // 如果取出的线的目标节点存在时间相同的节点里，保存该线的id，进行高亮显示
-                if (sameStartTimeNodes.contains(pvmActivityImpl)) {
-                    highFlows.add(pvmTransition.getId());
-                }
-            }
-        }
-        return highFlows;
-    }
 
 
 }
