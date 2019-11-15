@@ -301,7 +301,7 @@ public class MyWorksAction extends BaseAction {
         }
         else{
             formUrl = EConfig.getPathPropertiesValue(xml.getServer()) + xml.getUri();
-            formUrl = formUrl.contains("?") ? (formUrl + "&id=" + instance.getFormPkey()): (formUrl + "?id=" + + instance.getFormPkey());
+            formUrl = formUrl.contains("?") ? (formUrl + "&id=" + instance.getFormPkey()): (formUrl + "?id=" + instance.getFormPkey());
         }
         JSONObject exParam = JSON.parseObject(instance.getExtFormParam());
         Set<String> keys = exParam.keySet();
