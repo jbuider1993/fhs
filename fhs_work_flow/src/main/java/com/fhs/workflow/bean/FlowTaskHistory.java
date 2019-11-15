@@ -117,26 +117,31 @@ public class FlowTaskHistory extends BaseDO<FlowTaskHistory> {
     /**
      * 结果
      */
+    @TableField("result")
     private Integer result;
 
     /**
      * 备注
      */
+    @TableField("remark")
     private String remark;
 
     /**
      * 节点编码
      */
+    @TableField("code")
     private String code;
 
     /**
-     * 节点编码
+     * 排序
      */
+    @TableField("order_num")
     private Integer orderNum;
 
     /**
-     * 节点编码
+     * 节点usertaskid
      */
+    @TableField("definition_key")
     private String definitionKey;
 
 
