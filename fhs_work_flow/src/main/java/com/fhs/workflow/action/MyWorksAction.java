@@ -8,21 +8,27 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.FileUtils;
 import com.fhs.core.base.action.BaseAction;
+import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.ParamChecker;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.page.Pager;
 import com.fhs.core.result.HttpResult;
 import com.fhs.ucenter.api.vo.SysUserVo;
+import com.fhs.workflow.bean.FlowInstance;
+import com.fhs.workflow.bean.FlowJbpmXml;
 import com.fhs.workflow.bean.FlowTask;
 import com.fhs.workflow.bean.HistoryTask;
-import com.fhs.workflow.service.BpmImageService;
-import com.fhs.workflow.service.FlowCoreService;
-import com.fhs.workflow.service.WorkFlowTaskService;
+import com.fhs.workflow.service.*;
 import com.fhs.workflow.vo.BackAvtivityVO;
+import com.fhs.workflow.vo.InstanceVO;
+import com.netflix.discovery.converters.Auto;
+import com.sun.tools.javac.comp.Flow;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.ManagementService;
 import org.activiti.engine.ProcessEngineConfiguration;
@@ -31,7 +37,9 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.task.Task;
 import org.activiti.spring.ProcessEngineFactoryBean;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,17 +61,7 @@ public class MyWorksAction extends BaseAction {
     private WorkFlowTaskService workFlowTaskService;
 
     @Autowired
-    RepositoryService repositoryService;
-    @Autowired
-    ManagementService managementService;
-    @Autowired
-    protected RuntimeService runtimeService;
-    @Autowired
-    ProcessEngineConfiguration processEngineConfiguration;
-    @Autowired
-    ProcessEngineFactoryBean processEngine;
-    @Autowired
-    HistoryService historyService;
+    private HistoryService historyService;
 
     @Autowired
     private FlowCoreService flowCoreService;
@@ -71,6 +69,11 @@ public class MyWorksAction extends BaseAction {
     @Autowired
     private BpmImageService bpmImageService;
 
+    @Autowired
+    private FlowInstanceService instanceService;
+
+    @Autowired
+    private FlowJbpmXmlService flowJbpmXmlService;
 
     /**
      * 查询待完成的工作
@@ -264,7 +267,50 @@ public class MyWorksAction extends BaseAction {
 
     }
 
+    /**
+     * 根据id查询实例详情
+     * @param instanceId 工作流实例id
+     * @return 工作流实例详情
+     */
+    @RequestMapping("findInstanceById")
+    public HttpResult<InstanceVO> findInstanceById(String instanceId){
+        ParamChecker.isNotNull(instanceId,"instanceId为必传");
+        FlowInstance instance = this.instanceService.selectBean(FlowInstance.builder().activitiProcessInstanceId(instanceId).build());
+        ParamChecker.isNotNull(instance,"instanceId无效");
+        InstanceVO result = new InstanceVO();
+        BeanUtils.copyProperties(instance,result);
+        FlowJbpmXml xml = flowJbpmXmlService.selectById(instance.getXmlId());
+        ParamChecker.isNotNull(xml,"流程xml被删除");
 
+        result.setProcessKey(xml.getProcessKey());
+        List<Task> tasks = this.flowCoreService.findTaskListByInstanceId(instanceId);
+        result.setIsSubmiTask(Constant.INT_FALSE);
+        result.setIsCanWithdraw(Constant.INT_FALSE);
+        if(!tasks.isEmpty()){
+            // 如果不为空，如果task的id是第一个节点的话，那么就是提交节点,提交节点不允许撤回，其他的节点允许撤回
+            if(tasks.get(0).getTaskDefinitionKey().equals(instance.getFirstDefinitionKey())){
+                result.setIsSubmiTask(Constant.INT_TRUE);
+            }
+            else{
+                result.setIsCanWithdraw(Constant.INT_TRUE);
+            }
+        }
+        String formUrl = null;
+        if(Constant.INT_TRUE ==  xml.getIsPagex()){
+            formUrl = EConfig.getPathPropertiesValue(xml.getServer()) + "/ms/pagex/" + xml.getNamespace() + "_flowform.jsp?id=" + instance.getFormPkey();
+        }
+        else{
+            formUrl = EConfig.getPathPropertiesValue(xml.getServer()) + xml.getUri();
+            formUrl = formUrl.contains("?") ? (formUrl + "&id=" + instance.getFormPkey()): (formUrl + "?id=" + + instance.getFormPkey());
+        }
+        JSONObject exParam = JSON.parseObject(instance.getExtFormParam());
+        Set<String> keys = exParam.keySet();
+        for(String key : keys){
+            formUrl =  formUrl + key + "=" + exParam.getString(key);
+        }
+        result.setFormUrl(formUrl);
+        return HttpResult.success(result);
+    }
 
 
 }
