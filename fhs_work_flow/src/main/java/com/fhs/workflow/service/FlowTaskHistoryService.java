@@ -52,4 +52,13 @@ public interface FlowTaskHistoryService extends BaseService<FlowTaskHistory>{
      */
     int RESULT_WITHDRAW = 4;
 
+    /**
+     * 根据当前需要记录节点的usertaskkey和instanceId来构建一个FlowTaskHistory
+     * 处理好code字段，和排序字段
+     * @param definitionKey usertaskId
+     * @param instanceId 流程实例id
+     * @return 构建好的对象
+     */
+    FlowTaskHistory buildFlowTaskHistory(String definitionKey,String instanceId);
+
 }

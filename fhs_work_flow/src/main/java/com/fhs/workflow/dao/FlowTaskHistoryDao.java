@@ -14,7 +14,22 @@ import org.springframework.stereotype.Repository;
  * @author jackwong
  * @since 2019-11-12 14:40:34
  */
+@Repository
 @MapperDefinition(domainClass = FlowTaskHistory.class, orderBy = " update_time DESC")
 public interface FlowTaskHistoryDao extends BaseDao<FlowTaskHistory> {
+
+    /**
+     * 查询最后一个任务历史
+     * @param instanceId 实例id
+     * @return 最后一个任务历史
+     */
+    FlowTaskHistory findLastTaskHistory(@Param("instanceId") String instanceId);
+
+    /**
+     * 查询实例最大的ordernum
+     * @param instanceId 实例id
+     * @return 最大的ordernum、
+     */
+    Integer findMaxOrderNum(@Param("instanceId")String instanceId);
 
 }
