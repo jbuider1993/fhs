@@ -12,6 +12,7 @@ import com.fhs.workflow.service.FlowCoreService;
 import com.fhs.workflow.service.FlowInstanceService;
 import com.fhs.workflow.service.FlowJbpmXmlService;
 import com.fhs.workflow.service.FlowTaskHistoryService;
+import com.fhs.workflow.vo.BackAvtivityVO;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -104,6 +105,9 @@ public class FlowCoreServiceImpl implements FlowCoreService {
             taskService.complete(task.getId(), variables);
             taskHistory = FlowTaskHistory.builder().id(StringUtil.getUUID()).taskFinishTime(flowInstance.getCreateTime()).instanceId(flowInstance.getActivitiProcessInstanceId())
                     .title("提交").status(FlowTaskHistoryService.STATUS_FINISH).result(FlowTaskHistoryService.RESULT_SUBMIT).build();
+            taskHistory.setOrderNum(1);
+            taskHistory.setCode("001");
+            taskHistory.setDefinitionKey(task.getTaskDefinitionKey());
             taskHistory.preInsert(userId);
             taskHistory.setAssigneeUserId(userId);
             taskHistory.setTaskId(task.getId());
@@ -120,18 +124,25 @@ public class FlowCoreServiceImpl implements FlowCoreService {
      * @param taskId 当前任务ID
      */
     @Override
-    public List<ActivityImpl> findBackAvtivity(String taskId) throws Exception {
-        List<ActivityImpl> rtnList = null;
+    public List<BackAvtivityVO> findBackAvtivity(String taskId) throws Exception {
         Task task = this.findTaskById(taskId);
-        ParamChecker.isNotNullOrEmpty(task, "taskId无效");
-        if (task.getParentTaskId() != null) {// 会签任务节点，不允许驳回
-            rtnList = new ArrayList<ActivityImpl>();
-        } else {
-            rtnList = iteratorBackActivity(taskId, findActivitiImpl(taskId,
-                    null), new ArrayList<ActivityImpl>(),
-                    new ArrayList<ActivityImpl>());
-        }
-        return reverList(rtnList);
+        /*
+           1 获取实例所有的历史记录
+           2 获取当前task的code  比如00129   001-2-9
+           3 遍历获取所有的history code   task.code.startWith(item.code) 添加到集合中
+         */
+        // 根据排序字段获取所有的历史记录
+        List<FlowTaskHistory> taskHistories = taskHistoryService.selectPageForOrder(FlowTaskHistory.builder().instanceId(task.getProcessInstanceId())
+                .build(),0,Integer.MAX_VALUE," order_num ASC ");
+        List<BackAvtivityVO> result = new ArrayList<>();
+        // 获取当天task的 code 比如是 0012910 那么他的爸爸应该是001 0012 00129
+        String taskCode = taskHistoryService.buildFlowTaskHistory(task.getTaskDefinitionKey(),task.getProcessInstanceId()).getCode();
+        taskHistories.forEach(item->{
+            if(taskCode.startsWith(item.getCode()) && (!taskCode.equals(item.getCode()))){
+                result.add(BackAvtivityVO.builder().id(item.getDefinitionKey()).title(item.getTitle()).build());
+            }
+        });
+        return result;
     }
 
     @Override
@@ -316,9 +327,12 @@ public class FlowCoreServiceImpl implements FlowCoreService {
             taskHistoryService.updateById(history);
             //创建一个扔进去
         } else {
-            history = FlowTaskHistory.builder().id(StringUtil.getUUID()).taskFinishTime((DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN)))
-                    .instanceId(task.getProcessInstanceId()).title(task.getName()).status(FlowTaskHistoryService.STATUS_FINISH).assigneeUserId(task.getAssignee())
-                    .build();
+            history = this.taskHistoryService.buildFlowTaskHistory(task.getTaskDefinitionKey(),task.getProcessInstanceId());
+            history.setTaskId(taskId);
+            history.setTaskFinishTime((DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN)));
+            history.setTitle(task.getName());
+            history.setStatus(FlowTaskHistoryService.STATUS_FINISH);
+            history.setAssigneeUserId(task.getAssignee());
             history.setUseTime((int) (System.currentTimeMillis() - task.getCreateTime().getTime()) / 1000 / 60);
             history.setRemark(ConverterUtils.toString(variables.get("remark")));
             history.setResult(ConverterUtils.toInteger(variables.get("result")));
@@ -447,107 +461,6 @@ public class FlowCoreServiceImpl implements FlowCoreService {
         }
     }
 
-    /**
-     * 迭代循环流程树结构，查询当前节点可驳回的任务节点
-     *
-     * @param taskId       当前任务ID
-     * @param currActivity 当前活动节点
-     * @param rtnList      存储回退节点集合
-     * @param tempList     临时存储节点集合（存储一次迭代过程中的同级userTask节点）
-     * @return 回退节点集合
-     */
-    private List<ActivityImpl> iteratorBackActivity(String taskId,
-                                                    ActivityImpl currActivity, List<ActivityImpl> rtnList,
-                                                    List<ActivityImpl> tempList) throws Exception {
-        // 查询流程定义，生成流程树结构
-        ProcessInstance processInstance = findProcessInstanceByTaskId(taskId);
-
-        // 当前节点的流入来源
-        List<PvmTransition> incomingTransitions = currActivity
-                .getIncomingTransitions();
-        // 条件分支节点集合，userTask节点遍历完毕，迭代遍历此集合，查询条件分支对应的userTask节点
-        List<ActivityImpl> exclusiveGateways = new ArrayList<ActivityImpl>();
-        // 并行节点集合，userTask节点遍历完毕，迭代遍历此集合，查询并行节点对应的userTask节点
-        List<ActivityImpl> parallelGateways = new ArrayList<ActivityImpl>();
-        // 遍历当前节点所有流入路径
-        for (PvmTransition pvmTransition : incomingTransitions) {
-            TransitionImpl transitionImpl = (TransitionImpl) pvmTransition;
-            ActivityImpl activityImpl = transitionImpl.getSource();
-            String type = (String) activityImpl.getProperty("type");
-            /**
-             * 并行节点配置要求：<br>
-             * 必须成对出现，且要求分别配置节点ID为:XXX_start(开始)，XXX_end(结束)
-             */
-            if ("parallelGateway".equals(type)) {// 并行路线
-                String gatewayId = activityImpl.getId();
-                String gatewayType = gatewayId.substring(gatewayId
-                        .lastIndexOf("_") + 1);
-                if ("START".equals(gatewayType.toUpperCase())) {// 并行起点，停止递归
-                    return rtnList;
-                } else {// 并行终点，临时存储此节点，本次循环结束，迭代集合，查询对应的userTask节点
-                    parallelGateways.add(activityImpl);
-                }
-            } else if ("startEvent".equals(type)) {// 开始节点，停止递归
-                return rtnList;
-            } else if ("userTask".equals(type)) {// 用户任务
-                tempList.add(activityImpl);
-            } else if ("exclusiveGateway".equals(type)) {// 分支路线，临时存储此节点，本次循环结束，迭代集合，查询对应的userTask节点
-                currActivity = transitionImpl.getSource();
-                exclusiveGateways.add(currActivity);
-            }
-        }
-
-        /**
-         * 迭代条件分支集合，查询对应的userTask节点
-         */
-        for (ActivityImpl activityImpl : exclusiveGateways) {
-            iteratorBackActivity(taskId, activityImpl, rtnList, tempList);
-        }
-
-        /**
-         * 迭代并行集合，查询对应的userTask节点
-         */
-        for (ActivityImpl activityImpl : parallelGateways) {
-            iteratorBackActivity(taskId, activityImpl, rtnList, tempList);
-        }
-
-        /**
-         * 根据同级userTask集合，过滤最近发生的节点
-         */
-        currActivity = filterNewestActivity(processInstance, tempList);
-        if (currActivity != null) {
-            // 查询当前节点的流向是否为并行终点，并获取并行起点ID
-            String id = findParallelGatewayId(currActivity);
-            if (CheckUtils.isNullOrEmpty(id)) {// 并行起点ID为空，此节点流向不是并行终点，符合驳回条件，存储此节点
-                rtnList.add(currActivity);
-            } else {// 根据并行起点ID查询当前节点，然后迭代查询其对应的userTask任务节点
-                currActivity = findActivitiImpl(taskId, id);
-            }
-
-            // 清空本次迭代临时集合
-            tempList.clear();
-            // 执行下次迭代
-            iteratorBackActivity(taskId, currActivity, rtnList, tempList);
-        }
-        return rtnList;
-    }
-
-    /**
-     * 反向排序list集合，便于驳回节点按顺序显示
-     *
-     * @param list
-     * @return
-     */
-    private List<ActivityImpl> reverList(List<ActivityImpl> list) {
-        List<ActivityImpl> rtnList = new ArrayList<ActivityImpl>();
-        // 由于迭代出现重复数据，排除重复
-        for (int i = list.size(); i > 0; i--) {
-            if (!rtnList.contains(list.get(i - 1))) {
-                rtnList.add(list.get(i - 1));
-            }
-        }
-        return rtnList;
-    }
 
     /**
      * 根据当前节点，查询输出流向是否为并行终点，如果为并行终点，则拼装对应的并行起点ID

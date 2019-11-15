@@ -1,5 +1,6 @@
 package com.fhs.workflow.service;
 
+import com.fhs.workflow.vo.BackAvtivityVO;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.task.Task;
 
@@ -57,7 +58,7 @@ public interface FlowCoreService {
      * @param taskId
      *            当前任务ID
      */
-    List<ActivityImpl> findBackAvtivity(String taskId) throws Exception;
+    List<BackAvtivityVO> findBackAvtivity(String taskId) throws Exception;
 
     /**
      * 审批通过(驳回直接跳回功能需后续扩展)

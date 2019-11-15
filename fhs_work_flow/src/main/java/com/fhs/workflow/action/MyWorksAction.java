@@ -1,7 +1,6 @@
 package com.fhs.workflow.action;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.CheckUtils;
-import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.FileUtils;
 import com.fhs.core.base.action.BaseAction;
 import com.fhs.core.exception.ParamChecker;
@@ -33,7 +31,6 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -196,12 +193,7 @@ public class MyWorksAction extends BaseAction {
     @RequestMapping("findBackAvtivity")
     public HttpResult<List<BackAvtivityVO>> findBackAvtivity(String taskId) throws Exception {
         ParamChecker.isNotNullOrEmpty(taskId,"taskid不能为空");
-        List<ActivityImpl> activityList = flowCoreService.findBackAvtivity(taskId);
-        List<BackAvtivityVO> result = new ArrayList<>();
-        for (ActivityImpl temp : activityList) {
-            result.add(BackAvtivityVO.builder().title(ConverterUtils.toString(temp.getProperty("name"))).id(temp.getId()).build());
-        }
-        return HttpResult.success(result);
+        return HttpResult.success(flowCoreService.findBackAvtivity(taskId));
     }
 
     /**
@@ -231,7 +223,7 @@ public class MyWorksAction extends BaseAction {
     public HttpResult<Boolean> backProcess(String taskId, String activityId,boolean isPre, HttpServletRequest request) throws Exception {
         ParamChecker.isNotNullOrEmpty(taskId, "任务id不能为空");
         if(CheckUtils.isNullOrEmpty(activityId)){
-            List<ActivityImpl> activityList = flowCoreService.findBackAvtivity(taskId);
+            List<BackAvtivityVO> activityList = flowCoreService.findBackAvtivity(taskId);
             if(activityList.isEmpty()){
                 throw  new ParamException("当前任务不可驳回，因为无可驳回任务点");
             }

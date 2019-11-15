@@ -31,7 +31,7 @@ public class FlowTaskHistoryServiceImpl extends BaseServiceImpl<FlowTaskHistory>
         List<FlowTaskHistory>  brotherHitorys = super.findForList(FlowTaskHistory.builder().instanceId(instanceId).definitionKey(definitionKey).build());
         if(!brotherHitorys.isEmpty()){
             return FlowTaskHistory.builder().id(StringUtil.getUUID()).orderNum(brotherHitorys.get(0).getOrderNum()).definitionKey(definitionKey)
-                    .code(brotherHitorys.get(0).getCode()).build();
+                    .code(brotherHitorys.get(0).getCode()).instanceId(instanceId).build();
         }
         FlowTaskHistory lastTaskHistory = taskHistoryDao.findLastTaskHistory(instanceId);
         if(lastTaskHistory==null){
@@ -39,7 +39,8 @@ public class FlowTaskHistoryServiceImpl extends BaseServiceImpl<FlowTaskHistory>
                     .code("001").build();
         }
         int maxOrderNum = taskHistoryDao.findMaxOrderNum(instanceId);
-        return FlowTaskHistory.builder().id(StringUtil.getUUID()).orderNum(++maxOrderNum).definitionKey(definitionKey)
-                .code(lastTaskHistory.getCode()+(maxOrderNum+1)).build();
+        maxOrderNum++;
+        return FlowTaskHistory.builder().id(StringUtil.getUUID()).orderNum(maxOrderNum).definitionKey(definitionKey)
+                .code(lastTaskHistory.getCode()+maxOrderNum).instanceId(instanceId).build();
     }
 }
