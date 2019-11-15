@@ -113,6 +113,7 @@ public class FlowCoreServiceImpl implements FlowCoreService {
             taskHistory.setTaskId(task.getId());
             taskHistoryService.insertJpa(taskHistory);
             checkProProcessInstanceIsEnd(task.getProcessInstanceId(), null);
+            flowInstanceService.updateSelectiveById(FlowInstance.builder().id(flowInstance.getId()).firstDefinitionKey(task.getTaskDefinitionKey()).build());
         }
         return flowInstance.getId();
     }

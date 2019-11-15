@@ -1,5 +1,6 @@
 package com.fhs.workflow.vo;
 
+import com.fhs.core.base.vo.BaseVo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BackAvtivityVO {
+public class BackAvtivityVO extends BaseVo<BackAvtivityVO> {
     // 标题
     private String title;
     // id

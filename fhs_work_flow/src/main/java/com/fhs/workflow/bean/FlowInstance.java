@@ -74,12 +74,18 @@ public class FlowInstance extends BaseDO<FlowInstance> {
     @TableField("status")
     private int status;
 
+    /**
+     * 第一个用户任务的key
+     */
+    @TableField("first_definition_key")
+    private String firstDefinitionKey;
+
 
     public FlowInstance() {
     }
 
 
-    public FlowInstance(String id, String title, String xmlId, String activitiProcessInstanceId, String formPkey, String extFormParam, int status) {
+    public FlowInstance(String id, String title, String xmlId, String activitiProcessInstanceId, String formPkey, String extFormParam, int status, String firstDefinitionKey) {
         this.id = id;
         this.title = title;
         this.xmlId = xmlId;
@@ -87,5 +93,6 @@ public class FlowInstance extends BaseDO<FlowInstance> {
         this.formPkey = formPkey;
         this.extFormParam = extFormParam;
         this.status = status;
+        this.firstDefinitionKey = firstDefinitionKey;
     }
 }
