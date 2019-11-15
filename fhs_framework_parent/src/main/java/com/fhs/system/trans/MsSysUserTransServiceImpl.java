@@ -66,9 +66,20 @@ public class MsSysUserTransServiceImpl implements ITransTypeService,Initializing
             {
                 e.printStackTrace();
             }
-
-            obj.getTransMap().put(tempField.getName() + "UserName", redisCacheService.getStr("ucenter:sysuser:username:"+ userId));
-            obj.getTransMap().put(tempField.getName() + "UserHeader", redisCacheService.getStr("ucenter:sysuser:userheader:"+ userId));
+            if(!userId.contains(",")){
+                obj.getTransMap().put(tempField.getName() + "UserName", redisCacheService.getStr("ucenter:sysuser:username:"+ userId));
+                obj.getTransMap().put(tempField.getName() + "UserHeader", redisCacheService.getStr("ucenter:sysuser:userheader:"+ userId));
+            }
+            else{
+                String[] userIds  = userId.split(",");
+                StringBuilder nameBuilder = new StringBuilder();
+                for(String tempUserId:userIds){
+                    if(redisCacheService.exists("ucenter:sysuser:username:"+ tempUserId)){
+                        nameBuilder.append(redisCacheService.getStr("ucenter:sysuser:username:"+ tempUserId) + ",");
+                    }
+                }
+                obj.getTransMap().put(tempField.getName() + "UserName",nameBuilder.toString());
+            }
 
         }
 
