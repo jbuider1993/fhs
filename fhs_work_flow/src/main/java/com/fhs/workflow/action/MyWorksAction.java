@@ -9,7 +9,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.fhs.base.action.ModelSuperAction;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
@@ -26,21 +25,15 @@ import com.fhs.workflow.service.BpmImageService;
 import com.fhs.workflow.service.FlowCoreService;
 import com.fhs.workflow.service.WorkFlowTaskService;
 import com.fhs.workflow.vo.BackAvtivityVO;
-import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.ManagementService;
 import org.activiti.engine.ProcessEngineConfiguration;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.impl.RepositoryServiceImpl;
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
-import org.activiti.image.impl.DefaultProcessDiagramGenerator;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -188,6 +181,7 @@ public class MyWorksAction extends BaseAction {
      */
     @RequestMapping("revoke")
     public HttpResult<Boolean> revoke(String taskId,HttpServletRequest request) throws Exception {
+        this.flowCoreService.updateEndSuccessProcess(taskId,super.getParameterMap(request),true,this.getSessionuser(request).getUserId());
         // 撤销申请
         return HttpResult.success(true);
     }

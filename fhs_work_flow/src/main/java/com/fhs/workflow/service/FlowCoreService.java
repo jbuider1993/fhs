@@ -1,9 +1,8 @@
 package com.fhs.workflow.service;
 
-import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.task.Task;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -86,13 +85,16 @@ public interface FlowCoreService {
                             Map<String, Object> variables) throws Exception;
 
 
-
     /**
-     * 办结流程(特权人直接审批通过等)
-     *
-     * @param taskId
+     * 结束流程
+     * 有2种场景，特权人直接通过审批或者申请人撤销申请
+     * @param taskId 任务id
+     * @param variables 流程变量
+     * @param isRevoke 是否是撤销
+     * @param userId 用户id--撤销的时候需要传
+     * @throws Exception
      */
-    void updateEndSuccessProcess(String taskId) throws Exception;
+    void updateEndSuccessProcess(String taskId,Map<String, Object> variables,boolean isRevoke,String userId) throws Exception;
 
     /**
      * 会签操作
@@ -110,10 +112,12 @@ public interface FlowCoreService {
      *
      * @param taskId
      *            当前任务节点ID
-     * @param userId
-     *            被转办人Code
+     * @param sourceUserId
+     *           原来的人id
+     * @param targetUserId
+     *                 被转办人id
      */
-    void updateTransferAssignee(String taskId, String userId);
+    void updateTransferAssignee(String taskId, String sourceUserId,String targetUserId);
 
     /**
      * 撤回
@@ -122,4 +126,11 @@ public interface FlowCoreService {
      * @param  variables 流程变量
      */
     void updateWithdraw(String taskId, String userId, Map<String, Object> variables) throws Exception;
+
+    /**
+     * 根据activiti 流程实例id获取未完成任务
+     * @param instanceId 流程实例id
+     * @return 任务集合
+     */
+    List<Task> findTaskListByInstanceId(String instanceId);
 }
