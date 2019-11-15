@@ -17,6 +17,7 @@ import com.fhs.core.log.LogDesc;
 import com.fhs.core.page.Pager;
 import com.fhs.core.result.HttpResult;
 import com.fhs.ucenter.api.vo.SysUserVo;
+import com.mybatis.jpa.context.DataPermissonContext;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -507,5 +508,13 @@ public class ModelSuperAction<T> extends BaseAction<T>
      */
     public Map<String,String> getFormartField(){
         return null;
+    }
+
+    @Override
+    public EMap<String, Object> getParameterMap(HttpServletRequest request) {
+        EMap<String, Object> result = super.getParameterMap(request);
+        result.put("permission", DataPermissonContext.getDataPermissonMap());
+        result.put("loginUserId",getSessionuser(request).getUserId());
+        return result;
     }
 }
