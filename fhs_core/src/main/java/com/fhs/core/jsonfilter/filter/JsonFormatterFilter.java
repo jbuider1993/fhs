@@ -11,6 +11,7 @@ import java.util.Collection;
 /**
  * json格式化 实现
  * by wanglei
+ * @author jackwong
  */
 public class JsonFormatterFilter extends BeforeFilter {
 

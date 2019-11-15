@@ -9,6 +9,7 @@ import java.util.*;
  * update from https://github.com/Liuyis/jsonfilter
  * by jackwong
  * json过滤器
+ * @author jackwong
  */
 public class SimpleSerializerFilter extends SimplePropertyPreFilter{
 
