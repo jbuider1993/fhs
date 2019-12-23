@@ -1,13 +1,5 @@
 package com.fhs.workflow.action;
 
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fhs.common.constant.Constant;
@@ -27,22 +19,23 @@ import com.fhs.workflow.bean.HistoryTask;
 import com.fhs.workflow.service.*;
 import com.fhs.workflow.vo.BackAvtivityVO;
 import com.fhs.workflow.vo.InstanceVO;
-import com.netflix.discovery.converters.Auto;
-import com.sun.tools.javac.comp.Flow;
 import org.activiti.engine.HistoryService;
-import org.activiti.engine.ManagementService;
-import org.activiti.engine.ProcessEngineConfiguration;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
-import org.activiti.spring.ProcessEngineFactoryBean;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -115,8 +108,25 @@ public class MyWorksAction extends BaseAction {
      */
     @RequestMapping("claimTask")
     public HttpResult<Boolean> claimTask(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        taskService.claim(request.getParameter("taskId"), getSessionuser(request).getUserLoginName());
+        Task task = taskService.createTaskQuery().taskId(request.getParameter("taskId")).singleResult();
+        if (task.getAssignee() == null) {
+            taskService.claim(request.getParameter("taskId"), getSessionuser(request).getUserLoginName());
+        }
         return HttpResult.success(true);
+    }
+
+    /**
+     * 是否被签收
+     */
+    @RequestMapping("isClaimTask")
+    public HttpResult<Boolean> isclaimTask(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Task task = taskService.createTaskQuery().taskId(request.getParameter("taskId")).singleResult();
+        // 判断任务是否已经被签收
+        if (task.getAssignee() == null) {
+            //return HttpResult.error("已被签收");
+            return HttpResult.success(true);
+        }
+        return HttpResult.success(false);
     }
 
     /**
@@ -165,27 +175,28 @@ public class MyWorksAction extends BaseAction {
 
     /**
      * 撤回审批的任务
+     *
      * @param taskId 历史任务的taskid
      * @return 是否撤回成功
      */
     @RequestMapping("withdraw")
-    public HttpResult<Boolean> withdraw(String taskId,HttpServletRequest request) throws Exception {
-        flowCoreService.updateWithdraw(taskId,this.getSessionuser(request).getUserId(),super.getParameterMap(request));
+    public HttpResult<Boolean> withdraw(String taskId, HttpServletRequest request) throws Exception {
+        flowCoreService.updateWithdraw(taskId, this.getSessionuser(request).getUserId(), super.getParameterMap(request));
         return HttpResult.success(true);
     }
 
     /**
      * 撤销申请
+     *
      * @param taskId 历史任务的taskid
      * @return 是否撤回成功
      */
     @RequestMapping("revoke")
-    public HttpResult<Boolean> revoke(String taskId,HttpServletRequest request) throws Exception {
-        this.flowCoreService.updateEndSuccessProcess(taskId,super.getParameterMap(request),true,this.getSessionuser(request).getUserId());
+    public HttpResult<Boolean> revoke(String taskId, HttpServletRequest request) throws Exception {
+        this.flowCoreService.updateEndSuccessProcess(taskId, super.getParameterMap(request), true, this.getSessionuser(request).getUserId());
         // 撤销申请
         return HttpResult.success(true);
     }
-
 
     /**
      * 查找可回退节点
@@ -195,7 +206,7 @@ public class MyWorksAction extends BaseAction {
      */
     @RequestMapping("findBackAvtivity")
     public HttpResult<List<BackAvtivityVO>> findBackAvtivity(String taskId) throws Exception {
-        ParamChecker.isNotNullOrEmpty(taskId,"taskid不能为空");
+        ParamChecker.isNotNullOrEmpty(taskId, "taskid不能为空");
         return HttpResult.success(flowCoreService.findBackAvtivity(taskId));
     }
 
@@ -216,26 +227,27 @@ public class MyWorksAction extends BaseAction {
 
     /**
      * 驳回
-     * @param taskId  任务id
-     * @param isPre 驳回到上一任务，如果指定任务id为空并且这里设置为false的话则驳回到第一个任务
+     *
+     * @param taskId     任务id
+     * @param isPre      驳回到上一任务，如果指定任务id为空并且这里设置为false的话则驳回到第一个任务
      * @param activityId 指定任务
-     * @param request 请求
+     * @param request    请求
      * @return
      */
     @RequestMapping("backTask")
-    public HttpResult<Boolean> backProcess(String taskId, String activityId,boolean isPre, HttpServletRequest request) throws Exception {
+    public HttpResult<Boolean> backProcess(String taskId, String activityId, boolean isPre, HttpServletRequest request) throws Exception {
         ParamChecker.isNotNullOrEmpty(taskId, "任务id不能为空");
-        if(CheckUtils.isNullOrEmpty(activityId)){
+        if (CheckUtils.isNullOrEmpty(activityId)) {
             List<BackAvtivityVO> activityList = flowCoreService.findBackAvtivity(taskId);
-            if(activityList.isEmpty()){
-                throw  new ParamException("当前任务不可驳回，因为无可驳回任务点");
+            if (activityList.isEmpty()) {
+                throw new ParamException("当前任务不可驳回，因为无可驳回任务点");
             }
             // 获取上一个任务
-            if(isPre){
-                activityId = activityList.get(activityList.size()-1).getId();
+            if (isPre) {
+                activityId = activityList.get(activityList.size() - 1).getId();
 
-            //获取第一个任务
-            }else{
+                //获取第一个任务
+            } else {
                 activityId = activityList.get(0).getId();
             }
         }
@@ -243,8 +255,6 @@ public class MyWorksAction extends BaseAction {
         flowCoreService.updateBackProcess(taskId, activityId, paramMap);
         return HttpResult.success(true);
     }
-
-
 
     /**
      * 获取工作流图片
@@ -257,56 +267,55 @@ public class MyWorksAction extends BaseAction {
     public void getWorkFlowImg(HttpServletRequest request, HttpServletResponse response) throws Exception {
         //processInstanceId
         String processInstanceId = request.getParameter("processInstanceId");
-        ParamChecker.isNotNullOrEmpty(processInstanceId,"实例id为必传");
+        ParamChecker.isNotNullOrEmpty(processInstanceId, "实例id为必传");
         //获取历史流程实例
         HistoricProcessInstance processInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
-        ParamChecker.isNotNullOrEmpty(processInstance,"实例id无效");
+        ParamChecker.isNotNullOrEmpty(processInstance, "实例id无效");
         String procDefId = processInstance.getProcessDefinitionId();
-        InputStream imageStream = bpmImageService.draw(procDefId,processInstanceId);
-        FileUtils.downloadInputStream(imageStream,response,"workflow.png");
+        InputStream imageStream = bpmImageService.draw(procDefId, processInstanceId);
+        FileUtils.downloadInputStream(imageStream, response, "workflow.png");
 
     }
 
     /**
      * 根据id查询实例详情
+     *
      * @param instanceId 工作流实例id
      * @return 工作流实例详情
      */
     @RequestMapping("findInstanceById")
-    public HttpResult<InstanceVO> findInstanceById(String instanceId){
-        ParamChecker.isNotNull(instanceId,"instanceId为必传");
+    public HttpResult<InstanceVO> findInstanceById(String instanceId) {
+        ParamChecker.isNotNull(instanceId, "instanceId为必传");
         FlowInstance instance = this.instanceService.selectBean(FlowInstance.builder().activitiProcessInstanceId(instanceId).build());
-        ParamChecker.isNotNull(instance,"instanceId无效");
+        ParamChecker.isNotNull(instance, "instanceId无效");
         InstanceVO result = new InstanceVO();
-        BeanUtils.copyProperties(instance,result);
+        BeanUtils.copyProperties(instance, result);
         FlowJbpmXml xml = flowJbpmXmlService.selectById(instance.getXmlId());
-        ParamChecker.isNotNull(xml,"流程xml被删除");
+        ParamChecker.isNotNull(xml, "流程xml被删除");
 
         result.setProcessKey(xml.getProcessKey());
         List<Task> tasks = this.flowCoreService.findTaskListByInstanceId(instanceId);
         result.setIsSubmiTask(Constant.INT_FALSE);
         result.setIsCanWithdraw(Constant.INT_FALSE);
-        if(!tasks.isEmpty()){
+        if (!tasks.isEmpty()) {
             // 如果不为空，如果task的id是第一个节点的话，那么就是提交节点,提交节点不允许撤回，其他的节点允许撤回
-            if(tasks.get(0).getTaskDefinitionKey().equals(instance.getFirstDefinitionKey())){
+            if (tasks.get(0).getTaskDefinitionKey().equals(instance.getFirstDefinitionKey())) {
                 result.setIsSubmiTask(Constant.INT_TRUE);
-            }
-            else{
+            } else {
                 result.setIsCanWithdraw(Constant.INT_TRUE);
             }
         }
         String formUrl = null;
-        if(Constant.INT_TRUE ==  xml.getIsPagex()){
+        if (Constant.INT_TRUE == xml.getIsPagex()) {
             formUrl = EConfig.getPathPropertiesValue(xml.getServer()) + "/ms/pagex/" + xml.getNamespace() + "_flowform.jsp?id=" + instance.getFormPkey();
-        }
-        else{
+        } else {
             formUrl = EConfig.getPathPropertiesValue(xml.getServer()) + xml.getUri();
-            formUrl = formUrl.contains("?") ? (formUrl + "&id=" + instance.getFormPkey()): (formUrl + "?id=" + instance.getFormPkey());
+            formUrl = formUrl.contains("?") ? (formUrl + "&id=" + instance.getFormPkey()) : (formUrl + "?id=" + instance.getFormPkey());
         }
         JSONObject exParam = JSON.parseObject(instance.getExtFormParam());
         Set<String> keys = exParam.keySet();
-        for(String key : keys){
-            formUrl =  formUrl + key + "=" + exParam.getString(key);
+        for (String key : keys) {
+            formUrl = formUrl + key + "=" + exParam.getString(key);
         }
         result.setFormUrl(formUrl);
         return HttpResult.success(result);

@@ -1,12 +1,10 @@
 package com.fhs.workflow.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fhs.common.utils.*;
 import com.fhs.core.exception.ParamChecker;
 import com.fhs.core.exception.ParamException;
 import com.fhs.workflow.bean.FlowInstance;
 import com.fhs.workflow.bean.FlowJbpmXml;
-import com.fhs.workflow.bean.FlowTask;
 import com.fhs.workflow.bean.FlowTaskHistory;
 import com.fhs.workflow.service.FlowCoreService;
 import com.fhs.workflow.service.FlowInstanceService;
@@ -143,7 +141,7 @@ public class FlowCoreServiceImpl implements FlowCoreService {
                 result.add(BackAvtivityVO.builder().id(item.getDefinitionKey()).title(item.getTitle()).build());
             }
         });
-        return result;
+        return result.stream().distinct().collect(Collectors.toList());
     }
 
     @Override
@@ -229,7 +227,7 @@ public class FlowCoreServiceImpl implements FlowCoreService {
         else{
             variables.put("result",FlowTaskHistoryService.RESULT_END);
         }
-        commitProcess(taskId, null, endActivity.getId());
+        commitProcess(taskId, variables, endActivity.getId());
     }
 
     @Override
@@ -446,7 +444,7 @@ public class FlowCoreServiceImpl implements FlowCoreService {
                 .singleResult();
         //代表结束了，就去更新instance状态
         if (processInstance == null) {
-            FlowInstance instance = this.flowInstanceService.findBean(FlowInstance.builder().activitiProcessInstanceId(processInstanceId).build());
+            FlowInstance instance = this.flowInstanceService.selectBean(FlowInstance.builder().activitiProcessInstanceId(processInstanceId).build());
             if (instance != null) {
                 List<FlowTaskHistory> histories = this.taskHistoryService.selectPageForOrder(FlowTaskHistory.builder().instanceId(processInstanceId).build(),0,1,"create_time DESC");
                 if(!histories.isEmpty()){

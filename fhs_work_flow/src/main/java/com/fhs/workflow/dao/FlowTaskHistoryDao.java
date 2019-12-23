@@ -1,12 +1,14 @@
 package com.fhs.workflow.dao;
 
-import com.fhs.workflow.bean.FlowTaskHistory;
-import org.apache.ibatis.annotations.Param;
-import java.util.List;
 import com.fhs.core.base.dao.BaseDao;
+import com.fhs.workflow.bean.FlowTaskHistory;
+import com.fhs.workflow.vo.TaskHistoryVO;
 import com.mybatis.jpa.annotation.MapperDefinition;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 流程任务日志(FlowTaskHistory)表数据库访问层
@@ -31,5 +33,26 @@ public interface FlowTaskHistoryDao extends BaseDao<FlowTaskHistory> {
      * @return 最大的ordernum、
      */
     Integer findMaxOrderNum(@Param("instanceId")String instanceId);
+
+    /**
+     * 查询已办纪录
+     * @param paramMap
+     * @return
+     */
+    List<TaskHistoryVO> findTaskHistoryList(Map<String, Object> paramMap);
+
+    /**
+     * 查询已办纪录数量
+     * @param paramMap
+     * @return
+     */
+    int findTaskHistoryCount(Map<String, Object> paramMap);
+
+    /**
+     * 查询审批历史
+     * @param instanceId
+     * @return
+     */
+    List<TaskHistoryVO> findApprovalRecord(@Param("instanceId") String instanceId);
 
 }

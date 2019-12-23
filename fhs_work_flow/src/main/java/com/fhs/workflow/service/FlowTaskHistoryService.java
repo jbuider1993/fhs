@@ -1,8 +1,12 @@
 package com.fhs.workflow.service;
 
-import com.fhs.workflow.bean.FlowTaskHistory;
-import java.util.List;
 import com.fhs.core.base.service.BaseService;
+import com.fhs.workflow.bean.FlowTaskHistory;
+import com.fhs.workflow.vo.TaskHistoryVO;
+
+import java.util.List;
+import java.util.Map;
+
 /**
  * 流程任务日志(FlowTaskHistory)表服务接口
  *
@@ -60,5 +64,25 @@ public interface FlowTaskHistoryService extends BaseService<FlowTaskHistory>{
      * @return 构建好的对象
      */
     FlowTaskHistory buildFlowTaskHistory(String definitionKey,String instanceId);
+
+    /**
+     * 查询已办纪录
+     * @param paramMap
+     * @return
+     */
+    List<TaskHistoryVO> findTaskHistoryList(Map<String, Object> paramMap);
+
+    /**
+     * 查询已办纪录总数
+     * @param paramMap
+     * @return
+     */
+    int findTaskHistoryCount(Map<String, Object> paramMap);
+
+    /**
+     * 审批纪录
+     */
+    List<TaskHistoryVO> findApprovalRecord(String instanceId);
+
 
 }

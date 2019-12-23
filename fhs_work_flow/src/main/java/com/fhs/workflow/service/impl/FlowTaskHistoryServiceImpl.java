@@ -1,14 +1,16 @@
 package com.fhs.workflow.service.impl;
 
 import com.fhs.common.utils.StringUtil;
+import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.workflow.bean.FlowTaskHistory;
 import com.fhs.workflow.dao.FlowTaskHistoryDao;
 import com.fhs.workflow.service.FlowTaskHistoryService;
-import com.netflix.discovery.converters.Auto;
+import com.fhs.workflow.vo.TaskHistoryVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.fhs.core.base.service.impl.BaseServiceImpl;
+
 import java.util.List;
+import java.util.Map;
 
 /**
  * 流程任务日志(FlowTaskHistory)表服务实现类
@@ -43,4 +45,20 @@ public class FlowTaskHistoryServiceImpl extends BaseServiceImpl<FlowTaskHistory>
         return FlowTaskHistory.builder().id(StringUtil.getUUID()).orderNum(maxOrderNum).definitionKey(definitionKey)
                 .code(lastTaskHistory.getCode()+maxOrderNum).instanceId(instanceId).build();
     }
+
+    @Override
+    public List<TaskHistoryVO> findTaskHistoryList(Map<String, Object> paramMap) {
+        return taskHistoryDao.findTaskHistoryList(paramMap);
+    }
+
+    @Override
+    public int findTaskHistoryCount(Map<String, Object> paramMap) {
+        return taskHistoryDao.findTaskHistoryCount(paramMap);
+    }
+
+    @Override
+    public List<TaskHistoryVO> findApprovalRecord(String instanceId) {
+        return taskHistoryDao.findApprovalRecord(instanceId);
+    }
+
 }

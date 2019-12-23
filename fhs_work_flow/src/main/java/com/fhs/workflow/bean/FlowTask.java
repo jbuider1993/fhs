@@ -14,7 +14,7 @@ import lombok.Data;
  * @date 2019 -11-11 16:37:44
  */
 @Data
-@TransTypes(types = {Constant.USER_NAME})
+@TransTypes(types = {Constant.USER_INFO})
 public class FlowTask extends SuperBean<FlowTask> {
 
     //任务id
@@ -57,6 +57,7 @@ public class FlowTask extends SuperBean<FlowTask> {
     private String title;
 
     //实例创建人
+    @Trans(type = Constant.USER_INFO, key = Constant.USER_NAME)
     private String createUser;
 
     public FlowTask() {
