@@ -12,6 +12,7 @@ import java.util.Set;
 /**
  * 除了配置的字段外的字段都不参与序列化
  * by wanglei
+ * @author jackwong
  */
 public class AllPropertyNotSeralizerFilter  extends SimplePropertyPreFilter {
 

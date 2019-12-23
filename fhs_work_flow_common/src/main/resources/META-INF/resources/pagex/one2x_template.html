@@ -1,0 +1,97 @@
+<div class="infoGroup">
+    ${tagSett.title}
+</div>
+<input type="hidden" name="${xnamespace}" id="${xnamespace}">
+<div id="${xnamespace}_id">
+
+</div>
+<table id="${xnamespace}_table" class="pubTable" style="max-width:80%;">
+    <tr>
+        <!--遍历所有的头-->
+        <% for(field in fieldList){ %>
+            <th>
+                ${field.title}
+            </th>
+        <% } %>
+
+        <th style="width:150px;">
+            <a href="javascript:void(0)" style="background-color: #1ab394;padding: 5px;border-radius: 2px;color: white;" onclick="${xnamespace}_addRow()">添加</a>
+        </th>
+    </tr>
+</table>
+
+<script id="${xnamespace}_add" type="text/html">
+    <tr id="<@=trId @>">
+        <% for(field in fieldList){ %>
+        <td>${field.formHtml}</td>
+        <% } %>
+        <td><a href="javascript:void(0)" style="background-color: red;padding: 5px;border-radius: 2px;color: white;" onclick="${xnamespace}_remove(this)">删除</a></td>
+    </tr>
+</script>
+<script>
+    var ${xnamespace}_index = 0;
+
+    function ${xnamespace}_addRow(){
+        ${xnamespace}_index++;
+        var _tempTRId = 'pagex_tr_${xnamespace}_'+ ${xnamespace}_index;
+        $('#${xnamespace}_table').append(baidu.template('${xnamespace}_add',{trId:_tempTRId}));
+        $.parser.parse('#' + _tempTRId);
+    }
+
+    function ${xnamespace}_onsave(){
+        //走一个循环拿数据
+        //
+        var _${xnamespace}Data = [];
+
+        for(i=1;i<=${xnamespace}_index;i++)
+        {
+
+            //判断这组对象是不是被干掉了
+            if($("#${firstFieldName}_" + i).length>0){
+                var _rowData = {};
+                _${xnamespace}Data.push(_rowData);
+            <% for(field in fieldList){ %>
+                _rowData.${field.name} = $('#${field.name}_' + i).${field.getValue};
+           <% } %>
+                if($('#${xnamespace}_pkey_' + i).length>0)
+                {
+                    _rowData.pkey = $('#${xnamespace}_pkey_' + i).val();
+                }
+            }
+        }
+        $('#${xnamespace}').val(json2str(_${xnamespace}Data));
+        var _result = true;
+        //循环
+        return _result;
+    }
+
+    function ${xnamespace}_remove(_obj){
+        $(_obj).parent().parent().remove();
+    }
+
+    function ${xnamespace}_onload(_info)
+    {
+        //ajax查询列表调用addrow，然后初始化数据
+        $.ajax({
+           url:'${basePath}/ms/x/${xnamespace}/findListData?${modelConfig.fkey}=' + _info.${sourceModelConfig.pkey},
+           dataType:'json',
+           success:function(_res){
+               _res.forEach(function(_item){
+                   //添加一行
+                   ${xnamespace}_addRow();
+                   var _tempId = '${xnamespace}_pkey_' + ${xnamespace}_index;
+                   $('#${xnamespace}_id').append('<input type="hidden" id="' + _tempId + '">');
+                   $('#'+_tempId).val(_item.${modelConfig.pkey});
+                   <% for(field in fieldList){ %>
+                       $('#${field.name}_' +  ${xnamespace}_index).${field.setValue}_item.${field.name});
+                   <% } %>
+               })
+           },
+        });
+    }
+
+    function ${xnamespace}_ready(){
+        //for循环初始化代码
+    }
+
+</script>

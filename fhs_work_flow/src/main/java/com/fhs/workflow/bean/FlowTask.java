@@ -14,7 +14,7 @@ import lombok.Data;
  * @date 2019 -11-11 16:37:44
  */
 @Data
-@TransTypes(types = {Constant.USER_NAME})
+@TransTypes(types = {Constant.USER_INFO})
 public class FlowTask extends SuperBean<FlowTask> {
 
     //任务id
@@ -50,16 +50,20 @@ public class FlowTask extends SuperBean<FlowTask> {
 
     private String fhsInstanceId;
 
+    //流程引擎实例id
+    private String activitiInstanceId;
+
     // 标题
     private String title;
 
     //实例创建人
+    @Trans(type = Constant.USER_INFO, key = Constant.USER_NAME)
     private String createUser;
 
     public FlowTask() {
     }
 
-    public FlowTask(String taskId, String taskName, String taskOwner, String assignee, Integer priority, String taskCreateTime, String instanceCreateTime, String dueDate, String category, String suspensionSate, String formKey, String fhsInstanceId, String title, String createUser) {
+    public FlowTask(String taskId, String taskName, String taskOwner, String assignee, Integer priority, String taskCreateTime, String instanceCreateTime, String dueDate, String category, String suspensionSate, String formKey, String fhsInstanceId, String activitiInstanceId, String title, String createUser) {
         this.taskId = taskId;
         this.taskName = taskName;
         this.taskOwner = taskOwner;
@@ -72,6 +76,7 @@ public class FlowTask extends SuperBean<FlowTask> {
         this.suspensionSate = suspensionSate;
         this.formKey = formKey;
         this.fhsInstanceId = fhsInstanceId;
+        this.activitiInstanceId = activitiInstanceId;
         this.title = title;
         this.createUser = createUser;
     }

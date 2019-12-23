@@ -5,7 +5,7 @@
 	//属性表格定义
 	rows = [
 
-		{ "name": "ID", "group": "名称", "value": task.taskId, "field": "taskId", "editor": "text" },
+		{ "name": "ID", "group": "名称", "value": task.taskId, "field": "arraytaskId", "editor": "text" },
 		{ "name": "描述", "group": "任务属性", "value": task.taskName, "field": "taskName", "editor": "text" },
 		{ "name": "任务属性", "group": "任务属性", "value": task.documentation, "field": "documentation", "editor": "text" },
 		{ "name": "表单key", "group": "表单属性", "value": task.formKey, "field": "formKey", "editor": "text" }

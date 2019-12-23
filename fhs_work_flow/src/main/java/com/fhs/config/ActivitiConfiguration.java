@@ -39,10 +39,11 @@ public class ActivitiConfiguration {
             public void configure(SpringProcessEngineConfiguration processEngineConfiguration) {
                 processEngineConfiguration.setActivityFontName("宋体");
                 processEngineConfiguration.setLabelFontName("宋体");
+                processEngineConfiguration.setAnnotationFontName("宋体");
                 processEngineConfiguration.setCustomSessionFactories(getCustomSessionFactories());
                 processEngineConfiguration.setBeans(getBeans());
                 //不手动创建数据库
-                processEngineConfiguration.setDatabaseSchemaUpdate("true");
+                processEngineConfiguration.setDatabaseSchemaUpdate(autoActivitiCreatTbl);
 
             }
 

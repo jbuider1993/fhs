@@ -1,0 +1,67 @@
+<div class='fitem'>
+    <div class='fitemDiv'>
+        <div class='uploadLableDiv'>
+            <label class='uploadLable'>${tagSett.title}:</label>
+        </div>
+
+        <input type='file' id='${tagSett.name}File'/>
+    </div>
+</div>
+<div class='fitem'>
+    <div class='bigLabelDiv'>
+        <label>&nbsp;</label>
+    </div>
+    &nbsp;&nbsp;&nbsp;&nbsp;${tagSett.placeholder}
+    <%  if(nvl(tagSett.required,false)){ %>
+    <span class="form-field-required">*</span>
+    <%}%>
+</div>
+<div class='fitem'>
+    <div class='bigLabelDiv'>
+        <label>&nbsp;</label>
+    </div>
+    <div class='bigContent' id='${tagSett.name}FileShow'>
+    </div>
+</div>
+<input type='hidden' name=${tagSett.name} id=${tagSett.name}
+<%  if(nvl(tagSett.required,false)){ %>
+    datatype="*"
+<%}%>
+nullmsg="请上传${tagSett.title}"/>
+
+<script>
+    //初始化上传
+    $(function(){
+        //默认5个
+        var _maxFileNumber = '${tagSett.max}' =='' ? 5 : new Number('${tagSett.max}');
+        var _fileType = '${tagSett.fileType}'
+        if('${tagSett.upType}'=='img')
+        {
+              inituploadifyIMG('${tagSett.name}File',false,"上传${tagSett.title}",_maxFileNumber);
+        }
+        else {
+            if(_fileType=='')
+            {
+                inituploadifyALL('${tagSett.name}File',false, '上传${tagSett.title}',_maxFileNumber );
+            }
+            else {
+                inituploadifyALL('${tagSett.name}File',false, '上传${tagSett.title}',_maxFileNumber,_fileType);
+            }
+        }
+    })
+    //上传返显示
+    function uploadsFileLoadSuccess_${tagSett.name}(info){
+        if(info.${tagSett.name})
+        {
+            initFiles("${tagSett.name}File", info.${tagSett.name});
+        }
+    }
+    //上传文件赋值
+    function uploadsFileOnsave_${tagSett.name}()
+    {
+        $("#${tagSett.name}").val($('#contentPathFileShow').listUploadFile()
+            .getFileId('${tagSett.name}FileShow'));
+        return true;
+    }
+
+</script>

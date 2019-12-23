@@ -1,14 +1,19 @@
 package com.fhs.workflow.bean;
 
-import com.baomidou.mybatisplus.annotation.*;
-import com.fhs.core.group.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.core.base.bean.BaseDO;
+import com.fhs.core.group.Add;
+import com.fhs.core.group.Delete;
+import com.fhs.core.group.Update;
 import lombok.Builder;
 import lombok.Data;
-import javax.validation.constraints.NotNull;
-
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * fhs的流程实例，为activiti的实例扩展表(FlowInstance)实体类
@@ -72,14 +77,20 @@ public class FlowInstance extends BaseDO<FlowInstance> {
      * 状态
      */
     @TableField("status")
-    private int status;
+    private Integer status;
+
+    /**
+     * 第一个用户任务的key
+     */
+    @TableField("first_definition_key")
+    private String firstDefinitionKey;
 
 
     public FlowInstance() {
     }
 
 
-    public FlowInstance(String id, String title, String xmlId, String activitiProcessInstanceId, String formPkey, String extFormParam, int status) {
+    public FlowInstance(String id, String title, String xmlId, String activitiProcessInstanceId, String formPkey, String extFormParam, Integer status, String firstDefinitionKey) {
         this.id = id;
         this.title = title;
         this.xmlId = xmlId;
@@ -87,5 +98,6 @@ public class FlowInstance extends BaseDO<FlowInstance> {
         this.formPkey = formPkey;
         this.extFormParam = extFormParam;
         this.status = status;
+        this.firstDefinitionKey = firstDefinitionKey;
     }
 }

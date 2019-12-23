@@ -2,6 +2,90 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fhs.workflow.dao.FlowTaskHistoryDao">
 
-    
+
+    <select id="findLastTaskHistory" resultType="com.fhs.workflow.bean.FlowTaskHistory" parameterType="map">
+          SELECT
+          `id`,
+          `instance_id`,
+          `task_finish_time`,
+          `task_id`,
+          `candidate_user_id`,
+          `candidate_rule_id`,
+          `status`,
+          `create_time`,
+          `update_time`,
+          `create_user`,
+          `update_user`,
+          `title`,
+          `parent_task_id`,
+          `use_time`,
+          `assignee_user_id`,
+          `result`,
+          `remark`,
+          `definition_key`,
+          `code`,
+          `order_num`
+        FROM
+           `t_flow_task_history`
+          WHERE  instance_id = #{instanceId} ORDER BY create_time DESC
+        LIMIT 0, 1
+    </select>
+
+    <select id="findMaxOrderNum" resultType="java.lang.Integer" parameterType="map">
+        SELECT MAX(order_num) FROM   `t_flow_task_history`   WHERE  instance_id = #{instanceId}
+    </select>
+
+    <sql id="AlreadyDoneWhere">
+        WHERE fi.create_user = #{userId}
+        <if test="processTitle != null and processTitle != ''">
+            AND fi.title LIKE '%${processTitle}%'
+        </if>
+        <if test="processName != null and processName != ''">
+            AND fjx.name LIKE '%${processName}%'
+        </if>
+    </sql>
+
+    <select id="findTaskHistoryList" parameterType="map" resultType="com.fhs.workflow.vo.TaskHistoryVO">
+        SELECT
+        fth.task_id,
+        fi.title processTitle,
+        fjx.name processName,
+        fth.title taskName,
+        fi.status processStatus,
+        fi.create_user createUser,
+        fth.task_finish_time taskFinishTime,
+        fth.use_time useTime,
+        fth.`result` useStatus
+        FROM t_flow_task_history fth
+        LEFT JOIN t_flow_instance fi ON fi.activiti_process_instance_id = fth.instance_id
+        LEFT JOIN t_flow_jbpm_xml fjx ON fjx.id =  fi.form_pkey
+        <include refid="AlreadyDoneWhere"/>
+        ORDER BY task_finish_time DESC
+        <if test="start!= null and end != null">
+            LIMIT ${start}, ${end}
+        </if>
+    </select>
+
+    <select id="findTaskHistoryCount" parameterType="map" resultType="int">
+        SELECT
+        COUNT(*)
+        FROM t_flow_task_history fth
+        LEFT JOIN t_flow_instance fi ON fi.activiti_process_instance_id = fth.instance_id
+        LEFT JOIN t_flow_jbpm_xml fjx ON fjx.id =  fi.form_pkey
+        <include refid="AlreadyDoneWhere"/>
+    </select>
+
+    <select id="findApprovalRecord" resultType="com.fhs.workflow.vo.TaskHistoryVO">
+        select
+            title taskName,
+            task_finish_time taskFinishTime,
+            create_time,
+            `result` useStatus,
+            remark
+        from t_flow_task_history
+        where instance_id = #{instanceId}
+        ORDER BY create_time desc
+    </select>
+
 
 </mapper>

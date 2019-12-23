@@ -62,11 +62,16 @@
 			<artifactId>activiti-spring-boot-starter-basic</artifactId>
 			<version>5.22.0</version>
 		</dependency>
-    </dependencies>
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-all</artifactId>
+			<version>5.0.5</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<pluginManagement><!-- lock down plugins versions to avoid using Maven
-				defaults (may be moved to parent pom) -->
+         defaults (may be moved to parent pom) -->
 			<plugins>
 				<plugin>
 					<artifactId>maven-clean-plugin</artifactId>

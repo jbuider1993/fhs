@@ -50,6 +50,9 @@
 			<if test="title !=null and title !='' ">
 				AND title LIKE '%${title}%'
 			</if>
+			<if test="taskName !=null and taskName !='' ">
+				AND `NAME_` LIKE '%${taskName}%'
+			</if>
 			<if test="taskTime !=null and taskTime !='' ">
 				AND  to_days(`CREATE_TIME_`) = to_days('${taskTime}')
 			</if>

@@ -1023,6 +1023,17 @@ public class StringUtil
     }
 
     /**
+     * 格式化订单号
+     *
+     * @param number
+     * @return 4位的订单号
+     */
+    public static String formatCheckNumber(int number)
+    {
+        return formatCountWith0("", "%04d", number);
+    }
+
+    /**
      *
      * 获取驼峰名称，首字母大写
      *

@@ -1,49 +1,41 @@
 package com.fhs.workflow.action;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.fhs.base.action.ModelSuperAction;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.CheckUtils;
-import com.fhs.common.utils.ConverterUtils;
+import com.fhs.common.utils.FileUtils;
 import com.fhs.core.base.action.BaseAction;
+import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.ParamChecker;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.page.Pager;
 import com.fhs.core.result.HttpResult;
 import com.fhs.ucenter.api.vo.SysUserVo;
+import com.fhs.workflow.bean.FlowInstance;
+import com.fhs.workflow.bean.FlowJbpmXml;
 import com.fhs.workflow.bean.FlowTask;
 import com.fhs.workflow.bean.HistoryTask;
-import com.fhs.workflow.service.FlowCoreService;
-import com.fhs.workflow.service.WorkFlowTaskService;
+import com.fhs.workflow.service.*;
 import com.fhs.workflow.vo.BackAvtivityVO;
-import org.activiti.bpmn.model.BpmnModel;
+import com.fhs.workflow.vo.InstanceVO;
 import org.activiti.engine.HistoryService;
-import org.activiti.engine.ManagementService;
-import org.activiti.engine.ProcessEngineConfiguration;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.activiti.engine.impl.context.Context;
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.activiti.engine.impl.pvm.PvmTransition;
-import org.activiti.engine.impl.pvm.process.ActivityImpl;
-import org.activiti.image.ProcessDiagramGenerator;
-import org.activiti.spring.ProcessEngineFactoryBean;
+import org.activiti.engine.task.Task;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -62,21 +54,19 @@ public class MyWorksAction extends BaseAction {
     private WorkFlowTaskService workFlowTaskService;
 
     @Autowired
-    RepositoryService repositoryService;
-    @Autowired
-    ManagementService managementService;
-    @Autowired
-    protected RuntimeService runtimeService;
-    @Autowired
-    ProcessEngineConfiguration processEngineConfiguration;
-    @Autowired
-    ProcessEngineFactoryBean processEngine;
-    @Autowired
-    HistoryService historyService;
+    private HistoryService historyService;
 
     @Autowired
     private FlowCoreService flowCoreService;
 
+    @Autowired
+    private BpmImageService bpmImageService;
+
+    @Autowired
+    private FlowInstanceService instanceService;
+
+    @Autowired
+    private FlowJbpmXmlService flowJbpmXmlService;
 
     /**
      * 查询待完成的工作
@@ -118,8 +108,25 @@ public class MyWorksAction extends BaseAction {
      */
     @RequestMapping("claimTask")
     public HttpResult<Boolean> claimTask(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        taskService.claim(request.getParameter("taskId"), getSessionuser(request).getUserLoginName());
+        Task task = taskService.createTaskQuery().taskId(request.getParameter("taskId")).singleResult();
+        if (task.getAssignee() == null) {
+            taskService.claim(request.getParameter("taskId"), getSessionuser(request).getUserLoginName());
+        }
         return HttpResult.success(true);
+    }
+
+    /**
+     * 是否被签收
+     */
+    @RequestMapping("isClaimTask")
+    public HttpResult<Boolean> isclaimTask(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Task task = taskService.createTaskQuery().taskId(request.getParameter("taskId")).singleResult();
+        // 判断任务是否已经被签收
+        if (task.getAssignee() == null) {
+            //return HttpResult.error("已被签收");
+            return HttpResult.success(true);
+        }
+        return HttpResult.success(false);
     }
 
     /**
@@ -146,7 +153,6 @@ public class MyWorksAction extends BaseAction {
                 .createHistoricTaskInstanceQuery()
                 .processInstanceId(processInstanceId)
                 .list();
-
         Map<String, HistoryTask> taskMap = new HashMap<>();
         HistoryTask tempTask = null;
         //流程变量
@@ -168,6 +174,31 @@ public class MyWorksAction extends BaseAction {
     }
 
     /**
+     * 撤回审批的任务
+     *
+     * @param taskId 历史任务的taskid
+     * @return 是否撤回成功
+     */
+    @RequestMapping("withdraw")
+    public HttpResult<Boolean> withdraw(String taskId, HttpServletRequest request) throws Exception {
+        flowCoreService.updateWithdraw(taskId, this.getSessionuser(request).getUserId(), super.getParameterMap(request));
+        return HttpResult.success(true);
+    }
+
+    /**
+     * 撤销申请
+     *
+     * @param taskId 历史任务的taskid
+     * @return 是否撤回成功
+     */
+    @RequestMapping("revoke")
+    public HttpResult<Boolean> revoke(String taskId, HttpServletRequest request) throws Exception {
+        this.flowCoreService.updateEndSuccessProcess(taskId, super.getParameterMap(request), true, this.getSessionuser(request).getUserId());
+        // 撤销申请
+        return HttpResult.success(true);
+    }
+
+    /**
      * 查找可回退节点
      *
      * @param taskId 任务id
@@ -175,13 +206,8 @@ public class MyWorksAction extends BaseAction {
      */
     @RequestMapping("findBackAvtivity")
     public HttpResult<List<BackAvtivityVO>> findBackAvtivity(String taskId) throws Exception {
-        ParamChecker.isNotNullOrEmpty(taskId,"taskid不能为空");
-        List<ActivityImpl> activityList = flowCoreService.findBackAvtivity(taskId);
-        List<BackAvtivityVO> result = new ArrayList<>();
-        for (ActivityImpl temp : activityList) {
-            result.add(BackAvtivityVO.builder().title(ConverterUtils.toString(temp.getProperty("name"))).id(temp.getId()).build());
-        }
-        return HttpResult.success(result);
+        ParamChecker.isNotNullOrEmpty(taskId, "taskid不能为空");
+        return HttpResult.success(flowCoreService.findBackAvtivity(taskId));
     }
 
     /**
@@ -201,26 +227,27 @@ public class MyWorksAction extends BaseAction {
 
     /**
      * 驳回
-     * @param taskId  任务id
-     * @param isPre 驳回到上一任务，如果指定任务id为空并且这里设置为false的话则驳回到第一个任务
+     *
+     * @param taskId     任务id
+     * @param isPre      驳回到上一任务，如果指定任务id为空并且这里设置为false的话则驳回到第一个任务
      * @param activityId 指定任务
-     * @param request 请求
+     * @param request    请求
      * @return
      */
     @RequestMapping("backTask")
-    public HttpResult<Boolean> backProcess(String taskId, String activityId,boolean isPre, HttpServletRequest request) throws Exception {
+    public HttpResult<Boolean> backProcess(String taskId, String activityId, boolean isPre, HttpServletRequest request) throws Exception {
         ParamChecker.isNotNullOrEmpty(taskId, "任务id不能为空");
-        if(CheckUtils.isNullOrEmpty(activityId)){
-            List<ActivityImpl> activityList = flowCoreService.findBackAvtivity(taskId);
-            if(activityList.isEmpty()){
-                throw  new ParamException("当前任务不可驳回，因为无可驳回任务点");
+        if (CheckUtils.isNullOrEmpty(activityId)) {
+            List<BackAvtivityVO> activityList = flowCoreService.findBackAvtivity(taskId);
+            if (activityList.isEmpty()) {
+                throw new ParamException("当前任务不可驳回，因为无可驳回任务点");
             }
             // 获取上一个任务
-            if(isPre){
-                activityId = activityList.get(activityList.size()-1).getId();
+            if (isPre) {
+                activityId = activityList.get(activityList.size() - 1).getId();
 
-            //获取第一个任务
-            }else{
+                //获取第一个任务
+            } else {
                 activityId = activityList.get(0).getId();
             }
         }
@@ -228,7 +255,6 @@ public class MyWorksAction extends BaseAction {
         flowCoreService.updateBackProcess(taskId, activityId, paramMap);
         return HttpResult.success(true);
     }
-
 
     /**
      * 获取工作流图片
@@ -241,92 +267,58 @@ public class MyWorksAction extends BaseAction {
     public void getWorkFlowImg(HttpServletRequest request, HttpServletResponse response) throws Exception {
         //processInstanceId
         String processInstanceId = request.getParameter("processInstanceId");
-        ParamChecker.isNotNullOrEmpty(processInstanceId,"实例id为必传");
+        ParamChecker.isNotNullOrEmpty(processInstanceId, "实例id为必传");
         //获取历史流程实例
         HistoricProcessInstance processInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
-        ParamChecker.isNotNullOrEmpty(processInstanceId,"实例id无效");
-        //获取流程图
-        BpmnModel bpmnModel = repositoryService.getBpmnModel(processInstance.getProcessDefinitionId());
-        processEngineConfiguration = processEngine.getProcessEngineConfiguration();
-        Context.setProcessEngineConfiguration((ProcessEngineConfigurationImpl) processEngineConfiguration);
+        ParamChecker.isNotNullOrEmpty(processInstance, "实例id无效");
+        String procDefId = processInstance.getProcessDefinitionId();
+        InputStream imageStream = bpmImageService.draw(procDefId, processInstanceId);
+        FileUtils.downloadInputStream(imageStream, response, "workflow.png");
 
-        ProcessDiagramGenerator diagramGenerator = processEngineConfiguration.getProcessDiagramGenerator();
-        ProcessDefinitionEntity definitionEntity = (ProcessDefinitionEntity) repositoryService.getProcessDefinition(processInstance.getProcessDefinitionId());
-
-        List<HistoricActivityInstance> highLightedActivitList = historyService.createHistoricActivityInstanceQuery().processInstanceId(processInstanceId).list();
-        //高亮环节id集合
-        List<String> highLightedActivitis = new ArrayList<String>();
-        //高亮线路id集合
-        List<String> highLightedFlows = getHighLightedFlows(definitionEntity, highLightedActivitList);
-
-        for (HistoricActivityInstance tempActivity : highLightedActivitList) {
-            String activityId = tempActivity.getActivityId();
-            highLightedActivitis.add(activityId);
-        }
-        InputStream imageStream = diagramGenerator.generateDiagram(bpmnModel, "png", highLightedActivitis, highLightedFlows, processEngine.getProcessEngineConfiguration().getActivityFontName(),
-                processEngine.getProcessEngineConfiguration().getLabelFontName(), null, null, 1.0);
-
-        // 输出资源内容到相应对象
-        byte[] b = new byte[1024];
-        int len;
-        while ((len = imageStream.read(b, 0, 1024)) != -1) {
-            response.getOutputStream().write(b, 0, len);
-        }
     }
 
-
     /**
-     * 获取需要高亮的线
-     * 这段是copy的
+     * 根据id查询实例详情
      *
-     * @param processDefinitionEntity
-     * @param historicActivityInstances
-     * @return
+     * @param instanceId 工作流实例id
+     * @return 工作流实例详情
      */
-    private List<String> getHighLightedFlows(
-            ProcessDefinitionEntity processDefinitionEntity,
-            List<HistoricActivityInstance> historicActivityInstances) {
+    @RequestMapping("findInstanceById")
+    public HttpResult<InstanceVO> findInstanceById(String instanceId) {
+        ParamChecker.isNotNull(instanceId, "instanceId为必传");
+        FlowInstance instance = this.instanceService.selectBean(FlowInstance.builder().activitiProcessInstanceId(instanceId).build());
+        ParamChecker.isNotNull(instance, "instanceId无效");
+        InstanceVO result = new InstanceVO();
+        BeanUtils.copyProperties(instance, result);
+        FlowJbpmXml xml = flowJbpmXmlService.selectById(instance.getXmlId());
+        ParamChecker.isNotNull(xml, "流程xml被删除");
 
-        List<String> highFlows = new ArrayList<String>();// 用以保存高亮的线flowId
-        for (int i = 0; i < historicActivityInstances.size() - 1; i++) {// 对历史流程节点进行遍历
-            ActivityImpl activityImpl = processDefinitionEntity
-                    .findActivity(historicActivityInstances.get(i)
-                            .getActivityId());// 得到节点定义的详细信息
-            List<ActivityImpl> sameStartTimeNodes = new ArrayList<ActivityImpl>();// 用以保存后需开始时间相同的节点
-            ActivityImpl sameActivityImpl1 = processDefinitionEntity
-                    .findActivity(historicActivityInstances.get(i + 1)
-                            .getActivityId());
-            // 将后面第一个节点放在时间相同节点的集合里
-            sameStartTimeNodes.add(sameActivityImpl1);
-            for (int j = i + 1; j < historicActivityInstances.size() - 1; j++) {
-                HistoricActivityInstance activityImpl1 = historicActivityInstances
-                        .get(j);// 后续第一个节点
-                HistoricActivityInstance activityImpl2 = historicActivityInstances
-                        .get(j + 1);// 后续第二个节点
-                if (activityImpl1.getStartTime().equals(
-                        activityImpl2.getStartTime())) {
-                    // 如果第一个节点和第二个节点开始时间相同保存
-                    ActivityImpl sameActivityImpl2 = processDefinitionEntity
-                            .findActivity(activityImpl2.getActivityId());
-                    sameStartTimeNodes.add(sameActivityImpl2);
-                } else {
-                    // 有不相同跳出循环
-                    break;
-                }
-            }
-            List<PvmTransition> pvmTransitions = activityImpl
-                    .getOutgoingTransitions();// 取出节点的所有出去的线
-            for (PvmTransition pvmTransition : pvmTransitions) {
-                // 对所有的线进行遍历
-                ActivityImpl pvmActivityImpl = (ActivityImpl) pvmTransition
-                        .getDestination();
-                // 如果取出的线的目标节点存在时间相同的节点里，保存该线的id，进行高亮显示
-                if (sameStartTimeNodes.contains(pvmActivityImpl)) {
-                    highFlows.add(pvmTransition.getId());
-                }
+        result.setProcessKey(xml.getProcessKey());
+        List<Task> tasks = this.flowCoreService.findTaskListByInstanceId(instanceId);
+        result.setIsSubmiTask(Constant.INT_FALSE);
+        result.setIsCanWithdraw(Constant.INT_FALSE);
+        if (!tasks.isEmpty()) {
+            // 如果不为空，如果task的id是第一个节点的话，那么就是提交节点,提交节点不允许撤回，其他的节点允许撤回
+            if (tasks.get(0).getTaskDefinitionKey().equals(instance.getFirstDefinitionKey())) {
+                result.setIsSubmiTask(Constant.INT_TRUE);
+            } else {
+                result.setIsCanWithdraw(Constant.INT_TRUE);
             }
         }
-        return highFlows;
+        String formUrl = null;
+        if (Constant.INT_TRUE == xml.getIsPagex()) {
+            formUrl = EConfig.getPathPropertiesValue(xml.getServer()) + "/ms/pagex/" + xml.getNamespace() + "_flowform.jsp?id=" + instance.getFormPkey();
+        } else {
+            formUrl = EConfig.getPathPropertiesValue(xml.getServer()) + xml.getUri();
+            formUrl = formUrl.contains("?") ? (formUrl + "&id=" + instance.getFormPkey()) : (formUrl + "?id=" + instance.getFormPkey());
+        }
+        JSONObject exParam = JSON.parseObject(instance.getExtFormParam());
+        Set<String> keys = exParam.keySet();
+        for (String key : keys) {
+            formUrl = formUrl + key + "=" + exParam.getString(key);
+        }
+        result.setFormUrl(formUrl);
+        return HttpResult.success(result);
     }
 
 

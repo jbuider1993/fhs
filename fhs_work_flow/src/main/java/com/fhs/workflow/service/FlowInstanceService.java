@@ -20,7 +20,7 @@ public interface FlowInstanceService extends BaseService<FlowInstance>{
      */
     int STATUS_END = 1;
     /**
-     * 撤回
+     * 撤销申请
      */
     int STATUS_REVOKE = 2;
 }

@@ -37,15 +37,15 @@ nullmsg="请上传${tagSett.title}"/>
         var _fileType = '${tagSett.fileType}'
         if('${tagSett.upType}'=='img')
         {
-              inituploadifyIMG('${tagSett.name}File',false,"上传${tagSett.title}",_maxFileNumber);
+              inituploadifyIMG('${tagSett.name}File',"${tagSett.multi}","上传${tagSett.title}",_maxFileNumber);
         }
         else {
             if(_fileType=='')
             {
-                inituploadifyALL('${tagSett.name}File',false, '上传${tagSett.title}',_maxFileNumber );
+                inituploadifyALL('${tagSett.name}File',"${tagSett.multi}", '上传${tagSett.title}',_maxFileNumber );
             }
             else {
-                inituploadifyALL('${tagSett.name}File',false, '上传${tagSett.title}',_maxFileNumber,_fileType);
+                inituploadifyALL('${tagSett.name}File',"${tagSett.multi}", '上传${tagSett.title}',_maxFileNumber,_fileType);
             }
         }
     })

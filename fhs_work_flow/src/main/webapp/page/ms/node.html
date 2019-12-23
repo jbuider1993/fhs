@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>可退回节点</title>
+</head>
+<body>
+
+<div class="fitem">
+    <div class='fitemDiv'><label>节点:</label>
+        <input type='text' autocomplete='off' dataType='*' nullmsg=节点不能为空' errormsg='节点名称输入了错误的格式'
+               class='easyui-combobox '
+               id='activityId' valuefield='id' textfield='title'
+               url=''/>
+        <span class='form-field-required'>*</span></div>
+</div>
+
+<div class="fitem">
+    <div class="bigLabelDiv"><label>备注:</label></div>
+    <div class="bigContent"><textarea datatype="empty|*" nullmsg="备注不能为空" errormsg="备注输入了错误的格式" class="form_textarea "
+                                      id="nodeRemark" name="remark" placeholder="请填写备注" prompt="请选择备注"></textarea></div>
+</div>
+
+<div id="dlg-buttons">
+    <center>
+        <a href="#" class="easyui-linkbutton" onclick="save()">确认</a>
+        <a href="#" class="easyui-linkbutton" onclick="closeDialog2()">取消</a>
+    </center>
+</div>
+</body>
+<script>
+    var taskId = "${parameter.taskId}";
+
+    $(function () {
+        //加载combobox数据
+        $.ajax({
+            type: 'post',
+            url: '${work_flow_basePath}ms/myWorks/findBackAvtivity?taskId=' + taskId,
+            success: function (res) {
+                if (res.code == 200) {
+                    $("#activityId").combobox("loadData", res.data);
+                    $("#activityId").combobox("setValue", res.data[0].id);
+                }
+            }
+        })
+    })
+
+
+    // 关闭dialog2
+    function closeDialog2() {
+        $('#addOrUpdateDialog2').dialog('close');
+    }
+
+    //提交
+    function save() {
+        var activityId = $("#activityId").combobox("getValue");
+        var remark = $("#nodeRemark").val();
+        debugger;
+        $.ajax({
+            type: "POST",
+            url: "${work_flow_basePath}ms/myWorks/backTask",
+            data: {taskId: taskId, activityId: activityId, isPre: true, remark: remark},
+            success: function (res) {
+                if (res.code == 200) {
+                    Ealert("操作成功")
+                    closeDialog2();
+                    closeDialog();
+                    reload();
+                }
+            }
+        });
+    }
+
+    $("#ajaxBtn").click(function () {
+
+    })
+
+</script>
+</html>

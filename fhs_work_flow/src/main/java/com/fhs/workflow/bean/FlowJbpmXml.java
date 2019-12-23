@@ -60,7 +60,7 @@ public class FlowJbpmXml extends BaseDO<FlowJbpmXml> {
     //表单在哪个服务器上
     @NotNull(message = "表单在哪个服务器上字段不可为null", groups = {Update.class, Delete.class})
     @TableField("server")
-    private Integer server;
+    private String server;
 
     //表单是否是pagex实现
     @NotNull(message = "表单是否是pagex实现字段不可为null", groups = {Update.class, Delete.class})
@@ -98,7 +98,7 @@ public class FlowJbpmXml extends BaseDO<FlowJbpmXml> {
     public FlowJbpmXml() {
     }
 
-    public FlowJbpmXml(String id, String name, String processKey, Integer server, Integer isPagex, String uri, String namespace, Integer status, String xml, String img, Integer version) {
+    public FlowJbpmXml(String id, String name, String processKey, String server, Integer isPagex, String uri, String namespace, Integer status, String xml, String img, Integer version) {
         this.id = id;
         this.name = name;
         this.processKey = processKey;

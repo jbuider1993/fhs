@@ -24,6 +24,9 @@ public class UploadSFormTag extends BaseFormTag {
     }
     @Override
     public String getContentHtml() {
+        if(!tagSett.containsKey("multi")){
+            tagSett.put("multi",true);
+        }
         try {
             return BeetlUtil.renderBeelt("/pagex/tags/uploads_tag.html",super.getBeetlParamMap());
         } catch (Exception e) {
