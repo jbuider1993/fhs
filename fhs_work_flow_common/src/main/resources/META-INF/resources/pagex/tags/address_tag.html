@@ -1,0 +1,263 @@
+<script type="text/javascript">
+
+    //////////////////////////////百度地图
+    var provinceName = '';
+    var cityName = '';
+    var areaNames = '';
+    // 添加带有定位的导航控件
+    var navigationControl = new BMap.NavigationControl({
+        // 靠左上角位置
+        anchor : BMAP_ANCHOR_TOP_LEFT,
+
+    });
+    var map = new BMap.Map("allmap");
+    map.enableScrollWheelZoom();
+    map.enableContinuousZoom();
+    map.addControl(navigationControl);
+    var point = new BMap.Point(116.282387, 40.044088);
+    map.centerAndZoom(point, 14);
+    var ac = new BMap.Autocomplete( // 建立一个自动完成的对象
+        {
+            "input" : "address",
+            "location" : map
+        });
+    ac.addEventListener("onhighlight", function(e) { // 鼠标放在下拉列表上的事件
+
+        var str = "";
+        var _value = e.fromitem.value;
+        var value = "";
+        if (e.fromitem.index > -1) {
+            value = _value.province + _value.city + _value.district + _value.street
+                + _value.business;
+        }
+        str = "FromItem<br />index = " + e.fromitem.index + "<br />value = "
+            + value;
+
+        value = "";
+        if (e.toitem.index > -1) {
+            _value = e.toitem.value;
+            value = _value.province + _value.city + _value.district + _value.street
+                + _value.business;
+        }
+        str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = "
+            + value;
+        getElement("searchResultPanel").innerHTML = str;
+
+    });
+
+    var myValue;
+    ac.addEventListener("onconfirm", function(e) { // 鼠标点击下拉列表后的事件
+        var _value = e.item.value;
+        myValue = _value.province + _value.city + _value.district + _value.street
+            + _value.business;
+        getElement("searchResultPanel").innerHTML = "onconfirm<br />index = " + e.item.index
+            + "<br />myValue = " + myValue;
+        setPlace();
+    });
+
+    function setPlace() {
+        map.clearOverlays(); // 清除地图上所有覆盖物
+        function myFun() {
+            var pp = local.getResults().getPoi(0).point; // 获取第一个智能搜索的结果
+            $("input[name='longitude']").val(pp.lng);
+            $("input[name='latitude']").val(pp.lat);
+            map.centerAndZoom(pp, 18);
+            map.addOverlay(new BMap.Marker(pp)); // 添加标注
+        }
+        var local = new BMap.LocalSearch(map, { // 智能搜索
+            onSearchComplete : myFun
+        });
+        $('#addressShow').val(myValue);
+        $('#address').val(myValue);
+        local.search(myValue);
+    }
+
+    function getElement(id) {
+        return document.getElementById(id);
+    }
+    function selShowMap(areaName) {
+        areaNames = areaName;
+        $(".tangram-suggestion-main").css("z-index", 9998);
+    }
+
+    function mysearch(e) {
+        provinceName = $("#provinceid").combobox('getText');
+        cityName = $("#cityid").combobox('getText');
+        areaNames = $("#areaid").combobox('getText');
+        $(".tangram-suggestion-main").css("z-index", 9998);
+        $('#address').val(provinceName + cityName + areaNames + $(e).val());
+    }
+    //百度地图--回显创建地图点
+    function addMarker(addressStr) {
+        map.clearOverlays(); // 清除地图上所有覆盖物
+        $('#address2').val(addressStr);
+        // 填写标注到地图中
+        var longitude = parseFloat($('#longitude').val());
+        var latitude = parseFloat($('#latitude').val());
+        point = new BMap.Point(longitude, latitude);
+        map.centerAndZoom(point, 18);
+        map.addOverlay(new BMap.Marker(point));
+    }
+
+
+    //根据经纬度标点
+    function addMarker(lng, lat) {
+        point = new BMap.Point(lng, lat);
+        map.centerAndZoom(point, 14);
+        var marker = new BMap.Marker(point);
+        map.addOverlay(marker);
+    }
+
+    //表单加载成功的时候
+    function addressFormLoadSuccess(info){
+        //加载市
+        var cityUrl = '${systemServiceUrl}/webApi/area/getProvinceData?areaParentId=' + info.provinceid + '&jsonpCallback=?';
+        $('#cityid').combobox('reload', cityUrl);
+
+        //加载区县
+        var areaUrl = '${systemServiceUrl}/webApi/area/getProvinceData?areaParentId=' + info.cityid + '&jsonpCallback=?';
+        $('#areaid').combobox('reload', areaUrl);
+
+        $('#address2').val(info.address);
+        // 将标注添加到地图中
+        var longitude = parseFloat($('#longitude').val());
+        var latitude = parseFloat($('#latitude').val());
+        //在地图上标注点
+        addMarker(longitude,latitude);
+    }
+
+    /*点击地图回填经纬度 start*/
+    map.addEventListener("click", function (e) {
+        map.clearOverlays();
+        // 百度地图API功能
+        var longitude = document.getElementById('longitude');
+        var latitude = document.getElementById('latitude');
+        longitude.value = e.point.lng;
+        latitude.value = e.point.lat;
+        addMarker(e.point.lng, e.point.lat)
+    });
+
+</script>
+<!-- 省份 -->
+<div class="fitem">
+    <div class="fitemDiv">
+        <label>省份:</label>
+        <input type="text" id="provinceid" name="provinceid" editable="false" class="easyui-combobox"
+        <%  if(nvl(tagSett.required,false)){ %>
+            datatype = '*'
+        <%  } %>
+        nullmsg="请选择省"
+        data-options="
+        url: '${systemServiceUrl}/webApi/area/getProvinceData?areaParentId=0&jsonpCallback=?',
+        valueField: 'id',
+        textField:'areaName',
+        editable : false,
+        onSelect: function(rec){
+        provinceName = rec.areaName;
+        $('#cityid').combobox('loadData', {});
+        $('#areaid').combobox('loadData', {});
+        var cityUrl = '${systemServiceUrl}/webApi/area/getProvinceData?areaParentId='+rec.id+'&jsonpCallback=?';
+        $('#cityid').combobox('reload', cityUrl);
+        $('#cityid').combobox('clear');
+        $('#areaid').combobox('clear');
+        }"
+        />
+        <% if(nvl(tagSett.required,false)){ %>
+            <span class="form-field-required" >*</span>
+        <% } %>
+    </div>
+    <!-- 市 -->
+    <div class="fitemDiv">
+        <label>市:</label>
+        <input type="text" id="cityid" name="cityid" editable="false" class="easyui-combobox"
+        <% if(nvl(tagSett.required,false)){ %>
+               datatype = '*'
+        <% } %>
+        nullmsg="请选择市"
+        data-options="
+        valueField: 'id',
+        textField:'areaName',
+        editable : false,
+        onSelect: function(rec){
+        cityName = rec.areaName;
+        $('#areaid').combobox('loadData', {});
+        var url = '${systemServiceUrl}/webApi/area/getProvinceData?areaParentId='+rec.id+'&jsonpCallback=?';
+        $('#areaid').combobox('reload', url);
+        $('#areaid').combobox('clear');
+        }"/>
+        <% if(nvl(tagSett.required,false)){ %>
+            <span class="form-field-required" >*</span>
+        <% } %>
+
+    </div>
+</div>
+<!-- 县 -->
+<div class="fitem">
+    <div class="fitemDiv">
+        <label>区县:</label>
+        <input type="text" id="areaid" name="areaid" editable="false"
+        <% if(nvl(tagSett.required,false)){ %>
+               datatype = '*'
+        <% } %>
+        nullmsg="请选择区县"
+        class="easyui-combobox"
+        data-options="
+        valueField: 'id',
+        textField:'areaName',
+        onSelect: function(rec){
+        selShowMap(rec.areaName);
+        }"/>
+        <% if(nvl(tagSett.required,false)){ %>
+            <span class="form-field-required" >*</span>
+        <% } %>
+    </div>
+</div>
+<!-- 详细地址 -->
+<div class="fitem">
+    <div class="bigLabelDiv">
+        <label>详细地址:</label>
+    </div>
+    <div class="bigContent">
+        <input type="text" id="address2" class="big_text"
+        <% if(nvl(tagSett.required,false)){ %>
+                datatype = '*'
+        <% } %>
+        nullmsg="请填写详细地址"
+        placeholder="请填写详细地址" errormsg="请填写详细地址"  onkeyup="mysearch(this)"/>
+        <span class="form-field-required">*</span>
+        <input id="address" class="big_text" type="text" name="address" datatype="*" nullmsg="请填写详细地址"
+               placeholder="请填写详细地址" errormsg="请填写详细地址" style="height:0px;visibility:hidden"/>
+        <div id="searchResultPanel"
+             style="border: 1px solid #C0C0C0; width: 150px; height: auto; display: none; z-index: 110005; position: absolute;"></div>
+    </div>
+</div>
+<!-- 经纬度 -->
+<div class="fitem">
+    <div class="fitemDiv">
+        <label>经度:</label><input id="longitude" class="easyui-validatebox"
+                                 type="text" name="longitude" nullmsg="请填写经度" placeholder="经度"
+                                 readonly="readonly"/>
+        <% if(nvl(tagSett.required,false)){ %>
+                <span class="form-field-required" >*</span>
+        <% } %>
+
+    </div>
+    <div class="fitemDiv">
+        <label>纬度:</label> <input id="latitude" class="easyui-validatebox"
+                                  name="latitude" type="text" nullmsg="请填写纬度" placeholder="纬度"
+                                  readonly="readonly"/>
+        <% if(nvl(tagSett.required,false)){ %>
+            <span class="form-field-required" >*</span>
+        <% } %>
+
+    </div>
+</div>
+<!-- 地图 -->
+<div class="fitem">
+    <div class="bigLabelDiv">
+        <label>&nbsp;</label>
+    </div>
+    <div class="bigContent">
+        <div id="allmap" class="bMap"></div>
+    </div>
+</div>
