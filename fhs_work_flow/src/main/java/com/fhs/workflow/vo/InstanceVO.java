@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
  * @date 2019 -11-15 14:03:56
  */
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class InstanceVO extends FlowInstance {
