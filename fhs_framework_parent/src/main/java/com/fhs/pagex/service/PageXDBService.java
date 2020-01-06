@@ -96,8 +96,12 @@ public class PageXDBService {
             List<Map<String, Object>> fields = addDTO.getFormFieldSett();
             //把所有的namespace拿到
             for (Map<String, Object> field : fields) {
+
                 if ("one2x".equals(field.get("type"))) {
-                    namespaces.add(ConverterUtils.toString(field.get("namespace")));
+                    Object allowEdit = field.get("allowEdit");
+                    if(allowEdit == null || (boolean)allowEdit){
+                        namespaces.add(ConverterUtils.toString(field.get("namespace")));
+                    }
                 }
             }
             // ConverterUtils.toString(modelConfig.get("xNamespaces")).split(",");
