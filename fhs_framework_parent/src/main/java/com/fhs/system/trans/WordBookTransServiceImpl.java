@@ -85,7 +85,7 @@ public class WordBookTransServiceImpl implements ITransTypeService, Initializing
     @Override
     public void unTransMore(List<? extends SuperBean<?>> objList, List<Field> toTransList) {
         for (SuperBean<?> obj : objList) {
-            transOne(obj, toTransList);
+            unTransOne(obj, toTransList);
         }
     }
 
