@@ -24,4 +24,18 @@ public interface ITransTypeService
      * @param toTransList 需要翻译的字段集合
      */
     public void transMore( List<? extends  SuperBean<?>> objList,List<Field> toTransList);
+
+    /**
+     * 反向翻译，根据中文获取字典值
+     * @param obj 需要翻译的对象
+     * @param toTransList 需要翻译的字段
+     */
+    public void unTransOne(SuperBean<?> obj, List<Field> toTransList);
+
+    /**
+     *
+     * @param objList 需要翻译的对象集合
+     * @param toTransList 需要翻译的字段集合
+     */
+    public void unTransMore( List<? extends  SuperBean<?>> objList,List<Field> toTransList);
 }

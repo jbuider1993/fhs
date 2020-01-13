@@ -82,5 +82,15 @@ public class AreaTransServiceImpl implements ITransTypeService,InitializingBean 
         }
     }
 
+    @Override
+    public void unTransOne(SuperBean<?> obj, List<Field> toTransList) {
+
+    }
+
+    @Override
+    public void unTransMore(List<? extends SuperBean<?>> objList, List<Field> toTransList) {
+
+    }
+
 
 }

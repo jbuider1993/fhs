@@ -76,5 +76,15 @@ public class SysOrganizationTransServiceImpl implements ITransTypeService,Initia
         }
     }
 
+    @Override
+    public void unTransOne(SuperBean<?> obj, List<Field> toTransList) {
+
+    }
+
+    @Override
+    public void unTransMore(List<? extends SuperBean<?>> objList, List<Field> toTransList) {
+
+    }
+
 
 }
