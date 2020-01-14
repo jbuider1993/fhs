@@ -92,16 +92,6 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
     }
 
     @Override
-    public void unTransOne(SuperBean<?> obj, List<Field> toTransList) {
-
-    }
-
-    @Override
-    public void unTransMore(List<? extends SuperBean<?>> objList, List<Field> toTransList) {
-
-    }
-
-    @Override
     public void afterPropertiesSet() throws Exception {
         //注册自己为一个服务
         TransService.registerTransType("pagex", this);

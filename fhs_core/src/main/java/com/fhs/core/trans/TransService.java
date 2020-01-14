@@ -21,9 +21,6 @@ public class TransService {
      */
     private static Map<String, ITransTypeService> transTypeServiceMap = new HashMap<String, ITransTypeService>();
 
-    private static Map<String, ITransTypeService> unTransTypeServiceMap = new HashMap<String, ITransTypeService>();
-
-
     /**
      * 注册一个trans服务
      *
@@ -32,7 +29,6 @@ public class TransService {
      */
     public static void registerTransType(String type, ITransTypeService transTypeService) {
         transTypeServiceMap.put(type, transTypeService);
-        unTransTypeServiceMap.put(type, transTypeService);
     }
 
     /**
@@ -82,56 +78,6 @@ public class TransService {
                 continue;
             }
             transTypeServiceMap.get(type).transMore(objList, transFieldList);
-        }
-    }
-
-    /**
-     * 反向翻译
-     *
-     * @param obj 需要翻译的对象
-     */
-    public void unTransOne(SuperBean<?> obj) {
-        if (obj == null) {
-            return;
-        }
-        ClassInfo info = ClassManager.getClassInfoByName(obj.getClass());
-        String[] transTypes = info.getTransTypes();
-        if (transTypes == null) {
-            return;
-        }
-        List<Field> transFieldList = null;
-        for (String type : transTypes) {
-            transFieldList = info.getTransField(type);
-            if (transFieldList == null || transFieldList.size() == 0) {
-                continue;
-            }
-            unTransTypeServiceMap.get(type).unTransOne(obj, transFieldList);
-        }
-    }
-
-    /**
-     * 翻译多个 字段
-     *
-     * @param objList 需要翻译的对象集合
-     * @param objList 需要翻译的字段集合
-     */
-    public void unTransMore(List<? extends SuperBean<?>> objList) {
-        if (objList == null || objList.size() == 0) {
-            return;
-        }
-        Object object = objList.get(0);
-        ClassInfo info = ClassManager.getClassInfoByName(object.getClass());
-        String[] transTypes = info.getTransTypes();
-        if (transTypes == null) {
-            return;
-        }
-        List<Field> transFieldList = null;
-        for (String type : transTypes) {
-            transFieldList = info.getTransField(type);
-            if (transFieldList == null || transFieldList.size() == 0) {
-                continue;
-            }
-            unTransTypeServiceMap.get(type).unTransMore(objList, transFieldList);
         }
     }
 

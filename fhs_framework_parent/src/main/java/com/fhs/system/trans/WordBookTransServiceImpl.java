@@ -8,9 +8,7 @@ import com.fhs.common.utils.ReflectUtils;
 import com.fhs.common.utils.StringUtil;
 import com.fhs.core.base.bean.SuperBean;
 import com.fhs.core.result.HttpResult;
-import com.fhs.core.trans.ITransTypeService;
-import com.fhs.core.trans.Trans;
-import com.fhs.core.trans.TransService;
+import com.fhs.core.trans.*;
 import com.fhs.system.api.FeignWordBookApiService;
 import com.fhs.system.bean.WordbookVO;
 import org.springframework.beans.factory.InitializingBean;
@@ -45,8 +43,6 @@ public class WordBookTransServiceImpl implements ITransTypeService, Initializing
 
     @Override
     public void transOne(SuperBean<?> obj, List<Field> toTransList) {
-
-
         Trans tempTrans = null;
 
         for (Field tempField : toTransList) {
@@ -62,30 +58,56 @@ public class WordBookTransServiceImpl implements ITransTypeService, Initializing
 
     @Override
     public void transMore(List<? extends SuperBean<?>> objList, List<Field> toTransList) {
-
         for (SuperBean<?> obj : objList) {
             transOne(obj, toTransList);
         }
     }
 
-    @Override
-    public void unTransOne(SuperBean<?> obj, List<Field> toTransList) {
-        Trans tempTrans = null;
+    /**
+     * 反向翻译
+     *
+     * @param obj 需要翻译的对象
+     */
+    public void unTransOne(SuperBean<?> obj) {
+        if (obj == null) {
+            return;
+        }
+        ClassInfo info = ClassManager.getClassInfoByName(obj.getClass());
+        String[] transTypes = info.getTransTypes();
+        if (transTypes == null) {
+            return;
+        }
+        List<Field> transFieldList = null;
+        for (String type : transTypes) {
+            transFieldList = info.getTransField(type);
+            if (transFieldList == null || transFieldList.size() == 0) {
+                continue;
+            }
+            Trans tempTrans = null;
 
-        for (Field tempField : toTransList) {
-            tempField.setAccessible(true);
-            tempTrans = tempField.getAnnotation(Trans.class);
-            String bookCode = StringUtil.toString(ReflectUtils.getValue(obj, tempField.getName()));
-            String key = tempTrans.key().contains("KEY_") ? StringUtil.toString(ReflectUtils.getValue(obj, tempTrans.key().replace("KEY_", ""))) : tempTrans.key();
-            //sex_0/1  男 女
-            obj.getTransMap().put(tempField.getName() + "Name", unWordBookTransMap.get(key + "_" + bookCode));
+            for (Field tempField : transFieldList) {
+                tempField.setAccessible(true);
+                tempTrans = tempField.getAnnotation(Trans.class);
+                String bookCode = StringUtil.toString(ReflectUtils.getValue(obj, tempField.getName()));
+                String key = tempTrans.key().contains("KEY_") ? StringUtil.toString(ReflectUtils.getValue(obj, tempTrans.key().replace("KEY_", ""))) : tempTrans.key();
+                //sex_0/1  男 女
+                obj.getTransMap().put(tempField.getName() + "Name", unWordBookTransMap.get(key + "_" + bookCode));
+            }
         }
     }
 
-    @Override
-    public void unTransMore(List<? extends SuperBean<?>> objList, List<Field> toTransList) {
+    /**
+     * 翻译多个 字段
+     *
+     * @param objList 需要翻译的对象集合
+     * @param objList 需要翻译的字段集合
+     */
+    public void unTransMore(List<? extends SuperBean<?>> objList) {
+        if (objList == null || objList.size() == 0) {
+            return;
+        }
         for (SuperBean<?> obj : objList) {
-            unTransOne(obj, toTransList);
+            unTransOne(obj);
         }
     }
 
