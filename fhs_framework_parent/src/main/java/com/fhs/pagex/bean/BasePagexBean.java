@@ -17,5 +17,8 @@ import com.fhs.core.trans.Trans;
  * @Version: 1.0
  */
 public class BasePagexBean<T extends BasePagexBean>  extends BaseDO<T> {
-
+    @Override
+    public Object getId() {
+        return super.getId();
+    }
 }

@@ -160,16 +160,7 @@ var add = {
                     $('#parkingMainDiv').hide();
                     $('#parkingSecretDvi').show();
                 }
-                if ('${param.showQR}' == 'true') {
-                    $('#parkingMainDiv').hide();
-                    $("#qrCodeDiv").qrcode({
-                        width: 500,
-                        height: 500,
-                        text: "'${path.park_qr_pase_path}?parkingId=' +info.id"
-                    });
 
-                    $('#qrCodeDiv').show();
-                }
             },
             onSave: function () {
                 if ('${param.isAdd}' == 'true') {

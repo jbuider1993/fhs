@@ -5,7 +5,7 @@ var listPage={
     listFieldSett:function(){
 	  return [
 		  {name:'port_name',title:'出入口名称',width:'20%',align:'center'},
-          {name:'park_id',title:'停车场名称',width:'20%',isJoin:true,namespace:'parking',showField:'transMap.parkName',align:'center'},
+          {name:'park_id',title:'停车场名称',width:'20%',trans:'auto',key:'parking',showField:'transMap.parkName',align:'center'},
           {name:'real_location',title:'位置',width:'20%',align:'center'},
           {name:'port_fun_type',title:'使用功能类别',width:'10%',align:'center',key:'port_fun_type',trans:'book',showField:'transMap.port_fun_typeName'},
           {name:'is_disable',title:'是否禁用',width:'6%',formart:'formatRowColor',align:'center',trans:'book',key:'is_disable',showField:'transMap.is_disableName'},

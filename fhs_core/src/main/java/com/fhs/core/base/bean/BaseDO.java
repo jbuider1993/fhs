@@ -16,6 +16,7 @@ import com.fhs.core.exception.BusinessException;
 import com.fhs.core.trans.Trans;
 import com.mybatis.jpa.annotation.Between;
 import lombok.Data;
+import lombok.SneakyThrows;
 import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionUtils;
 
@@ -28,186 +29,177 @@ import java.util.Objects;
 
 /**
  * 所有的do请都继承此do
- * 
+ *
  * @Filename: BaseDO.java
  * @Description:
  * @Version: 1.0
  * @Author: jackwang
  * @Email: wanglei@sxpartner.com
- * @History:<br>
- *               陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
- *
+ * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
 @SuppressWarnings("rawtypes")
 @Data
-public abstract class BaseDO<T extends BaseDO> extends SuperBean<T>
-{
-    
+public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> {
+
     /**
      *
      */
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * 子类id字段缓存
      */
     @TableField(exist = false)
     private static final Map<Class<?>, Field> ID_FIELD_CACHE_MAP = new HashMap<>();
-    
+
     /**
      * 创建人
      */
     @TableField("create_user")
     @Trans(type = Constant.USER_INFO, key = Constant.USER_NAME)
     protected String createUser;
-    
+
     /**
      * 创建时间
      */
     @TableField("create_time")
     @Between
     protected String createTime;
-    
+
     /**
      * 更新人
      */
     @TableField("update_user")
     @Trans(type = Constant.USER_INFO, key = Constant.USER_NAME)
     protected String updateUser;
-    
+
     /**
      * 更新时间
      */
     @TableField("update_time")
     @Between
     protected String updateTime;
-    
+
     /**
      * 将我自己保存到 db中去
      *
      * @return 是否成功
      */
     @SuppressWarnings("unchecked")
-    public boolean save()
-    {
+    public boolean save() {
         return getBaseService().insert(this) != 0;
     }
-    
+
     /**
      * 插入之前调用
      */
-    public void preInsert(String userId)
-    {
+    public void preInsert(String userId) {
         String dateTime = DateUtils.getCurrentDateStr(DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN));
         this.createTime = dateTime;
         this.updateTime = dateTime;
         this.createUser = userId;
         this.updateUser = userId;
     }
-    
+
     /**
      * 更新之前调用
      */
-    public void preUpdate(String userId)
-    {
+    public void preUpdate(String userId) {
         this.updateTime = DateUtils.getCurrentDateStr(DateUtils.getCurrentDateStr(DateUtils.DATETIME_PATTERN));
         this.updateUser = userId;
     }
-    
+
     /**
      * 根据子类extends 本类的注解获取baseservice
-     * 
+     *
      * @return
      */
-    private BaseService getBaseService()
-    {
+    private BaseService getBaseService() {
         BaseService baseService =
-            SpringContextUtil.getBeanByClass(BaseService.class, new String[] {this.getClass().getName()});
-        if (baseService == null)
-        {
+                SpringContextUtil.getBeanByClass(BaseService.class, new String[]{this.getClass().getName()});
+        if (baseService == null) {
             throw new BusinessException("找不到" + this.getClass().getName() + " 对应的服务类");
         }
         return baseService;
     }
-    
+
     /**
      * 把自己更新到db中去
      *
      * @return
      */
     @SuppressWarnings("unchecked")
-    public boolean update()
-    {
+    public boolean update() {
         return getBaseService().updateSelectiveById(this) != 0;
     }
-    
+
     /**
      * 删除我自己
-     * 
+     *
      * @return 是否删除成功
      * @throws BusinessException
      */
     public boolean delete()
-        throws BusinessException
-    {
-        Field idField = getIdField();
+            throws BusinessException {
+        Field idField = getIdField(true);
         idField.setAccessible(true);
-        try
-        {
+        try {
             Object id = idField.get(this);
-            if (id == null)
-            {
+            if (id == null) {
                 throw new BusinessException(this.toString() + "没有设置id");
             }
             return getBaseService().deleteById(id) != 0;
-        }
-        catch (IllegalArgumentException e)
-        {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
-        }
-        catch (IllegalAccessException e)
-        {
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
         return false;
     }
-    
+
+    @SneakyThrows
+    public Object getId() {
+        Field idField = getIdField(false);
+        if (idField == null) {
+            return null;
+        }
+        idField.setAccessible(true);
+        return idField.get(this);
+    }
+
     /**
      * 根据自己的条件去查询
-     * 
+     *
      * @return 自己实际db中的数据
      */
     @SuppressWarnings("unchecked")
-    public T find()
-    {
-        return (T)getBaseService().selectBean(this);
+    public T find() {
+        return (T) getBaseService().selectBean(this);
     }
-    
+
     /**
-     *
      * @return
      */
     @SuppressWarnings("unchecked")
-    public List<T> findList()
-    {
+    public List<T> findList() {
         return getBaseService().selectPage(this, Constant.PAGE_ALL, Constant.PAGE_ALL);
     }
-    
+
     /**
      * 获取子类id字段
-     * 
+     *
      * @return 子类id字段
      */
-    private Field getIdField()
-    {
-        if (ID_FIELD_CACHE_MAP.containsKey(this.getClass()))
-        {
+    private Field getIdField(boolean isThrowError) {
+        if (ID_FIELD_CACHE_MAP.containsKey(this.getClass())) {
             return ID_FIELD_CACHE_MAP.get(this.getClass());
         }
         List<Field> fieldList = ReflectUtils.getAnnotationField(this.getClass(), javax.persistence.Id.class);
-        if (fieldList.size() == 0)
-        {
-            throw new BusinessException("找不到" + this.getClass() + "的id注解");
+        if (fieldList.size() == 0) {
+            if (isThrowError) {
+                throw new BusinessException("找不到" + this.getClass() + "的id注解");
+            }
+            return null;
         }
         ID_FIELD_CACHE_MAP.put(this.getClass(), fieldList.get(0));
         return fieldList.get(0);
@@ -314,12 +306,12 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T>
 
         BaseDO var3;
         try {
-            var3 = (BaseDO)sqlSession.selectOne(this.sqlStatement(SqlMethod.SELECT_BY_ID), id);
+            var3 = (BaseDO) sqlSession.selectOne(this.sqlStatement(SqlMethod.SELECT_BY_ID), id);
         } finally {
             this.closeSqlSession(sqlSession);
         }
 
-        return (T)var3;
+        return (T) var3;
     }
 
     public T selectById() {
@@ -343,7 +335,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T>
     }
 
     public T selectOne(Wrapper<T> queryWrapper) {
-        return (T)SqlHelper.getObject(this.selectList(queryWrapper));
+        return (T) SqlHelper.getObject(this.selectList(queryWrapper));
     }
 
     public IPage<T> selectPage(IPage<T> page, Wrapper<T> queryWrapper) {
@@ -368,7 +360,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T>
 
         Integer var4;
         try {
-            var4 = SqlHelper.retCount((Integer)sqlSession.selectOne(this.sqlStatement(SqlMethod.SELECT_COUNT), map));
+            var4 = SqlHelper.retCount((Integer) sqlSession.selectOne(this.sqlStatement(SqlMethod.SELECT_COUNT), map));
         } finally {
             this.closeSqlSession(sqlSession);
         }
@@ -400,5 +392,5 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T>
         SqlSessionUtils.closeSqlSession(sqlSession, GlobalConfigUtils.currentSessionFactory(this.getClass()));
     }
 
-    
+
 }

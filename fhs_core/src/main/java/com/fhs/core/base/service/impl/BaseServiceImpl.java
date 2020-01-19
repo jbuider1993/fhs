@@ -723,4 +723,9 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     public IPage<Map<String, Object>> selectMapsPageMP(IPage<T> page, Wrapper<T> queryWrapper) {
         return baseDao.selectMapsPage(page, queryWrapper);
     }
+
+    @Override
+    public List<T> findByIds(List<?> ids) {
+        return baseDao.selectByIds(ids);
+    }
 }
