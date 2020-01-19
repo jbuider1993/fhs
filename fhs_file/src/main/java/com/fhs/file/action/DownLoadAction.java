@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -147,9 +148,7 @@ public class DownLoadAction extends BaseAction<ServiceFile> {
 
         // 文件名
         String showFileName = serviceFile.getFileName();
-
         String minPath = downFilePath + filePath + fileIdWH;
-
         File file = new File(minPath);
         if (fileStorage.checkFileIsExist(minPath,serviceFile)) {
             fileStorage.downloadFileByToken(minPath,serviceFile,response);
@@ -190,5 +189,52 @@ public class DownLoadAction extends BaseAction<ServiceFile> {
         }
     }
 
+
+    /**
+     * 图片转zip下载
+     *
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "downUploadZip", method = RequestMethod.GET)
+    public void downUploadZip(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Map<String, Object> param = new HashMap<>();
+            param.put("fileIds", StringUtil.getStrToIn(request.getParameter("fileIds")));
+            String fileName = request.getParameter("fileName");
+            List<ServiceFile> list = serviceFileService.findForListFromMap(param);
+            //获取图片的路径
+            String[] pngPathList = getPngPathList(list);
+            //生成zip路径
+            String path = EConfig.getPathPropertiesValue("saveFilePath")+fileName+".zip";
+            //打包生成zip
+            ZipUtil.zip(path,pngPathList);
+            File file = new File(path);
+            if (file.exists()){
+                FileUtils.download(file, response, file.getName());
+            }
+            //zip传到客户端之后删除zip文件
+            FileUtils.deleteFile(file.getAbsolutePath());
+        } catch (Exception e) {
+            throw new RuntimeException("下载文件异常:" + e.getMessage());
+        }
+    }
+
+    /**
+     * 获取图片路径
+     * @param serviceFile
+     * @return
+     */
+    private  String[] getPngPathList(List<ServiceFile> serviceFile) {
+        String token = null;
+        String[] arr = new String[serviceFile.size()];
+        for (int i = 0;i<serviceFile.size();i++) {
+            String fileName = (null == token ? serviceFile.get(i).getFileId() : token) + serviceFile.get(i).getFileSuffix();
+            String saveFilePath = EConfig.getPathPropertiesValue("saveFilePath") + File.separator + serviceFile.get(i).getUploadDate() + File.separator + serviceFile.get(i).getFileSuffix().replace(".", "") + File.separator + fileName;
+            arr[i] =  saveFilePath;
+        }
+        return arr;
+    }
 
 }

@@ -12,6 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 硬盘文件存储
@@ -61,7 +64,7 @@ public class DiskFileStorage<mian> implements FileStorage {
     public void downloadFile(ServiceFile serviceFile, HttpServletResponse response) {
         File file = getFile( serviceFile, null);
         if (file.exists()) {
-            FileUtils.download(file, response, file.getName());
+            FileUtils.download(file, response, serviceFile.getFileName());
             return;
         }
         throw new ParamException("文件不存在：" + serviceFile.getFileId());
@@ -84,5 +87,6 @@ public class DiskFileStorage<mian> implements FileStorage {
     public InputStream getFileInputStream(ServiceFile serviceFile) throws FileNotFoundException {
         return new FileInputStream(getFile( serviceFile,  null));
     }
+
 
 }
