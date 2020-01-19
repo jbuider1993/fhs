@@ -387,7 +387,8 @@ public class HttpUtils {
         //Step1：创建MultipartEntityBuilder实例
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         //Step2：初始化，设置各种属性
-        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+        builder.setCharset(Charset.forName("utf-8"));
+        builder.setMode(HttpMultipartMode.RFC6532);
         if (fileMap != null && fileMap.size() > 0) {
             Set<Map.Entry<String, File>> entries = fileMap.entrySet();
             for (Map.Entry<String, File> entry : entries) {

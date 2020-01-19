@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.*;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -139,7 +140,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
      * @param response response
      * @param fileName 文件名称
      */
-    public static void initResponseHeader(HttpServletResponse response, String fileName, long length) {
+    public static void initResponseHeader(HttpServletResponse response, String fileName, long length){
         fileName = formartFileName(fileName);
         // 清空response
         response.reset();
@@ -147,8 +148,12 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         if (!contentType.equals("application/javascript")) {
             String disposition = "application/octet-stream".equals(contentType) ? "attachment" : "inline";
             // 解决中文乱码
-            response.setHeader("Content-Disposition",
-                    disposition + ";filename=" + fileName);
+            try {
+                response.setHeader("Content-Disposition",
+                        disposition + ";filename=" + URLEncoder.encode(fileName, "utf-8"));
+            } catch (UnsupportedEncodingException e) {
+                LOG.error(e);
+            }
 
         }
 
@@ -219,7 +224,6 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
                 result = "image/png";
                 break;
             case "jpg":
-            case "jpeg":
                 result = "image/jpeg";
                 break;
             case "mp4":
