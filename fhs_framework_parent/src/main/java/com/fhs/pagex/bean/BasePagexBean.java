@@ -1,8 +1,7 @@
 package com.fhs.pagex.bean;
 
-import com.fhs.common.constant.Constant;
+import com.fhs.common.utils.ReflectUtils;
 import com.fhs.core.base.bean.BaseDO;
-import com.fhs.core.trans.Trans;
 
 /**
  * 描述
@@ -17,8 +16,14 @@ import com.fhs.core.trans.Trans;
  * @Version: 1.0
  */
 public class BasePagexBean<T extends BasePagexBean>  extends BaseDO<T> {
+
+    private static final String ID_FIELD_NAME = "id";
+
     @Override
     public Object getId() {
+        if(ReflectUtils.getDeclaredField(this.getClass(), ID_FIELD_NAME) != null){
+            return ReflectUtils.getValue(this, ID_FIELD_NAME);
+        }
         return super.getId();
     }
 }
