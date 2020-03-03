@@ -1,7 +1,18 @@
 
 #    FHS-Framework 简介
  **fhs-framwork是一个集成了国内外诸多优秀开源项目的快速开发平台，除了在常规快速开发平台提供 用户，角色，权限，菜单，字典，操作日志，代码生成器 等功能的基础上，还在以下方面为您的快速开发做出了努力。**
+
+#### 2.0升级日志：
  
+      fhs-framework升级到了2.0，springboot和springcloud,jetcache,apollo 等依赖都进行了大版本升级和之前的项目可能会有些不兼容，如果需要之前版本请移步：https://gitee.com/fhs-opensource/fhs-framework/blob/v1.0.2
+	  a 升级springboot版本为2.2.5 cloud版本升级到：Hoxton.SR1
+	  b jetcache升级到2.5.16 并且使用lettuce连接redis
+	  c shedlock升级到4.3 apollo client升级到了1.5
+	  d 去掉了自定义的spring cache  manager定义，后续缓存统一使用jetcache
+	  e 支持Apollo动态变更日志级别
+	  f logback_fhs.xml 改为了logback-spring.xml
+
+
  
 #### 1. 项目基础框架搭建期 
 &#8194;&#8194;&#8194;&#8194;导入一份sql，copy一个pom稍作修改，copy3个配置文件稍作修改，copy一个springboot启动类稍作修改即可完成框架搭建。
@@ -140,7 +151,7 @@
 #### 技术栈
 - 前端:Easyui(美化过的Easyui),Layui(首页)，Validform，My 97(定制过主题)。
 - 后端校验：hibernate vilidator。
-- 后端：SpringBoot 1.5.13(后期升级2.x，先让别人踩坑) + Springcloud（可选）
+- 后端：SpringBoot 2.2.5 + Springcloud（可选）
 - ORM：Mybatis(基础)+JPA(一对一&一对多查询，数据权限注解)+Plus(条件查询器)
 - 模板引擎：beetl+JSP
 - 无后端业务的快速开发引擎:PAGEX
