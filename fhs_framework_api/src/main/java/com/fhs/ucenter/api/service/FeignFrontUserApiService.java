@@ -5,7 +5,7 @@ import com.fhs.feignConfig.FeignConfiguration;
 import com.fhs.ucenter.api.form.GetSingleFrontUserForm;
 import com.fhs.ucenter.api.vo.FrontUserVo;
 import feign.RequestLine;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**

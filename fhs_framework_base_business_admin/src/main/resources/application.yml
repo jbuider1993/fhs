@@ -2,7 +2,9 @@
 ###################  项目启动端口  ###################
 server:
   port: 8082
-
+spring:
+  main:
+    allow-bean-definition-overriding: true
 
 # 该配置节点为独立的节点，有很多同学容易将这个配置放在spring的节点下，导致配置无法被识别
 mybatis-plus:
@@ -18,3 +20,22 @@ logging:
     com.fhs.ucenter.dao: debug
     com.fhs.pagex: debug
     com.fhs.system.dao: debug
+
+jetcache:
+  statIntervalMinutes: 15
+  areaInCacheName: false
+  hidePackages: com.alibaba
+  local:
+    default:
+      type: caffeine
+      limit: 100
+      keyConvertor: fastjson
+      expireAfterWriteInMillis: 300000
+  remote: #阿里的jetcache2级缓存
+    default:
+      type: redis.lettuce
+      keyConvertor: fastjson
+      valueEncoder: java
+      valueDecoder: java
+      uri:
+        - redis://123456@192.168.0.241:6636/1  #redis://密码@IP:端口/库

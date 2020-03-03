@@ -41,6 +41,7 @@ import java.util.Map;
  * shiro 配置包含单点登录支持
  */
 @Configuration
+@Order(2)
 public class ShiroConfiguration{
 
     /*
@@ -122,32 +123,22 @@ public class ShiroConfiguration{
      * @return  自定义缓存管理器
      */
     @Bean(name = "shiroSpringCacheManager")
-    public ShiroSpringCacheManager shiroSpringCacheManager( RedisConnectionFactory factory) {
-        RedisTemplate template = new RedisTemplate();
-        template.setConnectionFactory(factory);
-        //定义key的序列化方式
-        JdkSerializationRedisSerializer valSerializer =new JdkSerializationRedisSerializer();
-        template.setValueSerializer(valSerializer);
-        GenericJackson2JsonRedisSerializer keySerializer = new GenericJackson2JsonRedisSerializer();
-        template.setKeySerializer(keySerializer);
-        template.afterPropertiesSet();
-        RedisCacheManager rcm = new RedisCacheManager(template);
-        //设置缓存过期时间
-        rcm.setDefaultExpiration(60);//秒
+    @DependsOn("redisConfig")
+    public ShiroSpringCacheManager shiroSpringCacheManager(RedisCacheManager redisCacheManager) {
         ShiroSpringCacheManager cacheManager = new ShiroSpringCacheManager();
-        cacheManager.setCacheManager(rcm);
+        cacheManager.setCacheManager(redisCacheManager);
         return cacheManager;
     }
 
     @Bean(name = "securityManager")
-    @DependsOn({"shiroRealm","shiroSpringCacheManager"})
-    public DefaultWebSecurityManager securityManager(RedisConnectionFactory factory) {
+    @DependsOn({"shiroRealm","shiroSpringCacheManager","redisCacheManager"})
+    public DefaultWebSecurityManager securityManager(RedisCacheManager redisCacheManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         if(this.useVue)
         {
             securityManager = new StatelessSecurityManager();
         }
-        securityManager.setCacheManager(shiroSpringCacheManager(factory));// 用户授权/认证信息Cache, 采用EhCache 缓存
+        securityManager.setCacheManager(shiroSpringCacheManager(redisCacheManager));// 用户授权/认证信息Cache, 采用EhCache 缓存
        /*if (isEnableCas) {
             securityManager.setSubjectFactory(new CasSubjectFactory());
         }*/

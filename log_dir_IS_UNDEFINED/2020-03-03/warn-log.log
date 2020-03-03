@@ -1,0 +1,122 @@
+2020-03-03 10:47:54.988 [main] WARN  com.ctrip.framework.apollo.core.utils.ResourceUtils - No available properties: apollo-env.properties
+2020-03-03 10:48:09.538 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.Wordbook.
+2020-03-03 10:48:09.572 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.ServiceWordbookGroup.
+2020-03-03 10:48:09.694 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenu.
+2020-03-03 10:48:09.730 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenuPermission.
+2020-03-03 10:48:09.869 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysRole.
+2020-03-03 10:48:09.942 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysUser.
+2020-03-03 10:48:15.227 [main] WARN  org.beetl.ext.spring.BeetlSpringViewResolver - Beetl不建议使用使用spring前缀，会导致include,layout找不到对应的模板，请使用beetl的配置RESOURCE.ROOT来配置模板根目录
+2020-03-03 10:50:35.284 [main] WARN  com.ctrip.framework.apollo.core.utils.ResourceUtils - No available properties: apollo-env.properties
+2020-03-03 10:50:50.187 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.Wordbook.
+2020-03-03 10:50:50.237 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.ServiceWordbookGroup.
+2020-03-03 10:50:50.387 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenu.
+2020-03-03 10:50:50.427 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenuPermission.
+2020-03-03 10:50:50.606 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysRole.
+2020-03-03 10:50:50.718 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysUser.
+2020-03-03 10:50:55.956 [main] WARN  org.beetl.ext.spring.BeetlSpringViewResolver - Beetl不建议使用使用spring前缀，会导致include,layout找不到对应的模板，请使用beetl的配置RESOURCE.ROOT来配置模板根目录
+2020-03-03 10:52:03.578 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.Wordbook.
+2020-03-03 10:52:03.613 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.ServiceWordbookGroup.
+2020-03-03 10:52:03.704 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenu.
+2020-03-03 10:52:03.737 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenuPermission.
+2020-03-03 10:52:03.867 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysRole.
+2020-03-03 10:52:03.936 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysUser.
+2020-03-03 10:52:08.822 [main] WARN  org.beetl.ext.spring.BeetlSpringViewResolver - Beetl不建议使用使用spring前缀，会导致include,layout找不到对应的模板，请使用beetl的配置RESOURCE.ROOT来配置模板根目录
+2020-03-03 10:53:35.843 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.Wordbook.
+2020-03-03 10:53:35.876 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.ServiceWordbookGroup.
+2020-03-03 10:53:35.963 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenu.
+2020-03-03 10:53:35.994 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenuPermission.
+2020-03-03 10:53:36.124 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysRole.
+2020-03-03 10:53:36.193 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysUser.
+2020-03-03 10:53:40.848 [main] WARN  org.beetl.ext.spring.BeetlSpringViewResolver - Beetl不建议使用使用spring前缀，会导致include,layout找不到对应的模板，请使用beetl的配置RESOURCE.ROOT来配置模板根目录
+2020-03-03 11:15:28.997 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.Wordbook.
+2020-03-03 11:15:29.031 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.ServiceWordbookGroup.
+2020-03-03 11:15:29.139 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenu.
+2020-03-03 11:15:29.189 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenuPermission.
+2020-03-03 11:15:29.317 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysRole.
+2020-03-03 11:15:29.386 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysUser.
+2020-03-03 11:15:35.359 [main] WARN  org.beetl.ext.spring.BeetlSpringViewResolver - Beetl不建议使用使用spring前缀，会导致include,layout找不到对应的模板，请使用beetl的配置RESOURCE.ROOT来配置模板根目录
+2020-03-03 11:26:05.865 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.Wordbook.
+2020-03-03 11:26:06.016 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.ServiceWordbookGroup.
+2020-03-03 11:26:06.457 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenu.
+2020-03-03 11:26:06.620 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenuPermission.
+2020-03-03 11:26:07.165 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysRole.
+2020-03-03 11:26:07.357 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysUser.
+2020-03-03 11:26:12.436 [main] WARN  org.beetl.ext.spring.BeetlSpringViewResolver - Beetl不建议使用使用spring前缀，会导致include,layout找不到对应的模板，请使用beetl的配置RESOURCE.ROOT来配置模板根目录
+2020-03-03 11:29:13.985 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.Wordbook.
+2020-03-03 11:29:14.017 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.ServiceWordbookGroup.
+2020-03-03 11:29:14.110 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenu.
+2020-03-03 11:29:14.143 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenuPermission.
+2020-03-03 11:29:14.270 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysRole.
+2020-03-03 11:29:14.341 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysUser.
+2020-03-03 11:29:22.759 [main] WARN  org.beetl.ext.spring.BeetlSpringViewResolver - Beetl不建议使用使用spring前缀，会导致include,layout找不到对应的模板，请使用beetl的配置RESOURCE.ROOT来配置模板根目录
+2020-03-03 11:30:13.663 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.Wordbook.
+2020-03-03 11:30:13.696 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.ServiceWordbookGroup.
+2020-03-03 11:30:13.786 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenu.
+2020-03-03 11:30:13.818 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenuPermission.
+2020-03-03 11:30:13.942 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysRole.
+2020-03-03 11:30:14.008 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysUser.
+2020-03-03 11:30:22.771 [main] WARN  org.beetl.ext.spring.BeetlSpringViewResolver - Beetl不建议使用使用spring前缀，会导致include,layout找不到对应的模板，请使用beetl的配置RESOURCE.ROOT来配置模板根目录
+2020-03-03 11:42:29.898 [main] WARN  com.ctrip.framework.apollo.core.utils.ResourceUtils - No available properties: apollo-env.properties
+2020-03-03 11:42:44.232 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.Wordbook.
+2020-03-03 11:42:44.276 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.ServiceWordbookGroup.
+2020-03-03 11:42:44.381 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenu.
+2020-03-03 11:42:44.418 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenuPermission.
+2020-03-03 11:42:44.558 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysRole.
+2020-03-03 11:42:44.624 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysUser.
+2020-03-03 11:42:49.851 [main] WARN  org.beetl.ext.spring.BeetlSpringViewResolver - Beetl不建议使用使用spring前缀，会导致include,layout找不到对应的模板，请使用beetl的配置RESOURCE.ROOT来配置模板根目录
+2020-03-03 11:55:45.347 [main] WARN  com.ctrip.framework.apollo.core.utils.ResourceUtils - No available properties: apollo-env.properties
+2020-03-03 11:56:00.347 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.Wordbook.
+2020-03-03 11:56:00.392 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.ServiceWordbookGroup.
+2020-03-03 11:56:00.514 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenu.
+2020-03-03 11:56:00.553 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenuPermission.
+2020-03-03 11:56:00.707 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysRole.
+2020-03-03 11:56:00.779 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysUser.
+2020-03-03 11:56:05.873 [main] WARN  org.beetl.ext.spring.BeetlSpringViewResolver - Beetl不建议使用使用spring前缀，会导致include,layout找不到对应的模板，请使用beetl的配置RESOURCE.ROOT来配置模板根目录
+2020-03-03 11:58:20.183 [main] WARN  com.ctrip.framework.apollo.core.utils.ResourceUtils - No available properties: apollo-env.properties
+2020-03-03 11:59:19.716 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.Wordbook.
+2020-03-03 11:59:19.762 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.ServiceWordbookGroup.
+2020-03-03 11:59:19.886 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenu.
+2020-03-03 11:59:19.922 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenuPermission.
+2020-03-03 11:59:20.081 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysRole.
+2020-03-03 11:59:20.158 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysUser.
+2020-03-03 11:59:25.089 [main] WARN  org.beetl.ext.spring.BeetlSpringViewResolver - Beetl不建议使用使用spring前缀，会导致include,layout找不到对应的模板，请使用beetl的配置RESOURCE.ROOT来配置模板根目录
+2020-03-03 12:02:50.267 [main] WARN  com.ctrip.framework.apollo.core.utils.ResourceUtils - No available properties: apollo-env.properties
+2020-03-03 12:03:07.405 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.Wordbook.
+2020-03-03 12:03:07.440 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.ServiceWordbookGroup.
+2020-03-03 12:03:07.550 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenu.
+2020-03-03 12:03:07.586 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenuPermission.
+2020-03-03 12:03:07.726 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysRole.
+2020-03-03 12:03:07.799 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysUser.
+2020-03-03 12:03:21.913 [main] WARN  com.ctrip.framework.apollo.core.utils.ResourceUtils - No available properties: apollo-env.properties
+2020-03-03 12:04:08.039 [main] WARN  com.ctrip.framework.apollo.core.utils.ResourceUtils - No available properties: apollo-env.properties
+2020-03-03 12:04:23.983 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.Wordbook.
+2020-03-03 12:04:24.017 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.ServiceWordbookGroup.
+2020-03-03 12:04:24.131 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenu.
+2020-03-03 12:04:24.172 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenuPermission.
+2020-03-03 12:04:24.305 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysRole.
+2020-03-03 12:04:24.379 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysUser.
+2020-03-03 12:04:29.246 [main] WARN  org.beetl.ext.spring.BeetlSpringViewResolver - Beetl不建议使用使用spring前缀，会导致include,layout找不到对应的模板，请使用beetl的配置RESOURCE.ROOT来配置模板根目录
+2020-03-03 12:08:41.904 [main] WARN  com.ctrip.framework.apollo.core.utils.ResourceUtils - No available properties: apollo-env.properties
+2020-03-03 12:09:53.545 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.Wordbook.
+2020-03-03 12:09:53.592 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.ServiceWordbookGroup.
+2020-03-03 12:09:53.688 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenu.
+2020-03-03 12:09:53.723 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenuPermission.
+2020-03-03 12:09:53.849 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysRole.
+2020-03-03 12:09:53.914 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysUser.
+2020-03-03 12:09:58.962 [main] WARN  org.beetl.ext.spring.BeetlSpringViewResolver - Beetl不建议使用使用spring前缀，会导致include,layout找不到对应的模板，请使用beetl的配置RESOURCE.ROOT来配置模板根目录
+2020-03-03 12:11:58.138 [main] WARN  com.ctrip.framework.apollo.core.utils.ResourceUtils - No available properties: apollo-env.properties
+2020-03-03 12:12:12.739 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.Wordbook.
+2020-03-03 12:12:12.773 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.ServiceWordbookGroup.
+2020-03-03 12:12:12.894 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenu.
+2020-03-03 12:12:12.930 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenuPermission.
+2020-03-03 12:12:13.071 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysRole.
+2020-03-03 12:12:13.145 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysUser.
+2020-03-03 12:12:18.617 [main] WARN  org.beetl.ext.spring.BeetlSpringViewResolver - Beetl不建议使用使用spring前缀，会导致include,layout找不到对应的模板，请使用beetl的配置RESOURCE.ROOT来配置模板根目录
+2020-03-03 12:17:21.500 [main] WARN  com.ctrip.framework.apollo.core.utils.ResourceUtils - No available properties: apollo-env.properties
+2020-03-03 12:21:23.944 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.Wordbook.
+2020-03-03 12:21:23.978 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.system.bean.ServiceWordbookGroup.
+2020-03-03 12:21:24.100 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenu.
+2020-03-03 12:21:24.136 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysMenuPermission.
+2020-03-03 12:21:24.271 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysRole.
+2020-03-03 12:21:24.603 [main] WARN  com.baomidou.mybatisplus.core.toolkit.TableInfoHelper - Warn: Could not find @TableId in Class: com.fhs.ucenter.bean.SysUser.
+2020-03-03 12:21:29.549 [main] WARN  org.beetl.ext.spring.BeetlSpringViewResolver - Beetl不建议使用使用spring前缀，会导致include,layout找不到对应的模板，请使用beetl的配置RESOURCE.ROOT来配置模板根目录

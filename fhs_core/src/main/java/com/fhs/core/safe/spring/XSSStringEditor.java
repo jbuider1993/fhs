@@ -41,7 +41,9 @@ public class XSSStringEditor extends PropertyEditorSupport implements WebBinding
     }
 
     @Override
-    public void initBinder(WebDataBinder binder, WebRequest request) {
-        binder.registerCustomEditor(String.class, this);
+    public void initBinder(WebDataBinder webDataBinder) {
+        webDataBinder.registerCustomEditor(String.class, this);
     }
+
+
 }

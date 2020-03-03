@@ -11,6 +11,7 @@
 package com.fhs.file.service.impl;
 
 
+import com.alicp.jetcache.anno.Cached;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.db.DataSource;
@@ -40,7 +41,8 @@ public class ServiceFileServiceImpl extends BaseServiceImpl<ServiceFile> impleme
      * @param fileId
      * @return
      */
-    @Cacheable(unless = "#result == null", value = "redis-file#(5000*1)", key = "'file_fileId_' + #fileId")
+    @Override
+    @Cached(name = "redis-file", key = "'file_fileId_' + #fileId",expire = 500)
     public ServiceFile selectById(String fileId) {
         log.infoMsg("查询文件服务:{}", fileId);
         return super.selectById(fileId);
@@ -51,10 +53,12 @@ public class ServiceFileServiceImpl extends BaseServiceImpl<ServiceFile> impleme
      */
     private String fileSavePath;
 
+    @Override
     public String getFileSavePath() {
         return fileSavePath;
     }
 
+    @Override
     public void setFileSavePath(String fileSavePath) {
         this.fileSavePath = fileSavePath;
     }

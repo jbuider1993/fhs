@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/fhs_chart" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/fhs_cloud" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/fhs_common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/fhs_core" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/fhs_eureka-server" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/fhs_file" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/fhs_file_admin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/fhs_framework_api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/fhs_framework_base_business" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/fhs_framework_base_business_admin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/fhs_framework_parent" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/fhs_mini_admin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/fhs_word" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/fhs_work_flow" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/fhs_work_flow_common" charset="UTF-8" />
+  </component>
+</project>

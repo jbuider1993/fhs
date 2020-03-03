@@ -7,7 +7,7 @@
 	<groupId>com.fhs-opensource</groupId>
 	<artifactId>fhs_chart</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.0</version>
+	<version>2.0.0</version>
 
 	<name>fhs_chart</name>
 	<url>https://gitee.com/fhs-opensource/fhs_chart</url>

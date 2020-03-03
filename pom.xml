@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <groupId>com.fhs-opensource</groupId>
+    <artifactId>fhs_framework</artifactId>
+    <version>2.0.0</version>
+    <packaging>pom</packaging>
+    <modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>fhs_chart</module>
+        <module>fhs_cloud</module>
+        <module>fhs_common</module>
+        <module>fhs_core</module>
+        <module>fhs_eureka-server</module>
+        <module>fhs_file</module>
+        <module>fhs_file_admin</module>
+        <module>fhs_framework_api</module>
+        <module>fhs_framework_base_business</module>
+        <module>fhs_framework_base_business_admin</module>
+        <module>fhs_word</module>
+        <module>fhs_framework_parent</module>
+        <module>fhs_mini_admin</module>
+        <module>fhs_work_flow</module>
+        <module>fhs_work_flow_common</module>
+    </modules>
+
+
+</project>

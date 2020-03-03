@@ -8,7 +8,6 @@ import me.chanjar.weixin.mp.api.WxMpConfigStorage;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import redis.clients.jedis.JedisPoolConfig;
 
 import java.io.File;
 import java.util.concurrent.locks.Lock;
@@ -62,15 +61,8 @@ public class WxMpInRedisConfigStorage implements WxMpConfigStorage {
 
     private RedisSerializer<String> redisSerializer;
     private RedisConnection redisConnection;
+
     public WxMpInRedisConfigStorage() {
-    }
-    public WxMpInRedisConfigStorage(String host, int port) {
-    }
-
-    public WxMpInRedisConfigStorage(JedisPoolConfig poolConfig, String host, int port) {
-    }
-
-    public WxMpInRedisConfigStorage(JedisPoolConfig poolConfig, String host, int port, int timeout, String password) {
     }
 
     public void destroy() {
@@ -82,6 +74,7 @@ public class WxMpInRedisConfigStorage implements WxMpConfigStorage {
         this.redisConnection = redisTemplate.getConnectionFactory().getConnection();
     }
 
+    @Override
     public Lock getCardApiTicketLock() {
         return this.cardApiTicketLock;
     }
@@ -154,7 +147,7 @@ public class WxMpInRedisConfigStorage implements WxMpConfigStorage {
     @Override
     public void expireAccessToken() {
         Throwable var2 = null;
-        LOG.info("设置accessToken立刻过期" );
+        LOG.info("设置accessToken立刻过期");
         try {
             setString(ACCESS_TOKEN_EXPIRES_TIME_KEY, "0");
         } catch (Throwable var11) {

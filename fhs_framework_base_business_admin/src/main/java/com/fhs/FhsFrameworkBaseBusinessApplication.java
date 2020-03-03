@@ -9,13 +9,13 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
-@SpringBootApplication()
+@SpringBootApplication(scanBasePackages = {"com.fhs","com.alicp.jetcache"})
 @MapperScan(basePackages = {"com.fhs.*.dao", "com.fhs.*.*.dao"})
-@EnableMethodCache(basePackages = {"com.xhb","com.fhs"})
+@EnableMethodCache(basePackages = {"com.fhs"})
 @EnableCreateCacheAnnotation
 @EnableConfigurationProperties
 @PropertySource("classpath:config.properties")

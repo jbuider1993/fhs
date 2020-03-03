@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/fhs_common/common.iml" filepath="$PROJECT_DIR$/fhs_common/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fhs_core/core.iml" filepath="$PROJECT_DIR$/fhs_core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/fhs-framework.iml" filepath="$PROJECT_DIR$/.idea/fhs-framework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fhs_chart/fhs_chart.iml" filepath="$PROJECT_DIR$/fhs_chart/fhs_chart.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fhs_cloud/fhs_cloud.iml" filepath="$PROJECT_DIR$/fhs_cloud/fhs_cloud.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fhs_eureka-server/fhs_eureka-server.iml" filepath="$PROJECT_DIR$/fhs_eureka-server/fhs_eureka-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fhs_file/fhs_file.iml" filepath="$PROJECT_DIR$/fhs_file/fhs_file.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fhs_file_admin/fhs_file_admin.iml" filepath="$PROJECT_DIR$/fhs_file_admin/fhs_file_admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fhs_framework_api/fhs_framework_api.iml" filepath="$PROJECT_DIR$/fhs_framework_api/fhs_framework_api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fhs_framework_base_business/fhs_framework_base_business.iml" filepath="$PROJECT_DIR$/fhs_framework_base_business/fhs_framework_base_business.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fhs_framework_base_business_admin/fhs_framework_base_business_admin.iml" filepath="$PROJECT_DIR$/fhs_framework_base_business_admin/fhs_framework_base_business_admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fhs_framework_parent/fhs_framework_parent.iml" filepath="$PROJECT_DIR$/fhs_framework_parent/fhs_framework_parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fhs_mini_admin/fhs_mini_admin.iml" filepath="$PROJECT_DIR$/fhs_mini_admin/fhs_mini_admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fhs_word/fhs_word.iml" filepath="$PROJECT_DIR$/fhs_word/fhs_word.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fhs_work_flow/fhs_work_flow.iml" filepath="$PROJECT_DIR$/fhs_work_flow/fhs_work_flow.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fhs_work_flow_common/fhs_work_flow_common.iml" filepath="$PROJECT_DIR$/fhs_work_flow_common/fhs_work_flow_common.iml" />
+    </modules>
+  </component>
+</project>

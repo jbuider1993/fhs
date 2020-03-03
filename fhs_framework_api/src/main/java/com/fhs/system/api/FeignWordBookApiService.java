@@ -6,7 +6,7 @@ import com.fhs.system.bean.LogAdminOperatorLogVo;
 import com.fhs.system.bean.WordbookVO;
 import feign.Param;
 import feign.RequestLine;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;

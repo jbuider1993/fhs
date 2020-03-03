@@ -11,6 +11,7 @@ import com.fhs.ucenter.service.SysOrganizationService;
 import com.fhs.ucenter.service.SysUserService;
 import com.fhs.ucenter.service.UcenterMsTenantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,8 +21,10 @@ import org.springframework.stereotype.Service;
  * @since 2019-05-15 14:21:04
  */
 @Service("ucenterMsTenantService")
-public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenant>   implements UcenterMsTenantService {
+public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenant> implements UcenterMsTenantService {
 
+
+    @Lazy
     @Autowired
     private SysUserService sysUserService;
 
@@ -32,11 +35,11 @@ public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenant>
     public int insert(UcenterMsTenant tenant) {
         SysUser adminUser = new SysUser();
         adminUser.setGroupCode(tenant.getGroupCode());
-        adminUser.setPassword(Md5Util.MD5(tenant.getGroupCode()+"123456").toLowerCase());
+        adminUser.setPassword(Md5Util.MD5(tenant.getGroupCode() + "123456").toLowerCase());
         adminUser.setUserId(StringUtil.getUUID());
         adminUser.setIsAdmin(Constant.INT_TRUE);
         adminUser.setUserName(tenant.getTenantName());
-        adminUser.setUserLoginName(tenant.getGroupCode()+ "_admin");
+        adminUser.setUserLoginName(tenant.getGroupCode() + "_admin");
         adminUser.setMobile(tenant.getMobile());
         adminUser.setOrganizationId(tenant.getGroupCode() + "_001");
         adminUser.setIsDisable(Constant.INT_FALSE);

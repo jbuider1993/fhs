@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.github.liaochong:myexcel:2.3.3">
+    <CLASSES>
+      <root url="jar://D:/apache-maven-3.6.3/jars/com/github/liaochong/myexcel/2.3.3/myexcel-2.3.3.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://D:/apache-maven-3.6.3/jars/com/github/liaochong/myexcel/2.3.3/myexcel-2.3.3-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://D:/apache-maven-3.6.3/jars/com/github/liaochong/myexcel/2.3.3/myexcel-2.3.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -8,7 +8,7 @@ import com.fhs.ucenter.api.form.SysUserForm;
 import com.fhs.ucenter.api.vo.SysUserVo;
 import feign.Param;
 import feign.RequestLine;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 

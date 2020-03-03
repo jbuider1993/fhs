@@ -1,6 +1,5 @@
 package com.fhs.config;
 
-import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -38,7 +37,7 @@ public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements Env
     /**
      * 配置文件获取
      */
-    protected RelaxedPropertyResolver propertyResolver;
+    protected Environment environment;
     /**
      * 文档描述
      */
@@ -52,6 +51,7 @@ public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements Env
      *
      * @param registry
      */
+    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(new String[]{"swagger-ui.html"}).addResourceLocations(new String[]{"classpath:/META-INF/resources/"});
         registry.addResourceHandler(new String[]{"/webjars*"}).addResourceLocations(new String[]{"classpath:/META-INF/resources/webjars/"});
@@ -67,12 +67,13 @@ public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements Env
         return (new ApiInfoBuilder()).title(this.serviceName + " Restful APIs").description(this.description).contact(this.creatName).version("1.0").build();
     }
 
+    @Override
     public void setEnvironment(Environment environment) {
-        this.propertyResolver = new RelaxedPropertyResolver(environment, (String) null);
-        this.basePackage = this.propertyResolver.getProperty("swagger.basepackage");
-        this.creatName = this.propertyResolver.getProperty("swagger.service.developer");
-        this.serviceName = this.propertyResolver.getProperty("swagger.service.name");
-        this.description = this.propertyResolver.getProperty("swagger.service.description");
+        this.environment = environment;
+        this.basePackage = this.environment.getProperty("swagger.basepackage");
+        this.creatName = this.environment.getProperty("swagger.service.developer");
+        this.serviceName = this.environment.getProperty("swagger.service.name");
+        this.description = this.environment.getProperty("swagger.service.description");
     }
 
 }

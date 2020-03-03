@@ -2,7 +2,7 @@ package com.fhs.demo.service;
 
 import com.fhs.feignConfig.FeignConfiguration;
 import feign.RequestLine;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 
 import java.util.HashMap;
 

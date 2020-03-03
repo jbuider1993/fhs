@@ -8,15 +8,18 @@ import com.fhs.common.utils.JsonUtils;
 import com.fhs.common.utils.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.ApplicationHome;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.system.ApplicationHome;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.jar.JarFile;
 
 /**
  * 配置文件工具，自定义配置文件使用此工具类读取

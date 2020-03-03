@@ -10,7 +10,10 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.PatternTopic;
@@ -20,6 +23,10 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @Description:redis序列化配置
  * @author  zhangqiang
@@ -27,22 +34,31 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * @versio  1.0
  * Copyright (c) 2017 All Rights Reserved.
  * */
-@Configuration
+@Configuration("redisConfig")
 @EnableCaching
+@Order(1)
 public class RedisConfig extends CachingConfigurerSupport {
 
-    /**
-     * @desc redis缓存，设置过期时间
-     * @param redisTemplate
-     * @return
-     */
-    @Bean
-    public CacheManager cacheManager(RedisTemplate redisTemplate) {
-        RedisCacheManager rcm = new RedisCacheManager(redisTemplate);
-        //设置缓存过期时间
-        rcm.setDefaultExpiration(60);//秒
-        return rcm;
+    @Bean("redisCacheManager")
+    @Primary
+    public RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+
+        RedisCacheWriter redisCacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory);
+
+        // 默认配置，过期时间指定是30分钟
+        RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig();
+        defaultCacheConfig.entryTtl(Duration.ofMinutes(30));
+
+        // redisExpire1h cache配置，过期时间指定是1小时，缓存key的前缀指定成prefixaaa_（存到redis的key会自动添加这个前缀）
+        RedisCacheConfiguration userCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig().
+                entryTtl(Duration.ofHours(1)).prefixKeysWith("springcache:fhs:");
+        Map<String, RedisCacheConfiguration> redisCacheConfigurationMap = new HashMap<>();
+        redisCacheConfigurationMap.put("redisExpire1h", userCacheConfiguration);
+
+        RedisCacheManager cacheManager = new RedisCacheManager(redisCacheWriter, defaultCacheConfig, redisCacheConfigurationMap);
+        return cacheManager;
     }
+
     /**
      * RedisTemplate配置
      * @param factory RedisConnectionFactory对象
