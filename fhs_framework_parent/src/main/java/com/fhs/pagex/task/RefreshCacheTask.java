@@ -10,6 +10,7 @@ import com.fhs.pagex.trans.PageXTransServiceImpl;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.DependsOn;
@@ -49,6 +50,9 @@ public class RefreshCacheTask implements InitializingBean,Runnable,ApplicationCo
     @Autowired
     private JoinService joinService;
 
+    @Value("${fhs.pagex.disable:false}")
+    private boolean isDisablePagex;
+
 
 
     /**
@@ -58,6 +62,9 @@ public class RefreshCacheTask implements InitializingBean,Runnable,ApplicationCo
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        if(this.isDisablePagex){
+            return;
+        }
         //先去刷新一遍，然后判断是否是开发者模式如果是，则继续刷新
         try
         {
