@@ -1,20 +1,16 @@
-/fhs_cloud/fhs_cloud.iml
-/fhs_cloud/target
-/fhs_eureka-server/target
-/fhs_eureka-server/fhs_eureka-server.iml
-/fhs_file/target
-/fhs_file/fhs_file.iml
-/fhs_eureka-server/*.iml
-/fhs_file/*.iml
-/fhs_file_admin/target
-/fhs_file_admin/fhs_file_admin.iml
-/fhs_framework_api/fhs_framework_api.iml
-/fhs_framework_api/target
-/fhs_framework_api/.project
-/fhs_framework_base_business_admin/*.iml
-/fhs_mini_admin/fhs_mini_admin.iml
-/fhs_static/static.iml
-/fhs_framework_base_business_admin/target
-/fhs_mini_admin/target
-/fhs_work_flow/target
-/fhs_static/target
+*.iml
+# Compiled class file
+*.class
+# Log file
+*.log
+# BlueJ files
+*.ctxt
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+*/target
