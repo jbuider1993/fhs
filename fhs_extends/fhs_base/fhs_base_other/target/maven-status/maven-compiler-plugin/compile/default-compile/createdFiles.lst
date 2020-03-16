@@ -1,5 +1,0 @@
-com\fhs\core\base\service\impl\BaseServiceImpl.class
-com\fhs\core\base\mapper\FhsBaseMapper.class
-com\fhs\core\base\service\BaseService.class
-com\fhs\core\base\action\BaseAction.class
-com\fhs\core\base\action\BaseAction$PageSizeInfo.class

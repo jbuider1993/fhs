@@ -19,3 +19,16 @@
 /fhs_module/fhs_basics/src
 /fhs_extends/fhs_base/src
 /fhs_spring_cloud/src
+/fhs_extends/fhs_cache/target
+/fhs_extends/fhs_config/target
+/fhs_extends/fhs_db/target
+/fhs_extends/fhs_exception/target
+/fhs_extends/fhs_http_result/target
+/fhs_extends/fhs_json/target
+/fhs_extends/fhs_logger/target
+/fhs_extends/fhs_pojo/target
+/fhs_extends/fhs_trans/fhs_trans_anno/target
+/fhs_extends/fhs_trans/fhs_trans_service/target
+/fhs_extends/fhs_valid/target
+/fhs_extends/fhs_base/fhs_base_other/target
+/fhs_extends/fhs_base/fhs_base_pojo/target

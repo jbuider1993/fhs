@@ -1,8 +1,0 @@
-com\fhs\core\exception\advice\ControllerExceptionAdvice.class
-com\fhs\core\exception\NotPremissionException.class
-com\fhs\core\exception\BaseException.class
-com\fhs\core\exception\BusinessException.class
-com\fhs\core\exception\ParamException.class
-com\fhs\core\exception\ResultException.class
-com\fhs\core\exception\CheckException.class
-com\fhs\core\exception\HttpException.class

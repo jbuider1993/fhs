@@ -1,5 +1,0 @@
-com\fhs\core\config\SystemConfigFilter.class
-com\fhs\core\config\ConfigChangeListener.class
-com\fhs\core\config\LoggerChangeListener.class
-com\fhs\core\config\EConfig.class
-com\fhs\core\config\EConfig$1.class
