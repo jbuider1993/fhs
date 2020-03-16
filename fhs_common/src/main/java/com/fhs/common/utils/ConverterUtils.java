@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * <类型转换工具类>
  *
- * @author wanglei
+ * @author jackwong
  * @version [版本号, 2013年8月7日]
  * @see [相关类/方法]
  * @since [产品/模块版本]

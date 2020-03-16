@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Cookie 操作工具类
- * @author  wanglei
+ * @author  jackwong
  * @version  [版本号, 2015年6月2日]
  * @see  [相关类/方法]
  * @since  [产品/模块版本]

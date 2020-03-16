@@ -18,7 +18,7 @@ import java.util.*;
 /**
  * <日期处理工具类>
  *
- * @author wanglei
+ * @author jackwong
  * @version [版本号, 2013年8月5日]
  * @see [相关类/方法]
  * @since [产品/模块版本]

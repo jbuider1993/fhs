@@ -6,10 +6,10 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
- * 本程序为liujiduo创建，wanglei修改
+ * 本程序为liujiduo创建，jackwong
  * 现在没发现什么中文问题，如果发现有乱码
  * 请参考-http://log-cd.iteye.com/blog/585647
- * @author wanglei
+ * @author jackwong
  * @version [版本号, 2016年6月1日]
  * @see [相关类/方法]
  * @since [产品/模块版本]
@@ -55,9 +55,7 @@ public final class ZipUtil
     /**
      * 扫描添加文件Entry
      *
-     * @param base 基路径
-     *
-     * @param source 源文件
+     * @param filePaths 文件路径
      * @param zos Zip文件输出流
      * @throws IOException
      */
@@ -151,7 +149,7 @@ public final class ZipUtil
 
 /**
  * 用于关闭流对象
- * @author  wanglei
+ * @author  jackwong
  * @version  [版本号, 2016年6月1日]
  * @see  [相关类/方法]
  * @since  [产品/模块版本]

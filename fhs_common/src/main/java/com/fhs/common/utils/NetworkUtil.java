@@ -1,5 +1,7 @@
 package com.fhs.common.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -11,9 +13,10 @@ import java.util.Enumeration;
 /**
  * 网络工具包
  */
+@Slf4j
 public class NetworkUtil
 {
-    private static final Logger LOGGER = Logger.getLogger(NetworkUtil.class);
+
   
     /** 
      * 获取请求主机IP地址,如果通过代理进来，则透过防火墙获取真实IP地址; 
@@ -71,7 +74,7 @@ public class NetworkUtil
         try {
             return InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
-            LOGGER.error("获取本机ip错误:",e);
+            log.error("获取本机ip错误:",e);
             return "192.168.0.1";
         }
     }

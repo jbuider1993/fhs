@@ -7,8 +7,8 @@ import java.util.*;
  *本类生成的html需要和
  * https://blog.csdn.net/shuaizai88/article/details/72723935
  * 一起使用
- * 记得maven安装html2excel.jar
- * https://github.com/liaochong/html2excel
+ * 记得maven安装html2excel.jar  -- 现在叫myexcel了
+ * https://github.com/liaochong/myexcel
  */
 public class TableUtils
 {

@@ -1,5 +1,8 @@
 package com.fhs.common.utils;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +15,7 @@ import java.util.List;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
+@Slf4j
 public class ListUtils
 {
     /**
@@ -59,5 +63,55 @@ public class ListUtils
             result.add(t);
         }
         return result;
+    }
+
+
+    /**
+     * 将entityList转换成modelList
+     * @param fromList
+     * @param tClass
+     * @param <F>
+     * @param <T>
+     * @return
+     */
+    public static<F,T> List<T> copyListToList(List<F> fromList, Class<T> tClass) {
+        if (fromList.isEmpty()) {
+            return null;
+        }
+        List<T> tList = new ArrayList<>();
+        for (F f : fromList) {
+            T t = entityToModel(f, tClass);
+            if (t != null) {
+                tList.add(t);
+            }
+        }
+        return tList;
+    }
+
+    /**
+     * 把子类copy为父类  语法糖
+     * @param fromList  子类list
+     * @param tClass 父类class
+     * @param <F>
+     * @param <T>
+     * @return
+     */
+    public static<T> List<T> copyListToPararentList(List<?> fromList, Class<T> tClass){
+        List tempList = fromList;
+        return tempList;
+    }
+
+    private static<F,T> T entityToModel(F entity, Class<T> modelClass) {
+        T model = null;
+        if (entity == null || modelClass ==null) {
+            return null;
+        }
+        try {
+            model = modelClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            log.error("实体类实例化异常");
+        }
+        BeanUtils.copyProperties(entity, model);
+        return model;
     }
 }

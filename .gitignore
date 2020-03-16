@@ -15,3 +15,7 @@
 *.rar
 /*/target
 /.idea
+/fhs_module/src
+/fhs_module/fhs_basics/src
+/fhs_extends/fhs_base/src
+/fhs_spring_cloud/src

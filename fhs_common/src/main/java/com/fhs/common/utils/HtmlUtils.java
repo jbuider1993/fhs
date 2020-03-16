@@ -9,7 +9,7 @@ import java.io.*;
 /**
  * HTML 工具类
  *
- * @author  wanglei
+ * @author  jackwong
  * @version  [版本号, 2016年5月24日]
  * @see  [相关类/方法]
  * @since  [产品/模块版本]
@@ -37,7 +37,7 @@ public class HtmlUtils
 
 /**
  * 自己重写的response,主要是替换PrintWriter 用于获取写给前台的数据
- * @author  wanglei
+ * @author  jackwong
  * @version  [版本号, 2016年5月24日]
  * @see  [相关类/方法]
  * @since  [产品/模块版本]

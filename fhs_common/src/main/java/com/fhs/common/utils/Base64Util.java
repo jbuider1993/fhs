@@ -1,23 +1,24 @@
 package com.fhs.common.utils;
 
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 
-import sun.misc.BASE64Decoder;
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.UnsupportedEncodingException;
+import java.util.Base64;
 
 /**
- * 
  * java Base64编码实例
- * 
+ *
  * @author wangpengfei
  * @version [版本号, 2016年9月11日]
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
+@Slf4j
 public class Base64Util {
     /**
      * 将 s 进行 BASE64 编码
-     * 
+     *
      * @param s
      * @return
      */
@@ -26,12 +27,17 @@ public class Base64Util {
             return null;
         }
 
-        return (new sun.misc.BASE64Encoder()).encode(s.getBytes());
+        try {
+            return new String(Base64.getEncoder().encode(s.getBytes()), "UTF8");
+        } catch (UnsupportedEncodingException e) {
+            log.error("", e);
+        }
+        return null;
     }
 
     /**
      * 将 BASE64 编码的字符串 s 进行解码
-     * 
+     *
      * @param s
      * @return
      */
@@ -39,10 +45,8 @@ public class Base64Util {
         if (s == null) {
             return null;
         }
-
-        BASE64Decoder decoder = new BASE64Decoder();
         try {
-            byte[] b = decoder.decodeBuffer(s);
+            byte[] b = Base64.getDecoder().decode(s);
             return new String(b);
         } catch (Exception e) {
             return null;
@@ -51,24 +55,20 @@ public class Base64Util {
 
     /**
      * 根据base64 获取byte
-     * 
-     * @param base64
-     *            base64数据
+     *
+     * @param base64 base64数据
      * @return byt数组
      */
     public static byte[] getByteFromBase64(String base64) {
-        if(base64.startsWith("data:image/png;base64,"))
-        {
-            base64 = base64.replace("data:image/png;base64,","");
+        if (base64.startsWith("data:image/png;base64,")) {
+            base64 = base64.replace("data:image/png;base64,", "");
         }
-        if(base64.startsWith("data:image/jpeg;base64,"))
-        {
-            base64 = base64.replace("data:image/jpeg;base64,","");
+        if (base64.startsWith("data:image/jpeg;base64,")) {
+            base64 = base64.replace("data:image/jpeg;base64,", "");
         }
-        BASE64Decoder decoder = new BASE64Decoder();
         try {
             // Base64解码
-            byte[] b = decoder.decodeBuffer(base64);
+            byte[] b = Base64.getDecoder().decode(base64);
             for (int i = 0; i < b.length; ++i) {
                 if (b[i] < 0) {// 调整异常数据
                     b[i] += 256;
@@ -76,9 +76,9 @@ public class Base64Util {
             }
             return b;
         } catch (Exception e) {
-            return new byte[] {};
+            return new byte[]{};
         }
     }
 
-    
+
 }

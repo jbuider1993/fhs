@@ -6,7 +6,7 @@ import java.security.MessageDigest;
 
 /**
  * 加密解密工具类
- * @author  wanglei
+ * @author  jackwong
  * @version  [版本号, 2015年3月3日]
  * @see  [相关类/方法]
  * @since  [产品/模块版本]

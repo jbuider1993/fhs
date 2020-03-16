@@ -5,8 +5,7 @@
  * */
 package com.fhs.common.utils;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import java.util.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -98,7 +97,7 @@ public class EncryptUtils
             cipher = Cipher.getInstance(STRING_DES);
             cipher.init(Cipher.ENCRYPT_MODE, key);
             byte encryptedData[] = cipher.doFinal(src.getBytes(STRING_ENCODING));
-            String resultCode = (new BASE64Encoder()).encode(encryptedData);
+            String resultCode = new String((Base64.getEncoder()).encode(encryptedData),STRING_ENCODING);
             resultCode =
                 resultCode.replaceAll("\\+", "ELTjh")
                     .replaceAll("/", "ELTxg")
@@ -140,7 +139,7 @@ public class EncryptUtils
                     .replaceAll("ELTad", "&")
                     .replaceAll("ELTdy", "=")
                     .replaceAll("ELTjh", "#");
-            byte byteMi[] = (new BASE64Decoder()).decodeBuffer(src);
+            byte byteMi[] = Base64.getDecoder().decode(src);
             SecretKeySpec key = new SecretKeySpec(keys.getBytes(), STRING_DES);
             Cipher cipher = Cipher.getInstance(STRING_DES);
             cipher.init(Cipher.DECRYPT_MODE, key);
@@ -259,7 +258,7 @@ public class EncryptUtils
      *
      * 根据id,加密成idE
      *
-     * @param idE
+     * @param id
      * @return
      */
     public static String getEncodeIdEFromId(Integer id)
@@ -276,7 +275,7 @@ public class EncryptUtils
     *
     * 根据id,加密成idE
     *
-    * @param idE
+    * @param id
     * @return
     */
    public static String getEncodeIdEFromId(String id)

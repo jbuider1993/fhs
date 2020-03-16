@@ -1,0 +1,10 @@
+com\fhs\core\valid\group\Add.class
+com\fhs\core\valid\aop\OrdinaryActionParamCheckAop.class
+com\fhs\core\valid\pattern\Pattern.class
+com\fhs\core\valid\group\Update.class
+com\fhs\core\valid\group\Delete.class
+com\fhs\core\valid\aop\FeignParamCheckAop.class
+com\fhs\core\valid\aop\ParamCheckAop.class
+com\fhs\core\valid\aop\RetrunErrorInfo.class
+com\fhs\core\valid\aop\ParamExceptionHandlerAdvice.class
+com\fhs\core\valid\checker\ParamChecker.class

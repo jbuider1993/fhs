@@ -1,24 +1,25 @@
 package com.fhs.common.utils;
 
 import com.fhs.common.constant.Constant;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 反射工具类
  *
- * @author wanglei
+ * @author jackwong
  * @version [版本号, 2015年8月7日]
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
+@Slf4j
 public class ReflectUtils {
-    /**
-     * 日志记录
-     */
-    private static final Logger LOG = Logger.getLogger(ReflectUtils.class);
+
 
     /**
      * 调用obj的setfield 方法设置value
@@ -39,7 +40,7 @@ public class ReflectUtils {
             field.setAccessible(true);
             field.set(obj, value);
         } catch (Exception e) {
-            LOG.error("给" + obj + "的字段" + fieldName + "设置值" + value + "错误", e);
+            log.error("给" + obj + "的字段" + fieldName + "设置值" + value + "错误", e);
         }
     }
 
@@ -55,11 +56,11 @@ public class ReflectUtils {
             field.setAccessible(true);
             field.set(obj, value);
         } catch (SecurityException e) {
-            LOG.error(e);
+            log.error("",e);
         } catch (IllegalArgumentException e) {
-            LOG.error(e);
+            log.error("",e);
         } catch (IllegalAccessException e) {
-            LOG.error(e);
+            log.error("",e);
         }
     }
 
@@ -73,7 +74,7 @@ public class ReflectUtils {
         try {
             return cls.newInstance();
         } catch (Exception ex) {
-            LOG.error(ex);
+            log.error("",ex);
         }
         return null;
     }
@@ -177,11 +178,11 @@ public class ReflectUtils {
                 }
             }
         } catch (SecurityException e) {
-            LOG.error(e);
+            log.error("",e);
         } catch (IllegalArgumentException e) {
-            LOG.error(e);
+            log.error("",e);
         } catch (IllegalAccessException e) {
-            LOG.error(e);
+            log.error("",e);
         }
         return Constant.EMPTY;
     }
@@ -217,11 +218,11 @@ public class ReflectUtils {
                 }
             }
         } catch (SecurityException e) {
-            LOG.error(e);
+            log.error("",e);
         } catch (IllegalArgumentException e) {
-            LOG.error(e);
+            log.error("",e);
         } catch (IllegalAccessException e) {
-            LOG.error(e);
+            log.error("",e);
         }
         return Constant.EMPTY;
     }
@@ -278,5 +279,28 @@ public class ReflectUtils {
         Field field = getDeclaredField(clazz, fieldName);
         // 如果field !=null 代表包含fieldName
         return field != null;
+    }
+
+    /**
+     * 获取所有的方法
+     *
+     * @param clazz 需要获取所有方法的class
+     * @return 所有的方法
+     */
+    public static List<Method> getAllMethod(Class<?> clazz) {
+        return Arrays.asList(clazz.getMethods());
+    }
+
+    /**
+     * 根据名称获取method
+     * @param clazz class
+     * @param name 方法名称
+     * @return
+     */
+    public static Method  getMethodd(Class<?> clazz,String name){
+        List<Method> methods = Arrays.asList(clazz.getMethods()).stream().filter(method->{
+            return name.equals(method.getName());
+        }).collect(Collectors.toList());
+        return methods.isEmpty() ? null : methods.get(0);
     }
 }

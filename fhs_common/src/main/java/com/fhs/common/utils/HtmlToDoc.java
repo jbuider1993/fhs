@@ -6,7 +6,7 @@ import java.io.*;
 
 /**
  * 强html转换为doc
- * @author  wanglei
+ * @author  jackwong
  * @version  [版本号, 2016年6月1日]
  * @see  [相关类/方法]
  * @since  [产品/模块版本]

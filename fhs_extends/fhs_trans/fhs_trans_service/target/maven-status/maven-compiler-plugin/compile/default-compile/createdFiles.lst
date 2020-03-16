@@ -1,0 +1,10 @@
+com\fhs\core\trans\service\impl\TransService.class
+com\fhs\core\trans\manager\ClassInfo.class
+com\fhs\core\trans\manager\CacheManager.class
+com\fhs\core\trans\service\impl\ITransTypeService.class
+com\fhs\core\trans\service\impl\AutoTransService.class
+com\fhs\core\trans\listener\TransMessageListener.class
+com\fhs\core\trans\fi\TransRefresher.class
+com\fhs\core\trans\manager\ClassManager.class
+com\fhs\core\trans\service\impl\TransFieldSett.class
+com\fhs\core\trans\service\AutoTransAble.class

@@ -1,5 +1,6 @@
 package com.fhs.common.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -46,13 +47,10 @@ import java.util.*;
  * @date : 2015/7/21
  * @see : TODO
  */
+@Slf4j
 @SuppressWarnings("deprecation")
 public class HttpUtils {
 
-    /**
-     * 日志输出
-     */
-    private static final Logger LOG = Logger.getLogger(HttpUtils.class);
 
     private static PoolingHttpClientConnectionManager connMgr;
 
@@ -125,9 +123,9 @@ public class HttpUtils {
                 InputStream instream = entity.getContent();
                 result = IOUtils.toString(instream, "UTF-8");
             }
-            LOG.infoMsg("请求结果 : {}", result);
+            log.info("请求结果 : {}", result);
         } catch (IOException e) {
-            LOG.error("请求失败，IOException ： " + e.getMessage());
+            log.error("请求失败，IOException ： " + e.getMessage());
         }
         return result;
     }
@@ -227,20 +225,20 @@ public class HttpUtils {
         try {
             response = httpClient.execute(httpPost);
             int statusCode = response.getStatusLine().getStatusCode();
-            LOG.infoMsg("请求成功,请求返回状态码:{}", statusCode);
+            log.info("请求成功,请求返回状态码:{}", statusCode);
             if (statusCode == 200) {
                 HttpEntity entity = response.getEntity();
                 httpStr = EntityUtils.toString(entity, "UTF-8");
             }
-            LOG.infoMsg("请求结果:{}", httpStr);
+            log.info("请求结果:{}", httpStr);
         } catch (Exception e) {
-            LOG.error("请求失败, Exception : " + e.getMessage());
+            log.error("请求失败, Exception : " + e.getMessage());
         } finally {
             if (response != null) {
                 try {
                     EntityUtils.consume(response.getEntity());
                 } catch (IOException e) {
-                    LOG.error("请求失败, IOException : " + e.getMessage());
+                    log.error("请求失败, IOException : " + e.getMessage());
                 }
             }
         }
@@ -295,7 +293,7 @@ public class HttpUtils {
         try {
             response = httpClient.execute(httpPost);
             int statusCode = response.getStatusLine().getStatusCode();
-            LOG.infoMsg("请求成功,请求返回状态码:{}", statusCode);
+            log.info("请求成功,请求返回状态码:{}", statusCode);
             if (statusCode != HttpStatus.SC_OK) {
                 return null;
             }
@@ -304,15 +302,15 @@ public class HttpUtils {
                 return null;
             }
             httpStr = EntityUtils.toString(entity, "utf-8");
-            LOG.infoMsg("请求结果:{}", httpStr);
+            log.info("请求结果:{}", httpStr);
         } catch (Exception e) {
-            LOG.error("请求失败,Exception : " + e.getMessage());
+            log.error("请求失败,Exception : " + e.getMessage());
         } finally {
             if (response != null) {
                 try {
                     EntityUtils.consume(response.getEntity());
                 } catch (IOException e) {
-                    LOG.error("请求失败,IOException : " + e.getMessage());
+                    log.error("请求失败,IOException : " + e.getMessage());
                 }
             }
         }
@@ -372,7 +370,7 @@ public class HttpUtils {
         if (ThreadKey.BUS_KEY.get() == null) {
             ThreadKey.BUS_KEY.set(StringUtil.getUUID());
         }
-        LOG.infoMsg("开始请求:{},请求参数:{}", apiUrl, JsonUtils.object2json(param));
+        log.info("开始请求:{},请求参数:{}", apiUrl, JsonUtils.object2json(param));
     }
 
     /**
@@ -404,20 +402,20 @@ public class HttpUtils {
             setThreadKey(apiUrl, fileMap);
             response = httpClient.execute(httpPost);
             int statusCode = response.getStatusLine().getStatusCode();
-            LOG.infoMsg("请求成功,请求返回状态码:{}", statusCode);
+            log.info("请求成功,请求返回状态码:{}", statusCode);
             if (statusCode == 200) {
                 entity = response.getEntity();
                 httpStr = EntityUtils.toString(entity, "UTF-8");
             }
-            LOG.infoMsg("请求结果:{}", httpStr);
+            log.info("请求结果:{}", httpStr);
         } catch (Exception e) {
-            LOG.error("请求失败, Exception : " + e.getMessage());
+            log.error("请求失败, Exception : " + e.getMessage());
         } finally {
             if (response != null) {
                 try {
                     EntityUtils.consume(response.getEntity());
                 } catch (IOException e) {
-                    LOG.error("请求失败, IOException : " + e.getMessage());
+                    log.error("请求失败, IOException : " + e.getMessage());
                 }
             }
         }
@@ -439,7 +437,7 @@ public class HttpUtils {
         String filePath = null;
         try {
             filePath = savePath + File.separator + fileName;
-            LOG.info(String.format("下载图片... url = {%s}, filePath = {%s} ", httpUrlStr, filePath));
+            log.info(String.format("下载图片... url = {%s}, filePath = {%s} ", httpUrlStr, filePath));
             // 构造URL
             URL url = new URL(httpUrlStr);
             // 打开连接
@@ -463,12 +461,12 @@ public class HttpUtils {
             while ((len = is.read(bs)) != -1) {
                 os.write(bs, 0, len);
             }
-            LOG.info(String.format("下载图片成功 图片存放路径 = {%s}", filePath));
+            log.info(String.format("下载图片成功 图片存放路径 = {%s}", filePath));
         } catch (MalformedURLException e) {
-            LOG.error("下载图片失败 : " + e.getMessage());
+            log.error("下载图片失败 : " + e.getMessage());
             e.printStackTrace();
         } catch (Exception e) {
-            LOG.error("普通异常下载图片失败 : " + e.getMessage());
+            log.error("普通异常下载图片失败 : " + e.getMessage());
         } finally {
             // 完毕，关闭所有链接
             try {
@@ -479,7 +477,7 @@ public class HttpUtils {
                     is.close();
                 }
             } catch (IOException e) {
-                LOG.error("下载图片关闭流失败: " + e.getMessage());
+                log.error("下载图片关闭流失败: " + e.getMessage());
             }
             return filePath;
         }

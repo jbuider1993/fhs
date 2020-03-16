@@ -138,17 +138,17 @@ public interface Constant
     /**
      * 接口调用成功代码
      */
-    int HPROSE_SUCCESS_CODE = 200;
+    int SUCCESS_CODE = 200;
 
     /**
      *接口调用失败代码
      */
-    int HPROSE_DEFEAT_CODE = 300;
+    int DEFEAT_CODE = 300;
 
     /**
      * 302
      */
-    int HPROSE_302 = 302;
+    int CODE_302 = 302;
 
     /**
      * sessionId/ssoid过期
@@ -239,7 +239,15 @@ public interface Constant
      */
     String CENTER_LINE = "-";
 
+    /**
+     *字典
+     */
+    String WORD_BOOK  = "wordbook";
 
+    /**
+     *用户信息
+     */
+    String USER_INFO = "sysUser";
 
     /**
      * 1
@@ -383,136 +391,6 @@ public interface Constant
      */
     int PAGE_ALL = -1;
 
-    /**
-     *用户 名称 redis key
-     */
-    String USER_NAME_REDIS_KEY = "sysUser:user_username:";
 
-    /**
-     *用户 部门名称 redis key
-     */
-    String USER_ORG_NAME_REDIS_KEY = "ucenter:user_orgname:";
 
-    /**
-     *字典
-     */
-    String WORD_BOOK  = "wordbook";
-
-    /**
-     *用户信息
-     */
-    String USER_INFO = "sysUser";
-
-    /**
-     *用户名
-     */
-    String USER_NAME = "sysUser:userName";
-
-    /**
-     *前台用户名
-     */
-    String FRONT_USER_INFO = "ucenter:frontUser";
-
-    /**
-     *前台用户昵称
-     */
-    String FRONT_USER_NICK_NAME = "ucenter:frontUser:nickName";
-
-    /**
-     *前台用户名
-     */
-    String FRONT_USER_NAME = "ucenter:frontUser:userName";
-
-    /**
-     * 前台用户头像
-     */
-    String FRONT_USER_IMAGE = "ucenter:frontUser:imagePath";
-
-    /**
-     *部门
-     */
-    String USER_ORG_NAME = "orgName";
-
-    /**
-     *部门信息
-     */
-    String ORG_INFO = "orgInfo";
-
-    /**
-     *应用信息
-     */
-    String APP_INFO = "appInfo";
-
-    /**
-     * 分类信息
-     */
-    String CLASSIFY_INFO = "classifyInfo";
-
-    /**
-     * 分类名称
-     */
-    String CLASSIFY_NAME = "classify:classifyName";
-
-    /**
-     * 区域信息
-     */
-    String AREA_INFO = "areaInfo";
-
-    /**
-     * 区域字典
-     */
-    String AREA_NAME = "area:areaName";
-
-    /**
-     * 前端用户认证类型 0-企业管理员
-     */
-    String FRONT_USER_AUTHEN_TYPE_ENTER_ADMIN = "0";
-
-    /**
-     * 前端用户认证类型 1-商户
-     */
-    String FRONT_USER_AUTHEN_TYPE_MERCHANT = "1";
-
-    /**
-     * 前端用户认证类型 2-业主/租户
-     */
-    String FRONT_USER_AUTHEN_TYPE_OWER = "2";
-
-    /**
-     * 前端用户认证类型 3-职工
-     */
-    String FRONT_USER_AUTHEN_TYPE_STAFF = "3";
-
-    /**
-     * 前端用户审核状态 0-待审核
-     */
-    Integer FRONT_USER_AUTHEN_STATUS_WAIT = 0;
-
-    /**
-     * 前端用户审核状态 1-已通过
-     */
-    Integer FRONT_USER_AUTHEN_STATUS_PASS = 1;
-
-    /**
-     * 前端用户审核状态 2-未通过
-     */
-    Integer FRONT_USER_AUTHEN_STATUS_NO_PASS = 2;
-
-    /**
-     * 机构信息
-     */
-    String SYS_ORGANIZATION_INFO = "sysOrganizationInfo";
-
-    /**
-     * 机构名称
-     */
-    String SYS_ORGANIZATION_NAME = "sysOrganizationInfo:organizationName";
-
-    /**
-     *
-     */
-    Integer SCHEDULE_THREAD_NUM = 10;
-
-    //前端用户与openid
-    String FRONT_USER_OPENID = "ucenter:frontUser:openId";
 }

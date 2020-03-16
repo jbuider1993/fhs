@@ -6,7 +6,7 @@ import java.util.Map;
 
 /**
  * 主要用于分页
- * @author  wanglei
+ * @author  jackwong
  * @version  [版本号, 2016年10月29日]
  * @see  [相关类/方法]
  * @since  [产品/模块版本]

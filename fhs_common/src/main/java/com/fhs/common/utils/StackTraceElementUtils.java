@@ -4,7 +4,7 @@ import com.fhs.common.constant.Constant;
 
 /**
  * 堆栈信息工具类
- * @author  wanglei
+ * @author  jackwong
  * @version  [版本号, 2016年12月30日]
  * @see  [相关类/方法]
  * @since  [产品/模块版本]

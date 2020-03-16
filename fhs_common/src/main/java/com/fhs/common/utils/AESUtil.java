@@ -1,5 +1,6 @@
 package com.fhs.common.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.*;
@@ -14,9 +15,9 @@ import java.security.SecureRandom;
  *
  * @author jackwong
  */
+@Slf4j
 public class AESUtil {
 
-    private  static Logger LOG = Logger.getLogger(AESUtil.class);
 
     /**
      * 加密
@@ -46,7 +47,7 @@ public class AESUtil {
             byte[] result = cipher.doFinal(byteContent);
             return Base64.encodeBase64String(result);
         } catch (Exception e) {
-            LOG.error("解密错误:"  + content + ",pass:" + password,e);
+            log.error("解密错误:"  + content + ",pass:" + password,e);
         }
         return null;
     }
@@ -61,6 +62,9 @@ public class AESUtil {
      * @throws BadPaddingException 解析失败,秘钥和验证码不匹配
      */
     public static String decrypt(String content, String password)  {
+        if(password==null){
+            password = "123456";
+        }
         try {
             KeyGenerator kgen = KeyGenerator.getInstance("AES");
             //解决linux 系统下面出错问题
@@ -75,7 +79,7 @@ public class AESUtil {
             byte[] result = cipher.doFinal(Base64.decodeBase64(content));
             return new String(result,"utf-8"); // 加密
         } catch (Exception e) {
-            LOG.error("加密错误:"  + content + ",pass:" + password,e);
+            log.error("加密错误:"  + content + ",pass:" + password,e);
         }
         return null;
     }

@@ -1,6 +1,6 @@
 package com.fhs.common.spring;
 
-import com.fhs.common.utils.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AdvisedSupport;
 import org.springframework.aop.framework.AopProxy;
 import org.springframework.aop.support.AopUtils;
@@ -30,18 +30,18 @@ import java.util.Map;
  * Copyright (c) 2017 All Rights Reserved.
  */
 @Component
+@Slf4j
 public class SpringContextUtil implements ApplicationContextAware {
-    private static Logger logger = Logger.getLogger(SpringContextUtil.class);
     private static ApplicationContext applicationContext = null;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        logger.info("------SpringContextUtil setApplicationContext-------");
+        log.info("------SpringContextUtil setApplicationContext-------");
         SpringContextUtil.applicationContext = applicationContext;
     }
 
     public static void setStaticApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        logger.info("------SpringContextUtil setApplicationContext-------");
+        log.info("------SpringContextUtil setApplicationContext-------");
         SpringContextUtil.applicationContext = applicationContext;
     }
 
@@ -73,7 +73,7 @@ public class SpringContextUtil implements ApplicationContextAware {
         try {
             return applicationContext.getBean(clazz);
         } catch (Exception e) {
-            logger.error("获取对象错误:" + e.getMessage());
+            log.error("获取对象错误:" + e.getMessage());
             return null;
         }
     }
@@ -90,7 +90,7 @@ public class SpringContextUtil implements ApplicationContextAware {
         try {
             return (T)getTarget(applicationContext.getBean(clazz));
         } catch (Exception e) {
-            logger.error("获取对象错误:" + e.getMessage());
+            log.error("获取对象错误:" + e.getMessage());
             return null;
         }
     }
@@ -155,14 +155,14 @@ public class SpringContextUtil implements ApplicationContextAware {
             try {
                 proxy = getJdkDynamicProxyTargetObject(proxy);
             } catch (Exception e) {
-                logger.error("获取对象错误:" + e.getMessage());
+                log.error("获取对象错误:" + e.getMessage());
                 return proxy;
             }
         } else { //cglib
             try {
                 proxy = getCglibProxyTargetObject(proxy);
             } catch (Exception e) {
-                logger.error("获取对象错误:" + e.getMessage());
+                log.error("获取对象错误:" + e.getMessage());
                 return proxy;
             }
         }

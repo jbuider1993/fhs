@@ -9,6 +9,7 @@
  */
 package com.fhs.common.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.File;
@@ -23,14 +24,15 @@ import java.util.*;
 /**
  * <日期处理工具类>
  *
- * @author wanglei
+ * @author jackwong
  * @version [版本号, 2013年8月5日]
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
+@Slf4j
 public class Md5Util
 {
-    private static final Logger LOG = Logger.getLogger(Md5Util.class);
+
 
     public final static String MD5(String s)
     {
@@ -190,10 +192,10 @@ public class Md5Util
             }
             sb.append(extendsParam);
             result = sb.toString();
-            LOG.info("签名前字符串:" + result);
+            log.info("签名前字符串:" + result);
             // 进行MD5加密
             result = DigestUtils.md5Hex(result).toUpperCase();
-            LOG.info("签名后字符串:" + result);
+            log.info("签名后字符串:" + result);
         }
         catch (Exception e)
         {
@@ -243,10 +245,10 @@ public class Md5Util
                 sb = sb.deleteCharAt(sb.length() - 1);
             }
             result = sb.toString();
-            LOG.info("签名前字符串:" + result);
+            log.info("签名前字符串:" + result);
             // 进行MD5加密
             result = DigestUtils.md5Hex(result).toUpperCase();
-            LOG.info("签名后字符串:" + result);
+            log.info("签名后字符串:" + result);
         }
         catch (Exception e)
         {
