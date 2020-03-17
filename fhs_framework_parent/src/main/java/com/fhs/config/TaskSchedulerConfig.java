@@ -21,25 +21,11 @@ import java.time.Duration;
  **/
 @Configuration
 @EnableScheduling
-public class TaskSchedulerConfig implements EnvironmentAware {
-
-    @Value("${fhs.task.pool-size}")
-    private int  poolSize;
-
-    @Value("${fhs.task.default-lock-Minutes}")
-    private int  defaultLockMinutes;
-
-    private Environment environment;
-
-
+public class TaskSchedulerConfig {
 
     @Bean
     public LockProvider lockProvider(RedisConnectionFactory connectionFactory) {
         return new RedisLockProvider(connectionFactory);
     }
 
-    @Override
-    public void setEnvironment(Environment environment) {
-        this.environment = environment;
-    }
 }
