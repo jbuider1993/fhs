@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fhs.basics.mapper.SysOrganizationMapper">
+
+    <sql id="Base_Column_List">
+        id AS id,
+        name AS name,
+        parent_id AS parentId,
+        ranking AS ranking,
+        is_disable AS isDisable,
+        project_id AS projectId,
+        create_user AS createUser,
+        create_time AS createTime,
+        update_user AS updateUser,
+        update_time AS updateTime
+    </sql>
+
+    <select id="findForListFromMap" parameterType="java.util.Map"
+            resultType="com.fhs.basics.dox.SysOrganizationDO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_ucenter_ms_organization
+        WHERE 1 = 1
+        <include refid="sqlWhere"/>
+    </select>
+    <select id="findBean" parameterType="com.fhs.basics.dox.SysOrganizationDO"
+            resultType="com.fhs.basics.dox.SysOrganizationDO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_ucenter_ms_organization
+        WHERE 1 = 1
+        <if test="null != null and null != ''">
+            AND null = #{null}
+        </if>
+    </select>
+
+    <select id="findCountFromMap" parameterType="map" resultType="java.lang.Integer">
+        SELECT COUNT(1) AS count FROM t_ucenter_ms_organization WHERE 1 = 1
+        <include refid="sqlWhere"/>
+    </select>
+
+    <sql id="sqlWhere">
+        <if test="id!=null and id != ''">
+            AND id LIKE CONCAT('%', #{id}, '%')
+        </if>
+        <if test="parentId!=null and parentId!=''">
+            AND parent_id=#{parentId}
+        </if>
+    </sql>
+
+    <!-- 子集查询 -->
+    <select id="getSubNodeDatas" parameterType="map" resultType="com.fhs.basics.vo.ComboboxNodeVO">
+        SELECT id AS id, name AS text,parent_id AS parentId, id AS wxOrgId FROM
+        t_ucenter_ms_organization
+        where is_disable = 0
+        <if test="parentId !=null and parentId!='' and parentId != '-1'">
+            AND parent_id =#{parentId}
+        </if>
+        <if test="parentId == '-1' ">
+            AND id =#{userOrgId}
+        </if>
+        <if test="userOrgId !=null and userOrgId!='' and parentId!='-1' ">
+            AND id LIKE CONCAT(#{userOrgId}, '%')
+        </if>
+        ORDER BY parent_id
+    </select>
+
+    <!-- t_ucenter_ms_organization_根据条件类型查询组织机构树 -->
+    <select id="getTreesData" parameterType="map" resultType="com.fhs.basics.vo.TreeModelVO">
+        SELECT
+        TRIM(t.id) AS id,
+        TRIM(t.parent_id) AS pid,
+        TRIM(t.name) AS name,
+        'd' AS nodeType
+        FROM `t_ucenter_ms_organization` t
+        WHERE t.is_disable = 0
+        <if test="organizationId != null and organizationId != ''">
+            AND t.id LIKE CONCAT(#{organizationId}, '%')
+        </if>
+        ORDER BY pid
+    </select>
+
+    <select id="findCountByNameAndParentId" parameterType="com.fhs.basics.dox.SysOrganizationDO" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_ucenter_ms_organization
+        <where>
+            <if test="parentId != null and parentId != ''">
+                AND parent_id = #{parentId}
+            </if>
+            <if test="name != null and name != ''">
+                AND name = #{name}
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据条件查询机构数 -->
+    <select id="findChildCountById" parameterType="map" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_ucenter_ms_organization
+        WHERE id LIKE CONCAT(#{organizationId}, '%') AND id != #{organizationId}
+        <if test="isDisable != null and isDisable != ''">
+            AND is_disable = #{isDisable}
+        </if>
+    </select>
+
+    <select id="findRank" resultType="java.lang.Integer" parameterType="map">
+    SELECT MAX(ranking) FROM t_ucenter_ms_organization WHERE parent_id=#{parentId}
+    </select>
+
+</mapper>

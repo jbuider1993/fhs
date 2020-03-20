@@ -453,8 +453,25 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
         return tClass;
     }
 
+    /**
+     * vo转DO
+     * @param vo vo
+     * @return
+     */
+    @Override
+    public D v2d(V vo){
+        return (D)vo;
+    }
 
+    @Override
+    public Class<D> getDOClass() {
+        return this.doClass;
+    }
 
+    @Override
+    public Class<V> getVOClass() {
+        return this.voClass;
+    }
 
     /**
      * po转vo

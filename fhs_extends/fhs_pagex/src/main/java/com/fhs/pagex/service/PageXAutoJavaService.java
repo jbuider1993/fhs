@@ -54,7 +54,7 @@ public class PageXAutoJavaService {
         transAbbreviationMap.put("book","wordbook");
         transAbbreviationMap.put("user","sysUser");
         transAbbreviationMap.put("type","classifyInfo");
-        transAbbreviationMap.put("fuser","ucenter:frontUser");
+        transAbbreviationMap.put("fuser","basics:frontUser");
     }
 
 
@@ -79,7 +79,7 @@ public class PageXAutoJavaService {
         //po对象
         Map<String,Object> poMap = new HashMap<>();
         poMap.put("className", javaClassName);
-        StringBuilder transTypes = new StringBuilder("\"wordbook\",\"sysUser\",\"classifyInfo\",\"ucenter:frontUser\"");
+        StringBuilder transTypes = new StringBuilder("\"wordbook\",\"sysUser\",\"classifyInfo\",\"basics:frontUser\"");
         List<Map<String,Object>> javaFieldList = new ArrayList<>();
         Map<String,Object> tempField = null;
         Map<String,String> tempTransMap = null;

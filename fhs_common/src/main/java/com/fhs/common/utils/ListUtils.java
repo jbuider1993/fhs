@@ -18,6 +18,8 @@ import java.util.List;
 @Slf4j
 public class ListUtils
 {
+
+
     /**
      * 将字符串集合转换成整数集合
      * @param list

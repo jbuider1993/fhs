@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fhs.basics.dao.SysMenuDAO">
+
+	<sql id="selectMenuSql">
+		SELECT
+		m.menu_id AS id,
+		m.menu_name AS NAME,
+		m.father_menu_id AS parentid
+		FROM
+		t_ucenter_ms_menu m
+	</sql>
+	<!-- 获取菜单的更目录节点数据 -->
+	<select id="findMenuRootTrees" resultType="treeData">
+		<include refid="selectMenuSql"></include>
+	</select>
+
+		<!-- 根据menuType查询菜单 -->
+	<select id="findMenuTreesByMenuType" resultType="treeData" parameterType="map">
+		select  id,name,0 as parentid  from
+		t_ucenter_ms_system
+		<where>
+			<if test="systemIds != null and systemIds != ''">
+				AND id IN(${systemIds})
+			</if>
+		</where>
+		union all
+		SELECT
+		m.menu_id AS id,
+		m.menu_name AS NAME,
+		case when m.father_menu_id=0 then system_id else m.father_menu_id end  AS parentid
+		FROM
+		t_ucenter_ms_menu m
+		WHERE m.is_disable =0 and m.menu_id!=0
+		<if test="systemIds != null and systemIds != ''">
+			AND m.system_id IN(${systemIds})
+		</if>
+	</select>
+
+	<!-- 根据ParentId查询菜单 -->
+	<select id="findMenuTreesByParentId" parameterType="map"
+		resultType="treeData">
+
+		<include refid="selectMenuSql"></include>
+		WHERE m.is_disable =0
+		<if test="fatherMenuId==null">
+			m.father_menu_id is NULL
+		</if>
+		<if test="fatherMenuId!=null">
+			AND m.father_menu_id = #{fatherMenuId}
+		</if>
+		<if test="menuType!=null">
+			AND m.menu_type LIKE CONCAT('%',#{menuType},'%')
+		</if>
+		<if
+			test="groupCode != null and groupCode != '' and managerCode != null and managerCode != ''">
+
+			AND m.menu_id IN(
+			<include refid="findManagerAllAppIds"></include>
+			)
+		</if>
+		ORDER BY m.father_menu_id,m.order_index
+	</select>
+
+
+	<sql id="findManagerAllAppIds">
+		SELECT model_key AS modelKey
+		FROM `t_admin_app_menu_item`
+		WHERE app_id IN (
+		SELECT app_id AS appId FROM
+		`t_admin_app_group_rela`
+		WHERE
+		group_id = (SELECT group_id FROM
+		`t_admin_group` WHERE group_code
+		= #{groupCode}) AND state = 0 UNION
+		SELECT app_id AS appId
+		FROM
+		`t_app_apply` WHERE manager_code =
+		#{managerCode} AND apply_state = 3)
+		AND model_type = 0
+	</sql>
+	<!-- t_sys_orgnization_根据条件类型查询组织机构树 -->
+	<select id="findMenuTrees" parameterType="map" resultType="treeModel">
+		SELECT
+		TRIM(t.menu_id) AS id,
+		TRIM(t.father_menu_id) AS pid,
+		TRIM(t.menu_name) AS name,
+		<!-- TRIM(t.menu_type) AS menuType, -->
+		image,
+		'd' AS
+		nodeType
+		FROM `t_ucenter_ms_menu` t
+		WHERE 1=1
+		<if test="menuType!=null and menuType!='' ">
+			AND t.menu_type LIKE CONCAT('%',#{menuType},'%')
+		</if>
+		<if test="menuId!=null">
+			AND father_menu_id =#{menuId}
+		</if>
+	</select>
+
+
+	<!-- 更具菜单类型及父编号获取菜单集合 -->
+	<select id="findForListFromMap" parameterType="sysMenu"
+		resultType="sysMenu">
+		SELECT
+		menu_id AS menuId,
+		menu_name AS menuName,
+		father_menu_id AS
+		fatherMenuId,
+		menu_url AS menuUrl,
+		namespace,
+		menu_type AS menuType,
+		is_disable AS
+		isDisable,
+		( CASE is_disable WHEN '0' THEN '启用' WHEN '1'
+		THEN '禁用' END ) AS state,
+		image,
+		server_name_id AS serverNameId,
+		namespace,
+		check_help_url AS checkHelpUrl,
+		system_id AS systemId
+		FROM t_ucenter_ms_menu
+		WHERE 1=1
+		<if test="menuType!=null">
+			AND menu_type LIKE CONCAT('%',#{menuType},'%')
+		</if>
+
+		<if test="menuId!=null">
+			AND father_menu_id=#{menuId}
+		</if>
+
+		<if test="start !=null and start!=''">
+			LIMIT ${start},${end}
+		</if>
+
+	</select>
+	<!-- 此sql嵌套了一个子查询,为了过滤掉namespace为null的数据 -->
+	<select id="findForAllList" resultType="sysMenu"
+		parameterType="map">
+		SELECT * FROM (SELECT
+		m.menu_name AS menuName,
+		m.menu_id AS menuId,
+		CONCAT(m.namespace,':',b.method) AS namespace,
+		m.menu_url AS menuUrl ,
+		m.father_menu_id AS fatherMenuId
+		FROM
+		t_ucenter_ms_menu m
+		LEFT JOIN
+		t_ucenter_ms_menu_permission b ON b.menu_id = m.menu_id
+		WHERE
+		m.`namespace` IS NOT NULL
+		AND m.`namespace` !=''
+		AND m.`is_disable`
+		= 0
+		AND b.`is_disable` = 0
+		ORDER BY
+		m.father_menu_id,m.order_index
+		) m
+		WHERE
+		m.`namespace` IS NOT NULL
+	</select>
+
+
+	<select id="searchServer" resultType="map">
+		SELECT id,
+		server_name AS
+		serverName,
+		server_url AS serverUrl
+		FROM t_ucenter_ms_menu_server
+	</select>
+
+	<!-- 添加菜单信息 -->
+	<insert id="add" parameterType="sysMenu">
+		INSERT INTO `t_ucenter_ms_menu`
+		(
+		menu_name,
+		father_menu_id,
+		menu_url,
+		menu_type,
+		is_disable,
+		namespace,
+		server_name_id,
+		order_index,
+		image,
+		check_help_url,
+		menu_state,
+		configuration_home_menu,
+		system_id)
+		VALUES (
+		#{menuName},
+		#{fatherMenuId},
+		#{menuUrl},
+		#{menuType},
+		#{isDisable},
+		#{namespace},
+		#{serverNameId},
+		#{orderIndex},
+		#{image},
+		#{checkHelpUrl},
+		#{menuState},
+		#{configurationHomeMenu},
+		#{systemId})
+	</insert>
+
+	<!-- 删除菜单信息 -->
+	<delete id="delete" parameterType="sysMenu">
+		DELETE FROM t_ucenter_ms_menu WHERE
+		menu_id=#{menuId}
+	</delete>
+
+	<!-- 更加菜单ID删除权限 -->
+	<delete id="deleteButton" parameterType="sysMenu">
+		DELETE FROM
+		t_ucenter_ms_menu_permission
+		WHERE
+		menu_id=#{menuId}
+	</delete>
+
+	<!-- 修改菜单信息 -->
+	<update id="update" parameterType="sysMenu">
+		UPDATE `t_ucenter_ms_menu`
+		SET
+		`menu_name`=#{menuName},
+		`father_menu_id`=#{fatherMenuId},
+		`menu_url`=#{menuUrl},
+		`menu_type`=#{menuType},
+		`is_disable`=#{isDisable},
+		namespace = #{namespace},
+		server_name_id=#{serverNameId},
+		order_index=#{orderIndex},
+		image=#{image},
+		check_help_url=#{checkHelpUrl},
+		menu_state=#{menuState},
+		configuration_home_menu =
+		#{configurationHomeMenu},
+		system_id=#{systemId}
+		WHERE menu_id=#{menuId}
+	</update>
+
+
+	<update id="updateDisable" parameterType="sysMenu">
+		UPDATE `t_ucenter_ms_menu`
+		SET
+		`is_disable`=#{isDisable}
+		WHERE father_menu_id=#{menuId}
+	</update>
+
+
+	<!-- 获取菜单总条数 -->
+	<select id="findCount" resultType="int">
+		SELECT COUNT(1)
+		FROM
+		`t_ucenter_ms_menu`
+		Where 1=1
+		<if test="menuType!=null">
+			AND menu_type LIKE CONCAT('%',#{menuType},'%')
+		</if>
+
+		<if test="menuId!=null">
+			AND father_menu_id=#{menuId}
+		</if>
+	</select>
+
+	<!-- 获取菜单信息 -->
+	<select id="findBean" parameterType="sysMenu" resultType="sysMenu">
+		SELECT
+		menu_id AS menuId,
+		menu_name AS menuName,
+		father_menu_id AS
+		fatherMenuId,
+		menu_url AS menuUrl,
+		namespace,
+		menu_type AS menuType,
+		is_disable AS
+		isDisable,
+		image,
+		server_name_id AS serverNameId,
+		order_index AS orderIndex,
+		namespace,
+		check_help_url AS checkHelpUrl,
+		menu_state AS menuState,
+		configuration_home_menu AS
+		configurationHomeMenu,
+		system_id AS systemId
+		FROM `t_ucenter_ms_menu` WHERE
+		menu_id=#{menuId}
+	</select>
+
+	<!-- 检测菜单父节点是否存 -->
+	<select id="isExit" parameterType="map" resultType="int">
+		SELECT
+		COUNT(1)
+		FROM `t_ucenter_ms_menu` WHERE
+		father_menu_id=#{fatherMenuId}
+	</select>
+
+	<!-- 找所有有权限的菜单id -->
+	<select id="findAllIdsExcept" parameterType="map" resultType="sysMenu">
+		SELECT
+		m.menu_id AS menuId,
+		m.menu_name AS menuName,
+		m.father_menu_id AS
+		fatherMenuId,
+
+		CONCAT(s.`server_url`,m.menu_url)AS menuUrl,
+		m.namespace,
+		m.menu_type AS menuType,
+		m.is_disable AS
+		isDisable,
+		image,
+		m.server_name_id AS serverNameId,
+		system_id AS systemId,
+		order_index AS
+		orderIndex,
+
+		m.check_help_url AS checkHelpUrl
+		FROM
+		t_ucenter_ms_menu m ,
+		t_ucenter_ms_menu_server s
+		WHERE
+		m.menu_id!= 0
+		AND m.`server_name_id` = s.`id`
+		AND m.menu_type LIKE
+		CONCAT('%',#{menuType},'%')
+	</select>
+
+	<select id="getUrlById" parameterType="map" resultType="map">
+		select
+		menu_id as menuId,
+		menu_name as menuName,
+		menu_url as menuUrl
+		from
+		t_ucenter_ms_menu
+		where menu_id = #{menuId}
+	</select>
+
+	<select id="getConfigurationHomeMenu" parameterType="map"
+		resultType="map">
+		select
+		menu_id as menuId,
+		configuration_home_menu as
+		configurationHomeMenu
+		from
+		t_ucenter_ms_menu
+		where
+		menu_id = #{menuId}
+	</select>
+
+	<select id="findIdAndNameAndNamespaceList" resultType="sysMenu">
+		SELECT
+			menu_id AS menuId,
+			menu_name AS menuName,
+			namespace AS namespace
+		FROM
+			t_ucenter_ms_menu
+	</select>
+
+</mapper>
+

@@ -4,8 +4,8 @@ package com.fhs.base.api.ucenter.rpc;
 import com.fhs.base.api.config.FeignConfiguration;
 import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.result.HttpResult;
-import com.fhs.ucenter.form.SysUserForm;
-import com.fhs.ucenter.vo.SysUserVO;
+import com.fhs.basics.form.SysUserForm;
+import com.fhs.basics.vo.SysUserVO;
 import feign.Param;
 import feign.RequestLine;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -34,7 +34,7 @@ public interface FeignSysUserApiService {
      * @param userLoginName 用户登录名
      * @return HttpResult 包含用户信息
      */
-    @RequestLine("GET /api/com.fhs.base.api.ucenter.rpc.FeignSysUserApiService/getSysUserByLoginName")
+    @RequestLine("GET /api/com.fhs.base.api.basics.rpc.FeignSysUserApiService/getSysUserByLoginName")
     HttpResult<SysUserVO> getSysUserByName(@Param("userLoginName") String userLoginName);
 
     /**
@@ -42,7 +42,7 @@ public interface FeignSysUserApiService {
      * @param userLoginName 用户登录名
      * @return 用户权限列表
      */
-    @RequestLine("GET /api/com.fhs.base.api.ucenter.rpc.FeignSysUserApiService/selectMenuByUname")
+    @RequestLine("GET /api/com.fhs.base.api.basics.rpc.FeignSysUserApiService/selectMenuByUname")
     HttpResult<List<String>> selectMenuByUname(@Param("userLoginName") String userLoginName);
 
     /**
@@ -50,7 +50,7 @@ public interface FeignSysUserApiService {
      * @param sysUserForm 后端用户的form对象
      * @return 处理结果
      */
-    @RequestLine("POST /api/com.fhs.base.api.ucenter.rpc.FeignSysUserApiService/getSysUserList")
+    @RequestLine("POST /api/com.fhs.base.api.basics.rpc.FeignSysUserApiService/getSysUserList")
     HttpResult<Pager<SysUserVO>> getSysUserList(@RequestBody SysUserForm sysUserForm);
 
     /**
@@ -58,7 +58,7 @@ public interface FeignSysUserApiService {
      * @param userId 用户ID
      * @return 用户权限URL列表
      */
-    @RequestLine("GET /api/com.fhs.base.api.ucenter.rpc.FeignSysUserApiService/getPermissionUrlByUserId")
+    @RequestLine("GET /api/com.fhs.base.api.basics.rpc.FeignSysUserApiService/getPermissionUrlByUserId")
     HttpResult<List<String>> getPermissionUrlByUserId(@Param("userId") String userId);
 
     /**
@@ -66,7 +66,7 @@ public interface FeignSysUserApiService {
      * @param userId  用户id
      * @return 数据权限配置
      */
-    @RequestLine("GET /api/com.fhs.base.api.ucenter.rpc.FeignSysUserApiService/getDataUserPermisstion")
+    @RequestLine("GET /api/com.fhs.base.api.basics.rpc.FeignSysUserApiService/getDataUserPermisstion")
     HttpResult<Map<String,String>> getDataUserPermisstion(@Param("userId") String userId);
 
 
@@ -75,7 +75,7 @@ public interface FeignSysUserApiService {
      * @param sysUserForm 后端用户form
      * @return 后端用户信息
      */
-    @RequestLine("GET /api/com.fhs.base.api.ucenter.rpc.FeignSysUserApiService/getSysUserByUserId")
+    @RequestLine("GET /api/com.fhs.base.api.basics.rpc.FeignSysUserApiService/getSysUserByUserId")
     HttpResult<SysUserVO> getSysUserByUserId(SysUserForm sysUserForm);
 
     /**
@@ -83,6 +83,6 @@ public interface FeignSysUserApiService {
      * @param organizationId 组织id
      * @return 用户列表
      */
-    @RequestLine("GET /api/com.fhs.base.api.ucenter.rpc.FeignSysUserApiService/getSysUserByOrganizationId")
+    @RequestLine("GET /api/com.fhs.base.api.basics.rpc.FeignSysUserApiService/getSysUserByOrganizationId")
     HttpResult<List<SysUserVO>> getSysUserByOrganizationId(@Param("organizationId") String organizationId);
 }

@@ -14,7 +14,12 @@
     <dependencies>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_trans</artifactId>
+            <artifactId>fhs_trans_anno</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_trans_service</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
         <dependency>
@@ -29,7 +34,7 @@
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_base</artifactId>
+            <artifactId>fhs_base_pojo</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
         <dependency>
