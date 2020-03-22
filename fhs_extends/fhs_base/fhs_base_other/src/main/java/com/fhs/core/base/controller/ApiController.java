@@ -1,4 +1,4 @@
-package com.fhs.core.base.action;
+package com.fhs.core.base.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fhs.common.spring.SpringContextUtil;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
@@ -22,14 +21,13 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 
 /**
  * 所有的api请求都通过此接口走
  */
 @Controller
 @Slf4j
-public class ApiAction {
+public class ApiController {
 
     /**
      * 执行RPC方法

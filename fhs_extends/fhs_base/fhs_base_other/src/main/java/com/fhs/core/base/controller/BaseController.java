@@ -1,4 +1,4 @@
-package com.fhs.core.base.action;
+package com.fhs.core.base.controller;
 
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
@@ -17,14 +17,14 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * action 基类
+ * controller 基类
  *
  * @author wanglei
  * @version [版本号, 2015年1月29日]
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public abstract class BaseAction {
+public abstract class BaseController {
     private final Logger LOG = Logger.getLogger(BaseAction.class);
 
     /**
