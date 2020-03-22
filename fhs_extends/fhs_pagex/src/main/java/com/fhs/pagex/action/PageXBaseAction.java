@@ -3,7 +3,7 @@ package com.fhs.pagex.action;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fhs.common.utils.ConverterUtils;
-import com.fhs.core.base.action.BaseAction;
+import com.fhs.core.base.controller.BaseController;
 import com.fhs.core.db.ds.ReadWriteDataSourceDecision;
 import com.fhs.pagex.dto.PagexBaseDTO;
 import com.fhs.pagex.service.JoinService;
@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * pagex处理前段业务逻辑的公共代码
  */
-public class PageXBaseAction extends BaseAction {
+public class PageXBaseAction extends BaseController {
 
     @Autowired
     protected PageXDBService service;

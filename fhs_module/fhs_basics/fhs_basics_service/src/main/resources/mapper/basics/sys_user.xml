@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.fhs.basics.dao.SysUserDAO">
+<mapper namespace="com.fhs.basics.mapper.SysUserMapper">
     <!-- 登录 -->
     <select id="login" resultType="sysUser" parameterType="sysUser">
 		SELECT
@@ -24,15 +24,16 @@
 		update_time AS updateTime
 		FROM
 		t_ucenter_ms_user
-		WHERE 1 = 1
-		AND
-		user_login_name =
-		#{userLoginName}
-		AND password = #{password}
-        <if test="groupCode !=null and groupCode!=''">
-		AND group_code = #{groupCode}
-        </if>
-		AND is_disable=0
+		<where>
+            AND
+            user_login_name =
+            #{userLoginName}
+            AND password = #{password}
+            <if test="groupCode !=null and groupCode!=''">
+                AND group_code = #{groupCode}
+            </if>
+            AND is_disable=0
+        </where>
 	</select>
 
     <select id="findForListFromMap" parameterType="map" resultType="sysUser">
@@ -56,15 +57,15 @@
         update_user AS updateUser,
         update_time AS updateTime
         FROM t_ucenter_ms_user
-
-        WHERE 1=1
-        <if test="userName !=null and userName!=''">
-            AND user_name LIKE CONCAT('%', #{userName}, '%')
-        </if>
-        ORDER BY user_id DESC
-        <if test="start !=null and start!=''">
-            LIMIT ${start},${end}
-        </if>
+        <where>
+            <if test="userName !=null and userName!=''">
+                AND user_name LIKE CONCAT('%', #{userName}, '%')
+            </if>
+            ORDER BY user_id DESC
+            <if test="start !=null and start!=''">
+                LIMIT ${start},${end}
+            </if>
+        </where>
     </select>
 
     <!-- 添加用户角色信息 -->
@@ -350,17 +351,18 @@
         AS isDisable,
         organization_id AS organizationId
         FROM t_ucenter_ms_user
-        WHERE 1 = 1
-        <if test="userLoginName != null and userLoginName != ''">
-            AND user_login_name = #{userLoginName}
-        </if>
+        <where>
+            <if test="userLoginName != null and userLoginName != ''">
+                AND user_login_name = #{userLoginName}
+            </if>
 
-        <if test="password != null and password != ''">
-            AND password = #{password}
-        </if>
-        <if test="userId !=null">
-            AND user_id = #{userId}
-        </if>
+            <if test="password != null and password != ''">
+                AND password = #{password}
+            </if>
+            <if test="userId !=null">
+                AND user_id = #{userId}
+            </if>
+        </where>
     </select>
 
     <!-- 删除用户角色 -->
@@ -412,10 +414,10 @@
 		SELECT
 		COUNT(1)
 		FROM `t_ucenter_ms_user`
-		WHERE 1=1
-		AND password = #{password}
-		AND
-		user_id = #{userId}
+		<where>
+            AND password = #{password}
+            AND user_id = #{userId}
+        </where>
 	</select>
 
     <!-- 修改密码 -->
@@ -504,23 +506,23 @@
         b.menu_id = m.menu_id LEFT JOIN
         t_ucenter_ms_menu_server s ON s.id =
         m.server_name_id
-        WHERE 1 = 1
-        <if test="Ids.size() > 0">
-            AND b.permission_id IN
-            <foreach collection="Ids" index="index" item="item" open="("
-                     separator="," close=")">
-                #{item}
-            </foreach>
-        </if>
-        <if test="menuType !=null">
-            AND m.menu_type LIKE CONCAT('%',#{menuType},'%')
-        </if>
-        AND m.menu_id IN (
-        <include refid="getRoleMenuIdOfGroup"></include>
-        )
-        AND m.is_disable = 0
-        ORDER BY m.father_menu_id,m.order_index
-
+        <where>
+            <if test="Ids.size() > 0">
+                AND b.permission_id IN
+                <foreach collection="Ids" index="index" item="item" open="("
+                         separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="menuType !=null">
+                AND m.menu_type LIKE CONCAT('%',#{menuType},'%')
+            </if>
+            AND m.menu_id IN (
+            <include refid="getRoleMenuIdOfGroup"></include>
+            )
+            AND m.is_disable = 0
+            ORDER BY m.father_menu_id,m.order_index
+        </where>
     </select>
 
     <!-- 通过权限编号集合获取菜单 -->
@@ -574,17 +576,17 @@
         SELECT
         COUNT(1)
         FROM `t_ucenter_ms_user`
-        WHERE 1 = 1
-        <if test="userId !=null and userId != ''">
-            AND user_id != #{userId}
-        </if>
-        <if test="userName !=null and userName != ''">
-            AND user_name = #{userName}
-        </if>
-        <if test="userLoginName !=null and userLoginName != ''">
-            AND user_login_name = #{userLoginName}
-        </if>
-
+        <where>
+            <if test="userId !=null and userId != ''">
+                AND user_id != #{userId}
+            </if>
+            <if test="userName !=null and userName != ''">
+                AND user_name = #{userName}
+            </if>
+            <if test="userLoginName !=null and userLoginName != ''">
+                AND user_login_name = #{userLoginName}
+            </if>
+        </where>
     </select>
     <!-- 根据传来的fatherIds查出所有的father信息 -->
     <select id="getFatherMenu" parameterType="java.lang.String"

@@ -11,7 +11,7 @@ import org.aspectj.lang.annotation.*;
 public class OrdinaryActionParamCheckAop extends ParamCheckAop {
     /**
      * 定义切入点
-     * com.xhb.tour.action
+     * com.xhb.tour.controller
      */
     @Pointcut("execution(* com.*.*.action..*.*(..) )")
     public void checkParam(){

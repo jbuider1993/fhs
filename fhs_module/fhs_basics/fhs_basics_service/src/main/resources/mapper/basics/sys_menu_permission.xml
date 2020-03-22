@@ -12,13 +12,14 @@
 		permission_type as permissionType,
 		( CASE is_disable WHEN '0' THEN '启用' WHEN '1' THEN '禁用' end ) AS state
 		FROM t_ucenter_ms_menu_permission
-		WHERE 1=1
-		<if test="menuId !=null">
-		   AND	menu_id = #{menuId}
-		</if>
-		<if test="start !=null and start!=''">
-			LIMIT ${start},${end}
-		</if>
+		<where>
+			<if test="menuId !=null">
+				AND	menu_id = #{menuId}
+			</if>
+			<if test="start !=null and start!=''">
+				LIMIT ${start},${end}
+			</if>
+		</where>
 	</select>
 
 <!-- 	更加权限类型获取权限 -->
@@ -30,21 +31,22 @@
 		permission_type AS permissionType,
 		( CASE is_disable WHEN '0' THEN '启用' WHEN '1' THEN '禁用' end ) AS state
 		FROM t_ucenter_ms_menu_permission
-		WHERE 1=1
-		<if test="permissionType !=null and permissionType!=''">
-			AND permission_type = #{permissionType}
-		</if>
-		<if test="permissionType ==null and permissionType ==''">
-			AND permission_type is NULL
-		</if>
+		<where>
+			<if test="permissionType !=null and permissionType!=''">
+				AND permission_type = #{permissionType}
+			</if>
+			<if test="permissionType ==null and permissionType ==''">
+				AND permission_type is NULL
+			</if>
 
-		<if test="menuId !=null and menuId!=''">
-			AND menu_id = #{menuId}
-		</if>
+			<if test="menuId !=null and menuId!=''">
+				AND menu_id = #{menuId}
+			</if>
 
-		<if test="menuId ==null or menuId ==''">
-			AND menu_id is NULL
-		</if>
+			<if test="menuId ==null or menuId ==''">
+				AND menu_id is NULL
+			</if>
+		</where>
 	</select>
 
 <!-- 	添加权限信息 -->
@@ -87,13 +89,14 @@
 		resultType="int">
 		SELECT COUNT(*)
 		FROM `t_ucenter_ms_menu_permission`
-		WHERE
-		<if test="menuId !=null">
-			menu_id = #{menuId}
-		</if>
-		<if test="menuId ==null">
-			menu_id is NULL
-		</if>
+		<where>
+			<if test="menuId !=null">
+				menu_id = #{menuId}
+			</if>
+			<if test="menuId ==null">
+				menu_id is NULL
+			</if>
+		</where>
 	</select>
 
 <!-- 	根据编号获取权限对象 -->

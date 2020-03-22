@@ -237,6 +237,7 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
     }
 
 
+    @Override
     public int batchInsert(List<D> list) {
         return baseMapper.batchInsert(list);
     }
@@ -327,6 +328,7 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
     }
 
 
+    @Override
     public int deleteBean(D entity) {
         return baseMapper.deleteBean(entity);
     }

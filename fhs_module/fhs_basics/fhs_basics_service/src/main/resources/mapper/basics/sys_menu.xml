@@ -90,13 +90,14 @@
 		'd' AS
 		nodeType
 		FROM `t_ucenter_ms_menu` t
-		WHERE 1=1
-		<if test="menuType!=null and menuType!='' ">
-			AND t.menu_type LIKE CONCAT('%',#{menuType},'%')
-		</if>
-		<if test="menuId!=null">
-			AND father_menu_id =#{menuId}
-		</if>
+		<where>
+			<if test="menuType!=null and menuType!='' ">
+				AND t.menu_type LIKE CONCAT('%',#{menuType},'%')
+			</if>
+			<if test="menuId!=null">
+				AND father_menu_id =#{menuId}
+			</if>
+		</where>
 	</select>
 
 
@@ -121,19 +122,19 @@
 		check_help_url AS checkHelpUrl,
 		system_id AS systemId
 		FROM t_ucenter_ms_menu
-		WHERE 1=1
-		<if test="menuType!=null">
-			AND menu_type LIKE CONCAT('%',#{menuType},'%')
-		</if>
+		<where>
+			<if test="menuType!=null">
+				AND menu_type LIKE CONCAT('%',#{menuType},'%')
+			</if>
 
-		<if test="menuId!=null">
-			AND father_menu_id=#{menuId}
-		</if>
+			<if test="menuId!=null">
+				AND father_menu_id=#{menuId}
+			</if>
 
-		<if test="start !=null and start!=''">
-			LIMIT ${start},${end}
-		</if>
-
+			<if test="start !=null and start!=''">
+				LIMIT ${start},${end}
+			</if>
+		</where>
 	</select>
 	<!-- 此sql嵌套了一个子查询,为了过滤掉namespace为null的数据 -->
 	<select id="findForAllList" resultType="com.fhs.basics.dox.SysMenuDO"
@@ -252,14 +253,15 @@
 		SELECT COUNT(1)
 		FROM
 		`t_ucenter_ms_menu`
-		Where 1=1
-		<if test="menuType!=null">
-			AND menu_type LIKE CONCAT('%',#{menuType},'%')
-		</if>
+		<where>
+			<if test="menuType!=null">
+				AND menu_type LIKE CONCAT('%',#{menuType},'%')
+			</if>
 
-		<if test="menuId!=null">
-			AND father_menu_id=#{menuId}
-		</if>
+			<if test="menuId!=null">
+				AND father_menu_id=#{menuId}
+			</if>
+		</where>
 	</select>
 
 	<!-- 获取菜单信息 -->

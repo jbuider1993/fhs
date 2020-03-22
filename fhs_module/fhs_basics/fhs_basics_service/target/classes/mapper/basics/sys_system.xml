@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.fhs.basics.dao.SysSystemDAO">
+<mapper namespace="com.fhs.basics.mapper.SysSystemMapper">
 
-  <select id="getSystemList" parameterType="sysUser" resultType="sysSystem">
+  <select id="getSystemList" parameterType="com.fhs.basics.dox.SysUserDO" resultType="com.fhs.basics.dox.SysSystemDO">
         SELECT
           id AS id,
           name AS name,

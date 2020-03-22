@@ -25,8 +25,7 @@
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>mybatis-jpa-jack</artifactId>
-            <version>1.0.7</version>
-            <scope>compile</scope>
+            <version>${fhs.mybatis-jpa-jack.version}</version>
         </dependency>
     </dependencies>
     <modules>

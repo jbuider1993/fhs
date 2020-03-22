@@ -25,7 +25,7 @@ import java.util.Set;
  * @since [产品/模块版本]
  */
 public abstract class BaseController {
-    private final Logger LOG = Logger.getLogger(BaseAction.class);
+    private final Logger LOG = Logger.getLogger(BaseController.class);
 
     /**
      * 成功

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.fhs.basics.dao.SysMenuDAO">
+<mapper namespace="com.fhs.basics.mapper.SysMenuMapper">
 
 	<sql id="selectMenuSql">
 		SELECT
@@ -11,12 +11,12 @@
 		t_ucenter_ms_menu m
 	</sql>
 	<!-- 获取菜单的更目录节点数据 -->
-	<select id="findMenuRootTrees" resultType="treeData">
+	<select id="findMenuRootTrees" resultType="com.fhs.basics.vo.TreeDataVO">
 		<include refid="selectMenuSql"></include>
 	</select>
 
 		<!-- 根据menuType查询菜单 -->
-	<select id="findMenuTreesByMenuType" resultType="treeData" parameterType="map">
+	<select id="findMenuTreesByMenuType" resultType="com.fhs.basics.vo.TreeDataVO" parameterType="map">
 		select  id,name,0 as parentid  from
 		t_ucenter_ms_system
 		<where>
@@ -39,7 +39,7 @@
 
 	<!-- 根据ParentId查询菜单 -->
 	<select id="findMenuTreesByParentId" parameterType="map"
-		resultType="treeData">
+		resultType="com.fhs.basics.vo.TreeDataVO">
 
 		<include refid="selectMenuSql"></include>
 		WHERE m.is_disable =0
@@ -80,7 +80,7 @@
 		AND model_type = 0
 	</sql>
 	<!-- t_sys_orgnization_根据条件类型查询组织机构树 -->
-	<select id="findMenuTrees" parameterType="map" resultType="treeModel">
+	<select id="findMenuTrees" parameterType="map" resultType="com.fhs.basics.vo.TreeModelVO">
 		SELECT
 		TRIM(t.menu_id) AS id,
 		TRIM(t.father_menu_id) AS pid,
@@ -90,19 +90,20 @@
 		'd' AS
 		nodeType
 		FROM `t_ucenter_ms_menu` t
-		WHERE 1=1
-		<if test="menuType!=null and menuType!='' ">
-			AND t.menu_type LIKE CONCAT('%',#{menuType},'%')
-		</if>
-		<if test="menuId!=null">
-			AND father_menu_id =#{menuId}
-		</if>
+		<where>
+			<if test="menuType!=null and menuType!='' ">
+				AND t.menu_type LIKE CONCAT('%',#{menuType},'%')
+			</if>
+			<if test="menuId!=null">
+				AND father_menu_id =#{menuId}
+			</if>
+		</where>
 	</select>
 
 
 	<!-- 更具菜单类型及父编号获取菜单集合 -->
-	<select id="findForListFromMap" parameterType="sysMenu"
-		resultType="sysMenu">
+	<select id="findForListFromMap" parameterType="com.fhs.basics.dox.SysMenuDO"
+		resultType="com.fhs.basics.dox.SysMenuDO">
 		SELECT
 		menu_id AS menuId,
 		menu_name AS menuName,
@@ -121,22 +122,22 @@
 		check_help_url AS checkHelpUrl,
 		system_id AS systemId
 		FROM t_ucenter_ms_menu
-		WHERE 1=1
-		<if test="menuType!=null">
-			AND menu_type LIKE CONCAT('%',#{menuType},'%')
-		</if>
+		<where>
+			<if test="menuType!=null">
+				AND menu_type LIKE CONCAT('%',#{menuType},'%')
+			</if>
 
-		<if test="menuId!=null">
-			AND father_menu_id=#{menuId}
-		</if>
+			<if test="menuId!=null">
+				AND father_menu_id=#{menuId}
+			</if>
 
-		<if test="start !=null and start!=''">
-			LIMIT ${start},${end}
-		</if>
-
+			<if test="start !=null and start!=''">
+				LIMIT ${start},${end}
+			</if>
+		</where>
 	</select>
 	<!-- 此sql嵌套了一个子查询,为了过滤掉namespace为null的数据 -->
-	<select id="findForAllList" resultType="sysMenu"
+	<select id="findForAllList" resultType="com.fhs.basics.dox.SysMenuDO"
 		parameterType="map">
 		SELECT * FROM (SELECT
 		m.menu_name AS menuName,
@@ -171,7 +172,7 @@
 	</select>
 
 	<!-- 添加菜单信息 -->
-	<insert id="add" parameterType="sysMenu">
+	<insert id="add" parameterType="com.fhs.basics.dox.SysMenuDO">
 		INSERT INTO `t_ucenter_ms_menu`
 		(
 		menu_name,
@@ -204,13 +205,13 @@
 	</insert>
 
 	<!-- 删除菜单信息 -->
-	<delete id="delete" parameterType="sysMenu">
+	<delete id="delete" parameterType="com.fhs.basics.dox.SysMenuDO">
 		DELETE FROM t_ucenter_ms_menu WHERE
 		menu_id=#{menuId}
 	</delete>
 
 	<!-- 更加菜单ID删除权限 -->
-	<delete id="deleteButton" parameterType="sysMenu">
+	<delete id="deleteButton" parameterType="com.fhs.basics.dox.SysMenuDO">
 		DELETE FROM
 		t_ucenter_ms_menu_permission
 		WHERE
@@ -218,7 +219,7 @@
 	</delete>
 
 	<!-- 修改菜单信息 -->
-	<update id="update" parameterType="sysMenu">
+	<update id="update" parameterType="com.fhs.basics.dox.SysMenuDO">
 		UPDATE `t_ucenter_ms_menu`
 		SET
 		`menu_name`=#{menuName},
@@ -239,7 +240,7 @@
 	</update>
 
 
-	<update id="updateDisable" parameterType="sysMenu">
+	<update id="updateDisable" parameterType="com.fhs.basics.dox.SysMenuDO">
 		UPDATE `t_ucenter_ms_menu`
 		SET
 		`is_disable`=#{isDisable}
@@ -252,18 +253,19 @@
 		SELECT COUNT(1)
 		FROM
 		`t_ucenter_ms_menu`
-		Where 1=1
-		<if test="menuType!=null">
-			AND menu_type LIKE CONCAT('%',#{menuType},'%')
-		</if>
+		<where>
+			<if test="menuType!=null">
+				AND menu_type LIKE CONCAT('%',#{menuType},'%')
+			</if>
 
-		<if test="menuId!=null">
-			AND father_menu_id=#{menuId}
-		</if>
+			<if test="menuId!=null">
+				AND father_menu_id=#{menuId}
+			</if>
+		</where>
 	</select>
 
 	<!-- 获取菜单信息 -->
-	<select id="findBean" parameterType="sysMenu" resultType="sysMenu">
+	<select id="findBean" parameterType="com.fhs.basics.dox.SysMenuDO" resultType="com.fhs.basics.dox.SysMenuDO">
 		SELECT
 		menu_id AS menuId,
 		menu_name AS menuName,
@@ -296,7 +298,7 @@
 	</select>
 
 	<!-- 找所有有权限的菜单id -->
-	<select id="findAllIdsExcept" parameterType="map" resultType="sysMenu">
+	<select id="findAllIdsExcept" parameterType="map" resultType="com.fhs.basics.dox.SysMenuDO">
 		SELECT
 		m.menu_id AS menuId,
 		m.menu_name AS menuName,
@@ -347,7 +349,7 @@
 		menu_id = #{menuId}
 	</select>
 
-	<select id="findIdAndNameAndNamespaceList" resultType="sysMenu">
+	<select id="findIdAndNameAndNamespaceList" resultType="com.fhs.basics.dox.SysMenuDO">
 		SELECT
 			menu_id AS menuId,
 			menu_name AS menuName,

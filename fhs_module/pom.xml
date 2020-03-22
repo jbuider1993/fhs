@@ -12,6 +12,7 @@
     <version>2.0.0</version>
     <modules>
         <module>fhs_basics</module>
+        <module>fhs_module_base</module>
     </modules>
     <artifactId>fhs_module</artifactId>
 

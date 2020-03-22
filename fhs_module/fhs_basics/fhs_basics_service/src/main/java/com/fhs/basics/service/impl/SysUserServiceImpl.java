@@ -71,6 +71,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> im
     private UcenterMsTenantService tenantService;
 
 
+    @Override
     public SysUserVO login(SysUserDO adminUser) {
         return d2v(sysUserMapper.login(adminUser));
     }
