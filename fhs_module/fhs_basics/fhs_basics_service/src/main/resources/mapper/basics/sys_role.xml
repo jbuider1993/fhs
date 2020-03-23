@@ -184,7 +184,7 @@
 
     <!-- 通过权限类型获取权限编号 -->
     <select id="searchButtonId" parameterType="map"
-            resultType="string">
+            resultType="java.lang.String">
 		SELECT b.permission_id
 		FROM t_ucenter_ms_menu_permission b
 		WHERE

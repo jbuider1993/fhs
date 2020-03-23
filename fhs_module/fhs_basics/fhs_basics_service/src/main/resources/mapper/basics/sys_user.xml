@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.fhs.basics.mapper.SysUserMapper">
     <!-- 登录 -->
-    <select id="login" resultType="sysUser" parameterType="sysUser">
+    <select id="login" resultType="com.fhs.basics.dox.SysUserDO" parameterType="com.fhs.basics.dox.SysUserDO">
 		SELECT
 		user_name AS userName,
 		is_disable AS isDisable,
@@ -36,7 +36,7 @@
         </where>
 	</select>
 
-    <select id="findForListFromMap" parameterType="map" resultType="sysUser">
+    <select id="findForListFromMap" parameterType="map" resultType="com.fhs.basics.dox.SysUserDO">
         SELECT
         user_name AS userName,
         user_id AS userId,
@@ -69,7 +69,7 @@
     </select>
 
     <!-- 添加用户角色信息 -->
-    <insert id="addUserRole" parameterType="sysUser">
+    <insert id="addUserRole" parameterType="com.fhs.basics.dox.SysUserDO">
         INSERT INTO t_ucenter_ms_role_user_rela
         (role_id,user_id )
         VALUES
@@ -82,14 +82,14 @@
 
 
     <!-- 删除用户信息 -->
-    <delete id="delete" parameterType="sysUser">
+    <delete id="delete" parameterType="com.fhs.basics.dox.SysUserDO">
 		DELETE FROM `t_ucenter_ms_user`
 		WHERE
 		user_id=#{userId}
 	</delete>
 
     <!-- 查询用户总条数 -->
-    <select id="findCount" resultType="int" parameterType="sysUser">
+    <select id="findCount" resultType="int">
         SELECT COUNT(1)
         FROM `t_ucenter_ms_user`
         <where>
@@ -100,8 +100,8 @@
     </select>
 
     <!-- 通过用户编号查询菜单 -->
-    <select id="selectMenuByUid" resultType="sysMenu"
-            parameterType="sysUser">
+    <select id="selectMenuByUid" resultType="com.fhs.basics.dox.SysMenuDO"
+            parameterType="com.fhs.basics.dox.SysUserDO">
         SELECT m.menu_name AS menuName,
         m.menu_id AS menuId,
         m.menu_state AS menuState,
@@ -129,7 +129,7 @@
         ORDER BY m.father_menu_id,m.order_index
     </select>
 
-    <select id="selectMenuAll" resultType="sysMenu" parameterType="map">
+    <select id="selectMenuAll" resultType="com.fhs.basics.dox.SysMenuDO" parameterType="map">
         SELECT
         menu_id AS menuId,
         menu_name AS menuName,
@@ -164,12 +164,12 @@
     </select>
 
     <!-- 查询admin 拥有的所有的权限列表 -->
-    <select id="selectMenuIdByAdmin" resultType="int" parameterType="sysUser">
+    <select id="selectMenuIdByAdmin" resultType="int" parameterType="com.fhs.basics.dox.SysUserDO">
 		SELECT menu_id FROM t_ucenter_ms_menu_permission
 	</select>
 
     <!-- 查询一个用户拥有的所有的权限列表 -->
-    <select id="selectMenuIdByUserId" resultType="int" parameterType="sysUser">
+    <select id="selectMenuIdByUserId" resultType="int" parameterType="com.fhs.basics.dox.SysUserDO">
 		SELECT m.menu_id AS menuId
 		FROM `t_ucenter_ms_menu` m
 		LEFT JOIN `t_ucenter_ms_menu_permission` b ON
@@ -188,7 +188,7 @@
 		m.father_menu_id,m.order_index
 	</select>
 
-    <select id="selectNotPlanfromMenuAll" resultType="sysMenu"
+    <select id="selectNotPlanfromMenuAll" resultType="com.fhs.basics.dox.SysMenuDO"
             parameterType="map">
         SELECT m.menu_name AS menuName,
         m.menu_id AS
@@ -236,7 +236,7 @@
 	</sql>
 
     <!-- 通过用户登录名查询菜单集合 -->
-    <select id="selectMenuByUname" resultType="sysMenu"
+    <select id="selectMenuByUname" resultType="com.fhs.basics.dox.SysMenuDO"
             parameterType="map">
 		SELECT
 		*
@@ -277,8 +277,8 @@
 		WHERE me.`namespace` IS NOT NULL
 	</select>
 
-    <select id="selectUserByULname" resultType="sysUser"
-            parameterType="sysUser">
+    <select id="selectUserByULname" resultType="com.fhs.basics.dox.SysUserDO"
+            parameterType="com.fhs.basics.dox.SysUserDO">
 		SELECT user_name AS userName,
 		user_id AS userId,
 		user_login_name AS userLoginName,
@@ -293,7 +293,7 @@
 		AND is_disable = 0
 	</select>
     <!-- 通过权限编号集合嘻哈下权限 -->
-    <select id="readMenuByButtonIds" parameterType="map" resultType="sysMenu">
+    <select id="readMenuByButtonIds" parameterType="map" resultType="com.fhs.basics.dox.SysMenuDO">
         SELECT m.menu_name AS menuName,
         m.menu_id as menuId,
         CONCAT(m.namespace,':',b.method) AS namespace,
@@ -321,7 +321,7 @@
 
 
     <!-- 通过父节点编号查询菜单 -->
-    <select id="selectParentMenuByid" resultType="sysMenu"
+    <select id="selectParentMenuByid" resultType="com.fhs.basics.dox.SysMenuDO"
             parameterType="map">
         SELECT m.menu_name as menuName,
         m.menu_id as menuId,
@@ -339,7 +339,7 @@
     </select>
 
     <!-- 获取菜单信息 -->
-    <select id="findBean" parameterType="sysUser" resultType="sysUser">
+    <select id="findBean" parameterType="com.fhs.basics.dox.SysUserDO" resultType="com.fhs.basics.dox.SysUserDO">
         SELECT
         user_name AS userName,
         user_id AS userId,
@@ -366,7 +366,7 @@
     </select>
 
     <!-- 删除用户角色 -->
-    <delete id="deleteUserRole" parameterType="sysUser">
+    <delete id="deleteUserRole" parameterType="com.fhs.basics.dox.SysUserDO">
 		DELETE FROM
 		`t_ucenter_ms_role_user_rela`
 		WHERE
@@ -374,7 +374,7 @@
 	</delete>
 
     <!-- 查询用户级角色 -->
-    <select id="searchUserRole" resultType="map" parameterType="sysUser">
+    <select id="searchUserRole" resultType="map" parameterType="com.fhs.basics.dox.SysUserDO">
 		SELECT r.role_id AS roleId, r.role_name AS roleName
 		FROM t_ucenter_ms_role r
 		LEFT JOIN t_ucenter_ms_role_user_rela ru ON r.role_id = ru.role_id
@@ -383,7 +383,7 @@
 	</select>
 
     <!-- 通过菜单编号查询菜单集合 -->
-    <select id="readMenuByIds" parameterType="map" resultType="sysMenu">
+    <select id="readMenuByIds" parameterType="map" resultType="com.fhs.basics.dox.SysMenuDO">
         SELECT m.menu_name AS menuName,
         m.menu_id AS menuId,
         CONCAT(s.server_url,m.menu_url) AS menuUrl,
@@ -410,7 +410,7 @@
     </select>
 
     <!-- 校验密码是否正确 -->
-    <select id="validataPass" resultType="int" parameterType="sysUser">
+    <select id="validataPass" resultType="int" parameterType="com.fhs.basics.dox.SysUserDO">
 		SELECT
 		COUNT(1)
 		FROM `t_ucenter_ms_user`
@@ -421,7 +421,7 @@
 	</select>
 
     <!-- 修改密码 -->
-    <update id="updatePass" parameterType="sysUser">
+    <update id="updatePass" parameterType="com.fhs.basics.dox.SysUserDO">
 		UPDATE `t_ucenter_ms_user`
 		SET
 		`password`=#{password}
@@ -429,8 +429,8 @@
 	</update>
 
     <!-- 查询用户权限 -->
-    <select id="searchUserButton" resultType="sysMenuPermission"
-            parameterType="sysUser">
+    <select id="searchUserButton" resultType="com.fhs.basics.dox.SysMenuPermissionDO"
+            parameterType="com.fhs.basics.dox.SysUserDO">
 		SELECT
 		b.permission_name AS buttonName,
 		b.permission_id AS
@@ -453,7 +453,7 @@
 	</select>
 
     <!-- 通过用户编号集合查询权限集合 -->
-    <select id="searchUserButtonIds" resultType="sysMenuPermission"
+    <select id="searchUserButtonIds" resultType="com.fhs.basics.dox.SysMenuPermissionDO"
             parameterType="map">
         SELECT permission_id AS buttonId,
         permission_name AS buttonName,
@@ -468,7 +468,7 @@
         </foreach>
     </select>
 
-    <select id="searchUserButtonAll" resultType="sysMenu"
+    <select id="searchUserButtonAll" resultType="com.fhs.basics.dox.SysMenuDO"
             parameterType="map">
         SELECT m.menu_name AS menuName,
         m.menu_id AS menuId,
@@ -489,7 +489,7 @@
 
 
     <!-- 通过权限查询菜单 -->
-    <select id="selectMenuByButtonIds" resultType="sysMenu"
+    <select id="selectMenuByButtonIds" resultType="com.fhs.basics.dox.SysMenuDO"
             parameterType="map">
         SELECT m.menu_name AS menuName,
         m.menu_id AS menuId,
@@ -526,7 +526,7 @@
     </select>
 
     <!-- 通过权限编号集合获取菜单 -->
-    <select id="selectMenuByButtons" resultType="sysMenu"
+    <select id="selectMenuByButtons" resultType="com.fhs.basics.dox.SysMenuDO"
             parameterType="map">
         SELECT m.menu_name AS menuName,
         m.menu_id as menuId,
@@ -572,7 +572,7 @@
     </select>
 
     <select id="getAdminUserCountByLoginName" resultType="int"
-            parameterType="sysUser">
+            parameterType="com.fhs.basics.dox.SysUserDO">
         SELECT
         COUNT(1)
         FROM `t_ucenter_ms_user`
@@ -590,7 +590,7 @@
     </select>
     <!-- 根据传来的fatherIds查出所有的father信息 -->
     <select id="getFatherMenu" parameterType="java.lang.String"
-            resultType="sysUser">
+            resultType="com.fhs.basics.dox.SysUserDO">
 		SELECT  m.menu_name AS menuName,
 		m.menu_id AS
 		menuId,
@@ -686,7 +686,7 @@
     </select>
 
     <!-- 根据用户ID查询用户权限URL -->
-    <select id="getPermissionUrlByUserId" parameterType="string" resultType="string">
+    <select id="getPermissionUrlByUserId" parameterType="string" resultType="java.lang.string">
        SELECT
 			mpu.url
 		FROM
@@ -701,12 +701,12 @@
 	</select>
 
     <!-- 根据所有用户权限URL -->
-    <select id="getPermissionUrlAll" resultType="string">
+    <select id="getPermissionUrlAll" resultType="java.lang.string">
 		    select  mpu.url from t_ucenter_ms_menu_permission_url_rela mpu
 	</select>
 
     <!-- 获取用户tree的list数据(处理后可为tree数据) -->
-    <select id="getUserOrgTreeList" resultType="com.fhs.basics.dto.SysUserOrgDTO" parameterType="map">
+    <select id="getUserOrgTreeList" resultType="com.fhs.basics.vo.SysUserOrgVO" parameterType="java.lang.String">
         SELECT * FROM(SELECT id,name as text,parent_id AS parentId,0 AS isUser,create_time FROM t_ucenter_ms_organization
         WHERE group_code=#{groupCode} ORDER BY create_time) temp
         UNION
