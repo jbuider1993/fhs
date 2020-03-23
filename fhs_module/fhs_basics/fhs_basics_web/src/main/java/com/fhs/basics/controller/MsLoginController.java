@@ -148,8 +148,8 @@ public class MsLoginController {
         if (user == null) {
             throw new ParamException("token失效");
         }
-        resultMap.put("user","user");
-        resultMap.put("menu",sysUserService.getMenu(user,"2"));
+        resultMap.put("user", "user");
+        resultMap.put("menu", sysUserService.getMenu(user, "2"));
         return HttpResult.success(resultMap);
     }
 

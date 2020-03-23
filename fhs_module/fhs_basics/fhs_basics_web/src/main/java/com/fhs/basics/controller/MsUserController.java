@@ -1,8 +1,8 @@
 package com.fhs.basics.controller;
 
-import com.fhs.base.action.ModelSuperAction;
 import com.fhs.basics.dox.SysUserDO;
 import com.fhs.basics.service.SysUserService;
+import com.fhs.basics.vo.LeftMenuVO;
 import com.fhs.basics.vo.SysUserOrgVO;
 import com.fhs.basics.vo.SysUserVO;
 import com.fhs.common.constant.Constant;
@@ -11,6 +11,7 @@ import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
+import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.logger.anno.LogDesc;
 import com.fhs.module.base.controller.ModelSuperController;
@@ -43,7 +44,6 @@ public class MsUserController extends ModelSuperController<SysUserVO, SysUserDO>
 
     /**
      * 获取用户jsontree 用于easyui下拉tree数据源
-     *
      */
     @RequestMapping("getUserTree")
     public List<SysUserOrgVO> getUserTree() {
@@ -70,7 +70,7 @@ public class MsUserController extends ModelSuperController<SysUserVO, SysUserDO>
             sysUser.setUpdateTime(new Date());
             sysUser.setUpdateUser(loginSysUser.getUserId());
             if (StringUtil.isEmpty(sysUser.getUserId())) { //新增
-                sysUser.setCreateTime(new Date();
+                sysUser.setCreateTime(new Date());
                 sysUser.setCreateUser(loginSysUser.getUserId());
                 sysUser.setGroupCode(loginSysUser.getGroupCode());
                 sysUser.setIsAdmin(Constant.INT_FALSE);
@@ -85,7 +85,7 @@ public class MsUserController extends ModelSuperController<SysUserVO, SysUserDO>
             }
             return HttpResult.success(retult);
         } else {
-            throw  new ParamException("用户名重复");
+            throw new ParamException("用户名重复");
         }
     }
 
@@ -113,7 +113,7 @@ public class MsUserController extends ModelSuperController<SysUserVO, SysUserDO>
     @RequestMapping("delUser")
     @LogDesc(type = LogDesc.DEL, value = "删除后台用户")
     public HttpResult<Boolean> delUser(HttpServletRequest request, HttpServletResponse response,
-                              @Validated({Delete.class}) SysUserVO sysUser) {
+                                       @Validated({Delete.class}) SysUserVO sysUser) {
         sysUserService.delete(sysUser);
         return HttpResult.success(true);
     }
@@ -182,10 +182,8 @@ public class MsUserController extends ModelSuperController<SysUserVO, SysUserDO>
      */
     @RequiresPermissions("sysUser:see")
     @RequestMapping("searchUserRole")
-    public void searchUserRole(HttpServletRequest request, HttpServletResponse response, SysUser sysUser) {
-        List<Map<String, Object>> userRoles = sysUserService.searchUserRole(sysUser);
-        String result = JsonUtils.list2json(userRoles);
-        super.outWrite(result, response);
+    public List<Map<String, Object>> searchUserRole(HttpServletRequest request, HttpServletResponse response, SysUserVO sysUser) {
+        return sysUserService.searchUserRole(sysUser);
     }
 
     /**
@@ -195,15 +193,10 @@ public class MsUserController extends ModelSuperController<SysUserVO, SysUserDO>
      * @param response
      */
     @RequestMapping("seachMenuByUser")
-    public void seachMenuByUser(@RequestParam("menuType") String menuType, HttpServletRequest request, HttpServletResponse response) {
-        SysUserVO user = super.getSessionuser(request);
-        if (user == null) {
-            LOG.error("用户没有登录:" + request.getSession());
-            return;
-        }
-        SysUser sysUser = new SysUser();
-        BeanUtils.copyProperties(user, sysUser);
-        super.outWrite(JsonUtils.list2json(sysUserService.getMenu(sysUser, menuType)), response);
+    public List<LeftMenuVO> seachMenuByUser(@RequestParam("menuType") String menuType, HttpServletRequest request, HttpServletResponse response) {
+        SysUserVO user = super.getSessionuser();
+        ParamChecker.isNotNull(user, "用户没有登录");
+        return sysUserService.getMenu(user, menuType);
     }
 
     /**
@@ -212,11 +205,11 @@ public class MsUserController extends ModelSuperController<SysUserVO, SysUserDO>
      * @param sysUser 前端用户信息
      */
     @RequestMapping("updatePass")
-    public void updatePass(HttpServletRequest request, HttpServletResponse response, SysUser sysUser) {
-        SysUserVo user = super.getSessionuser(request);
+    public void updatePass(HttpServletRequest request, HttpServletResponse response, SysUserVO sysUser) {
+        SysUserVO user = super.getSessionuser();
         sysUser.setUserId(user.getUserId());
         boolean isSuccess = sysUserService.updatePass(sysUser);
-        super.outToClient(isSuccess, response);
+        super.outToClient(isSuccess);
     }
 
     /**
@@ -225,15 +218,15 @@ public class MsUserController extends ModelSuperController<SysUserVO, SysUserDO>
      * @param formSysUser 前端参数
      */
     @RequestMapping("updateOwnUserInfo")
-    public void updateOwnUserInfo(HttpServletRequest request, HttpServletResponse response, SysUser formSysUser) {
-        SysUserVo user = super.getSessionuser(request);
+    public void updateOwnUserInfo(HttpServletRequest request, HttpServletResponse response, SysUserVO formSysUser) {
+        SysUserVO user = super.getSessionuser();
         formSysUser.setUserName(formSysUser.getUserName());
         //把密码设置为空不修改密码
         formSysUser.setPassword(null);
         formSysUser.setEmail(formSysUser.getEmail());
         formSysUser.setMobile(formSysUser.getMobile());
         formSysUser.setUserId(user.getUserId());
-        super.outToClient(sysUserService.updateSelectiveById(formSysUser) > 0, response);
+        super.outToClient(sysUserService.updateSelectiveById(formSysUser) > 0);
 
     }
 
@@ -246,15 +239,15 @@ public class MsUserController extends ModelSuperController<SysUserVO, SysUserDO>
     @RequestMapping("validataPass")
     public void validataPass(HttpServletRequest request, HttpServletResponse response) {
         String param = request.getParameter("param");
-        SysUserVo user = super.getSessionuser(request);
-        SysUser sysUser = new SysUser();
+        SysUserVO user = super.getSessionuser();
+        SysUserVO sysUser = new SysUserVO();
         sysUser.setUserId(user.getUserId());
         sysUser.setOldPassword(param);
         boolean isSuccess = sysUserService.validataPass(sysUser);
         if (isSuccess) {
-            super.outWrite("y", response);
+            super.outWrite("y");
         } else {
-            super.outWrite("原密码错误", response);
+            super.outWrite("原密码错误");
         }
 
     }
@@ -267,23 +260,23 @@ public class MsUserController extends ModelSuperController<SysUserVO, SysUserDO>
      * @param sysUser
      */
     @RequestMapping("validataLoginName")
-    public void validataLoginName(HttpServletRequest request, HttpServletResponse response, SysUser sysUser) {
+    public void validataLoginName(HttpServletRequest request, HttpServletResponse response, SysUserVO sysUser) {
         String param = request.getParameter("param");
         String isEdit = request.getParameter("isEdit");
         if ("true".equals(isEdit)) {
-            super.outWrite("y", response);
+            super.outWrite("y");
             return;
         }
 
         if (StringUtil.validtIsChinese(param)) {
-            super.outWrite("用户登录名不能包含中文", response);
+            super.outWrite("用户登录名不能包含中文");
         }
         sysUser.setUserLoginName(param);
         boolean isSuccess = sysUserService.validataLoginName(sysUser);
         if (isSuccess) {
-            super.outWrite("y", response);
+            super.outWrite("y");
         } else {
-            super.outWrite("登录名已存在", response);
+            super.outWrite("登录名已存在");
         }
 
     }
@@ -308,13 +301,13 @@ public class MsUserController extends ModelSuperController<SysUserVO, SysUserDO>
     @RequiresPermissions("sysUser:see")
     @RequestMapping("/findPage/{organizationId}")
     @ResponseBody
-    public Pager<SysUser> findPage(@PathVariable(value = "organizationId") String organizationId, HttpServletRequest request, SysUser sysUser) {
+    public Pager<SysUserVO> findPage(@PathVariable(value = "organizationId") String organizationId, HttpServletRequest request, SysUserVO sysUser) {
         if (isPermitted(request, "see")) {
             if (!CheckUtils.isNullOrEmpty(organizationId)) sysUser.setOrganizationId(organizationId);
-            PageSizeInfo pgeSizeInfo = getPageSizeInfo(request);
-            List<SysUser> dataList = sysUserService.findForList(sysUser, pgeSizeInfo.getPageStart(), pgeSizeInfo.getPageSize());
+            PageSizeInfo pgeSizeInfo = getPageSizeInfo();
+            List<SysUserVO> dataList = sysUserService.findForList(sysUser, pgeSizeInfo.getPageStart(), pgeSizeInfo.getPageSize());
             int count = sysUserService.findCountJpa(sysUser);
-            return new Pager<>(count, dataList);
+            return new Pager<SysUserVO>(count, dataList);
         } else {
             throw new NotPremissionException();
         }
@@ -323,18 +316,16 @@ public class MsUserController extends ModelSuperController<SysUserVO, SysUserDO>
     /**
      * 根据ID集合查询对象数据
      *
-     * @param id      id
-     * @param request request
-     * @return
+     * @param id id
      * @throws Exception
      */
     @RequiresPermissions("sysUser:see")
     @RequestMapping("info/{id}")
     @ResponseBody
-    public SysUser info(@PathVariable(value = "id", required = true) String id, HttpServletRequest request) throws Exception {
+    public SysUserVO info(@PathVariable(value = "id", required = true) String id) throws Exception {
         //根据用户id用户信息
-        SysUser bean = sysUserService.findSysUserById(id);
-        return bean;
+        SysUserVO user = sysUserService.findSysUserById(id);
+        return user;
     }
 
     /**
@@ -345,8 +336,8 @@ public class MsUserController extends ModelSuperController<SysUserVO, SysUserDO>
      */
     @RequestMapping("getOwnUserInfo")
     @ResponseBody
-    public SysUser getOwnUserInfo(HttpServletRequest request) {
-        return sysUserService.findSysUserById(super.getSessionuser(request).getUserId());
+    public SysUserVO getOwnUserInfo(HttpServletRequest request) {
+        return sysUserService.findSysUserById(super.getSessionuser().getUserId());
     }
 
 }

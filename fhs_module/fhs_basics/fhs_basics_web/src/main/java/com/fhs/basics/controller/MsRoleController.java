@@ -61,9 +61,8 @@ public class MsRoleController extends ModelSuperController<SysRoleVO, SysRoleDO>
         }
         List<SysRoleVO> dataList = sysRoleService.findForListFromMap(map);
         int count = sysRoleService.findCountFromMap(map);
-        return new Pager<SysRoleVO>(count,dataList);
+        return new Pager<SysRoleVO>(count, dataList);
     }
-
 
 
     /**
@@ -87,10 +86,11 @@ public class MsRoleController extends ModelSuperController<SysRoleVO, SysRoleDO>
 
     /**
      * 查询角色的按钮信息
+     *
      * @param sysRole
      */
     @RequestMapping("searchButtons")
-    public List<Map<String, Object>> searchButtons( SysRoleVO sysRole) {
+    public List<Map<String, Object>> searchButtons(SysRoleVO sysRole) {
         return sysRoleService.searchButtons(sysRole);
     }
 
@@ -119,10 +119,11 @@ public class MsRoleController extends ModelSuperController<SysRoleVO, SysRoleDO>
 
     /**
      * 根据机构id获取角色下拉框数据
+     *
      * @return
      */
     @RequestMapping("/getSelectOrganSysRoles/{organizationId}")
-    public  List<SysRoleVO> getSelectOrganSysRoles(@PathVariable("organizationId") String organizationId) {
+    public List<SysRoleVO> getSelectOrganSysRoles(@PathVariable("organizationId") String organizationId) {
         if (StringUtil.isEmpty(organizationId)) {
             throw new ParamException("organizationId 为必传");
         } else {

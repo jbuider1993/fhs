@@ -1,11 +1,14 @@
 package com.fhs.basics.service.impl;
 
-import com.fhs.core.db.DataSource;
-import com.fhs.system.bean.ServiceWordbookGroup;
-import com.fhs.system.bean.Wordbook;
-import com.fhs.system.service.ServiceWordbookGroupService;
-import com.fhs.system.service.WordBookService;
-import com.fhs.system.service.WordbookAndGroupService;
+import com.fhs.basics.dox.WordbookDO;
+import com.fhs.basics.dox.WordbookGroupDO;
+import com.fhs.basics.service.WordBookService;
+import com.fhs.basics.service.WordbookAndGroupService;
+import com.fhs.basics.service.WordbookGroupService;
+import com.fhs.basics.vo.WordbookGroupVO;
+import com.fhs.basics.vo.WordbookVO;
+import com.fhs.core.db.ds.DataSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,14 +28,14 @@ import java.util.Map;
 public class WordbookAndGroupServiceImpl  implements WordbookAndGroupService
 {
 
-    @Resource(name = "wordBookServiceImpl")
+    @Autowired
     private WordBookService wordBookService;
 
-    @Resource(name = "serviceWordbookGroupServiceImpl")
-    private ServiceWordbookGroupService serviceWordbookGroupService;
+    @Autowired
+    private WordbookGroupService serviceWordbookGroupService;
 
     @Override
-    public boolean addWordbook(Wordbook wordbook)
+    public boolean addWordbook(WordbookDO wordbook)
     {
         wordBookService.insertJpa(wordbook);
         this.refreshRedisCache(wordbook);
@@ -40,7 +43,7 @@ public class WordbookAndGroupServiceImpl  implements WordbookAndGroupService
     }
 
     @Override
-    public boolean updateWordbook(Wordbook wordbook)
+    public boolean updateWordbook(WordbookDO wordbook)
     {
         wordBookService.updateById(wordbook);
         this.refreshRedisCache(wordbook);
@@ -48,7 +51,7 @@ public class WordbookAndGroupServiceImpl  implements WordbookAndGroupService
     }
 
     @Override
-    public boolean delWordbook(Wordbook wordbook)
+    public boolean delWordbook(WordbookDO wordbook)
     {
         wordBookService.deleteById(wordbook.getWordbookId());
         this.refreshRedisCache(wordbook);
@@ -56,64 +59,64 @@ public class WordbookAndGroupServiceImpl  implements WordbookAndGroupService
     }
 
     @Override
-    public int findWordbookCount(Wordbook wordbook)
+    public int findWordbookCount(WordbookDO wordbook)
     {
         return wordBookService.findCount(wordbook);
     }
 
     @Override
-    public List<Wordbook> findWordbookForListFromMap(Map<String, Object> map)
+    public List<WordbookVO> findWordbookForListFromMap(Map<String, Object> map)
     {
         return wordBookService.findForListFromMap(map);
     }
 
     @Override
-    public boolean addWordbookGroup(ServiceWordbookGroup wordbookGroup)
+    public boolean addWordbookGroup(WordbookGroupDO wordbookGroup)
     {
         serviceWordbookGroupService.add(wordbookGroup);
         return true;
     }
 
     @Override
-    public boolean updateWordbookGroup(ServiceWordbookGroup wordbookGroup)
+    public boolean updateWordbookGroup(WordbookGroupDO wordbookGroup)
     {
         serviceWordbookGroupService.update(wordbookGroup);
         return true;
     }
 
     @Override
-    public boolean delWordbookGroup(ServiceWordbookGroup wordbookGroup)
+    public boolean delWordbookGroup(WordbookGroupDO wordbookGroup)
     {
         serviceWordbookGroupService.delete(wordbookGroup);
         return true;
     }
 
     @Override
-    public int findWordbookGroupCount(ServiceWordbookGroup wordbookGroup)
+    public int findWordbookGroupCount(WordbookGroupDO wordbookGroup)
     {
         return serviceWordbookGroupService.findCount(wordbookGroup);
     }
 
     @Override
-    public List<ServiceWordbookGroup> findWordbookGroupForListFromMap(Map<String, Object> map)
+    public List<WordbookGroupVO> findWordbookGroupForListFromMap(Map<String, Object> map)
     {
         return serviceWordbookGroupService.findForListFromMap(map);
     }
 
     @Override
-    public Wordbook getWordbookBean(Wordbook wordbook)
+    public WordbookVO getWordbookBean(WordbookDO wordbook)
     {
         return wordBookService.selectById(wordbook.getWordbookId());
     }
 
     @Override
-    public ServiceWordbookGroup getWordbookGroupBean(ServiceWordbookGroup wordbookGroup)
+    public WordbookGroupVO getWordbookGroupBean(WordbookGroupDO wordbookGroup)
     {
         return serviceWordbookGroupService.findBean(wordbookGroup);
     }
 
     @Override
-    public boolean refreshRedisCache(Wordbook wordbook)
+    public boolean refreshRedisCache(WordbookDO wordbook)
     {
         wordBookService.initWordBookDataCache(wordbook);
         return true;

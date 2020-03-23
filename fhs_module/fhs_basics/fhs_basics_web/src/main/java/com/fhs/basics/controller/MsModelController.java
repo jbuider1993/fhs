@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("ms/sysModel")
-public class MsModelController extends ModelSuperController<SysModelVO, SysModelDO>
-{
-    
+public class MsModelController extends ModelSuperController<SysModelVO, SysModelDO> {
+
 }

@@ -1,4 +1,5 @@
 package com.fhs.basics.controller;
+
 ;
 import com.fhs.basics.dox.SysMenuDO;
 import com.fhs.basics.service.SysMenuService;
@@ -26,12 +27,10 @@ import java.util.Map;
  * 系统菜单Action
  *
  * @author jianbo.qin
- *
  */
 @RestController
 @RequestMapping("ms/sysMenu")
-public class MsMenuController extends ModelSuperController<SysMenuVO, SysMenuDO>
-{
+public class MsMenuController extends ModelSuperController<SysMenuVO, SysMenuDO> {
 
     private static final Logger LOG = Logger.getLogger(MsMenuController.class);
 
@@ -46,8 +45,7 @@ public class MsMenuController extends ModelSuperController<SysMenuVO, SysMenuDO>
      */
     @RequiresPermissions("sysMenu:see")
     @RequestMapping("getMenuTreesData")
-    public List<TreeModelVO> getOrgStrutureTreesData(HttpServletRequest request, HttpServletResponse response)
-    {
+    public List<TreeModelVO> getOrgStrutureTreesData(HttpServletRequest request, HttpServletResponse response) {
         List<TreeModelVO> menuTrees = sysMenuService.findMenuTrees(request.getParameter("id"));
         return menuTrees;
     }
@@ -61,23 +59,17 @@ public class MsMenuController extends ModelSuperController<SysMenuVO, SysMenuDO>
      */
     @RequiresPermissions("sysMenu:add")
     @RequestMapping("addMenu")
-    public HttpResult addMenu(HttpServletRequest request, HttpServletResponse response, SysMenuVO adminMenu)
-    {
-        try
-        {
+    public HttpResult addMenu(HttpServletRequest request, HttpServletResponse response, SysMenuVO adminMenu) {
+        try {
             String url = adminMenu.getMenuUrl();
-            if (!CheckUtils.isNullOrEmpty(url))
-            {
-                if (url.indexOf("\\") != -1)
-                {
+            if (!CheckUtils.isNullOrEmpty(url)) {
+                if (url.indexOf("\\") != -1) {
                     url = url.replaceAll("\\\\", "/");
                     adminMenu.setMenuUrl(url);
                 }
             }
             sysMenuService.add(adminMenu);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return HttpResult.error(e);
         }
         return HttpResult.success(true);
@@ -93,13 +85,10 @@ public class MsMenuController extends ModelSuperController<SysMenuVO, SysMenuDO>
      */
     @RequiresPermissions("sysMenu:update")
     @RequestMapping("updateMenu")
-    public HttpResult<Boolean> updateMenu(HttpServletRequest request, HttpServletResponse reponse, SysMenuVO adminMenu)
-    {
+    public HttpResult<Boolean> updateMenu(HttpServletRequest request, HttpServletResponse reponse, SysMenuVO adminMenu) {
         String url = adminMenu.getMenuUrl();
-        if (!CheckUtils.isNullOrEmpty(url))
-        {
-            if (url.indexOf("\\") != -1)
-            {
+        if (!CheckUtils.isNullOrEmpty(url)) {
+            if (url.indexOf("\\") != -1) {
                 url = url.replaceAll("\\\\", "/");
                 adminMenu.setMenuUrl(url);
             }
@@ -110,7 +99,6 @@ public class MsMenuController extends ModelSuperController<SysMenuVO, SysMenuDO>
     }
 
 
-
     /**
      * 查询根节点数据，添加角色easyui-treegrid使用
      *
@@ -118,10 +106,9 @@ public class MsMenuController extends ModelSuperController<SysMenuVO, SysMenuDO>
      */
     @RequiresPermissions("sysMenu:see")
     @RequestMapping("findMenuRootTrees")
-    public void findMenuRootTrees(HttpServletRequest request, HttpServletResponse reponse, SysMenuVO adminMenu)
-    {
+    public void findMenuRootTrees(HttpServletRequest request, HttpServletResponse reponse, SysMenuVO adminMenu) {
         Integer menuType = 0;// 平台菜单
-        List<TreeDataVO> treeList = sysMenuService.findMenuTreeToJson(menuType,super.getSessionuser().getGroupCode());
+        List<TreeDataVO> treeList = sysMenuService.findMenuTreeToJson(menuType, super.getSessionuser().getGroupCode());
         String jsonTree = JsonUtils.list2json(treeList);
         super.outWrite(jsonTree);
     }
@@ -133,8 +120,7 @@ public class MsMenuController extends ModelSuperController<SysMenuVO, SysMenuDO>
      */
     @RequiresPermissions("sysMenu:see")
     @RequestMapping("findMenuParkTrees")
-    public void findMenuParkTrees(HttpServletRequest request, HttpServletResponse reponse, SysMenuVO adminMenu)
-    {
+    public void findMenuParkTrees(HttpServletRequest request, HttpServletResponse reponse, SysMenuVO adminMenu) {
         String menuType = request.getParameter("menuType"); // 0-运营菜单 1-园区菜单
         List<TreeDataVO> treeList = sysMenuService.findMenuTreeToJson(menuType);
         String jsonTree = JsonUtils.list2json(treeList);
