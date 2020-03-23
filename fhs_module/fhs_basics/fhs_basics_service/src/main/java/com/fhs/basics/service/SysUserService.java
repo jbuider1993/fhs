@@ -24,7 +24,7 @@ public interface SysUserService extends BaseService<SysUserVO, SysUserDO>
      */
     Integer SYS_USER_IS_ADMIN = 1;
 
-    public SysUserDO login(SysUserDO adminUser);
+    public SysUserVO login(SysUserDO adminUser);
 
     /**
      * 发送邮件

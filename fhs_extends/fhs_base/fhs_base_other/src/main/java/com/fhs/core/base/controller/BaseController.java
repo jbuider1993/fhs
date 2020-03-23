@@ -3,6 +3,8 @@ package com.fhs.core.base.controller;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.logger.Logger;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
@@ -59,14 +61,13 @@ public abstract class BaseController {
     }
 
 
-
     /**
      * 获取分页参数
      *
-     * @param request
      * @return 分页参数
      */
-    protected PageSizeInfo getPageSizeInfo(HttpServletRequest request) {
+    protected PageSizeInfo getPageSizeInfo() {
+        HttpServletRequest request = getRequest();
         return this.getPageSizeInfo(ConverterUtils.toInt(request.getParameter(Constant.PAGE)),
                 ConverterUtils.toInt(request.getParameter(Constant.ROWS)));
     }
@@ -92,7 +93,8 @@ public abstract class BaseController {
      *
      * @return 参数map
      */
-    public EMap<String, Object> getParameterMap(HttpServletRequest request) {
+    public EMap<String, Object> getParameterMap() {
+        HttpServletRequest request = getRequest();
         EMap<String, Object> resultMap = new EMap<String, Object>();
         Map<String, String[]> tempMap = request.getParameterMap();
         Set<String> keys = tempMap.keySet();
@@ -107,8 +109,9 @@ public abstract class BaseController {
      *
      * @return 计算好分页起始行的参数map
      */
-    protected EMap<String, Object> getPageTurnNum(HttpServletRequest request) {
-        EMap<String, Object> paramMap = this.getParameterMap(request);
+    protected EMap<String, Object> getPageTurnNum() {
+        HttpServletRequest request = getRequest();
+        EMap<String, Object> paramMap = this.getParameterMap();
         PageSizeInfo pageSizeInfo = getPageSizeInfo(paramMap.getInteger(Constant.PAGE, 0), paramMap.getInteger(Constant.ROWS, 0));
         paramMap.put(Constant.START, pageSizeInfo.getPageStart());
         paramMap.put(Constant.END, pageSizeInfo.getPageSize());
@@ -118,10 +121,10 @@ public abstract class BaseController {
     /**
      * <向前台写json>
      *
-     * @param str      需要向前台写的字符串
-     * @param response @param
+     * @param str 需要向前台写的字符串
      */
-    protected void outWriteJson(String str, HttpServletResponse response) {
+    protected void outWriteJson(String str) {
+        HttpServletResponse response = getResponse();
         response.setContentType("text/plain");
         response.setHeader("Cache-Control", "no-cache");
         response.setCharacterEncoding("UTF-8");
@@ -142,29 +145,29 @@ public abstract class BaseController {
     /**
      * <向浏览器输出成功，失败 json>
      *
-     * @param flag     是否成功 是 true 否false
-     * @param response response
+     * @param flag 是否成功 是 true 否false
      */
-    protected void outToClient(boolean flag, HttpServletResponse response) {
+    protected void outToClient(boolean flag) {
+        HttpServletResponse response = getResponse();
         if (flag) {
-            outWrite(CHECK_PASSES, response);
+            outWrite(CHECK_PASSES);
         } else {
-            outWrite(CHECK_FAILS, response);
+            outWrite(CHECK_FAILS);
         }
     }
 
     /**
      * <向浏览器输出成功，失败 jsonp>
      *
-     * @param flag     是否成功 是 true 否false
-     * @param response response
-     * @param request  request
+     * @param flag 是否成功 是 true 否false
      */
-    protected void outToClientJsonP(boolean flag, HttpServletResponse response, HttpServletRequest request) {
+    protected void outToClientJsonP(boolean flag) {
+        HttpServletResponse response = getResponse();
+        HttpServletRequest request = getRequest();
         if (flag) {
-            this.outJsonp(CHECK_PASSES, response, request);
+            this.outJsonp(CHECK_PASSES);
         } else {
-            this.outJsonp(CHECK_FAILS, response, request);
+            this.outJsonp(CHECK_FAILS);
         }
     }
 
@@ -174,12 +177,13 @@ public abstract class BaseController {
      * @param dataList 当前页需要显示的数据
      * @param count    符合过滤条件的数据总数
      */
-    protected void writeJsonForPager(List<?> dataList, long count, HttpServletResponse response) {
+    protected void writeJsonForPager(List<?> dataList, long count) {
+        HttpServletResponse response = getResponse();
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put(Constant.TOTAL, count);
         resultMap.put(Constant.ROWS, dataList);
         String json = JsonUtils.object2json(resultMap);
-        this.outWrite(json, response);
+        this.outWrite(json);
     }
 
     /**
@@ -194,32 +198,31 @@ public abstract class BaseController {
         resultMap.put(Constant.FOOTER, footerList);
         String json = JsonUtils.object2json(resultMap);
         // System.out.println(json);
-        this.outWrite(json, response);
+        this.outWrite(json);
     }
 
     /**
      * <将分页数据写到前台-- jsonp>
      *
-     * @param request  request
      * @param dataList 当前页需要显示的数据
      * @param count    符合过滤条件的数据总数
      */
-    protected void writeJsonPForPager(HttpServletRequest request, HttpServletResponse response, List<?> dataList,
+    protected void writeJsonPForPager(List<?> dataList,
                                       long count) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         resultMap.put(Constant.TOTAL, count);
         resultMap.put(Constant.ROWS, dataList);
         String json = JsonUtils.object2json(resultMap);
-        this.outJsonp(json, response, request);
+        this.outJsonp(json);
     }
 
     /**
      * <向前台写字符串>
      *
-     * @param str      需要向前台写的字符串
-     * @param response response
+     * @param str 需要向前台写的字符串
      */
-    protected void outWrite(String str, HttpServletResponse response) {
+    protected void outWrite(String str) {
+        HttpServletResponse response = getResponse();
         response.setContentType("text/html;charset=UTF-8");// 解决中文乱码
         PrintWriter pw = null;
         try {
@@ -237,14 +240,32 @@ public abstract class BaseController {
     }
 
     /**
-     * 向客户端输入jsonp
+     * 获取request
      *
-     * @param request  request
-     * @param response response
-     * @param json     json
      * @return
      */
-    protected void outJsonp(String json, HttpServletResponse response, HttpServletRequest request) {
+    public HttpServletRequest getRequest() {
+        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+    }
+
+    /**
+     * 获取response
+     *
+     * @return
+     */
+    public HttpServletResponse getResponse() {
+        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+    }
+
+    /**
+     * 向客户端输入jsonp
+     *
+     * @param json json
+     * @return
+     */
+    protected void outJsonp(String json) {
+        HttpServletResponse response = getResponse();
+        HttpServletRequest request = getRequest();
         response.setContentType("text/plain");
         response.setHeader("Pragma", "No-cache");
         response.setHeader("Cache-Control", "no-cache");
