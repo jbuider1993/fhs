@@ -20,7 +20,7 @@ public class Pager<T>
     /**
      *一共多少条数据
      */
-    private int total;
+    private long total;
 
     /**
      *当页显示数据
@@ -28,14 +28,14 @@ public class Pager<T>
     private Collection<T> rows;
 
 
-    public Pager(int total, Collection<T> rows)
+    public Pager(long total, Collection<T> rows)
     {
         super();
         this.total = total;
         this.rows = rows;
     }
 
-    public int getTotal()
+    public long getTotal()
     {
         return total;
     }

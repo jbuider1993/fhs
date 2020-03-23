@@ -37,7 +37,7 @@ public interface SysRoleService extends BaseService<SysRoleVO, SysRoleDO>
      * @param role
      * @return
      */
-    public boolean addRole(SysRoleDO role);
+    boolean addRole(SysRoleDO role);
 
     /**
      * 添加角色的按钮信息
@@ -45,7 +45,7 @@ public interface SysRoleService extends BaseService<SysRoleVO, SysRoleDO>
      * @param adminRole
      * @return
      */
-    public boolean addButtons(SysRoleDO adminRole);
+    boolean addButtons(SysRoleDO adminRole);
 
     /**
      * 删除角色的按钮信息
@@ -53,7 +53,7 @@ public interface SysRoleService extends BaseService<SysRoleVO, SysRoleDO>
      * @param adminRole
      * @return
      */
-    public boolean deleteButtons(SysRoleDO adminRole);
+    boolean deleteButtons(SysRoleDO adminRole);
 
     /**
      * 删除角色信息
@@ -61,7 +61,7 @@ public interface SysRoleService extends BaseService<SysRoleVO, SysRoleDO>
      * @param adminRole
      * @return
      */
-    public boolean deleteRole(SysRoleDO adminRole);
+    boolean deleteRole(SysRoleDO adminRole);
 
     /**
      * 修改角色信息
@@ -69,7 +69,7 @@ public interface SysRoleService extends BaseService<SysRoleVO, SysRoleDO>
      * @param adminRole
      * @return
      */
-    public boolean updateRole(SysRoleDO adminRole);
+    boolean updateRole(SysRoleDO adminRole);
 
     /**
      * 查询角色的按钮信息列表
@@ -77,7 +77,7 @@ public interface SysRoleService extends BaseService<SysRoleVO, SysRoleDO>
      * @param adminRole
      * @return
      */
-    public List<Map<String, Object>> searchButtons(SysRoleDO adminRole);
+    List<Map<String, Object>> searchButtons(SysRoleDO adminRole);
 
     /**
      * 根据角色查询按钮id
@@ -85,7 +85,7 @@ public interface SysRoleService extends BaseService<SysRoleVO, SysRoleDO>
      * @param map
      * @return
      */
-    public List<String> searchButtonId(Map<String, Object> map);
+    List<String> searchButtonId(Map<String, Object> map);
 
     /**
      * 根据角色获取角色对象
@@ -93,14 +93,14 @@ public interface SysRoleService extends BaseService<SysRoleVO, SysRoleDO>
      * @param map
      * @return
      */
-    public List<SysRoleVO> findRoleByGroupCode(Map<String, Object> map);
+    List<SysRoleVO> findRoleByGroupCode(Map<String, Object> map);
 
     /**
      *  获取一个用户的所有角色
      * @param userId 用户id
      * @return 角色集合
      */
-    public List<SysRoleVO> findRolesByUserId(String userId);
+    List<SysRoleVO> findRolesByUserId(String userId);
 
     /**
      * 根据roleid查询用户关联表用户数

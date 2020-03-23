@@ -176,7 +176,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> im
         List<SysMenuVO> menuList = null;
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("menuType", "0");//运营菜单
-        SysUserDO temp = sysUserMapper.findBean(adminUser);
+        SysUserDO temp = super.findBean(adminUser);
         if (temp.getIsAdmin() == ADMIN) {
             menuList = ListUtils.copyListToList(sysUserMapper.selectMenuAll(map),SysMenuVO.class);
         } else {

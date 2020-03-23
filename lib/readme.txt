@@ -1,2 +1,0 @@
-pagex 在运行期生成java文件和class需要依赖的jar包
-在path.properties中配置路径
