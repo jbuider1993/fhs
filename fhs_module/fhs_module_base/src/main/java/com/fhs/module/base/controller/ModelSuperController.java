@@ -44,8 +44,8 @@ import java.util.Set;
  * @Author: jianbo.qin
  * @History:<br> 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
-public abstract class ModelSuperController<V extends VO, D extends BaseDO> extends BaseController implements InitializingBean {
-    protected Logger log;
+public abstract class ModelSuperController<V extends VO, D extends BaseDO> extends BaseController {
+    protected Logger log = Logger.getLogger(getClass());
 
     @Autowired
     private BaseService<V, D> baseService;
@@ -457,8 +457,4 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
         return result;
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        log = Logger.getLogger(ModelSuperController.class);
-    }
 }
