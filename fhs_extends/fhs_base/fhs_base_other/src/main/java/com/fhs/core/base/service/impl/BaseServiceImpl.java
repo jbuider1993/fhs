@@ -95,7 +95,7 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     @Override
     public int add(D bean) {
-        return baseMapper.add(bean);
+        return baseMapper.insertJpa(bean);
     }
 
     @Override
@@ -105,7 +105,7 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     @Override
     public boolean update(D bean) {
-        return baseMapper.update(bean) > 0;
+        return this.updateJpa(bean);
     }
 
     @Override
@@ -120,7 +120,7 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     @Override
     public boolean delete(D bean) {
-        return baseMapper.delete(bean) > 0;
+        return baseMapper.deleteBean(bean) > 0;
     }
 
     @Override
@@ -130,7 +130,7 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     @Override
     public int findCount(D bean) {
-        return baseMapper.findCount(bean);
+        return (int)baseMapper.selectCountJpa(bean);
     }
 
     @Override
@@ -177,7 +177,7 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     @Override
     public V findBean(D bean) {
-        return d2v(baseMapper.findBean(bean));
+        return d2v(baseMapper.selectBean(bean));
     }
 
     @Override
