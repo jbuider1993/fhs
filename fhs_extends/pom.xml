@@ -25,6 +25,7 @@
         <module>fhs_trans</module>
         <module>fhs_base</module>
         <module>fhs_pagex</module>
+        <module>fhs_static</module>
     </modules>
 
     <dependencies>

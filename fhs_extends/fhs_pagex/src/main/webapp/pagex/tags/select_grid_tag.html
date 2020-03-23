@@ -1,0 +1,25 @@
+var _grid_name = '${tagSett.name}';
+var _grid_url = '${tagSett.url}';
+var panelWidth = '${tagSett.panelWidth}';
+var idField = '${tagSett.idField}';
+var textField = '${tagSett.textField}';
+var columns = ${tagSett.columns};
+$('#'+_grid_name).combogrid({
+    panelWidth : panelWidth,
+    value : '',
+    method : 'get',
+    idField : idField,
+    textField : textField,
+    url : _grid_url,
+    columns : columns,
+    pagination : false,
+    fitColumns : true,
+    mode : 'remote',
+    keyHandler : {
+        enter : function(q) {
+            var _temp_keyword =  $('#'+_grid_name).combogrid('getText');
+            var _temp_reloadUrl = _grid_url+'&q=' + encodeURI(_temp_keyword);
+            $('#'+_grid_name).combogrid('grid').datagrid('reload',_temp_reloadUrl);
+        }
+    }
+});

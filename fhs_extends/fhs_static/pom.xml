@@ -12,7 +12,7 @@
     <artifactId>fhs_static</artifactId>
     <build>
         <resources>
-            <!-- 打包时将jsp文件拷贝到META-INF目录下 -->
+            <!-- 打包时将静态文件拷贝到META-INF目录下 -->
             <resource>
                 <!-- 指定resources插件处理哪个目录下的资源文件 -->
                 <directory>src/main/webapp</directory>

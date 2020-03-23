@@ -1,0 +1,16 @@
+<script type="text/javascript">
+var isEdit = false;
+var isView =  false;
+if (eval('${parameter.isEdit!"false"}')) {
+	isEdit = true;
+}
+if (eval('${parameter.isView!"false"}')) {
+	isView = true;
+}
+//加载成功的时候执行的方法
+var loadSuccessFuns=[];
+//保存的时候执行的方法
+var onSaveFuns=[];
+//查看的时候
+var renderViewFuns=[];
+</script>

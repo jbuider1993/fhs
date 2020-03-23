@@ -32,7 +32,7 @@
         <module>fhs_extends</module>
         <module>fhs_module</module>
         <module>fhs_spring_cloud</module>
-        <module>fhs_parent</module>
+        <module>fhs_app</module>
         <!--<module>fhs_chart</module>
         <module>fhs_cloud</module>
         <module>fhs_core</module>
