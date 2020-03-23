@@ -1,4 +1,4 @@
-package com.fhs.pagex.action;
+package com.fhs.pagex.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * pagex处理前段业务逻辑的公共代码
  */
-public class PageXBaseAction extends BaseController {
+public class PageXBaseController extends BaseController {
 
     @Autowired
     protected PageXDBService service;

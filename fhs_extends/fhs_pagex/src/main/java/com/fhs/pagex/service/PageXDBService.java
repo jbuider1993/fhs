@@ -4,12 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fhs.common.utils.*;
-import com.fhs.core.base.bean.SuperBean;
+import com.fhs.core.base.pojo.SuperBean;
+import com.fhs.core.base.pojo.vo.VO;
+import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.exception.BusinessException;
-import com.fhs.core.trans.TransService;
-import com.fhs.pagex.bean.DefaultPageXBean;
+import com.fhs.core.trans.service.impl.TransService;
+import com.fhs.logger.Logger;
+import com.fhs.pagex.dox.DefaultPageXDO;
 import com.fhs.pagex.dto.PagexAddDTO;
-import com.fhs.redis.service.RedisCacheService;
 import com.mybatis.jpa.cache.JpaTools;
 import com.mybatis.jpa.common.ColumnNameUtil;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -164,7 +166,7 @@ public class PageXDBService {
                 throw new BusinessException("findListPager反射错误参数错误");
             }
         });
-        transService.transMore(superBeans);
+        transService.transMore((List<? extends VO>) superBeans);
         return JsonUtils.list2json(superBeans);
     }
 
@@ -222,7 +224,7 @@ public class PageXDBService {
      * @return
      */
     private String getSqlNamespace() {
-        String sqlNameSpace = JpaTools.statementAdapterMap.get(DefaultPageXBean.class.getName()).getNameSpace();
+        String sqlNameSpace = JpaTools.statementAdapterMap.get(DefaultPageXDO.class.getName()).getNameSpace();
         return sqlNameSpace + ".";
     }
 

@@ -128,6 +128,7 @@ public abstract  class BaseEasyuiCombo extends EmptyFormTag {
 
 
 
+    @Override
     public String setValueJs() {
         //多选
         if(ConverterUtils.toBoolean(tagSett.get("multiple")))
@@ -138,6 +139,7 @@ public abstract  class BaseEasyuiCombo extends EmptyFormTag {
     }
 
 
+    @Override
     public String getValueJs() {
         if(ConverterUtils.toBoolean(tagSett.get("multiple")))
         {

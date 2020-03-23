@@ -8,19 +8,19 @@ import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.ReflectUtils;
 import com.fhs.common.utils.StringUtil;
-import com.fhs.core.base.bean.SuperBean;
-import com.fhs.core.trans.ITransTypeService;
-import com.fhs.core.trans.Trans;
-import com.fhs.core.trans.TransService;
+import com.fhs.core.base.pojo.vo.VO;
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.listener.TransMessageListener;
+import com.fhs.core.trans.service.impl.ITransTypeService;
+import com.fhs.core.trans.service.impl.TransService;
+import com.fhs.logger.Logger;
 import com.fhs.pagex.dto.PagexListSettDTO;
 import com.fhs.pagex.service.PageXDBService;
 import com.fhs.pagex.service.PagexDataService;
-import com.fhs.system.trans.TransMessageListener;
 import com.mybatis.jpa.common.ColumnNameUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
@@ -46,8 +46,9 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
     @Autowired
     private PageXDBService pageXDBService;
 
+
     @Override
-    public void transOne(SuperBean<?> obj, List<Field> toTransList) {
+    public void transOne(VO obj, List<Field> toTransList) {
         Trans tempTrans = null;
         for (Field tempField : toTransList)
         {
@@ -88,7 +89,7 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
 
 
     @Override
-    public void transMore(List<? extends SuperBean<?>> objList, List<Field> toTransList) {
+    public void transMore(List<? extends VO> objList, List<Field> toTransList) {
         objList.forEach(obj->{
             this.transOne(obj,toTransList);
         });

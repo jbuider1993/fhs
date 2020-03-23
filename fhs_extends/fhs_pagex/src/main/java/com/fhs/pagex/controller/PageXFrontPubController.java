@@ -1,4 +1,4 @@
-package com.fhs.pagex.action;
+package com.fhs.pagex.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -30,7 +30,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/front/x/")
-public class PageXFrontPubAction extends PageXBaseAction implements InitializingBean {
+public class PageXFrontPubController extends PageXBaseController implements InitializingBean {
 
     /**
      * 哪些方法该交给谁处理

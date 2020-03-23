@@ -1,4 +1,4 @@
-package com.fhs.pagex.action;
+package com.fhs.pagex.controller;
 
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.core.result.HttpResult;
@@ -23,9 +23,9 @@ import java.util.concurrent.CountDownLatch;
  */
 @RestController()
 @RequestMapping("/pagex/")
-public class PageXAutoCodeAction implements ApplicationRunner {
+public class PageXAutoCodeController implements ApplicationRunner {
 
-    private static final Logger LOGGER = Logger.getLogger(PageXAutoCodeAction.class);
+    private static final Logger LOGGER = Logger.getLogger(PageXAutoCodeController.class);
 
     @Autowired
     private PageXAutoJavaService pageXAutoJavaService;

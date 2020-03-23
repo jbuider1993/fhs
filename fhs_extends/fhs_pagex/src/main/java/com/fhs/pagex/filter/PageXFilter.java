@@ -1,9 +1,8 @@
 package com.fhs.pagex.filter;
 
-import com.fhs.common.utils.Logger;
+import com.fhs.logger.Logger;
 import com.fhs.pagex.context.PagexServletContext;
 import com.fhs.pagex.service.HandelPageXService;
-
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

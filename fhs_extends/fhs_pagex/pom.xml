@@ -42,6 +42,22 @@
             <artifactId>fhs_base_other</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_basics_api</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javatools</groupId>
+            <artifactId>javatools</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-loader</artifactId>
+        </dependency>
 
     </dependencies>
 </project>

@@ -9,7 +9,7 @@ import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.ReflectUtils;
 import com.fhs.common.utils.StringUtil;
 import com.fhs.pagex.annotation.JoinShowColumn;
-import com.fhs.pagex.dao.DefaultPageXDAO;
+import com.fhs.pagex.mapper.DefaultPageXMapper;
 import com.fhs.pagex.dto.PagexListSettDTO;
 import com.mybatis.jpa.common.ColumnNameUtil;
 import com.mybatis.jpa.common.PersistentUtil;
@@ -37,7 +37,7 @@ public class JoinService implements InitializingBean {
      * pageXDBService
      */
     @Autowired
-    private DefaultPageXDAO pageXDAO;
+    private DefaultPageXMapper pageXDAO;
 
     /**
      * key model name value model对应的class

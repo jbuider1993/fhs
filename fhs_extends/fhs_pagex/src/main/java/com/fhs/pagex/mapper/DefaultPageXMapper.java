@@ -1,7 +1,6 @@
-package com.fhs.pagex.dao;
-
-import com.fhs.core.base.dao.BaseDao;
-import com.fhs.pagex.bean.DefaultPageXBean;
+package com.fhs.pagex.mapper;
+import com.fhs.core.base.mapper.FhsBaseMapper;
+import com.fhs.pagex.dox.DefaultPageXDO;
 import com.mybatis.jpa.annotation.MapperDefinition;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -20,9 +19,9 @@ import java.util.Map;
  * @UpdateDate: 2018/12/17 0017 19:59
  * @Version: 1.0
  */
-@MapperDefinition(domainClass = DefaultPageXBean.class)
+@MapperDefinition(domainClass = DefaultPageXDO.class)
 @Repository
-public interface DefaultPageXDAO extends BaseDao<DefaultPageXBean>{
+public interface DefaultPageXMapper extends FhsBaseMapper<DefaultPageXDO> {
     /**
      * 查询数据给join用
      * 本方法就是执行一个sql 返回结果的集合

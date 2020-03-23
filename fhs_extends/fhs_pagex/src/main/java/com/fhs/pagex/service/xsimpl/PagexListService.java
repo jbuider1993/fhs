@@ -1,9 +1,9 @@
 package com.fhs.pagex.service.xsimpl;
 
 import com.fhs.common.utils.ConverterUtils;
-import com.fhs.common.utils.Logger;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.BusinessException;
+import com.fhs.logger.Logger;
 import com.fhs.pagex.common.BeetlUtil;
 import com.fhs.pagex.dto.PagexListSettDTO;
 import com.fhs.pagex.service.HandelPageXService;

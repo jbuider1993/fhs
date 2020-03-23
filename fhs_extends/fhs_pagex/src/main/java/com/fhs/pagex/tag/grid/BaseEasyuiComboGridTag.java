@@ -26,6 +26,7 @@ public abstract class BaseEasyuiComboGridTag extends BaseGridTag {
     public abstract  String getEasyuiClass();
 
 
+    @Override
     public String getHtmlForToolsBar() {
         // 为了防止大家copy不知道怎么写，这里在说明一下，给form中 写的代码在这里 如果 isNewRow() 返回true的话那么 <div class="fitem">以及他的结束都要自己在这个方法中写，
         // 如果返回isNewRow() 返回false的话不需要管<div class="fitem">

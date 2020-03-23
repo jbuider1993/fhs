@@ -2,7 +2,7 @@ package com.fhs.pagex.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.fhs.common.utils.ConverterUtils;
-import com.fhs.common.utils.Logger;
+import com.fhs.logger.Logger;
 import com.fhs.pagex.dto.PagexListSettDTO;
 import com.fhs.pagex.fi.ListDataExtendsHandle;
 import org.springframework.beans.factory.InitializingBean;

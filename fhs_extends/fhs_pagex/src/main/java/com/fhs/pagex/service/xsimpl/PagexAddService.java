@@ -2,8 +2,8 @@ package com.fhs.pagex.service.xsimpl;
 
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
-import com.fhs.common.utils.Logger;
 import com.fhs.core.config.EConfig;
+import com.fhs.logger.Logger;
 import com.fhs.pagex.common.BeetlUtil;
 import com.fhs.pagex.dto.PagexAddDTO;
 import com.fhs.pagex.service.HandelPageXService;
@@ -15,7 +15,6 @@ import com.fhs.pagex.tag.form.IOne2XTag;
 import com.mybatis.jpa.common.ColumnNameUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
-
 import javax.script.ScriptException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,6 +52,7 @@ public class PagexAddService  implements IPageXService, InitializingBean {
      * @param namespace 命名空间
      * @return 列表页HTML
      */
+    @Override
     public String service(HttpServletRequest request, HttpServletResponse response, String js, String namespace) throws NoSuchMethodException, ScriptException {
 
         // 如果有缓存直接在缓存取

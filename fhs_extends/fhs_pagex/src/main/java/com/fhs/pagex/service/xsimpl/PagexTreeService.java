@@ -1,7 +1,7 @@
 package com.fhs.pagex.service.xsimpl;
 
-import com.fhs.common.utils.Logger;
-import com.fhs.config.BeetlConf;
+import com.fhs.logger.Logger;
+import com.fhs.module.base.config.BeetlConf;
 import com.fhs.pagex.dto.PageXTreeDTO;
 import com.fhs.pagex.service.HandelPageXService;
 import com.fhs.pagex.service.IPageXService;
@@ -41,7 +41,8 @@ public class PagexTreeService  implements IPageXService, InitializingBean {
      * @param namespace 命名空间
      * @return Tree页HTML
      */
-    public String service(HttpServletRequest request, HttpServletResponse response,String js,String namespace) throws NoSuchMethodException, ScriptException {
+    @Override
+    public String service(HttpServletRequest request, HttpServletResponse response, String js, String namespace) throws NoSuchMethodException, ScriptException {
         PageXTreeDTO treeDTO = PagexDataService.SIGNEL.getPageXTreeDTOFromCache(namespace);
         Map<String,Object> paramMap = new HashMap<>();
         paramMap.put("modelConfig",treeDTO.getModelConfig());

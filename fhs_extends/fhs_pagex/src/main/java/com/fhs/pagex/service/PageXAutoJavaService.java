@@ -3,12 +3,12 @@ package com.fhs.pagex.service;
 import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
-import com.fhs.common.utils.Logger;
 import com.fhs.common.utils.StringUtil;
-import com.fhs.config.BeetlConf;
-import com.fhs.core.clazz.MemoryClassLoader;
+import com.fhs.logger.Logger;
+import com.fhs.module.base.config.BeetlConf;
 import com.fhs.pagex.common.BeetlUtil;
 import com.fhs.pagex.dto.PagexListSettDTO;
+import com.fhs.pagex.loader.MemoryClassLoader;
 import com.mybatis.jpa.common.ColumnNameUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,7 +58,7 @@ public class PageXAutoJavaService {
     }
 
 
-    private  BeetlConf beetlConf;
+    private BeetlConf beetlConf;
 
 
     /**

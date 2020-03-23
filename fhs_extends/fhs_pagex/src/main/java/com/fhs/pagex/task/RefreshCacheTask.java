@@ -2,8 +2,8 @@ package com.fhs.pagex.task;
 
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.FileUtils;
-import com.fhs.common.utils.Logger;
 import com.fhs.core.config.EConfig;
+import com.fhs.logger.Logger;
 import com.fhs.pagex.service.JoinService;
 import com.fhs.pagex.service.PagexDataService;
 import org.springframework.beans.BeansException;
@@ -88,6 +88,7 @@ public class RefreshCacheTask implements InitializingBean,Runnable,ApplicationCo
     /**
      * 刷新js->page的任务
      */
+    @Override
     public void run(){
         while(true)
         {

@@ -1,6 +1,6 @@
 package com.fhs.pagex.tag.form;
 
-import com.fhs.common.utils.Logger;
+import com.fhs.logger.Logger;
 import com.fhs.pagex.common.BeetlUtil;
 import org.springframework.stereotype.Component;
 

@@ -1,25 +1,22 @@
-package com.fhs.pagex.action;
+package com.fhs.pagex.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.fhs.common.ExcelExportTools;
+import com.fhs.base.api.ucenter.rpc.FeignSysMenuApiService;
+import com.fhs.basics.vo.SysMenuVO;
+import com.fhs.basics.vo.SysUserVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
-import com.fhs.core.api.annotation.AutowareYLM;
+import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
-import com.fhs.core.log.LogDesc;
 import com.fhs.core.result.HttpResult;
+import com.fhs.logger.anno.LogDesc;
+import com.fhs.module.base.common.ExcelExportTools;
 import com.fhs.pagex.dto.PageXTreeDTO;
 import com.fhs.pagex.dto.TreeDTO;
 import com.fhs.pagex.service.PagexDataService;
-import com.fhs.redis.service.RedisCacheService;
-import com.fhs.system.api.FeignlogAdminOperatorLogApiService;
-import com.fhs.system.bean.LogAdminOperatorLogVo;
-import com.fhs.basics.api.service.FeignSysMenuApiService;
-import com.fhs.basics.api.vo.SysMenuVo;
-import com.fhs.basics.api.vo.SysUserVo;
 import com.mybatis.jpa.context.DataPermissonContext;
 import com.mybatis.jpa.context.MultiTenancyContext;
 import org.apache.shiro.SecurityUtils;
@@ -45,25 +42,25 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/ms/x/")
-public class PageXMsPubAction extends PageXBaseAction{
+public class PageXMsPubController extends PageXBaseController {
 
     /**
      * 日志记录服务
      */
-    @Autowired
-    private FeignlogAdminOperatorLogApiService feignlogAdminOperatorLogApiService;
+//    @Autowired
+//    private FeignlogAdminOperatorLogApiService feignlogAdminOperatorLogApiService;
 
     /**
      * 系统菜单服务
      */
-    @AutowareYLM
+    @Autowired
     private FeignSysMenuApiService feignSysMenuApiService;
 
 
     /**
      * namesapce:menu map
      */
-    private Map<String, SysMenuVo> namesapceMenuMap = new HashMap<>();
+    private Map<String, SysMenuVO> namesapceMenuMap = new HashMap<>();
 
     @Autowired
     private RedisCacheService<String> redisCacheService;
@@ -78,7 +75,7 @@ public class PageXMsPubAction extends PageXBaseAction{
 
         checkPermiessAndNamespace( namespace,"add");
         EMap<String,Object> paramMap = super.getParameterMap(request);
-        SysUserVo user = getSessionUser( request);
+        SysUserVO user = getSessionUser( request);
         paramMap.put("createUser",user.getUserId());
         paramMap.put("groupCode",user.getGroupCode());
         paramMap.put("updateUser",user.getUserId());
@@ -116,9 +113,9 @@ public class PageXMsPubAction extends PageXBaseAction{
 
         // 获取菜单name及nameSpace
         if (namesapceMenuMap.isEmpty()) {
-            HttpResult<List<SysMenuVo>> result = feignSysMenuApiService.findIdAndNameAndNamespaceList();
-            List<SysMenuVo> sysMenuList = result.getData();
-            for (SysMenuVo adminMenu : sysMenuList) {
+            HttpResult<List<SysMenuVO>> result = feignSysMenuApiService.findIdAndNameAndNamespaceList();
+            List<SysMenuVO> sysMenuList = result.getData();
+            for (SysMenuVO adminMenu : sysMenuList) {
                 namesapceMenuMap.put(adminMenu.getNamespace(), adminMenu);
             }
         }
@@ -126,23 +123,23 @@ public class PageXMsPubAction extends PageXBaseAction{
         {
             return;
         }
-        SysUserVo user = getSessionUser(request);
+        SysUserVO user = getSessionUser(request);
         // 创建LogAdminOperatorLog 对象,并给各属性赋值
-        LogAdminOperatorLogVo log = new LogAdminOperatorLogVo();
-        log.setCreateTime(DateUtils.getCurrentDateStr(DateUtils.DATE_FULL_STR_SSS));
-        log.setUrl(request.getRequestURI());
-        log.setOperatDesc(desc + "了" + PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace).getModelConfig().get("title"));
-        log.setOperatorId(user.getUserId());
-        log.setMenuId(namesapceMenuMap.get(namespace).getMenuId());
-        log.setReqParam(JsonUtils.map2json(paramMap));
-        try {
-            log.setNetworkIp(NetworkUtil.getIpAddress(request));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        log.setLogType(type);
-        log.setGroupCode(user.getGroupCode());
-        feignlogAdminOperatorLogApiService.addLogAdminOperatorLog(log);
+//        LogAdminOperatorLogVo log = new LogAdminOperatorLogVo();
+//        log.setCreateTime(DateUtils.getCurrentDateStr(DateUtils.DATE_FULL_STR_SSS));
+//        log.setUrl(request.getRequestURI());
+//        log.setOperatDesc(desc + "了" + PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace).getModelConfig().get("title"));
+//        log.setOperatorId(user.getUserId());
+//        log.setMenuId(namesapceMenuMap.get(namespace).getMenuId());
+//        log.setReqParam(JsonUtils.map2json(paramMap));
+//        try {
+//            log.setNetworkIp(NetworkUtil.getIpAddress(request));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        log.setLogType(type);
+//        log.setGroupCode(user.getGroupCode());
+//        feignlogAdminOperatorLogApiService.addLogAdminOperatorLog(log);
     }
 
     /**
@@ -336,8 +333,8 @@ public class PageXMsPubAction extends PageXBaseAction{
      * @param request request
      * @return 系统用户
      */
-    private SysUserVo getSessionUser(HttpServletRequest request){
-        return (SysUserVo)request.getSession().getAttribute(Constant.SESSION_USER);
+    private SysUserVO getSessionUser(HttpServletRequest request){
+        return (SysUserVO) request.getSession().getAttribute(Constant.SESSION_USER);
     }
 
     /**

@@ -1,8 +1,7 @@
-package com.fhs.pagex.bean;
+package com.fhs.pagex.dox;
 
-import com.fhs.core.base.bean.BaseDO;
+import com.fhs.core.base.dox.BaseDO;
 import lombok.Data;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -21,7 +20,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="t_default")
 @Data
-public class DefaultPageXBean extends BaseDO<DefaultPageXBean> {
+public class DefaultPageXDO extends BaseDO<DefaultPageXDO> {
     @Id
     private String id;
 }

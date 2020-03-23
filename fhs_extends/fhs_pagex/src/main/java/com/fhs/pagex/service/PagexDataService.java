@@ -2,8 +2,8 @@ package com.fhs.pagex.service;
 
 import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.ConverterUtils;
-import com.fhs.common.utils.Logger;
 import com.fhs.core.exception.ParamException;
+import com.fhs.logger.Logger;
 import com.fhs.pagex.dto.PageXFrontDTO;
 import com.fhs.pagex.dto.PageXTreeDTO;
 import com.fhs.pagex.dto.PagexAddDTO;

@@ -7,8 +7,8 @@ import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.StringUtil;
 import com.fhs.core.exception.ParamException;
-import com.fhs.pagex.bean.DefaultPageXBean;
-import com.fhs.pagex.dao.DefaultPageXDAO;
+import com.fhs.pagex.dox.DefaultPageXDO;
+import com.fhs.pagex.mapper.DefaultPageXMapper;
 import com.fhs.pagex.dto.PagexAddDTO;
 import com.fhs.pagex.dto.PagexListSettDTO;
 import com.mybatis.jpa.cache.JpaTools;
@@ -98,17 +98,17 @@ public class PageXAutoSqlService {
         }
         String sqlId = nameSpace + "_" + sqlName;
         //吧之前的缓存清除掉
-        mappedStatements.remove(DefaultPageXDAO.class.getName() + "." + sqlId);
+        mappedStatements.remove(DefaultPageXMapper.class.getName() + "." + sqlId);
         /*if(existSqlIdSet.contains(sqlId))
         {
             throw new ParamException("sql已经存在:" + nameSpace + "." + type);
         }*/
-        MybatisStatementAdapter adapter = JpaTools.statementAdapterMap.get(DefaultPageXBean.class.getName());
+        MybatisStatementAdapter adapter = JpaTools.statementAdapterMap.get(DefaultPageXDO.class.getName());
         // 方法名
         adapter.setMethodName(sqlId);
         existSqlIdSet.add(sqlId);
         adapter.setParameterTypeClass(Object.class);
-        PersistentMeta persistentMeta = JpaTools.persistentMetaMap.get(DefaultPageXDAO.class.getName());
+        PersistentMeta persistentMeta = JpaTools.persistentMetaMap.get(DefaultPageXMapper.class.getName());
 
         SqlCommandType sqlCommandType = null;
         String fromPreSql = null;

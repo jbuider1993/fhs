@@ -1,8 +1,8 @@
 package com.fhs.pagex.service;
 
-import com.fhs.common.utils.Logger;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.result.PubResult;
+import com.fhs.logger.Logger;
 
 import javax.script.ScriptException;
 import javax.servlet.http.HttpServletRequest;
