@@ -4,10 +4,11 @@ import com.fhs.base.api.ucenter.rpc.FeignSysUserApiService;
 import com.fhs.basics.vo.SysUserVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
+import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.exception.BusinessException;
+import com.fhs.core.feign.autowired.annotation.AutowiredFhs;
 import com.fhs.core.result.HttpResult;
 import com.fhs.logger.Logger;
-import com.fhs.module.base.redis.service.RedisCacheService;
 import io.buji.pac4j.subject.Pac4jPrincipal;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +39,13 @@ import java.util.Map;
  *
  */
 @Controller
+@AutowiredFhs
 public class IndexController {
 
     private static final Logger LOGGER = Logger.getLogger(IndexController.class);
 
     /** 后台用户feign服务 */
-    @Autowired
+    @AutowiredFhs
     private FeignSysUserApiService feignSysUserService;
 
     /**

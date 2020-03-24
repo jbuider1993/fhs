@@ -589,7 +589,7 @@
         </where>
     </select>
     <!-- 根据传来的fatherIds查出所有的father信息 -->
-    <select id="getFatherMenu" parameterType="java.lang.String"
+    <select id="getFatherMenu" parameterType="string"
             resultType="com.fhs.basics.dox.SysUserDO">
 		SELECT  m.menu_name AS menuName,
 		m.menu_id AS
@@ -677,7 +677,7 @@
 	</select>
 
     <!-- 查询当前机构及子机构用户数 -->
-    <select id="findUserByOrgId" parameterType="map" resultType="java.lang.Integer">
+    <select id="findUserByOrgId" parameterType="map" resultType="int">
         SELECT COUNT(1) FROM t_ucenter_ms_user
         WHERE organization_id LIKE CONCAT(#{organizationId}, '%')
         <if test="isDisable != null and isDisable != ''">
@@ -686,7 +686,7 @@
     </select>
 
     <!-- 根据用户ID查询用户权限URL -->
-    <select id="getPermissionUrlByUserId" parameterType="string" resultType="java.lang.string">
+    <select id="getPermissionUrlByUserId" parameterType="string" resultType="string">
        SELECT
 			mpu.url
 		FROM
@@ -701,12 +701,12 @@
 	</select>
 
     <!-- 根据所有用户权限URL -->
-    <select id="getPermissionUrlAll" resultType="java.lang.string">
+    <select id="getPermissionUrlAll" resultType="string">
 		    select  mpu.url from t_ucenter_ms_menu_permission_url_rela mpu
 	</select>
 
     <!-- 获取用户tree的list数据(处理后可为tree数据) -->
-    <select id="getUserOrgTreeList" resultType="com.fhs.basics.vo.SysUserOrgVO" parameterType="java.lang.String">
+    <select id="getUserOrgTreeList" resultType="com.fhs.basics.vo.SysUserOrgVO" parameterType="string">
         SELECT * FROM(SELECT id,name as text,parent_id AS parentId,0 AS isUser,create_time FROM t_ucenter_ms_organization
         WHERE group_code=#{groupCode} ORDER BY create_time) temp
         UNION

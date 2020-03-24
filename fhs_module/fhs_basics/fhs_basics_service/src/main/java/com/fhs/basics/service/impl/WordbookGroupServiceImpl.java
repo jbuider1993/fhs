@@ -1,5 +1,6 @@
 package com.fhs.basics.service.impl;
 
+import com.fhs.basics.dox.WordbookDO;
 import com.fhs.basics.dox.WordbookGroupDO;
 import com.fhs.basics.mapper.WordbookGroupMapper;
 import com.fhs.basics.mapper.WordbookMapper;
@@ -36,20 +37,22 @@ public class WordbookGroupServiceImpl extends BaseServiceImpl<WordbookGroupVO, W
     @Override
     public int add(WordbookGroupDO bean)
     {
-        return mapper.add(bean);
+        return mapper.insertJpa(bean);
     }
 
     @Override
     public boolean update(WordbookGroupDO bean)
     {
-        return mapper.update(bean) > 0;
+        return mapper.updateByIdJpa(bean) > 0;
     }
 
     @Override
     public boolean delete(WordbookGroupDO bean)
     {
-        int result = mapper.delete(bean);
-        wordbookMapper.batchDelete(bean.getWordbookGroupCode());
+        int result = mapper.deleteBean(bean);
+        WordbookDO deleteParam = new WordbookDO();
+        deleteParam.setWordbookGroupCode(bean.getWordbookGroupCode());
+        wordbookMapper.deleteBean(deleteParam);
         return result > 0;
 
     }
@@ -57,7 +60,7 @@ public class WordbookGroupServiceImpl extends BaseServiceImpl<WordbookGroupVO, W
     @Override
     public int findCount(WordbookGroupDO bean)
     {
-        return mapper.findCount(bean);
+        return (int)mapper.selectCountJpa(bean);
     }
 
     @Override
@@ -69,6 +72,6 @@ public class WordbookGroupServiceImpl extends BaseServiceImpl<WordbookGroupVO, W
     @Override
     public WordbookGroupVO findBean(WordbookGroupDO bean)
     {
-        return d2v(mapper.findBean(bean));
+        return d2v(mapper.selectBean(bean));
     }
 }

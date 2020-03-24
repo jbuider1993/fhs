@@ -6,6 +6,7 @@ import com.fhs.basics.vo.TreeDataVO;
 import com.fhs.basics.vo.TreeModelVO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
 import com.mybatis.jpa.annotation.MapperDefinition;
+import org.springframework.stereotype.Repository;
 
 import javax.swing.tree.TreeModel;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.Map;
  * 菜单DAO
  * @author jianbo.qin
  */
+@Repository
 @MapperDefinition(domainClass = SysMenuDO.class)
 public interface SysMenuMapper extends FhsBaseMapper<SysMenuDO>
 {

@@ -1,10 +1,14 @@
 package com.fhs.module.base.filter;
 
+import com.fhs.base.api.ucenter.rpc.FeignFrontUserApiService;
+import com.fhs.basics.form.GetSingleFrontUserForm;
+import com.fhs.basics.vo.UcenterFrontUserVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.CookieUtil;
 import com.fhs.core.config.EConfig;
+import com.fhs.core.result.HttpResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.ServletComponentScan;
@@ -72,7 +76,7 @@ public class UserFilter implements Filter {
 
         //普通会员
         boolean isUser = uri.contains("_u");
-        FrontUserVo user = (FrontUserVo) request.getSession().getAttribute("frontUser");
+        UcenterFrontUserVO user = (UcenterFrontUserVO) request.getSession().getAttribute("frontUser");
         if (isUser && CheckUtils.isNullOrEmpty(user)) {
             send2Login(response, request);
             return;
@@ -96,14 +100,14 @@ public class UserFilter implements Filter {
     private boolean login(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
         String accessToken = request.getParameter("accessToken");
-        HttpResult<FrontUserVo> resultFrontUser = frontUserService.getSingleFrontUser(GetSingleFrontUserForm.builder().accessToken(accessToken).build());
+        HttpResult<UcenterFrontUserVO> resultFrontUser = frontUserService.getSingleFrontUser(GetSingleFrontUserForm.builder().accessToken(accessToken).build());
         if (resultFrontUser.getCode() != Constant.SUCCESS_CODE) {
             LOGGER.error("获取前端用户信息错误,accessToken为{}", accessToken);
             LOGGER.error("获取前端用户信息错误,返回结果为{}", resultFrontUser);
             send2Login(response, request);
             return false;
         }
-        FrontUserVo frontUser = resultFrontUser.getData();//前端用户信息
+        UcenterFrontUserVO frontUser = resultFrontUser.getData();//前端用户信息
         if (frontUser == null) {
             send2Login(response, request);
             return false;

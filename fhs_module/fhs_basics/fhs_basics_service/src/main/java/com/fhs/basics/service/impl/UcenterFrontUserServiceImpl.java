@@ -16,6 +16,7 @@ import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.valid.checker.ParamChecker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -28,6 +29,7 @@ import java.util.Map;
  * @author jackwong
  * @since 2019-03-11 14:14:58
  */
+@Primary
 @Service("ucenterFrontUserService")
 @DataSource("base_business")
 public class UcenterFrontUserServiceImpl extends BaseServiceImpl<UcenterFrontUserVO, UcenterFrontUserDO> implements UcenterFrontUserService, FeignFrontUserApiService {

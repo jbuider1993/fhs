@@ -1,5 +1,6 @@
 package com.fhs.basics.service.impl;
 
+import com.fhs.base.api.ucenter.rpc.FeignWordBookApiService;
 import com.fhs.basics.dox.WordbookDO;
 import com.fhs.basics.mapper.WordbookMapper;
 import com.fhs.basics.service.WordBookService;
@@ -10,7 +11,9 @@ import com.fhs.common.utils.ConverterUtils;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.db.ds.DataSource;
+import com.fhs.core.result.HttpResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -24,9 +27,10 @@ import java.util.Map.Entry;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
+@Primary
 @Service
 @DataSource("base_business")
-public class WordBookServiceImpl extends BaseServiceImpl<WordbookVO, WordbookDO> implements WordBookService {
+public class WordBookServiceImpl extends BaseServiceImpl<WordbookVO, WordbookDO> implements WordBookService, FeignWordBookApiService {
     /**
      * redis获取下拉的key
      */
@@ -133,4 +137,11 @@ public class WordBookServiceImpl extends BaseServiceImpl<WordbookVO, WordbookDO>
         return mapper.findMapList(map);
     }
 
+    @Override
+    public HttpResult<List<WordbookVO>> getWordBookListByWordBookGroupCode(String wordBookGroupCode) {
+        WordbookVO param = new WordbookVO();
+        param.setWordbookGroupCode(wordBookGroupCode);
+        List<WordbookVO> wordbookList  = this.selectPage(param, Constant.PAGE_ALL,Constant.PAGE_ALL);
+        return HttpResult.success(wordbookList);
+    }
 }

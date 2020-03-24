@@ -7,14 +7,14 @@ import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.trans.anno.TransTypes;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 /**
  * 系统菜单vo
  */
-@SuperBuilder
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
 @TransTypes(types = {BaseTransConstant.WORD_BOOK})
 public class SysMenuVO extends SysMenuDO implements VO {

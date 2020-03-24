@@ -1,7 +1,7 @@
 package com.fhs.pagex.service.xsimpl;
 
 import com.fhs.logger.Logger;
-import com.fhs.module.base.config.BeetlConf;
+import com.fhs.pagex.config.BeetlConf;
 import com.fhs.pagex.dto.PageXTreeDTO;
 import com.fhs.pagex.service.HandelPageXService;
 import com.fhs.pagex.service.IPageXService;

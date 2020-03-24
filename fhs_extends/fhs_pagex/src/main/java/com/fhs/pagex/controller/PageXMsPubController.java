@@ -11,9 +11,10 @@ import com.fhs.common.utils.*;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
+import com.fhs.core.feign.autowired.annotation.AutowiredFhs;
 import com.fhs.core.result.HttpResult;
 import com.fhs.logger.anno.LogDesc;
-import com.fhs.module.base.common.ExcelExportTools;
+import com.fhs.pagex.common.ExcelExportTools;
 import com.fhs.pagex.dto.PageXTreeDTO;
 import com.fhs.pagex.dto.TreeDTO;
 import com.fhs.pagex.service.PagexDataService;
@@ -41,6 +42,7 @@ import java.util.*;
  * @Version: 1.0
  */
 @RestController
+@AutowiredFhs
 @RequestMapping("/ms/x/")
 public class PageXMsPubController extends PageXBaseController {
 
@@ -53,7 +55,7 @@ public class PageXMsPubController extends PageXBaseController {
     /**
      * 系统菜单服务
      */
-    @Autowired
+    @AutowiredFhs
     private FeignSysMenuApiService feignSysMenuApiService;
 
 
@@ -74,7 +76,7 @@ public class PageXMsPubController extends PageXBaseController {
     {
 
         checkPermiessAndNamespace( namespace,"add");
-        EMap<String,Object> paramMap = super.getParameterMap(request);
+        EMap<String,Object> paramMap = super.getParameterMap();
         SysUserVO user = getSessionUser( request);
         paramMap.put("createUser",user.getUserId());
         paramMap.put("groupCode",user.getGroupCode());
@@ -168,7 +170,7 @@ public class PageXMsPubController extends PageXBaseController {
     public HttpResult<Boolean> update(@PathVariable("namespace")String namespace, @PathVariable("id")String id,HttpServletRequest request, HttpServletResponse response)
     {
         checkPermiessAndNamespace( namespace,"update");
-        EMap<String,Object> paramMap = super.getParameterMap(request);
+        EMap<String,Object> paramMap = super.getParameterMap();
         paramMap.put("id",id);
         paramMap.put("groupCode", MultiTenancyContext.getProviderId());
         paramMap.put("updateUser",getSessionUser( request).getUserId());
@@ -211,7 +213,7 @@ public class PageXMsPubController extends PageXBaseController {
     public Map<String,Object> findPager(@PathVariable("namespace")String namespace,  HttpServletRequest request, HttpServletResponse response)
     {
         checkPermiessAndNamespace( namespace,"see");
-        Map<String,Object> paramMap = super.getPageTurnNum(request);
+        Map<String,Object> paramMap = super.getPageTurnNum();
         paramMap.put("dataPermissin", DataPermissonContext.getDataPermissonMap());
         paramMap.put("groupCode", MultiTenancyContext.getProviderId());
         request.getSession().setAttribute(this.getClass() + "preLoadParam",paramMap);
@@ -319,7 +321,7 @@ public class PageXMsPubController extends PageXBaseController {
     @RequestMapping("{namespace}/findListData")
     public JSONArray findListData(@PathVariable("namespace")String namespace, HttpServletRequest request, HttpServletResponse response)
     {
-        Map<String,Object> paramMap =super.getParameterMap(request);
+        Map<String,Object> paramMap =super.getParameterMap();
         paramMap.put("start", Constant.PAGE_ALL);
         paramMap.put("dataPermissin", DataPermissonContext.getDataPermissonMap());
         paramMap.put("groupCode", MultiTenancyContext.getProviderId());

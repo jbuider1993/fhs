@@ -8,6 +8,7 @@ import com.fhs.core.base.mapper.FhsBaseMapper;
 import com.mybatis.jpa.annotation.MapperDefinition;
 import com.mybatis.jpa.annotation.MultiTenancyCheck;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import java.util.Map;
  * @version [版本号, 2018-09-04]
  * @versio 1.0 陕西小伙伴网络科技有限公司  Copyright (c) 2018 All Rights Reserved.
  */
+@Repository
 @MultiTenancyCheck
 @MapperDefinition(domainClass = SysOrganizationDO.class)
 public interface SysOrganizationMapper extends FhsBaseMapper<SysOrganizationDO> {

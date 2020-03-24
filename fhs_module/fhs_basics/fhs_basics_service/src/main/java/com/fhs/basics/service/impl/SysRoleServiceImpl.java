@@ -1,14 +1,22 @@
 package com.fhs.basics.service.impl;
 
+import com.fhs.base.api.ucenter.rpc.FeignSysRoleApiService;
 import com.fhs.basics.dox.SysRoleDO;
 import com.fhs.basics.mapper.SysRoleMapper;
 import com.fhs.basics.service.SysRoleService;
+import com.fhs.basics.service.SysUserService;
 import com.fhs.basics.vo.SysRoleVO;
+import com.fhs.basics.vo.SysUserVO;
+import com.fhs.common.spring.SpringContextUtil;
+import com.fhs.common.utils.CheckUtils;
+import com.fhs.common.utils.JsonUtils;
 import com.fhs.common.utils.ListUtils;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.db.ds.DataSource;
+import com.fhs.core.result.HttpResult;
 import com.fhs.logger.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,14 +30,20 @@ import java.util.Map;
  * 系统角色实现
  * 老代码待优化
  */
+@Primary
 @Service
 @DataSource("base_business")
-public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleVO, SysRoleDO> implements SysRoleService {
+public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleVO, SysRoleDO> implements SysRoleService, FeignSysRoleApiService {
 
     private static final Logger LOG = Logger.getLogger(SysRoleServiceImpl.class);
 
     @Autowired
     private SysRoleMapper mapper;
+
+    /**
+     * 后台用户服务
+     */
+    private SysUserService userService;
 
     /**
      * 添加角色信息
@@ -125,7 +139,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleVO, SysRoleDO> im
             // 删除角色用户关联
             mapper.deleteUserRela(adminRole);
             // 删除角色信息
-            return mapper.delete(adminRole) > 0;
+            return mapper.deleteBean(adminRole) > 0;
         }
         return false;
     }
@@ -192,4 +206,42 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleVO, SysRoleDO> im
         return mapper.findUserCountByRoleId(paramMap);
     }
 
+    @Override
+    public HttpResult<String> getRoleListPermissions(String userId) {
+        if(CheckUtils.isNullOrEmpty(userId))
+        {
+            return HttpResult.error(null, "用户ID不可为空");
+        }
+        List<SysRoleVO> roles = this.findRolesByUserId(userId);
+        if(userService == null){
+            userService = SpringContextUtil.getBeanByClass(SysUserService.class);
+        }
+        SysUserVO sysUser = userService.selectById(userId);
+        List<Map<String,Object>> mapList=new ArrayList<>();
+        for (SysRoleVO sysRole:roles) {
+            Map<String,Object> map=new HashMap<>();
+            map.put("roleId",sysRole.getRoleId());
+            map.put("userId",sysUser.getUserId());
+            map.put("fullname",sysUser.getUserName());
+            map.put("roleName",sysRole.getRoleName());
+            map.put("alias",sysRole.getRoleId());
+            mapList.add(map);
+        }
+        return HttpResult.success(JsonUtils.list2json(mapList));
+    }
+
+    @Override
+    public HttpResult<String> getRoleById(String id) {
+        if(CheckUtils.isNullOrEmpty(id))
+        {
+            return HttpResult.error(null, "角色ID不可为空");
+        }
+        SysRoleVO sysRole = this.findBeanById(id);
+        Map<String,Object> map=new HashMap<>();
+        map.put("roleId",sysRole.getRoleId());
+        map.put("roleName",sysRole.getRoleName());
+        map.put("isDisable",sysRole.getRoleName());
+        map.put("alias",sysRole.getRoleId());
+        return HttpResult.success(JsonUtils.object2json(map));
+    }
 }

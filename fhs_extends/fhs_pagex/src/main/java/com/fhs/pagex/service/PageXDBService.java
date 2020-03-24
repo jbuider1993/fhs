@@ -148,12 +148,12 @@ public class PageXDBService {
             return JsonUtils.list2json(rows);
         }
         final Class clazz = namespaceClassMap.get(namespace);
-        final List<SuperBean<?>> superBeans = new ArrayList<>();
+        final List<VO> superBeans = new ArrayList<>();
         // List map 转List SuperBean
         rows.forEach(row -> {
             try {
                 Object tempObj = clazz.newInstance();
-                SuperBean<?> tempSuperBenn = (SuperBean) tempObj;
+                VO tempSuperBenn = (VO) tempObj;
                 for (String key : row.keySet()) {
                     ReflectUtils.setValue(tempObj, key, ConverterUtils.toString(row.get(key)));
                 }
@@ -166,7 +166,7 @@ public class PageXDBService {
                 throw new BusinessException("findListPager反射错误参数错误");
             }
         });
-        transService.transMore((List<? extends VO>) superBeans);
+        transService.transMore(superBeans);
         return JsonUtils.list2json(superBeans);
     }
 

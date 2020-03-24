@@ -7,6 +7,7 @@ import com.mybatis.jpa.annotation.MapperDefinition;
 import com.mybatis.jpa.annotation.MultiTenancyCheck;
 import com.mybatis.jpa.annotation.NotMultiTenancyCheck;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import java.util.Map;
  * @author jianbo.qin
  *
  */
+@Repository
 @MultiTenancyCheck
 @MapperDefinition(domainClass = SysRoleDO.class)
 public interface SysRoleMapper extends FhsBaseMapper<SysRoleDO>

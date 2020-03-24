@@ -48,6 +48,11 @@
             <version>${fhs.release.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_feign_autowired</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
             <groupId>javatools</groupId>
             <artifactId>javatools</artifactId>
             <version>1.0.0</version>
@@ -57,6 +62,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-loader</artifactId>
+        </dependency>
+        <!--ibeetl 模板引擎-->
+        <dependency>
+            <groupId>com.ibeetl</groupId>
+            <artifactId>beetl</artifactId>
+            <version>2.9.9</version>
         </dependency>
 
     </dependencies>

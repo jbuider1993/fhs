@@ -9,6 +9,7 @@ import com.fhs.basics.vo.SysUserVO;
 import feign.Param;
 import feign.RequestLine;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.context.annotation.Primary;
 import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import java.util.Map;
  * Copyright (c) 2017 All Rights Reserved.
  *
  */
+
 @FeignClient(value = "system", configuration= FeignConfiguration.class,primary = false)
 public interface FeignSysUserApiService {
 
@@ -59,7 +61,7 @@ public interface FeignSysUserApiService {
      * @return 用户权限URL列表
      */
     @RequestLine("GET /api/com.fhs.base.api.basics.rpc.FeignSysUserApiService/getPermissionUrlByUserId")
-    HttpResult<List<String>> getPermissionUrlByUserId(@Param("userId") String userId);
+    HttpResult<List<String>> getPermissionUrlByUserIdFeign(@Param("userId") String userId);
 
     /**
      * 获取用户的数据权限

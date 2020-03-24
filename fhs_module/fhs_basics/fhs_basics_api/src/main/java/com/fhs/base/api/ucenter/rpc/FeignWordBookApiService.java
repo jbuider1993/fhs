@@ -21,6 +21,6 @@ public interface FeignWordBookApiService {
      * @param wordBookGroupCode 字典编码
      * @return HttpResult 角色数据权限
      */
-    @RequestLine("GET /api/com.fhs.base.api.ucenter.rpc.FeignWordBookApiService/getWordBookList?wordBookGroupCode={wordBookGroupCode}")
-    HttpResult<List<WordbookVO>> getWordBookList(@Param("wordBookGroupCode") String wordBookGroupCode);
+    @RequestLine("GET /api/com.fhs.base.api.ucenter.rpc.FeignWordBookApiService/getWordBookListByWordBookGroupCode?wordBookGroupCode={wordBookGroupCode}")
+    HttpResult<List<WordbookVO>> getWordBookListByWordBookGroupCode(@Param("wordBookGroupCode") String wordBookGroupCode);
 }

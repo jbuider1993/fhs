@@ -17,16 +17,26 @@
             <artifactId>fhs_logger</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
+        <!--jetcache缓存-->
         <dependency>
             <groupId>com.alicp.jetcache</groupId>
-            <artifactId>jetcache-starter-redis</artifactId>
-            <version>2.5.16</version>
+            <artifactId>jetcache-starter-redis-lettuce</artifactId>
+            <version>${fhs.jetcache.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-redis</artifactId>
             <version>1.8.12.RELEASE</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+            <version>2.8.0</version>
         </dependency>
     </dependencies>
 

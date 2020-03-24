@@ -37,11 +37,16 @@
             <version>${fhs.release.version}</version>
         </dependency>
 
-        <!--ibeetl 模板引擎-->
         <dependency>
-            <groupId>com.ibeetl</groupId>
-            <artifactId>beetl</artifactId>
-            <version>2.9.9</version>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_pagex</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_feign_autowired</artifactId>
+            <version>${fhs.release.version}</version>
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
@@ -101,6 +106,8 @@
             <version>2.6.1</version>
             <scope>compile</scope>
         </dependency>
+
+
     </dependencies>
     <build>
         <resources>

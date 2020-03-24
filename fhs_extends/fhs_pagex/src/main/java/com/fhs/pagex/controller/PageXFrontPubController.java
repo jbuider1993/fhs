@@ -126,16 +126,16 @@ public class PageXFrontPubController extends PageXBaseController implements Init
             {
                 if(request.getParameter("notHttpResult")!=null)
                 {
-                    super.outJsonp(JsonUtils.object2json(resultData),response,request);
+                    super.outJsonp(JsonUtils.object2json(resultData));
                     return null;
                 }
-                super.outJsonp(HttpResult.success(resultData).asJson(),response,request);
+                super.outJsonp(HttpResult.success(resultData).asJson());
                 return null;
             }
         }
         if(request.getParameter("notHttpResult")!=null)
         {
-            super.outWriteJson(JsonUtils.object2json(resultData),response);
+            super.outWriteJson(JsonUtils.object2json(resultData));
             return null;
         }
         return HttpResult.success(resultData);

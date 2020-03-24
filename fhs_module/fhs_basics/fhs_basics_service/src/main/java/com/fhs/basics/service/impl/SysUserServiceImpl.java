@@ -3,8 +3,10 @@ package com.fhs.basics.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.fhs.base.api.ucenter.rpc.FeignSysUserApiService;
 import com.fhs.basics.dox.SysUserDO;
 import com.fhs.basics.dox.UcenterMsTenantDO;
+import com.fhs.basics.form.SysUserForm;
 import com.fhs.basics.mapper.SysMenuMapper;
 import com.fhs.basics.mapper.SysUserMapper;
 import com.fhs.basics.service.SysMenuService;
@@ -14,26 +16,30 @@ import com.fhs.basics.service.UcenterMsTenantService;
 import com.fhs.basics.vo.*;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
+import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.db.ds.DataSource;
+import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
+import com.fhs.core.valid.checker.ParamChecker;
 import com.google.common.collect.HashMultimap;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-
+@Primary
 @Service("sysUserServiceImpl")
 @DataSource("base_business")
-public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> implements SysUserService {
+public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> implements SysUserService, FeignSysUserApiService {
 
     private final int ADMIN = 1;
 
@@ -162,7 +168,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> im
      */
     @Override
     public List<SysMenuVO> selectMenuByUid(SysUserDO adminUser) {
-        return ListUtils.copyListToList(sysUserMapper.selectMenuByUid(adminUser),SysMenuVO.class);
+        return ListUtils.copyListToList(sysUserMapper.selectMenuByUid(adminUser), SysMenuVO.class);
     }
 
     /**
@@ -178,7 +184,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> im
         map.put("menuType", "0");//运营菜单
         SysUserDO temp = super.findBean(adminUser);
         if (temp.getIsAdmin() == ADMIN) {
-            menuList = ListUtils.copyListToList(sysUserMapper.selectMenuAll(map),SysMenuVO.class);
+            menuList = ListUtils.copyListToList(sysUserMapper.selectMenuAll(map), SysMenuVO.class);
         } else {
             menuList = selectMenuByUid(adminUser);
         }
@@ -343,7 +349,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> im
     @Override
     public SysMenuVO selectParentMenuByid(Map<String, Object> map) {
         SysMenuVO result = new SysMenuVO();
-        BeanUtils.copyProperties(sysUserMapper.selectParentMenuByid(map),result);
+        BeanUtils.copyProperties(sysUserMapper.selectParentMenuByid(map), result);
         return result;
     }
 
@@ -396,7 +402,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> im
 
     @Override
     public List<SysMenuVO> Test(Map<String, Object> map) {
-        return ListUtils.copyListToList(sysUserMapper.readMenuByIds(map),SysMenuVO.class);
+        return ListUtils.copyListToList(sysUserMapper.readMenuByIds(map), SysMenuVO.class);
     }
 
     /**
@@ -404,7 +410,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> im
      */
     @Override
     public List<SysMenuPermissionVO> searchUserButton(SysUserDO adminUser) {
-        return ListUtils.copyListToList(sysUserMapper.searchUserButton(adminUser),SysMenuPermissionVO.class);
+        return ListUtils.copyListToList(sysUserMapper.searchUserButton(adminUser), SysMenuPermissionVO.class);
     }
 
     /**
@@ -426,11 +432,11 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> im
         if (tempUser.getIsAdmin() == ADMIN)// 管理员时，全查
         {
             paramMap.put("menuState", menuState);
-            adminMenus = ListUtils.copyListToList(sysMenuMapper.findForAllList(paramMap),SysMenuVO.class);
+            adminMenus = ListUtils.copyListToList(sysMenuMapper.findForAllList(paramMap), SysMenuVO.class);
         } else {
             paramMap = MapUtils.bean2Map(adminUser);
             paramMap.put("menuState", menuState);
-            adminMenus =  ListUtils.copyListToList(sysUserMapper.selectMenuByUname(paramMap),SysMenuVO.class);
+            adminMenus = ListUtils.copyListToList(sysUserMapper.selectMenuByUname(paramMap), SysMenuVO.class);
         }
         List<String> resulstList = readButtonsByList(adminMenus);
         return resulstList;
@@ -508,7 +514,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> im
                 }
             }
         }
-        List<SysMenuVO> menuList = ListUtils.copyListToList(sysUserMapper.selectMenuAll(paramMap),SysMenuVO.class);
+        List<SysMenuVO> menuList = ListUtils.copyListToList(sysUserMapper.selectMenuAll(paramMap), SysMenuVO.class);
         menuList = menuFilter(user, menuList);
         Map<Integer, LeftMenuVO> leftMenuMap = new HashMap<>();
         // 遍历AdminMenu转换为LeftMenu
@@ -539,6 +545,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> im
 
     /**
      * 从所有的菜单找到用户拥有权限的
+     *
      * @param user
      * @param menuList
      * @return
@@ -586,6 +593,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> im
 
     /**
      * 找一个菜单的爸爸，保证拥有子菜单 可以显示出父菜单
+     *
      * @param hasAddMenu
      * @param menuMap
      * @param sysMenu
@@ -711,8 +719,56 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> im
     }
 
 
+    @Override
+    public HttpResult<SysUserVO> getSysUserByName(String userLoginName) {
+        return null;
+    }
+
+    @Override
+    public HttpResult<List<String>> selectMenuByUname(String userLoginName) {
+        return null;
+    }
+
+    @Override
+    public HttpResult<Pager<SysUserVO>> getSysUserList(SysUserForm sysUserForm) {
+        return null;
+    }
+
+    @Override
+    public HttpResult<List<String>> getPermissionUrlByUserIdFeign(String userId) {
+        SysUserVO sysUser = this.findBeanById(userId);
+        if (sysUser == null) {
+            return HttpResult.error(null, "没有此用户");
+        } else {
+            return HttpResult.success(this.getPermissionUrl(sysUser));
+        }
+    }
+
     private List<String> getPermissionUrlByUserId(String userId) {
         return sysUserMapper.getPermissionUrlByUserId(userId);
+    }
+
+    @Override
+    public HttpResult<Map<String, String>> getDataUserPermisstion(String userId) {
+        ParamChecker.isNotNullOrEmpty(userId, "userId不能为空");
+        return HttpResult.success(this.findUserDataPermissions(userId));
+    }
+
+    @Override
+    public HttpResult<SysUserVO> getSysUserByUserId(SysUserForm sysUserForm) {
+        SysUserVO vo = new SysUserVO();
+        if (!CheckUtils.isNullOrEmpty(sysUserForm) && !CheckUtils.isNullOrEmpty(sysUserForm.getUserId())) {
+            SysUserVO sysUser = this.selectById(sysUserForm.getUserId());
+            return HttpResult.success(sysUser);
+        }
+        throw new ParamException("userid不可为空");
+    }
+
+    @Override
+    public HttpResult<List<SysUserVO>> getSysUserByOrganizationId(String organizationId) {
+        ParamChecker.isNotNullOrEmpty(organizationId, "userId不能为空");
+        List<SysUserVO> sysUserList = this.findForList(SysUserVO.builder().organizationId(organizationId).build());
+        return HttpResult.success(sysUserList);
     }
 
     private List<String> getPermissionUrlAll() {

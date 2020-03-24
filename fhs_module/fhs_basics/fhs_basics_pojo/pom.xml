@@ -27,16 +27,6 @@
             <version>${fhs.release.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_basics_service</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_module_base</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>
-        <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-annotations</artifactId>
             <version>1.5.10</version>

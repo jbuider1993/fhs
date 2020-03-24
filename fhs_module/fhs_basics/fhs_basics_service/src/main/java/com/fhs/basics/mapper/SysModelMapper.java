@@ -14,8 +14,8 @@ import org.springframework.stereotype.Repository;
  * @author jianbo.qin
  * @since 2018-05-29
  */
-@MapperDefinition(domainClass = SysModelDO.class)
 @Repository
+@MapperDefinition(domainClass = SysModelDO.class)
 public interface SysModelMapper extends FhsBaseMapper<SysModelDO> {
 
 }
