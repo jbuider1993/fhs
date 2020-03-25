@@ -4,11 +4,11 @@ import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.core.exception.ParamException;
 import com.fhs.logger.Logger;
-import com.fhs.pagex.dto.PageXFrontDTO;
-import com.fhs.pagex.dto.PageXTreeDTO;
-import com.fhs.pagex.dto.PagexAddDTO;
-import com.fhs.pagex.dto.PagexListSettDTO;
 import com.fhs.pagex.listener.JsRefreshListener;
+import com.fhs.pagex.vo.PageXFrontVO;
+import com.fhs.pagex.vo.PageXTreeVO;
+import com.fhs.pagex.vo.PagexAddVO;
+import com.fhs.pagex.vo.PagexListSettVO;
 
 import javax.script.ScriptException;
 import java.util.ArrayList;
@@ -52,22 +52,22 @@ public enum PagexDataService {
     /**
      * addDTO缓存
      */
-    private Map<String, PagexAddDTO> pagexAddDtoCache = new ConcurrentHashMap<>();
+    private Map<String, PagexAddVO> pagexAddDtoCache = new ConcurrentHashMap<>();
 
     /**
      * listDTO缓存
      */
-    private Map<String, PagexListSettDTO> pagexListSettDTOCache = new ConcurrentHashMap<>();
+    private Map<String, PagexListSettVO> pagexListSettDTOCache = new ConcurrentHashMap<>();
 
     /**
      * pageXFrontDTO 缓存
      */
-    private Map<String, PageXFrontDTO> pageXFrontDTOCache = new ConcurrentHashMap<>();
+    private Map<String, PageXFrontVO> pageXFrontDTOCache = new ConcurrentHashMap<>();
 
     /**
      * PageXTreeDTO 缓存
      */
-    private Map<String, PageXTreeDTO> pageXTreeDTOCache = new ConcurrentHashMap<>();
+    private Map<String, PageXTreeVO> pageXTreeDTOCache = new ConcurrentHashMap<>();
 
 
 
@@ -158,7 +158,7 @@ public enum PagexDataService {
         this.addPageHtmlCache = addPageHtmlCache;
     }
 
-    public Map<String, PagexAddDTO> getPagexAddDtoCache() {
+    public Map<String, PagexAddVO> getPagexAddDtoCache() {
         return pagexAddDtoCache;
     }
 
@@ -168,13 +168,13 @@ public enum PagexDataService {
      * @param namespace namespace
      * @return PagexAddDTO
      */
-    public PagexAddDTO getPagexAddDTOFromCache(String namespace) {
+    public PagexAddVO getPagexAddDTOFromCache(String namespace) {
         if (!jsContentMap.containsKey(namespace)) {
             throw new ParamException("namespace不存在:" + namespace);
         }
         if (!pagexAddDtoCache.containsKey(namespace)) {
             try {
-                pagexAddDtoCache.put(namespace, new PagexAddDTO(jsContentMap.get(namespace)));
+                pagexAddDtoCache.put(namespace, new PagexAddVO(jsContentMap.get(namespace)));
             } catch (NoSuchMethodException e) {
                 LOG.error("找不到方法", e);
             } catch (ScriptException e) {
@@ -185,7 +185,7 @@ public enum PagexDataService {
     }
 
 
-    public Map<String, PagexListSettDTO> getPagexListSettDTOCache() {
+    public Map<String, PagexListSettVO> getPagexListSettDTOCache() {
         return pagexListSettDTOCache;
     }
 
@@ -195,13 +195,13 @@ public enum PagexDataService {
      * @param namespace namespace
      * @return PagexListSettDTO
      */
-    public PagexListSettDTO getPagexListSettDTOFromCache(String namespace) {
+    public PagexListSettVO getPagexListSettDTOFromCache(String namespace) {
         if (!jsContentMap.containsKey(namespace)) {
             throw new ParamException("namespace不存在:" + namespace);
         }
         if (!pagexListSettDTOCache.containsKey(namespace)) {
             try {
-                pagexListSettDTOCache.put(namespace, new PagexListSettDTO(jsContentMap.get(namespace)));
+                pagexListSettDTOCache.put(namespace, new PagexListSettVO(jsContentMap.get(namespace)));
             } catch (NoSuchMethodException e) {
                 LOG.error("找不到方法", e);
             } catch (ScriptException e) {
@@ -211,7 +211,7 @@ public enum PagexDataService {
         return pagexListSettDTOCache.get(namespace);
     }
 
-    public Map<String, PageXFrontDTO> getPageXFrontDTOFromCache() {
+    public Map<String, PageXFrontVO> getPageXFrontDTOFromCache() {
         return pageXFrontDTOCache;
     }
 
@@ -221,13 +221,13 @@ public enum PagexDataService {
      * @param namespace namespace
      * @return PagexListSettDTO
      */
-    public PageXFrontDTO getPageXFrontDTOFromCache(String namespace) {
+    public PageXFrontVO getPageXFrontDTOFromCache(String namespace) {
         if (!jsContentMap.containsKey(namespace)) {
             throw new ParamException("namespace不存在:" + namespace);
         }
         if (!pageXFrontDTOCache.containsKey(namespace)) {
             try {
-                pageXFrontDTOCache.put(namespace, new PageXFrontDTO(jsContentMap.get(namespace)));
+                pageXFrontDTOCache.put(namespace, new PageXFrontVO(jsContentMap.get(namespace)));
             } catch (NoSuchMethodException e) {
                 LOG.error("找不到方法", e);
             } catch (ScriptException e) {
@@ -243,13 +243,13 @@ public enum PagexDataService {
      * @param namespace namespace
      * @return PagexListSettDTO
      */
-    public PageXTreeDTO getPageXTreeDTOFromCache(String namespace) {
+    public PageXTreeVO getPageXTreeDTOFromCache(String namespace) {
         if (!jsContentMap.containsKey(namespace)) {
             throw new ParamException("namespace不存在:" + namespace);
         }
         if (!pageXTreeDTOCache.containsKey(namespace)) {
             try {
-                pageXTreeDTOCache.put(namespace, new PageXTreeDTO(jsContentMap.get(namespace)));
+                pageXTreeDTOCache.put(namespace, new PageXTreeVO(jsContentMap.get(namespace)));
             } catch (NoSuchMethodException e) {
                 LOG.error("找不到方法", e);
             } catch (ScriptException e) {

@@ -11,7 +11,7 @@ import com.fhs.core.exception.BusinessException;
 import com.fhs.core.trans.service.impl.TransService;
 import com.fhs.logger.Logger;
 import com.fhs.pagex.dox.DefaultPageXDO;
-import com.fhs.pagex.dto.PagexAddDTO;
+import com.fhs.pagex.vo.PagexAddVO;
 import com.mybatis.jpa.cache.JpaTools;
 import com.mybatis.jpa.common.ColumnNameUtil;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -84,7 +84,7 @@ public class PageXDBService {
      * @param namespace namespace
      */
     private void insertAndUpdateX(EMap<String, Object> paramMap, String namespace, boolean isAdd) {
-        PagexAddDTO addDTO = PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace);
+        PagexAddVO addDTO = PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace);
         Map<String, Object> modelConfig = addDTO.getModelConfig();
 
 

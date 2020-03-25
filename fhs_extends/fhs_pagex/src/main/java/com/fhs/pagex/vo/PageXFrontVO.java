@@ -1,4 +1,4 @@
-package com.fhs.pagex.dto;
+package com.fhs.pagex.vo;
 
 
 import com.fhs.common.utils.ConverterUtils;
@@ -17,7 +17,7 @@ import java.util.Map;
  * pagex 前端配置 DTO
  */
 @Data
-public class PageXFrontDTO extends PagexBaseDTO {
+public class PageXFrontVO extends PagexBaseVO {
 
     /**
      * 前段对象
@@ -35,7 +35,7 @@ public class PageXFrontDTO extends PagexBaseDTO {
      * @throws NoSuchMethodException 如果调用某些方法找不到
      * @throws ScriptException 脚本本身有问题
      */
-    public PageXFrontDTO(String js) throws NoSuchMethodException, ScriptException {
+    public PageXFrontVO(String js) throws NoSuchMethodException, ScriptException {
         super.initScriptEngine(js);
         frontObject = (ScriptObjectMirror) scriptEngine.get("front");
         this.initModelConfig();

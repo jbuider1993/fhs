@@ -79,7 +79,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> im
 
     @Override
     public SysUserVO login(SysUserDO adminUser) {
-        return d2v(sysUserMapper.login(adminUser));
+        return  d2v(sysUserMapper.login(adminUser));
     }
 
     @Override

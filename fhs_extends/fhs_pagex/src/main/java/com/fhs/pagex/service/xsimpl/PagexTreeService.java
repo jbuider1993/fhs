@@ -2,10 +2,10 @@ package com.fhs.pagex.service.xsimpl;
 
 import com.fhs.logger.Logger;
 import com.fhs.pagex.config.BeetlConf;
-import com.fhs.pagex.dto.PageXTreeDTO;
 import com.fhs.pagex.service.HandelPageXService;
 import com.fhs.pagex.service.IPageXService;
 import com.fhs.pagex.service.PagexDataService;
+import com.fhs.pagex.vo.PageXTreeVO;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
@@ -43,7 +43,7 @@ public class PagexTreeService  implements IPageXService, InitializingBean {
      */
     @Override
     public String service(HttpServletRequest request, HttpServletResponse response, String js, String namespace) throws NoSuchMethodException, ScriptException {
-        PageXTreeDTO treeDTO = PagexDataService.SIGNEL.getPageXTreeDTOFromCache(namespace);
+        PageXTreeVO treeDTO = PagexDataService.SIGNEL.getPageXTreeDTOFromCache(namespace);
         Map<String,Object> paramMap = new HashMap<>();
         paramMap.put("modelConfig",treeDTO.getModelConfig());
         paramMap.put("keySett",treeDTO.getKeySettMap());

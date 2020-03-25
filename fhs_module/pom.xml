@@ -13,6 +13,7 @@
     <modules>
         <module>fhs_basics</module>
         <module>fhs_module_base</module>
+        <module>fhs_public</module>
     </modules>
     <artifactId>fhs_module</artifactId>
 

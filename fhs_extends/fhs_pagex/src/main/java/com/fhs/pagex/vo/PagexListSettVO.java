@@ -1,4 +1,4 @@
-package com.fhs.pagex.dto;
+package com.fhs.pagex.vo;
 
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
@@ -22,7 +22,7 @@ import java.util.*;
  * @Version: 1.0
  */
 @Data
-public class PagexListSettDTO extends PagexBaseDTO {
+public class PagexListSettVO extends PagexBaseVO {
 
 
 
@@ -92,7 +92,7 @@ public class PagexListSettDTO extends PagexBaseDTO {
      * @throws NoSuchMethodException 如果调用某些方法找不到
      * @throws ScriptException 脚本本身有问题
      */
-    public PagexListSettDTO(String js) throws NoSuchMethodException, ScriptException {
+    public PagexListSettVO(String js) throws NoSuchMethodException, ScriptException {
         super.initScriptEngine(js);
         listPageObject = (ScriptObjectMirror) scriptEngine.get("listPage");
         this.initButtons();

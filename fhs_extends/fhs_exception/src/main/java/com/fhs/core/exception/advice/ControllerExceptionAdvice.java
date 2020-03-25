@@ -91,8 +91,10 @@ public class ControllerExceptionAdvice {
             LOG.error("处理客户端请求错误，客户端NONCE为：" + ThreadKey.BUS_KEY.get(), ex);
             httpResult = HttpResult.otherResult(PubResult.SYSTEM_ERROR);
             httpResult.setMessage("系统错误，请联系管理员,NONCE:" + ThreadKey.BUS_KEY.get());
-            httpResult.setExceptionInfo(AESUtil.encrypt(getStackTrace(ex), EConfig.getOtherConfigPropertiesValue("exceptionInfoPassword")));
-            JsonUtils.outJson(response, httpResult.asJson());
+            if(EConfig.getOtherConfigPropertiesValue("exceptionInfoPassword")!=null){
+                httpResult.setExceptionInfo(AESUtil.encrypt(getStackTrace(ex), EConfig.getOtherConfigPropertiesValue("exceptionInfoPassword")));
+            }
+           JsonUtils.outJson(response, httpResult.asJson());
         }
         return null;
     }

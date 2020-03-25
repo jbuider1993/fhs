@@ -5,11 +5,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.core.base.controller.BaseController;
 import com.fhs.core.db.ds.ReadWriteDataSourceDecision;
-import com.fhs.pagex.dto.PagexBaseDTO;
 import com.fhs.pagex.service.JoinService;
 import com.fhs.pagex.service.ListExtendsHanleService;
 import com.fhs.pagex.service.PageXDBService;
 import com.fhs.pagex.service.PagexDataService;
+import com.fhs.pagex.vo.PagexBaseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
@@ -32,7 +32,7 @@ public class PageXBaseController extends BaseController {
      * 根据modelconfig中的db配置，来设置本操作连接的数据库
      * @param pagexBaseDTO  pagexBaseDTO
      */
-    protected void setDB(PagexBaseDTO pagexBaseDTO){
+    protected void setDB(PagexBaseVO pagexBaseDTO){
         if(pagexBaseDTO!=null)
         {
             if(pagexBaseDTO.getModelConfig().containsKey("db"))

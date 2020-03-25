@@ -5,12 +5,12 @@ import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.BusinessException;
 import com.fhs.logger.Logger;
 import com.fhs.pagex.common.BeetlUtil;
-import com.fhs.pagex.dto.PagexListSettDTO;
 import com.fhs.pagex.service.HandelPageXService;
 import com.fhs.pagex.service.IPageXService;
 import com.fhs.pagex.service.PagexDataService;
 import com.fhs.pagex.tag.grid.BaseGridTag;
 import com.fhs.pagex.tag.grid.GridTagFactory;
+import com.fhs.pagex.vo.PagexListSettVO;
 import com.mybatis.jpa.common.ColumnNameUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
@@ -54,7 +54,7 @@ public class   PagexListService implements IPageXService, InitializingBean {
     @Override
     public String service(HttpServletRequest request, HttpServletResponse response,String js,String namespace) throws NoSuchMethodException, ScriptException {
         StringBuilder htmlBuilder = new StringBuilder();
-        PagexListSettDTO listPageSett =  PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace);
+        PagexListSettVO listPageSett =  PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace);
         if(!listPageSett.getModelConfig().containsKey("dataGridUrl"))
         {
             listPageSett.getModelConfig().put("dataGridUrl", EConfig.getPathPropertiesValue("basePath") +
@@ -118,7 +118,7 @@ public class   PagexListService implements IPageXService, InitializingBean {
      * @return ToolsBar html
      */
     public String createFiltersHtml(HttpServletRequest request, HttpServletResponse response,
-                                     PagexListSettDTO pagexListSettDTO, List<Map<String,String>> filterParams,List<Map<String,String>> filterParamsForBetween)
+                                     PagexListSettVO pagexListSettDTO, List<Map<String,String>> filterParams,List<Map<String,String>> filterParamsForBetween)
     {
         String type = null;
         Class gridTagClass = null;

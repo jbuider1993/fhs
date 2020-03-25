@@ -3,8 +3,8 @@ package com.fhs.pagex.service;
 import com.alibaba.fastjson.JSONArray;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.logger.Logger;
-import com.fhs.pagex.dto.PagexListSettDTO;
 import com.fhs.pagex.fi.ListDataExtendsHandle;
+import com.fhs.pagex.vo.PagexListSettVO;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +50,7 @@ public class ListExtendsHanleService implements InitializingBean {
         if (notNeedHandleNamespaceSettMap.containsKey(namespace)) {
             needHandleFieldList = notNeedHandleNamespaceSettMap.get(namespace);
         } else {
-            PagexListSettDTO listSettDTO = PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace);
+            PagexListSettVO listSettDTO = PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace);
             needHandleFieldList = listSettDTO.getListSett().stream().filter(new Predicate<Map<String, Object>>() {
                 @Override
                 public boolean test(Map<String, Object> stringObjectMap) {

@@ -14,9 +14,9 @@ import com.fhs.core.trans.listener.TransMessageListener;
 import com.fhs.core.trans.service.impl.ITransTypeService;
 import com.fhs.core.trans.service.impl.TransService;
 import com.fhs.logger.Logger;
-import com.fhs.pagex.dto.PagexListSettDTO;
 import com.fhs.pagex.service.PageXDBService;
 import com.fhs.pagex.service.PagexDataService;
+import com.fhs.pagex.vo.PagexListSettVO;
 import com.mybatis.jpa.common.ColumnNameUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,7 +137,7 @@ public class PageXTransServiceImpl implements ITransTypeService, InitializingBea
 
         Map<String,Object> paramMap = new HashMap<>();
         paramMap.put("start", Constant.PAGE_ALL);
-        PagexListSettDTO pagexListSettDTO = PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace);
+        PagexListSettVO pagexListSettDTO = PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace);
         String pkeyField = ConverterUtils.toString(pagexListSettDTO.getModelConfig().get("pkeyCamel"));
         JSONObject joinColumns = JSON.parseObject(ConverterUtils.toString(pagexListSettDTO.getModelConfig().get("joinColumns")));
         //没有配置则代表不需要提供翻译给其他的代码

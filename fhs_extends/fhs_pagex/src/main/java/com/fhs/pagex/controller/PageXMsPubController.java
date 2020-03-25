@@ -15,9 +15,9 @@ import com.fhs.core.feign.autowired.annotation.AutowiredFhs;
 import com.fhs.core.result.HttpResult;
 import com.fhs.logger.anno.LogDesc;
 import com.fhs.pagex.common.ExcelExportTools;
-import com.fhs.pagex.dto.PageXTreeDTO;
-import com.fhs.pagex.dto.TreeDTO;
 import com.fhs.pagex.service.PagexDataService;
+import com.fhs.pagex.vo.PageXTreeVO;
+import com.fhs.pagex.vo.TreeVO;
 import com.mybatis.jpa.context.DataPermissonContext;
 import com.mybatis.jpa.context.MultiTenancyContext;
 import org.apache.shiro.SecurityUtils;
@@ -233,7 +233,7 @@ public class PageXMsPubController extends PageXBaseController {
     public JSONArray ztreeData(@PathVariable("namespace")String namespace, HttpServletRequest request, HttpServletResponse response)
     {
         checkPermiessAndNamespace( namespace,"see");
-        PageXTreeDTO treeDTO = PagexDataService.SIGNEL.getPageXTreeDTOFromCache(namespace);
+        PageXTreeVO treeDTO = PagexDataService.SIGNEL.getPageXTreeDTOFromCache(namespace);
         if(treeDTO==null)
         {
             throw new ParamException("namespace:" + namespace + "不支持tree");
@@ -362,13 +362,13 @@ public class PageXMsPubController extends PageXBaseController {
      * @param namespace namespace
      */
     @RequestMapping("{namespace}/getTree")
-    public List<TreeDTO> getTree(@PathVariable("namespace")String namespace, HttpServletRequest request){
+    public List<TreeVO> getTree(@PathVariable("namespace")String namespace, HttpServletRequest request){
         checkPermiessAndNamespace( namespace,"see");
         JSONArray jsonArray = getAllListPage(namespace);
 
-        List<TreeDTO> result = new ArrayList<>();
-        Map<String, TreeDTO> map = new HashMap();
-        PageXTreeDTO treeDTO = PagexDataService.SIGNEL.getPageXTreeDTOFromCache(namespace);
+        List<TreeVO> result = new ArrayList<>();
+        Map<String, TreeVO> map = new HashMap();
+        PageXTreeVO treeDTO = PagexDataService.SIGNEL.getPageXTreeDTOFromCache(namespace);
         if(treeDTO==null)
         {
             throw new ParamException("namespace:" + namespace + "不支持tree");
@@ -382,7 +382,7 @@ public class PageXMsPubController extends PageXBaseController {
 
         for(int i=0;i<jsonArray.size();i++)
         {
-            TreeDTO tree = new TreeDTO();
+            TreeVO tree = new TreeVO();
             tree.setId(jsonArray.getJSONObject(i).getString(pkey));
             tree.setParentId(jsonArray.getJSONObject(i).getString(fidField));
             tree.setText(jsonArray.getJSONObject(i).getString(namekey));

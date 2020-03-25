@@ -23,7 +23,7 @@ public interface SysMenuService extends BaseService<SysMenuVO, SysMenuDO>
     int NOT_SHOW = 1;
 
     /**
-     * 租户
+     * 租户findIdAndNameAndNamespaceList
      */
     int MENU_TYPE_TENANT=1;
 
@@ -70,8 +70,4 @@ public interface SysMenuService extends BaseService<SysMenuVO, SysMenuDO>
      */
     boolean updateDisable(SysMenuDO menu);
 
-    /**
-     * 查询id,name,namespace列表
-     */
-    List<SysMenuVO> findIdAndNameAndNamespaceList();
 }

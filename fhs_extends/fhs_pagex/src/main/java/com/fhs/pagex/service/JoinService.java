@@ -10,7 +10,7 @@ import com.fhs.common.utils.ReflectUtils;
 import com.fhs.common.utils.StringUtil;
 import com.fhs.pagex.annotation.JoinShowColumn;
 import com.fhs.pagex.mapper.DefaultPageXMapper;
-import com.fhs.pagex.dto.PagexListSettDTO;
+import com.fhs.pagex.vo.PagexListSettVO;
 import com.mybatis.jpa.common.ColumnNameUtil;
 import com.mybatis.jpa.common.PersistentUtil;
 import com.mybatis.jpa.common.scanner.AnnotationTypeFilterBuilder;
@@ -199,7 +199,7 @@ public class JoinService implements InitializingBean {
      */
     public void refreshJs(String namespace,String js)
     {
-        PagexListSettDTO pagexListSett = PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace);
+        PagexListSettVO pagexListSett = PagexDataService.SIGNEL.getPagexListSettDTOFromCache(namespace);
         String joinColumns = ConverterUtils.toString(pagexListSett.getModelConfig().get("joinColumns"));
         if(CheckUtils.isNotEmpty(joinColumns))
         {

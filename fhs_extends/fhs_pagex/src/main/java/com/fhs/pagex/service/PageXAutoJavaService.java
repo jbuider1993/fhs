@@ -7,8 +7,8 @@ import com.fhs.common.utils.StringUtil;
 import com.fhs.logger.Logger;
 import com.fhs.pagex.common.BeetlUtil;
 import com.fhs.pagex.config.BeetlConf;
-import com.fhs.pagex.dto.PagexListSettDTO;
 import com.fhs.pagex.loader.MemoryClassLoader;
+import com.fhs.pagex.vo.PagexListSettVO;
 import com.mybatis.jpa.common.ColumnNameUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,7 +69,7 @@ public class PageXAutoJavaService {
         if(beetlConf == null){
             beetlConf = SpringContextUtil.getBeanByName(BeetlConf.class);
         }
-        PagexListSettDTO pagexListSettDTO = new PagexListSettDTO(js);
+        PagexListSettVO pagexListSettDTO = new PagexListSettVO(js);
         String namespace =  ConverterUtils.toString(pagexListSettDTO.getModelConfig().get("namespace"));
         if(ConverterUtils.toBoolean(pagexListSettDTO.getModelConfig().get("trans")))
         {

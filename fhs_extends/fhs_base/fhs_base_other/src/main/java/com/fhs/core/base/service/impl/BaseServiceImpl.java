@@ -433,8 +433,8 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        this.doClass = getTypeArgumentsClass(0);
-        this.voClass = getTypeArgumentsClass(1);
+        this.doClass = getTypeArgumentsClass(1);
+        this.voClass = getTypeArgumentsClass(0);
         init();
     }
 

@@ -1,4 +1,4 @@
-package com.fhs.pagex.dto;
+package com.fhs.pagex.vo;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class TreeDTO {
+public class TreeVO {
     /**
      * 名字
      */
@@ -23,5 +23,5 @@ public class TreeDTO {
     /**
      * 子集合
      */
-    private List<TreeDTO> children = new ArrayList<>();
+    private List<TreeVO> children = new ArrayList<>();
 }

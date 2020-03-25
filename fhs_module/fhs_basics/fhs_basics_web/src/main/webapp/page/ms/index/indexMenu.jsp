@@ -778,7 +778,7 @@
     //修改个人信息
     function updateUserInfo() {
         openDialog(
-            '${basePath}page/ms/root/admin_info_update.jsp',
+            '${basePath}page/ms/root/admin_info_update.html',
             '修改个人信息');
     }
 

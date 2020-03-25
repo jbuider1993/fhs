@@ -1,5 +1,4 @@
-package com.fhs.pagex.dto;
-
+package com.fhs.pagex.vo;
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import lombok.Data;
@@ -11,7 +10,7 @@ import java.util.Map;
  * pagex TREE配置 DTO
  */
 @Data
-public class PageXTreeDTO extends  PagexBaseDTO {
+public class PageXTreeVO extends  PagexBaseVO {
 
     /**
      * tree配置对象
@@ -37,7 +36,7 @@ public class PageXTreeDTO extends  PagexBaseDTO {
      * @throws NoSuchMethodException 如果调用某些方法找不到
      * @throws ScriptException 脚本本身有问题
      */
-    public PageXTreeDTO(String js) throws NoSuchMethodException, ScriptException {
+    public PageXTreeVO(String js) throws NoSuchMethodException, ScriptException {
         super.initScriptEngine(js);
         treeObject = (ScriptObjectMirror) scriptEngine.get("tree");
         this.initModelConfig();

@@ -1,5 +1,6 @@
 package com.fhs.basics.controller;
 
+import com.fhs.basics.dox.SysUserDO;
 import com.fhs.basics.service.SysSystemService;
 import com.fhs.basics.service.SysUserService;
 import com.fhs.basics.vo.SysUserVO;
@@ -73,7 +74,7 @@ public class MsLoginController {
      * 用户登录
      */
     @RequestMapping("/securityLogin")
-    public HttpResult<Boolean> securityLogin(SysUserVO sysUser, HttpServletRequest request, HttpServletResponse response) {
+    public HttpResult<Boolean> securityLogin(SysUserDO sysUser, HttpServletRequest request, HttpServletResponse response) {
         String identifyCode = request.getParameter("identifyCode");
         Object sessionIdentify = request.getSession().getAttribute("identifyCode");
         if (null == sessionIdentify)//session 失效
@@ -107,7 +108,7 @@ public class MsLoginController {
      * 用户登录
      */
     @RequestMapping("/vueLogin")
-    public HttpResult<Map<String, String>> vueLogin(SysUserVO sysUser, HttpServletRequest request, HttpServletResponse response) {
+    public HttpResult<Map<String, String>> vueLogin(SysUserDO sysUser, HttpServletRequest request, HttpServletResponse response) {
         if (!useVue) {
             throw new ParamException("vue模式才能使用此方法");
         }

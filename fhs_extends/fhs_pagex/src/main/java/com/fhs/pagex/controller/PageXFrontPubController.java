@@ -9,8 +9,8 @@ import com.fhs.common.utils.JsonUtils;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.result.PubResult;
-import com.fhs.pagex.dto.PageXFrontDTO;
 import com.fhs.pagex.service.PagexDataService;
+import com.fhs.pagex.vo.PageXFrontVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -51,14 +51,14 @@ public class PageXFrontPubController extends PageXBaseController implements Init
         if (namespace == null || functionName == null) {
             throw new ParamException("参数不完整，namespace或者functionName为null");
         }
-        PageXFrontDTO frontDTO = PagexDataService.SIGNEL.getPageXFrontDTOFromCache(namespace);
+        PageXFrontVO frontDTO = PagexDataService.SIGNEL.getPageXFrontDTOFromCache(namespace);
         if (!frontDTO.getFrontApiMap().containsKey(functionName)) {
             return PubResult.NO_FIND.asResult();
         }
         // 校验参数 end
 
 
-        PageXFrontDTO.FrontApi api = frontDTO.getFrontApiMap().get(functionName);
+        PageXFrontVO.FrontApi api = frontDTO.getFrontApiMap().get(functionName);
         FunctionHandle handle = functionHandleMap.get(api.getType());
 
         // 处理参数start
@@ -119,7 +119,7 @@ public class PageXFrontPubController extends PageXBaseController implements Init
      * @param response response
      * @return 只有前端不传notHttpResult并且接口不支持jsonp的时候给前端返回Httpresult
      */
-    public HttpResult<Object> handelHttpReulst(PageXFrontDTO.FrontApi api,Object resultData,HttpServletRequest request,HttpServletResponse response){
+    public HttpResult<Object> handelHttpReulst(PageXFrontVO.FrontApi api,Object resultData,HttpServletRequest request,HttpServletResponse response){
         if(api.isJSONP())
         {
             if(request.getParameter("jsonpCallback")!=null)

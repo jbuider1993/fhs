@@ -9,8 +9,8 @@ import com.fhs.common.utils.StringUtil;
 import com.fhs.core.exception.ParamException;
 import com.fhs.pagex.dox.DefaultPageXDO;
 import com.fhs.pagex.mapper.DefaultPageXMapper;
-import com.fhs.pagex.dto.PagexAddDTO;
-import com.fhs.pagex.dto.PagexListSettDTO;
+import com.fhs.pagex.vo.PagexAddVO;
+import com.fhs.pagex.vo.PagexListSettVO;
 import com.mybatis.jpa.cache.JpaTools;
 import com.mybatis.jpa.common.ColumnNameUtil;
 import com.mybatis.jpa.meta.PersistentMeta;
@@ -47,7 +47,7 @@ public class PageXAutoSqlService {
      *
      */
     public void autoSql(String js) throws NoSuchMethodException, ScriptException {
-        PagexAddDTO pagexAddDTO = new PagexAddDTO(js);
+        PagexAddVO pagexAddDTO = new PagexAddVO(js);
         String namespace = ConverterUtils.toString(pagexAddDTO.getModelConfig().get("namespace"));
         String insertSql = autoInsert(pagexAddDTO);
         parseSql("insertPageX", namespace, "insert", insertSql);
@@ -59,7 +59,7 @@ public class PageXAutoSqlService {
         parseSql("updatePageX", namespace, "update", updateSql);
         String findSql = autoFind(pagexAddDTO);
         parseSql("findBeanPageX", namespace, "select", findSql);
-        PagexListSettDTO pagexListSettDTO = new PagexListSettDTO(js);
+        PagexListSettVO pagexListSettDTO = new PagexListSettVO(js);
         String findPageSql = autoFindPage(pagexListSettDTO);
         parseSql("findPageX", namespace, "select", findPageSql);
         String findPageCountSql = autoFindPageCount(pagexListSettDTO);
@@ -158,7 +158,7 @@ public class PageXAutoSqlService {
      * @param pagexAddDTO pagexAddDTO
      * @return insert 的sql
      */
-    public String autoInsert(PagexAddDTO pagexAddDTO) {
+    public String autoInsert(PagexAddVO pagexAddDTO) {
         Map<String, Object> modelConfig = pagexAddDTO.getModelConfig();
         StringBuilder sqlBuilder = new StringBuilder("INSERT INTO " + modelConfig.get("table") + " (`");
         sqlBuilder.append(modelConfig.get("pkey") + "`");
@@ -198,7 +198,7 @@ public class PageXAutoSqlService {
      * @param pagexAddDTO pagexAddDTO
      * @return 根据id删除数的sql
      */
-    public String autoDel(PagexAddDTO pagexAddDTO) {
+    public String autoDel(PagexAddVO pagexAddDTO) {
         Map<String, Object> modelConfig = pagexAddDTO.getModelConfig();
         StringBuilder sqlBuilder = new StringBuilder(" DELETE FROM  " + modelConfig.get("table") + " WHERE ");
         sqlBuilder.append(modelConfig.get("pkey") + " = #{id}");
@@ -211,7 +211,7 @@ public class PageXAutoSqlService {
      * @param pagexAddDTO pagexAddDTO
      * @return 根据id删除数的sql
      */
-    public String autoDelForFkey(PagexAddDTO pagexAddDTO) {
+    public String autoDelForFkey(PagexAddVO pagexAddDTO) {
         Map<String, Object> modelConfig = pagexAddDTO.getModelConfig();
         StringBuilder sqlBuilder = new StringBuilder(" DELETE FROM  " + modelConfig.get("table") + " WHERE ");
         sqlBuilder.append(modelConfig.get("fkey") + " = #{fkey}");
@@ -224,7 +224,7 @@ public class PageXAutoSqlService {
      * @param pagexAddDTO pagexAddDTO
      * @return 根据id查询单个sql
      */
-    public String autoFind(PagexAddDTO pagexAddDTO) {
+    public String autoFind(PagexAddVO pagexAddDTO) {
         Map<String, Object> modelConfig = pagexAddDTO.getModelConfig();
         StringBuilder sqlBuilder = new StringBuilder(" SELECT " + modelConfig.get("pkey") + " AS " + modelConfig.get("pkeyCamel"));
         List<Map<String, Object>> fields = pagexAddDTO.getFormFieldSett();
@@ -246,7 +246,7 @@ public class PageXAutoSqlService {
      * @param pagexListSettDTO pagexListSettDTO
      * @return 生成根据条件查询列表sql
      */
-    public String autoFindPage(PagexListSettDTO pagexListSettDTO) {
+    public String autoFindPage(PagexListSettVO pagexListSettDTO) {
         Map<String, Object> modelConfig = pagexListSettDTO.getModelConfig();
         StringBuilder sqlBuilder = new StringBuilder("<script> SELECT create_time createTime,create_user createUser,update_time updateTime," +
                 "update_user updateUser," + modelConfig.get("pkey") + " AS " + modelConfig.get("pkeyCamel"));
@@ -283,7 +283,7 @@ public class PageXAutoSqlService {
      * @param pagexListSettDTO pagexListSettDTO
      * @return 查询列表总数的sql
      */
-    public String autoFindPageCount(PagexListSettDTO pagexListSettDTO) {
+    public String autoFindPageCount(PagexListSettVO pagexListSettDTO) {
         Map<String, Object> modelConfig = pagexListSettDTO.getModelConfig();
         StringBuilder sqlBuilder = new StringBuilder("<script> SELECT COUNT(1) as countNum");
         sqlBuilder.append(" FROM " + modelConfig.get("table") + autoPagerWhere(pagexListSettDTO) + "</script>");
@@ -296,7 +296,7 @@ public class PageXAutoSqlService {
      * @param pagexListSettDTO pagexListSettDTO
      * @return 生成列表和查总数sql的过滤条件sql
      */
-    private String autoPagerWhere(PagexListSettDTO pagexListSettDTO) {
+    private String autoPagerWhere(PagexListSettVO pagexListSettDTO) {
         StringBuilder sqlBuilder = new StringBuilder("<where>");
         List<Map<String, Object>> fields = pagexListSettDTO.getFilters();
         String fieldName = null;
@@ -366,7 +366,7 @@ public class PageXAutoSqlService {
                 sqlBuilder.append("</if>");
             }
         }
-        PagexAddDTO addDTO = PagexDataService.SIGNEL.getPagexAddDTOFromCache(pagexListSettDTO.getModelConfig().get("namespace").toString());
+        PagexAddVO addDTO = PagexDataService.SIGNEL.getPagexAddDTOFromCache(pagexListSettDTO.getModelConfig().get("namespace").toString());
         List<Map<String, Object>> formFieldSett = addDTO.getFormFieldSett();
 
         for (Map<String, Object> filed : formFieldSett) {
@@ -404,7 +404,7 @@ public class PageXAutoSqlService {
      * @param pagexAddDTO pagexAddDTO
      * @return 更新sql
      */
-    public String autoUpdateSql(PagexAddDTO pagexAddDTO) {
+    public String autoUpdateSql(PagexAddVO pagexAddDTO) {
         Map<String, Object> modelConfig = pagexAddDTO.getModelConfig();
         // columns
         StringBuilder sets = new StringBuilder();

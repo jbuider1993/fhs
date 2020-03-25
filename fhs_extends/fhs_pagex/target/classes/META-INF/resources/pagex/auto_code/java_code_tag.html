@@ -1,8 +1,8 @@
-import com.fhs.pagex.bean.BasePagexBean;
-import com.fhs.core.trans.Trans;
-import com.fhs.core.trans.TransTypes;
+import com.fhs.pagex.vo.BasePagexVO;
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.anno.TransTypes;
 @TransTypes(types = {${po.transTypes}})
-public class ${po.className} extends BasePagexBean<${po.className}>
+public class ${po.className} extends BasePagexVO<${po.className}>
 {
     public String ${modelConfig.pkeyCamel};
 <% for(field in po.fieldList){%>

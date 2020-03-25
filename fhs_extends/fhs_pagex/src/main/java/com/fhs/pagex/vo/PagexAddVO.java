@@ -1,4 +1,4 @@
-package com.fhs.pagex.dto;
+package com.fhs.pagex.vo;
 
 import com.fhs.common.utils.ConverterUtils;
 import com.mybatis.jpa.common.ColumnNameUtil;
@@ -23,7 +23,7 @@ import java.util.Map;
  * @Version: 1.0
  */
 @Data
-public class PagexAddDTO extends PagexBaseDTO {
+public class PagexAddVO extends PagexBaseVO {
 
     /**
      * 添加页面JS对象
@@ -42,7 +42,7 @@ public class PagexAddDTO extends PagexBaseDTO {
      * @throws NoSuchMethodException 如果调用某些方法找不到
      * @throws ScriptException 脚本本身有问题
      */
-    public PagexAddDTO(String js) throws NoSuchMethodException, ScriptException {
+    public PagexAddVO(String js) throws NoSuchMethodException, ScriptException {
         super.initScriptEngine(js);
         addPageObject = (ScriptObjectMirror) scriptEngine.get("add");
         this.initFormFieldSett();

@@ -319,10 +319,11 @@ public class MsUserController extends ModelSuperController<SysUserVO, SysUserDO>
      * @param id id
      * @throws Exception
      */
+    @Override
     @RequiresPermissions("sysUser:see")
     @RequestMapping("info/{id}")
     @ResponseBody
-    public SysUserVO info(@PathVariable(value = "id", required = true) String id) throws Exception {
+    public SysUserVO info(@PathVariable(value = "id", required = true) String id,HttpServletRequest request) throws Exception {
         //根据用户id用户信息
         SysUserVO user = sysUserService.findSysUserById(id);
         return user;

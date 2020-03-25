@@ -1,5 +1,6 @@
 package com.fhs.basics.service.impl;
 
+import com.fhs.base.api.ucenter.rpc.FeignSysMenuApiService;
 import com.fhs.basics.dox.SysMenuDO;
 import com.fhs.basics.dox.SysMenuPermissionDO;
 import com.fhs.basics.dox.UcenterMsTenantDO;
@@ -18,6 +19,7 @@ import com.fhs.common.utils.StringUtil;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.db.ds.DataSource;
+import com.fhs.core.result.HttpResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -33,7 +35,7 @@ import java.util.*;
  */
 @Service
 @DataSource("base_business")
-public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuVO, SysMenuDO> implements SysMenuService {
+public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuVO, SysMenuDO> implements SysMenuService, FeignSysMenuApiService {
 
     @Autowired
     private SysMenuMapper mapper;
@@ -374,8 +376,8 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuVO, SysMenuDO> im
     }
 
     @Override
-    public List<SysMenuVO> findIdAndNameAndNamespaceList() {
-        return ListUtils.copyListToList(mapper.findIdAndNameAndNamespaceList(), SysMenuVO.class);
+    public HttpResult<List<SysMenuVO>> findIdAndNameAndNamespaceList() {
+        return HttpResult.success(ListUtils.copyListToList(mapper.findIdAndNameAndNamespaceList(), SysMenuVO.class));
     }
 
 

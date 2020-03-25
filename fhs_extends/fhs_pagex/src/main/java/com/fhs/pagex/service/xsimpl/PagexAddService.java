@@ -5,13 +5,13 @@ import com.fhs.common.utils.ConverterUtils;
 import com.fhs.core.config.EConfig;
 import com.fhs.logger.Logger;
 import com.fhs.pagex.common.BeetlUtil;
-import com.fhs.pagex.dto.PagexAddDTO;
 import com.fhs.pagex.service.HandelPageXService;
 import com.fhs.pagex.service.IPageXService;
 import com.fhs.pagex.service.PagexDataService;
 import com.fhs.pagex.tag.form.BaseFormTag;
 import com.fhs.pagex.tag.form.FormTagFactory;
 import com.fhs.pagex.tag.form.IOne2XTag;
+import com.fhs.pagex.vo.PagexAddVO;
 import com.mybatis.jpa.common.ColumnNameUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
@@ -59,7 +59,7 @@ public class PagexAddService  implements IPageXService, InitializingBean {
         /*if (PagexDataService.SIGNEL.getAddPageHtmlCache().containsKey(namespace)) {
             return PagexDataService.SIGNEL.getAddPageHtmlCache().get(namespace);
         }*/
-        PagexAddDTO pageAddSett = PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace);
+        PagexAddVO pageAddSett = PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace);
         //formHtml
         Map<String,Object> paramMap = new HashMap<>();
         String formHtml = createFormHtml(request, response, pageAddSett,paramMap);
@@ -104,7 +104,7 @@ public class PagexAddService  implements IPageXService, InitializingBean {
      * @param pageAddSett 添加页配置
      * @return 表单内容
      */
-    public String createFormHtml(HttpServletRequest request, HttpServletResponse response, PagexAddDTO pageAddSett, Map<String,Object> paramMap) {
+    public String createFormHtml(HttpServletRequest request, HttpServletResponse response, PagexAddVO pageAddSett, Map<String,Object> paramMap) {
         String type = null;
         Class fromTagClass = null;
         BaseFormTag formTag = null;
@@ -208,7 +208,7 @@ public class PagexAddService  implements IPageXService, InitializingBean {
     }
 
     private String handelOne2X(List<String> readyJsListList , List<String> loadSuccessList, List<String> onSaveList, List<String> overallJsList,
-                               PagexAddDTO pageAddSett, Map<String, Object> field, HttpServletRequest request, HttpServletResponse response, Map<String,Object> paramMap){
+                               PagexAddVO pageAddSett, Map<String, Object> field, HttpServletRequest request, HttpServletResponse response, Map<String,Object> paramMap){
         // 头处理
         // template处理
         // load数据处理
@@ -219,7 +219,7 @@ public class PagexAddService  implements IPageXService, InitializingBean {
         loadSuccessList.add(xnamespace + "_onload(info)");
         onSaveList.add(xnamespace + "_onsave()");
         //找到需要关联的dto
-        PagexAddDTO xAddDTO = PagexDataService.SIGNEL.getPagexAddDTOFromCache(xnamespace);
+        PagexAddVO xAddDTO = PagexDataService.SIGNEL.getPagexAddDTOFromCache(xnamespace);
         String type = null;
         Class<? extends IOne2XTag> fromTagClass = null;
         IOne2XTag tag = null;
