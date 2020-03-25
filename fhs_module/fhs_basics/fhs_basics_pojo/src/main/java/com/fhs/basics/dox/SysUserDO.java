@@ -22,6 +22,7 @@ import com.mybatis.jpa.annotation.Like;
 import com.mybatis.jpa.annotation.RLike;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -40,6 +41,7 @@ import java.util.List;
  */
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @Table(name = "t_ucenter_ms_user")
 @TransTypes(types = {BaseTransConstant.WORD_BOOK, BaseTransConstant.SYS_ORGANIZATION_INFO})

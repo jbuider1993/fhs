@@ -23,14 +23,9 @@
             <version>${fhs.release.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <version>${fhs.spring-cloud-starter.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-netflix-core</artifactId>
-            <version>${fhs.spring-cloud-starter.version}</version>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_feign</artifactId>
+            <version>${fhs.release.version}</version>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>

@@ -5,18 +5,17 @@ import com.fhs.basics.dox.SysMenuDO;
 import com.fhs.basics.dox.SysUserDO;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.trans.anno.TransTypes;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fhs.core.trans.constant.TransType;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 /**
  * 系统菜单vo
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-@TransTypes(types = {BaseTransConstant.WORD_BOOK})
+@TransTypes(types = {TransType.WORD_BOOK})
 public class SysMenuVO extends SysMenuDO implements VO {
 
 }

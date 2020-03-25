@@ -2,7 +2,7 @@ package com.fhs.module.base.shiro;
 
 import com.fhs.logger.Logger;
 import org.apache.shiro.SecurityUtils;
-import org.beetl.core.Tag;
+import org.beetl.core.tag.Tag;
 import org.beetl.ext.spring.BeetlGroupUtilConfiguration;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;

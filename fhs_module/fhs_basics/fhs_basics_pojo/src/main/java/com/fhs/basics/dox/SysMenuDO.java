@@ -19,6 +19,7 @@ import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.basics.constant.BaseTransConstant;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import net.sf.jsqlparser.statement.update.Update;
 import org.hibernate.validator.constraints.Length;
 
@@ -41,6 +42,7 @@ import java.util.List;
  */
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "t_ucenter_ms_menu")
 public class SysMenuDO extends BaseDO<SysMenuDO> {
 

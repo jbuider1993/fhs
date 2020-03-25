@@ -1,6 +1,6 @@
 package com.fhs.basics.service.impl;
 
-import com.fhs.base.api.ucenter.rpc.FeignSysMenuApiService;
+import com.fhs.basics.api.rpc.FeignSysMenuApiService;
 import com.fhs.basics.dox.SysMenuDO;
 import com.fhs.basics.dox.SysMenuPermissionDO;
 import com.fhs.basics.dox.UcenterMsTenantDO;
@@ -8,7 +8,6 @@ import com.fhs.basics.mapper.SysMenuMapper;
 import com.fhs.basics.mapper.SysMenuPermissionMapper;
 import com.fhs.basics.service.SysMenuService;
 import com.fhs.basics.service.UcenterMsTenantService;
-import com.fhs.basics.vo.SysMenuPermissionVO;
 import com.fhs.basics.vo.SysMenuVO;
 import com.fhs.basics.vo.TreeDataVO;
 import com.fhs.basics.vo.TreeModelVO;
@@ -22,10 +21,7 @@ import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.result.HttpResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.tree.TreeModel;
 import java.util.*;
 
 /**

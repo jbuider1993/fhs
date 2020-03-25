@@ -19,8 +19,8 @@ import java.util.Map;
  * @UpdateDate: 2018/12/17 0017 19:59
  * @Version: 1.0
  */
-@MapperDefinition(domainClass = DefaultPageXDO.class)
 @Repository
+@MapperDefinition(domainClass = DefaultPageXDO.class)
 public interface DefaultPageXMapper extends FhsBaseMapper<DefaultPageXDO> {
     /**
      * 查询数据给join用

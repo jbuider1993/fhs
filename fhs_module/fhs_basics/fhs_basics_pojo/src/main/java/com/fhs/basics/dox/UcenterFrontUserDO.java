@@ -9,6 +9,7 @@ import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Update;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
 
 /**
@@ -19,6 +20,7 @@ import org.hibernate.validator.constraints.Length;
  */
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @TableName("t_ucenter_front_user")
 public class UcenterFrontUserDO extends BaseDO<UcenterFrontUserDO> {

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 系统用户DAO
@@ -242,7 +243,7 @@ public interface SysUserMapper extends FhsBaseMapper<SysUserDO>
      * @return 用户有权限的 菜单id
      */
     @NotMultiTenancyCheck
-    List<Integer> selectMenuIdByAdmin(SysUserDO user);
+    Set<Integer> selectMenuIdByAdmin(SysUserDO user);
 
     /**
      * 根据userid获取user有权限的菜单
@@ -250,7 +251,7 @@ public interface SysUserMapper extends FhsBaseMapper<SysUserDO>
      * @return 用户有权限的 菜单id
      */
     @NotMultiTenancyCheck
-    List<Integer> selectMenuIdByUserId(SysUserDO user);
+    Set<Integer> selectMenuIdByUserId(SysUserDO user);
 
     /**
      * 根据条件查询用户数

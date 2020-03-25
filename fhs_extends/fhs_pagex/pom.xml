@@ -49,7 +49,7 @@
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_feign_autowired</artifactId>
+            <artifactId>fhs_feign</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
         <dependency>
@@ -67,7 +67,7 @@
         <dependency>
             <groupId>com.ibeetl</groupId>
             <artifactId>beetl</artifactId>
-            <version>2.9.9</version>
+            <version>3.0.21.RELEASE</version>
         </dependency>
 
     </dependencies>

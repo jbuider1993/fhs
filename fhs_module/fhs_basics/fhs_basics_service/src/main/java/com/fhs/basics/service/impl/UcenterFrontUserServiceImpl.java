@@ -1,6 +1,6 @@
 package com.fhs.basics.service.impl;
 
-import com.fhs.base.api.ucenter.rpc.FeignFrontUserApiService;
+import com.fhs.basics.api.rpc.FeignFrontUserApiService;
 import com.fhs.basics.dox.UcenterFrontUserBindDO;
 import com.fhs.basics.dox.UcenterFrontUserDO;
 import com.fhs.basics.form.GetSingleFrontUserForm;

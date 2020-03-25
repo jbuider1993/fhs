@@ -52,15 +52,6 @@ public class AreaController extends ModelSuperController<AreaVO, AreaDO> {
         return areaService.findForListFromMap(map);
     }
 
-    /**
-     * 刷新区域缓存
-     */
-    @RequiresPermissions("area:refreshRedisCache")
-    @RequestMapping("/refreshRedisCache")
-    @ResponseBody
-    public HttpResult<Boolean> refreshRedisCache() {
-        areaService.refreshRedisCache();
-        return HttpResult.success(true);
-    }
+
 
 }

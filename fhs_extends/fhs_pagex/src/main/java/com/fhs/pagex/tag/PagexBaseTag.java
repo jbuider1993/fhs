@@ -1,7 +1,7 @@
 package com.fhs.pagex.tag;
 
 import com.fhs.common.utils.ConverterUtils;
-import org.beetl.core.Tag;
+import org.beetl.core.tag.Tag;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

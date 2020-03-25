@@ -31,4 +31,10 @@ public @interface AutoTrans
      * @return  默认为true 如果是false的话
      */
     boolean useCache() default true;
+
+    /**
+     * 是否使用redis存放缓存
+     * @return 默认false
+     */
+    boolean useRedis() default false;
 }

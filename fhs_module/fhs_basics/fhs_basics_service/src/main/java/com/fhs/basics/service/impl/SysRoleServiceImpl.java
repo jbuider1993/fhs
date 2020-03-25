@@ -1,6 +1,6 @@
 package com.fhs.basics.service.impl;
 
-import com.fhs.base.api.ucenter.rpc.FeignSysRoleApiService;
+import com.fhs.basics.api.rpc.FeignSysRoleApiService;
 import com.fhs.basics.dox.SysRoleDO;
 import com.fhs.basics.mapper.SysRoleMapper;
 import com.fhs.basics.service.SysRoleService;

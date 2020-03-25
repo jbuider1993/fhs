@@ -24,9 +24,9 @@ import javax.validation.constraints.NotNull;
  */
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @TableName("t_ucenter_mp_sett")
-@EqualsAndHashCode
 public class UcenterMpSettDO extends BaseDO<UcenterMpSettDO> {
     private static final long serialVersionUID = 296286961263761719L;
     @TableId(value = "id", type = IdType.UUID)

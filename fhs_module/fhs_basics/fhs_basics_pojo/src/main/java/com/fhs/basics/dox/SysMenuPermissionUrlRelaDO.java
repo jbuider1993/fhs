@@ -21,8 +21,8 @@ import javax.validation.constraints.NotNull;
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2018 All Rights Reserved.
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Builder
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "t_ucenter_ms_menu_permission_url_rela")
 @Entity
 public class SysMenuPermissionUrlRelaDO extends BaseDO<SysMenuPermissionUrlRelaDO> {

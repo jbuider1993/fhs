@@ -13,7 +13,7 @@
     <springProperty scope="context" name="log_dir" source="logback.file.dir"/>
     <springProperty scope="context" name="elk_host" source="logback.elk.host"/>
     <springProperty scope="context" name="root_level" source="logback.root.level"/>
-    <!--  <property name="log_dir" value="c:/logs/ucenter"/>-->
+    <!--  <property name="log_dir" value="c:/logs/basics"/>-->
     <!-- 日志最大的历史 30天 -->
     <property name="maxHistory" value="30"/>
 

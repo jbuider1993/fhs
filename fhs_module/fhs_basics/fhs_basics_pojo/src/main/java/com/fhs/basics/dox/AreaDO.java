@@ -9,6 +9,8 @@ import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
 import com.mybatis.jpa.annotation.Like;
 import com.fhs.common.constant.Constant;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Column;
@@ -30,7 +32,10 @@ import javax.validation.constraints.NotNull;
  * @History:<br> 陕西小伙伴网络科技有限公司
  * Copyright (c) 2017 All Rights Reserved.
  */
+
 @Entity
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "t_service_area")
 public class AreaDO extends BaseDO<AreaDO> {
     private static final long serialVersionUID = 1L;

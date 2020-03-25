@@ -3,7 +3,7 @@ package com.fhs.pagex.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.fhs.base.api.ucenter.rpc.FeignSysMenuApiService;
+import com.fhs.basics.api.rpc.FeignSysMenuApiService;
 import com.fhs.basics.vo.SysMenuVO;
 import com.fhs.basics.vo.SysUserVO;
 import com.fhs.common.constant.Constant;
@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.*;
 
 /**

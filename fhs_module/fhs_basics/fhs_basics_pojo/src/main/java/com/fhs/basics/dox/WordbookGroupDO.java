@@ -1,6 +1,8 @@
 package com.fhs.basics.dox;
 
 import com.fhs.core.base.dox.BaseDO;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
 
 import com.fhs.core.valid.group.Add;
@@ -20,7 +22,9 @@ import javax.validation.constraints.NotNull;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
+@Data
 @Entity
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "t_service_wordbook_group")
 public class WordbookGroupDO extends BaseDO<WordbookGroupDO> {
     /**

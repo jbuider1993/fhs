@@ -1,6 +1,6 @@
 package com.fhs.basics.service.impl;
 
-import com.fhs.base.api.ucenter.rpc.FeignWordBookApiService;
+import com.fhs.basics.api.rpc.FeignWordBookApiService;
 import com.fhs.basics.dox.WordbookDO;
 import com.fhs.basics.mapper.WordbookMapper;
 import com.fhs.basics.service.WordBookService;

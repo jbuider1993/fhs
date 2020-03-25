@@ -20,6 +20,7 @@ import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
 import com.fhs.basics.constant.BaseTransConstant;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -37,6 +38,7 @@ import javax.validation.constraints.NotNull;
  * @since [产品/模块版本]
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "t_ucenter_ms_role")
 @TransTypes(types = {Constant.WORD_BOOK, Constant.USER_INFO, BaseTransConstant.SYS_ORGANIZATION_INFO})

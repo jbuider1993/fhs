@@ -23,8 +23,8 @@ fhs:
     url: /b/page/login
   mybatis-jpa:
     #多个用;分隔
-    entity-package: com.**.**.bean
-    mapper-package: com.**.**.dao
+    entity-package: com.**.**.dox
+    mapper-package: com.**.**.mapper
   safe:
     enable-xss: true #xss注入控制
   session:
@@ -42,11 +42,12 @@ spring:
   main:
     allow-bean-definition-overriding: true
   application:
-    name: park_client
-  mvc:
-    view:
-      prefix: /page/
-      suffix: .jsp
+    name: fhs_admin_app
+  http:
+    encoding:
+      force: true
+      charset: utf-8
+      enabled: true
   redis:
     database: 0
     lettuce:
@@ -91,9 +92,8 @@ swagger:
 logging:
   config: classpath:logback-spring.xml
   level:
-    com.fhs.ucenter.dao: debug
+    com.fhs.basics: debug
     com.fhs.pagex: debug
-    com.fhs.system.dao: debug
 
 logback:
   #这里可以配置logstash ip和端口

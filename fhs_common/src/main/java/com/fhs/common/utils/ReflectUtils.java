@@ -255,7 +255,7 @@ public class ReflectUtils {
      */
     public static <T extends Annotation> List<Field> getAnnotationField(Class<?> clazz, Class<T> annotationClass) {
         List<Field> result = new ArrayList<>();
-        Field[] fields = clazz.getDeclaredFields();
+        List<Field> fields = getAllField(clazz);
         for (Field field : fields) {
             if (field.getAnnotation(annotationClass) != null) {
                 result.add(field);

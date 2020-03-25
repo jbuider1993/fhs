@@ -45,12 +45,12 @@ public class LoginServiceImpl implements LoginService {
     /**
      * ACCESS_TOKEN 和 userid的rediskey
      */
-    private static final String ACCESS_TOKEN_USER_KEY = "ucenter:access_token_user:";
+    private static final String ACCESS_TOKEN_USER_KEY = "basics:access_token_user:";
 
     /**
      * ACCESS_TOKEN对应的用户是否的vip
      */
-    private static final String ACCESS_TOKEN_USER_IS_VIP = "ucenter:access_token_user_is_vip:";
+    private static final String ACCESS_TOKEN_USER_IS_VIP = "basics:access_token_user_is_vip:";
 
     /**
      * redis缓存服务

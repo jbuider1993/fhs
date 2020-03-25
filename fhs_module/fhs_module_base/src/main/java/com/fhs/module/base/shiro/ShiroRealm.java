@@ -1,6 +1,6 @@
 package com.fhs.module.base.shiro;
 
-import com.fhs.base.api.ucenter.rpc.FeignSysUserApiService;
+import com.fhs.basics.api.rpc.FeignSysUserApiService;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.core.exception.BusinessException;

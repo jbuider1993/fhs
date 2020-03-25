@@ -10,6 +10,7 @@ import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -22,6 +23,7 @@ import javax.validation.constraints.NotNull;
  * @since 2019-05-15 14:21:04
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @TableName("t_ucenter_ms_tenant")
 public class UcenterMsTenantDO extends BaseDO<UcenterMsTenantDO> {

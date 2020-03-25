@@ -15,6 +15,8 @@ import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Entity;
@@ -34,6 +36,8 @@ import javax.validation.constraints.NotNull;
  * @since [产品/模块版本]
  */
 @Entity
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "t_ucenter_ms_menu_permission")
 public class SysMenuPermissionDO extends BaseDO<SysMenuPermissionDO> {
 

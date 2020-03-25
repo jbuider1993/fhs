@@ -1,6 +1,6 @@
 package com.fhs.module.base.index;
 
-import com.fhs.base.api.ucenter.rpc.FeignSysUserApiService;
+import com.fhs.basics.api.rpc.FeignSysUserApiService;
 import com.fhs.basics.vo.SysUserVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;

@@ -92,5 +92,15 @@ public class BaseObject<T extends BaseObject> implements Serializable
         return JsonUtils.bean2json(this);
     }
 
+
+    @Override
+    public int hashCode() {
+        return  this.asJson().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.asJson().equals(JsonUtils.bean2json(obj));
+    }
 }
 

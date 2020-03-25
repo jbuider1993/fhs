@@ -2,6 +2,8 @@ package com.fhs.basics.dox;
 
 
 import com.fhs.core.base.dox.BaseDO;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 
@@ -12,6 +14,8 @@ import javax.persistence.*;
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
 @Entity
+@Data
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "t_ucenter_ms_menu_server")
 public class SysMenuServerDO extends BaseDO<SysMenuServerDO> {
 

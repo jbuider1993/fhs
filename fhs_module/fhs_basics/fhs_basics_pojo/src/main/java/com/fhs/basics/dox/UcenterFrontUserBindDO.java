@@ -24,9 +24,9 @@ import javax.validation.constraints.NotNull;
  */
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @TableName("t_ucenter_front_user_bind")
-@EqualsAndHashCode
 public class UcenterFrontUserBindDO extends BaseDO<UcenterFrontUserBindDO> {
     private static final long serialVersionUID = 920530665191970437L;
     @TableId(value = "id", type = IdType.UUID)

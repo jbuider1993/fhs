@@ -1,6 +1,6 @@
 package com.fhs.module.base.filter;
 
-import com.fhs.base.api.ucenter.rpc.FeignFrontUserApiService;
+import com.fhs.basics.api.rpc.FeignFrontUserApiService;
 import com.fhs.basics.form.GetSingleFrontUserForm;
 import com.fhs.basics.vo.UcenterFrontUserVO;
 import com.fhs.common.constant.Constant;

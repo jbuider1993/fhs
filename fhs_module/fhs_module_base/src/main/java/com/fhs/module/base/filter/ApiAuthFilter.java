@@ -1,9 +1,9 @@
 package com.fhs.module.base.filter;
 
-import com.fhs.base.api.config.FeignConfiguration;
 import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.JsonUtils;
+import com.fhs.core.feign.config.FeignConfiguration;
 import com.fhs.core.result.PubResult;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 

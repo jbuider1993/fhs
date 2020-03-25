@@ -1,5 +1,8 @@
 package com.fhs.basics.dox;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 /**
  * 用于字典表翻译配置
  *
@@ -8,6 +11,7 @@ package com.fhs.basics.dox;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
+@Data
 public class TransWordBookSett {
     /**
      * 用于显示的字段名  会吧翻译的结果set到这个字段上

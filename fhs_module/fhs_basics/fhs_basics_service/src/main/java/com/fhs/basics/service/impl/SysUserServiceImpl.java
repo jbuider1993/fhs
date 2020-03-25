@@ -3,7 +3,7 @@ package com.fhs.basics.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.fhs.base.api.ucenter.rpc.FeignSysUserApiService;
+import com.fhs.basics.api.rpc.FeignSysUserApiService;
 import com.fhs.basics.dox.SysUserDO;
 import com.fhs.basics.dox.UcenterMsTenantDO;
 import com.fhs.basics.form.SysUserForm;
@@ -34,6 +34,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 @Primary
@@ -51,9 +52,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> im
     /**
      * ROOT
      */
-    private static final int ROOT = 0;
+    private static final int ROOT = 1;
 
-    @Value("${fhs.ucenter.passsalt:fhs}")
+    @Value("${fhs.basics.passsalt:fhs}")
     private String passsalt;
 
     /**
@@ -486,10 +487,10 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> im
         List<SysUserVO> userList = this.select();
         userList.forEach(sysUser -> {
             if (!StringUtil.isEmpty(sysUser.getUserName())) {
-                redisCacheService.remove("ucenter:sysuser:username:" + sysUser.getUserId());
-                redisCacheService.remove("ucenter:sysuser:userheader:" + sysUser.getUserId());
-                redisCacheService.addStr("ucenter:sysuser:username:" + sysUser.getUserId(), sysUser.getUserName());
-                redisCacheService.addStr("ucenter:sysuser:userheader:" + sysUser.getUserId(), EConfig.getPathPropertiesValue("fhs_file_basePath") + "/downLoad/file?fileId=" + sysUser.getHeader());
+                redisCacheService.remove("basics:sysuser:username:" + sysUser.getUserId());
+                redisCacheService.remove("basics:sysuser:userheader:" + sysUser.getUserId());
+                redisCacheService.addStr("basics:sysuser:username:" + sysUser.getUserId(), sysUser.getUserName());
+                redisCacheService.addStr("basics:sysuser:userheader:" + sysUser.getUserId(), EConfig.getPathPropertiesValue("fhs_file_basePath") + "/downLoad/file?fileId=" + sysUser.getHeader());
             }
         });
         return HttpResult.success();
@@ -551,7 +552,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> im
      * @return
      */
     private List<SysMenuVO> menuFilter(SysUserDO user, List<SysMenuVO> menuList) {
-        List<Integer> userMenuIds = null;
+        Set<Integer> userMenuIds = null;
         if (user.getIsAdmin() == ADMIN) {
             userMenuIds = sysUserMapper.selectMenuIdByAdmin(user);
         } else {
@@ -564,13 +565,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> im
         });
         // 已经添加进结果的菜单
         Set<SysMenuVO> hasAddMenu = new HashSet<>();
-        userMenuIds.forEach(id -> {
-            if (menuMap.containsKey(id)) {
-                hasAddMenu.add(menuMap.get(id));
+        for (Integer userMenuId : userMenuIds) {
+            if (menuMap.containsKey(userMenuId)) {
+                hasAddMenu.add(menuMap.get(userMenuId));
                 // 能看到儿子就能看到爸爸，找儿子的爸爸
-                initFather(hasAddMenu, menuMap, menuMap.get(id));
+                initFather(hasAddMenu, menuMap, menuMap.get(userMenuId));
             }
-        });
+        }
         List<SysMenuVO> result = new ArrayList<>();
         result.addAll(hasAddMenu);
         result.sort(new Comparator<SysMenuVO>() {
@@ -721,17 +722,32 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> im
 
     @Override
     public HttpResult<SysUserVO> getSysUserByName(String userLoginName) {
-        return null;
+        return HttpResult.success(this.findBean(new SysUserVO().mk("userLoginName",userLoginName)));
     }
 
     @Override
     public HttpResult<List<String>> selectMenuByUname(String userLoginName) {
-        return null;
+        List<String> list = this.selectMenuByUname( this.findBean(new SysUserVO().mk("userLoginName",userLoginName)));
+        return HttpResult.success(list);
     }
 
     @Override
     public HttpResult<Pager<SysUserVO>> getSysUserList(SysUserForm sysUserForm) {
-        return null;
+        SysUserVO sysUser = new SysUserVO();
+        BeanUtils.copyProperties(sysUserForm, sysUser);
+        List<SysUserVO> sysUsersList = this.findForList(sysUser, sysUserForm.getPageStart()-1, sysUserForm.getPageSize());
+        if(sysUsersList.size() > 0) {
+            List<SysUserVO> sysUserVoList = new ArrayList<>();
+            sysUsersList.forEach(sysUserForEach -> {
+                //正则表达式，替换手机号中间4位
+                sysUserForEach.setMobile(sysUserForEach.getMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
+                sysUserVoList.add(sysUserForEach);
+            });
+            int count = this.findCount(sysUser);
+            return count > 0 ? HttpResult.success(new Pager<>(count,sysUserVoList)) : HttpResult.success(new Pager<SysUserVO>(0, null));
+        }else {
+            return HttpResult.success(new Pager<SysUserVO>(0, null));
+        }
     }
 
     @Override
