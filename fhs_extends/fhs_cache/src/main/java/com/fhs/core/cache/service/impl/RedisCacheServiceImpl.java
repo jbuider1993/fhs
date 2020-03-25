@@ -32,7 +32,7 @@ public class RedisCacheServiceImpl<E> implements RedisCacheService<E>
     /**
      * redisTemplate
      */
-    @Resource(name="redisTemplate")
+    @Autowired
     private RedisTemplate<String, E> redisTemplate;
 
     @Autowired

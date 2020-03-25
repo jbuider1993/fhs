@@ -1,0 +1,41 @@
+<%
+include("/page/tags/form_include.html"){}
+%>
+<style>
+	.fitemDiv {
+		width: 100%;
+		float: left;
+	}
+</style>
+<form id="addUpdateForm" method="post">
+	<div class="fitem">
+		<#InputFormTag  name='permissionName' title='权限名称' required='true' />
+	</div>
+	<div class="fitem">
+		<#InputFormTag  name='method' title='方法名称' required='true' />
+	</div>
+	<#HideFormTag  name='menuId' title='菜单id' value='${parameter.menuId}' required='true' />
+	<div class="fitem">
+		<#WordBookFormTag  name='permissionType' title='权限类型' code='permission_type' onSelect='onSelectType' required='true' />
+	</div>
+	<div class="fitem">
+		<#WordBookFormTag  name='isDisable' title='是否禁用' code='yesOrNo' required='true' />
+	</div>
+	<%
+	layout("/page/tags/add_update_tag.html",{'nameSpace':'sysMenuPermission','idField':'permissionId'}){}
+	%>
+
+	<script type="text/javascript">
+		function onSelectType(rec){
+			$('#permissionName').val(rec.wordbookDesc);
+			var buttonPermission = '';
+			switch(rec.wordbookDesc){
+			case '添加' : buttonPermission = 'add'; break;
+			case '修改' : buttonPermission = 'update'; break;
+			case '删除' : buttonPermission = 'del'; break;
+			case '查询' : buttonPermission = 'see'; break;
+			}
+			$('#method').val(buttonPermission);
+		}
+	</script>
+</form>

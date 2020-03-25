@@ -5,6 +5,7 @@ import com.fhs.basics.dox.SysMenuDO;
 import com.fhs.basics.dox.SysMenuPermissionDO;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.trans.anno.TransTypes;
+import com.fhs.core.trans.constant.TransType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +17,7 @@ import lombok.experimental.SuperBuilder;
  */
 @Data
 @NoArgsConstructor
-@TransTypes(types = {BaseTransConstant.WORD_BOOK})
+@TransTypes(types = {TransType.WORD_BOOK})
 public class SysMenuPermissionVO extends SysMenuPermissionDO implements VO {
 
 }

@@ -12,6 +12,8 @@ package com.fhs.basics.dox;
 
 import com.fhs.common.utils.EncryptUtils;
 import com.fhs.core.base.dox.BaseDO;
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
@@ -81,6 +83,7 @@ public class SysMenuPermissionDO extends BaseDO<SysMenuPermissionDO> {
     @NotNull(message = "{test.isDisable.null}", groups = {Update.class, Add.class})
     @Max(message = "{test.isDisable.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.isDisable.min}", value = -2147483648, groups = {Add.class, Update.class})
+    @Trans(type = TransType.WORD_BOOK,key = "yesOrNo")
     private Integer isDisable;
     /**
      * 按钮类型12345，查询，添加，修改，删除，其他

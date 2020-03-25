@@ -178,7 +178,7 @@
         var sourceVals =$("#roleList").combobox('getValues');
         reloadRoles($('#organizationId').combotree('getValue'));
         $("#roleList").combobox('setValues',sourceVals);
-		initHeader("headerInput", info.header);
-		$('#headerInputVal').val(info.header);
+		initHeader("headerInput", info.js_css_include);
+		$('#headerInputVal').val(info.js_css_include);
     }
 </script>

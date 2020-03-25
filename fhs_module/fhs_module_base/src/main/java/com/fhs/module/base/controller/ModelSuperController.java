@@ -387,6 +387,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      * @throws Exception
      */
     @RequestMapping("findListData")
+    @ResponseBody
     public List<V> findListData(V e, HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (isPermitted(request, "see")) {
             List<V> list = baseService.findForList((D) e);

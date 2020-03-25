@@ -78,7 +78,7 @@ public class ListUtils
      */
     public static<F,T> List<T> copyListToList(List<F> fromList, Class<T> tClass) {
         if (fromList.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
         List<T> tList = new ArrayList<>();
         for (F f : fromList) {

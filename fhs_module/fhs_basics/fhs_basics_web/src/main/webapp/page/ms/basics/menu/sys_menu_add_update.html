@@ -11,24 +11,16 @@ include("/page/tags/form_include.html"){}
       <#WordBookFormTag  name='isDisable' title='是否禁用' code='yesOrNo' required='true' />
       <#WordBookFormTag  name='menuState' title='是否隐藏' code='yesOrNo' required='true' />
    </div>
-   <#UploadFormTag  name='image' title='LOGO'  placeholder="请上传菜单LOGO"/>
    <div class="fitem">
-    <#SelectFormTag  name='serverNameId' title='所在服务器' url='${basePath}/ms/menuServer/getData' required='true' valueField= 'id'
+    <#SelectFormTag  name='serverNameId' title='所在服务' url='${basePath}/ms/menuServer/findList' required='true' valueField= 'id'
       textField= 'serverName' />
     <#InputFormTag  name='orderIndex' title='菜单序号' required='true' dataType="n"/>
    </div>
-
+   <#UploadFormTag  name='image' title='LOGO'  placeholder="请上传菜单LOGO"/>
    <div class="fitem">
-      <#SelectFormTag  name='systemId' title='子系统' url='${basePath}/ms/sysSystem/getSystemComBoxData' required='true' valueField= 'id'
-      textField= 'text' />
+      <#SelectFormTag  name='systemId' title='子系统' url='${basePath}/ms/sysSystem/findList' required='true' valueField= 'id'
+      textField= 'name' />
       <#WordBookFormTag  name='menuType' title='菜单类型' code='menu_type' required='true' />
-   </div>
-   <#HideFormTag type="hidden" name="fatherMenuId" value="${parameter.parentId}"/>
-   <div class="fitem ">
-      <center class="fitem-footer">
-         <a href="#" class="easyui-linkbutton btn btn-suc" onclick="save()">保存</a>
-         <a href="#" class="easyui-linkbutton btn btn-can" onclick="closeDialog()">返回</a>
-      </center>
    </div>
 </form>
 

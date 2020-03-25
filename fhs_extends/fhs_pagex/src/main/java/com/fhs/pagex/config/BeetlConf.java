@@ -56,10 +56,10 @@ public class BeetlConf extends BaseController {
             @Qualifier("beetlConfig") BeetlGroupUtilConfiguration beetlGroupUtilConfiguration,ContentNegotiatingViewResolver
             contentNegotiatingViewResolver) {
         BeetlSpringViewResolver beetlSpringViewResolver = new BeetlSpringViewResolver();
-        beetlSpringViewResolver.setPrefix("/");
         beetlSpringViewResolver.setSuffix(".html");
         beetlSpringViewResolver.setContentType("text/html;charset=UTF-8");
         beetlSpringViewResolver.setOrder(0);
+        beetlSpringViewResolver.setCache(false);
         beetlSpringViewResolver.setConfig(beetlGroupUtilConfiguration);
         contentNegotiatingViewResolver.setOrder(1);
         beetlConf = this;

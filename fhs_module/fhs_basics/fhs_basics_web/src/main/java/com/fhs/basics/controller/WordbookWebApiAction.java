@@ -8,12 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("webApi/wordbook")
 public class WordbookWebApiAction extends BaseController {
 
@@ -24,7 +25,7 @@ public class WordbookWebApiAction extends BaseController {
      * 查询省市区外调接口
      */
     @RequestMapping("getData")
-    public List<WordbookVO> getData(String wordbookGroupCode) {
-        return wordBookService.getWordBookList(wordbookGroupCode);
+    public void getData(String wordbookGroupCode) {
+         super.outJsonp(JsonUtils.list2json(wordBookService.getWordBookList(wordbookGroupCode)));
     }
 }
