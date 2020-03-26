@@ -4,6 +4,7 @@ import com.fhs.common.constant.Constant;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.anno.TransTypes;
+import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
@@ -29,7 +30,7 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = true)
 @Builder
 @Table(name = "t_ucenter_ms_system")
-@TransTypes(types = {Constant.WORD_BOOK, Constant.USER_INFO})
+@TransTypes(types = {TransType.WORD_BOOK})
 @Entity
 public class SysSystemDO extends BaseDO<SysSystemDO> {
 
@@ -70,7 +71,7 @@ public class SysSystemDO extends BaseDO<SysSystemDO> {
      */
     @Max(message = "是否禁用 0:启用 1:禁用字段大于int最大值", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "是否禁用 0:启用 1:禁用字段小于int最小值", value = -2147483648, groups = {Add.class, Update.class})
-    @Trans(type = Constant.WORD_BOOK, key = "is_enable")
+    @Trans(type = TransType.WORD_BOOK, key = "is_enable")
     @Column(name = "is_enable")
     private Integer isEnable;
     /**
@@ -79,7 +80,7 @@ public class SysSystemDO extends BaseDO<SysSystemDO> {
     @Max(message = "0 全新 1 集成现有字段大于int最大值", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "0 全新 1 集成现有字段小于int最小值", value = -2147483648, groups = {Add.class, Update.class})
     @Column(name = "type")
-    @Trans(type = Constant.WORD_BOOK, key = "system_type")
+    @Trans(type = TransType.WORD_BOOK, key = "system_type")
     private Integer type;
     /**
      * 如果是集成第三方，则写第三方url

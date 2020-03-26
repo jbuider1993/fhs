@@ -14,6 +14,7 @@ import com.fhs.common.constant.Constant;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.anno.TransTypes;
+import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
@@ -44,7 +45,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Builder
 @Table(name = "t_ucenter_ms_user")
-@TransTypes(types = {BaseTransConstant.WORD_BOOK, BaseTransConstant.SYS_ORGANIZATION_INFO})
+@TransTypes(types = {TransType.WORD_BOOK})
 public class SysUserDO extends BaseDO<SysUserDO> {
     /**
      *
@@ -110,7 +111,7 @@ public class SysUserDO extends BaseDO<SysUserDO> {
     @NotNull(message = "{test.isDisable.null}", groups = {Update.class, Add.class})
     @Max(message = "{test.isDisable.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.isDisable.min}", value = -2147483648, groups = {Add.class, Update.class})
-    @Trans(type = Constant.WORD_BOOK, key = "is_enable")
+    @Trans(type = TransType.WORD_BOOK, key = "is_enable")
     private Integer isEnable;
 
     /**
@@ -152,7 +153,7 @@ public class SysUserDO extends BaseDO<SysUserDO> {
     @Max(message = "前端用户的sex字段大于int最大值", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "前端用户的sex字段小于int小值", value = -2147483648, groups = {Add.class, Update.class})
     @Column(name = "sex", length = 11)
-    @Trans(type = Constant.WORD_BOOK, key = "sex")
+    @Trans(type = TransType.WORD_BOOK, key = "sex")
     private Integer sex;
 
     /**

@@ -15,6 +15,7 @@ import com.fhs.common.utils.CheckUtils;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.anno.TransTypes;
+import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.basics.constant.BaseTransConstant;
@@ -107,7 +108,7 @@ public class SysMenuDO extends BaseDO<SysMenuDO> {
     /**
      * 菜单类型0 物业公司菜单1 物业集团菜单2 平台菜单
      */
-    @Trans(type = BaseTransConstant.WORD_BOOK, key = "menu_type")
+    @Trans(type = TransType.WORD_BOOK, key = "menu_type")
     private String menuType;
 
 

@@ -11,6 +11,7 @@ import com.fhs.core.base.pojo.SuperBean;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.trans.listener.TransMessageListener;
 import com.fhs.core.trans.manager.ClassInfo;
 import com.fhs.core.trans.manager.ClassManager;
@@ -120,8 +121,8 @@ public class WordBookTransServiceImpl implements ITransTypeService, Initializing
     @Override
     public void afterPropertiesSet() throws Exception {
         //注册自己为一个服务
-        TransService.registerTransType(Constant.WORD_BOOK, this);
-        TransMessageListener.regTransRefresher(Constant.WORD_BOOK, this::refreshWordBookCache);
+        TransService.registerTransType(TransType.WORD_BOOK, this);
+        TransMessageListener.regTransRefresher(TransType.WORD_BOOK, this::refreshWordBookCache);
     }
 
     /**

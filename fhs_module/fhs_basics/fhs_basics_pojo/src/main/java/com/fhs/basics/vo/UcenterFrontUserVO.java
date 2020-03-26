@@ -5,6 +5,7 @@ import com.fhs.basics.dox.UcenterFrontUserDO;
 import com.fhs.common.constant.Constant;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.trans.anno.TransTypes;
+import com.fhs.core.trans.constant.TransType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -17,7 +18,7 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@TransTypes(types = {Constant.WORD_BOOK, Constant.USER_INFO})
+@TransTypes(types = {TransType.WORD_BOOK})
 public class UcenterFrontUserVO extends UcenterFrontUserDO implements VO {
 
     /**

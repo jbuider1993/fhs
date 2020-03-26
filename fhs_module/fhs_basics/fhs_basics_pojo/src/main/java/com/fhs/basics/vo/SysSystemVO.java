@@ -5,6 +5,7 @@ import com.fhs.basics.dox.SysSystemDO;
 import com.fhs.basics.dox.SysUserDO;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.trans.anno.TransTypes;
+import com.fhs.core.trans.constant.TransType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -14,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-@TransTypes(types = {BaseTransConstant.WORD_BOOK})
+@TransTypes(types = {TransType.WORD_BOOK})
 public class SysSystemVO extends SysSystemDO implements VO {
 
 }
