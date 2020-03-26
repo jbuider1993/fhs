@@ -18,7 +18,7 @@
           update_time AS updateTime
         FROM
           t_ucenter_ms_system
-        WHERE is_enable = 0
+        WHERE is_enable = 1
           AND id IN
           (SELECT
             me.system_id AS systemId

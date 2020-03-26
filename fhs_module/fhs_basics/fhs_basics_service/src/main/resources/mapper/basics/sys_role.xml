@@ -64,7 +64,7 @@
                 AND organization_id LIKE CONCAT(#{organizationId}, '%')
             </if>
             <if test="isAdd != null and isAdd.length != ''">
-                AND is_enable = 0
+                AND is_enable = 1
             </if>
             ORDER BY role_id
             <if test="start !=null and start!=''">

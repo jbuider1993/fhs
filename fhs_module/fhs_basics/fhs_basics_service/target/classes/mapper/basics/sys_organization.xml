@@ -55,7 +55,7 @@
     <select id="getSubNodeDatas" parameterType="map" resultType="com.fhs.basics.vo.ComboboxNodeVO">
         SELECT id AS id, name AS text,parent_id AS parentId, id AS wxOrgId FROM
         t_ucenter_ms_organization
-        where is_enable = 0
+        where is_enable = 1
         <if test="parentId !=null and parentId!='' and parentId != '-1'">
             AND parent_id =#{parentId}
         </if>
@@ -76,7 +76,7 @@
         TRIM(t.name) AS name,
         'd' AS nodeType
         FROM `t_ucenter_ms_organization` t
-        WHERE t.is_enable = 0
+        WHERE t.is_enable = 1
         <if test="organizationId != null and organizationId != ''">
             AND t.id LIKE CONCAT(#{organizationId}, '%')
         </if>

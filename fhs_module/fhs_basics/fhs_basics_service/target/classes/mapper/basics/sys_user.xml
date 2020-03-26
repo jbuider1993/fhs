@@ -118,7 +118,7 @@
         ru.role_id
         LEFT JOIN t_ucenter_ms_user u ON u.user_id= ru.user_id LEFT JOIN
         t_ucenter_ms_menu_server s ON s.id = m.server_name_id
-        WHERE m.is_enable = 0
+        WHERE m.is_enable = 1
         and m.is_enable = b.is_enable
         <if test="userId !=null">
             AND u.user_id = #{userId}
@@ -181,7 +181,7 @@
 		LEFT JOIN `t_ucenter_ms_user` u ON u.user_id =
 		ru.user_id
 		LEFT JOIN `t_ucenter_ms_menu_server` s ON s.id = m.server_name_id
-		WHERE m.is_enable = 0
+		WHERE m.is_enable = 1
 		AND m.is_enable = b.is_enable
 		AND u.user_id = #{userId}
 		ORDER BY
@@ -216,7 +216,7 @@
         group_id = (
         <include refid="findManagerAllAppIds"></include>
         )
-        AND m.is_enable = 0
+        AND m.is_enable = 1
         ORDER BY
         m.father_menu_id,m.order_index
     </select>
@@ -271,7 +271,7 @@
 		#{userLoginName}
 		AND m.is_enable
 		= b.is_enable
-		AND m.is_enable = 0
+		AND m.is_enable = 1
 		ORDER BY m.father_menu_id,
 		m.order_index) me
 		WHERE me.`namespace` IS NOT NULL
@@ -290,7 +290,7 @@
 		FROM t_ucenter_ms_user
 		WHERE
 		user_login_name = #{userLoginName}
-		AND is_enable = 0
+		AND is_enable = 1
 	</select>
     <!-- 通过权限编号集合嘻哈下权限 -->
     <select id="readMenuByButtonIds" parameterType="map" resultType="com.fhs.basics.dox.SysMenuDO">
@@ -520,7 +520,7 @@
             AND m.menu_id IN (
             <include refid="getRoleMenuIdOfGroup"></include>
             )
-            AND m.is_enable = 0
+            AND m.is_enable = 1
             ORDER BY m.father_menu_id,m.order_index
         </where>
     </select>

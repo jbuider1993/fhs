@@ -31,7 +31,7 @@
 		case when m.father_menu_id=1 then system_id else m.father_menu_id end  AS parentid
 		FROM
 		t_ucenter_ms_menu m
-		WHERE m.is_enable =0 and m.menu_id!=1
+		WHERE m.is_enable =1 and m.menu_id!=1
 		<if test="systemIds != null and systemIds != ''">
 			AND m.system_id IN(${systemIds})
 		</if>
@@ -42,7 +42,7 @@
 		resultType="com.fhs.basics.vo.TreeDataVO">
 
 		<include refid="selectMenuSql"></include>
-		WHERE m.is_enable =0
+		WHERE m.is_enable =1
 		<if test="fatherMenuId==null">
 			m.father_menu_id is NULL
 		</if>
