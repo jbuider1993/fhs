@@ -17,7 +17,7 @@
 
 		<!-- 根据menuType查询菜单 -->
 	<select id="findMenuTreesByMenuType" resultType="com.fhs.basics.vo.TreeDataVO" parameterType="map">
-		select  id,name,0 as parentid  from
+		select  id,name,1 as parentid  from
 		t_ucenter_ms_system
 		<where>
 			<if test="systemIds != null and systemIds != ''">
@@ -28,10 +28,10 @@
 		SELECT
 		m.menu_id AS id,
 		m.menu_name AS NAME,
-		case when m.father_menu_id=0 then system_id else m.father_menu_id end  AS parentid
+		case when m.father_menu_id=1 then system_id else m.father_menu_id end  AS parentid
 		FROM
 		t_ucenter_ms_menu m
-		WHERE m.is_disable =0 and m.menu_id!=0
+		WHERE m.is_disable =0 and m.menu_id!=1
 		<if test="systemIds != null and systemIds != ''">
 			AND m.system_id IN(${systemIds})
 		</if>

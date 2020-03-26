@@ -1,6 +1,7 @@
 package com.fhs.basics.service.impl;
 
 import com.fhs.basics.api.rpc.FeignSysMenuApiService;
+import com.fhs.basics.constant.BasicsMenuConstant;
 import com.fhs.basics.dox.SysMenuDO;
 import com.fhs.basics.dox.SysMenuPermissionDO;
 import com.fhs.basics.dox.UcenterMsTenantDO;
@@ -11,6 +12,7 @@ import com.fhs.basics.service.UcenterMsTenantService;
 import com.fhs.basics.vo.SysMenuVO;
 import com.fhs.basics.vo.TreeDataVO;
 import com.fhs.basics.vo.TreeModelVO;
+import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.ListUtils;
@@ -77,7 +79,7 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuVO, SysMenuDO> im
 
         TreeDataVO root = new TreeDataVO();
         root.setName("root");
-        root.setId("0");
+        root.setId(BasicsMenuConstant.MENU_ROOT_STR);
         root.setMenuLevel(0);
 
         Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -134,11 +136,11 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuVO, SysMenuDO> im
             }
             //如果有爸爸则吧我设置为爸爸的儿子
             if (treeDataMap.containsKey(tempTree.getParentid())) {
-                father.setIsdir(1);
+                father.setIsdir(Constant.INT_TRUE);
                 father.getChildren().add(tempTree);
             } else {
                 //对root特殊处理
-                if ("0".equals(tempTree.getId())) {
+                if (BasicsMenuConstant.MENU_ROOT_STR.equals(tempTree.getId())) {
                     result.add(tempTree);
                     tempTree.setAllitem(tempTree.getId());
                     tempTree.setReaditem(tempTree.getId());

@@ -5,6 +5,7 @@ import com.fhs.basics.dox.SysRoleDO;
 import com.fhs.basics.dox.SysUserDO;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.trans.anno.TransTypes;
+import com.fhs.core.trans.constant.TransType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -14,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-@TransTypes(types = {BaseTransConstant.WORD_BOOK})
+@TransTypes(types = {TransType.WORD_BOOK, TransType.AUTO_TRANS})
 public class SysRoleVO extends SysRoleDO implements VO {
 
 }

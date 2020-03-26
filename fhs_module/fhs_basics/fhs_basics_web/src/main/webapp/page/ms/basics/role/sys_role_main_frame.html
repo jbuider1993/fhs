@@ -1,0 +1,40 @@
+<html>
+<head>
+    <%
+    layout("/page/tags/js_css_include.html",{}){}
+    %>
+</head>
+<body style="width: 100%; ">
+<iframe width="17%" height="95%" frameborder="no" border="0"
+        marginwidth="0" marginheight="0" scrolling="auto"
+        allowtransparency="yes" id="left"
+        src="${basePath}/b/page-ms-basics-org/emp_organization_tree"></iframe>
+<iframe width="82%" height="95%" frameborder="no" border="0"
+        marginwidth="0" marginheight="0" scrolling="auto"
+        allowtransparency="yes" id="rightFrame"
+        src="${basePath}/b/page-ms-basics-role/sys_role_list?organizationId=null"></iframe>
+
+<div id="addOrUpdateDialog" class="easyui-dialog"
+     data-options="iconCls:'icon-save'" closed="true"
+     style="width: 820px; height: 410px; padding: 5px;font-size: 14px;"	 buttons="#dlg-buttons">
+    <div id="dlg-buttons">
+        <a href="#" id="subBtn" class="easyui-linkbutton" onclick="save()">保存</a>
+        <a href="#" class="easyui-linkbutton" onclick="closeDialog()">返回</a>
+    </div>
+
+    <script type="text/javascript">
+        function changeRight(treeId, name) {
+            if (treeId == '') {
+                return;
+            }
+            $('#rightFrame').attr(
+                'src',
+                '${basePath}/b/page-ms-basics-role/sys_role_list?organizationId=' + treeId + "&organizationName=" + name);
+        }
+        function openMenuAddOrUpdate(url, title) {
+            openDialog(url, title);
+            $(".window-mask").width("1000px")
+        }
+    </script>
+</body>
+</html>

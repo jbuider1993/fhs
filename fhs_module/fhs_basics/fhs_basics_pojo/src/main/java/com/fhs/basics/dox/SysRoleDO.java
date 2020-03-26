@@ -15,6 +15,7 @@ import com.fhs.common.utils.EncryptUtils;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.anno.TransTypes;
+import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
@@ -41,7 +42,6 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "t_ucenter_ms_role")
-@TransTypes(types = {Constant.WORD_BOOK, Constant.USER_INFO, BaseTransConstant.SYS_ORGANIZATION_INFO})
 public class SysRoleDO extends BaseDO<SysRoleDO> {
     /**
      *
@@ -57,13 +57,7 @@ public class SysRoleDO extends BaseDO<SysRoleDO> {
     @Min(message = "{test.roleId.min}", value = -2147483648, groups = {Add.class, Update.class})
     private Integer roleId;
 
-    /**
-     * 加密主键
-     */
-    @NotNull(message = "{test.roleIdE.null}")
-    @Length(message = "{test.roleIdE.length}", max = 10, min = 0)
-    @Transient
-    private String roleIdE;
+
 
     /**
      * 角色名称
@@ -85,23 +79,21 @@ public class SysRoleDO extends BaseDO<SysRoleDO> {
     @NotNull(message = "{test.isDisable.null}", groups = {Update.class, Add.class})
     @Max(message = "{test.isDisable.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.isDisable.min}", value = -2147483648, groups = {Add.class, Update.class})
-    @Trans(type = "wordbook", key = "is_disable")
+    @Trans(type = TransType.WORD_BOOK, key = "yesOrNo")
     private Integer isDisable;
 
     /**
      * 所属机构
      */
-    @NotEmpty
     @NotNull(message = "所属机构字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "所属机构字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "organization_id")
-    @Trans(type = BaseTransConstant.SYS_ORGANIZATION_INFO)
+    @Trans(type = TransType.AUTO_TRANS,key = BaseTransConstant.ORG + "#org")
     private String organizationId;
 
     /**
      * 数据权限(资源类型，部门及小区)
      */
-    @NotEmpty
     @NotNull(message = "数据权限(资源类型，部门及小区)字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "数据权限(资源类型，部门及小区)字段的长度最大为500", groups = {Add.class, Update.class}, max = 500)
     @Column(name = "data_permissions")
@@ -128,28 +120,9 @@ public class SysRoleDO extends BaseDO<SysRoleDO> {
     private String state;
 
 
-    /**
-     * 给主键进行加密
-     */
-    public void setRoleIdE(String roleIdE) {
-        roleId = EncryptUtils.getDecodeIdFromIdE(roleIdE);
-        this.roleIdE = roleIdE;
-    }
 
-    /**
-     * 获取加密主键
-     */
-    public String getRoleIdE() {
-        return roleIdE;
-    }
 
-    /**
-     * 给角色id赋值
-     */
-    public void setRoleId(Integer roleId) {
-        roleIdE = EncryptUtils.getEncodeIdEFromId(roleId);
-        this.roleId = roleId;
-    }
+
 
     public SysRoleDO() {
     }

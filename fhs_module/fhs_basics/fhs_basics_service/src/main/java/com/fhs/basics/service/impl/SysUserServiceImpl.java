@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fhs.basics.api.rpc.FeignSysUserApiService;
+import com.fhs.basics.constant.BasicsMenuConstant;
 import com.fhs.basics.dox.SysUserDO;
 import com.fhs.basics.dox.UcenterMsTenantDO;
 import com.fhs.basics.form.SysUserForm;
@@ -49,10 +50,6 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> im
      */
     private static final int SHOW = 0;
 
-    /**
-     * ROOT
-     */
-    private static final int ROOT = 1;
 
     @Value("${fhs.basics.passsalt:fhs}")
     private String passsalt;
@@ -528,14 +525,14 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> im
         menuList.forEach(adminMenu -> {
             if (ConverterUtils.toInt(adminMenu.getMenuState()) != SysMenuService.NOT_SHOW) {
                 // 如果不是null 也不是root则找爸爸吧自己添加到爸爸的儿子里面去
-                if (adminMenu.getFatherMenuId() != null && adminMenu.getFatherMenuId() != ROOT) {
+                if (adminMenu.getFatherMenuId() != null && adminMenu.getFatherMenuId() != BasicsMenuConstant.MENU_ROOT) {
                     if (leftMenuMap.containsKey(adminMenu.getFatherMenuId())) {
                         leftMenuMap.get(adminMenu.getFatherMenuId()).getSonMenu().add(
                                 leftMenuMap.get(adminMenu.getMenuId()));
                     }
                 }
                 // 如果是一级菜单则挂写到result去
-                else if (adminMenu.getFatherMenuId() != null && adminMenu.getFatherMenuId() == ROOT) {
+                else if (adminMenu.getFatherMenuId() != null && adminMenu.getFatherMenuId() == BasicsMenuConstant.MENU_ROOT) {
                     result.add(leftMenuMap.get(adminMenu.getMenuId()));
                 }
             }

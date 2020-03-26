@@ -34,4 +34,9 @@ public interface BaseTransConstant {
      * 区域字典
      */
     String AREA_NAME = "area:areaName";
+
+    /**
+     * 组织机构
+     */
+    String ORG = "org";
 }

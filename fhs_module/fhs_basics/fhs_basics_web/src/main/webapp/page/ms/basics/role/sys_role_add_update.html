@@ -1,16 +1,13 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	isELIgnored="false" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <!--老代码后期优化-->
 <form id="addUpateRoleForm" method="post">
 	<div id="formulaCaclDiv">
-		<input type="hidden" name="roleId" id="roleId" value="${param.roleId}" />
+		<input type="hidden" name="roleId" id="roleId" value="${parameter.roleId}" />
 			
 		<div class="fitem">
 			<div class="fitemDiv">
 			<label>角色名称:</label> <input type="text" id="roleName"
-				value="${roleName}" name="roleName" datatype="*" nullmsg="请填写角色名称"
-				ajaxPost="true" ajaxurl="${basePath}ms/sysRole/validataName?isEdit=${param.isEdit}"   >
+				 name="roleName" datatype="*" nullmsg="请填写角色名称"  >
 				<span class="form-field-required">*</span>
 			</div>
 			<div class="fitemDiv">
@@ -18,7 +15,6 @@
 				<input class="easyui-combotree" id="organizationId" name="organizationId" datatype="*" nullmsg="请选择机构" data-options="
 					url:'${basePath}ms/sysOrganization/getOrgIdComBoxData',
 					method:'post',
-
 					"
 				></input>
 				<span class="form-field-required">*</span>
@@ -84,8 +80,9 @@
 				<span class="form-field-required">*</span>
 			</div>
 		</div>
-
-		<c:if test="${permissonDataUrl !=  null}">
+		<%
+		    if(has(permissonDataUrl)){
+		%>
 			<div class="fitem">
 				<div class="bigLabelDiv">
 					<label >${permissonDataTitle}:</label>
@@ -103,14 +100,14 @@
 					<span class="form-field-required">*</span>
 				</div>
 			</div>
-		</c:if>
+		<%}%>
 		
 		<div class="fitem">
 			<div class="bigLabelDiv">
 			<label>备注:</label>
 			</div>
-			<div class="bigLabelDiv">
-			<textarea cols="20" rows="5" id="remark" name="remark" value="${remark}"></textarea>
+			<div class="bigContent">
+			<textarea cols="20" rows="5" id="remark" name="remark" ></textarea>
 			</div>
 		</div>
 
@@ -543,19 +540,20 @@
 	}
 
 	var url_temp = "${basePath}ms/sysRole/addSysRole";
-	isEdit = ("${param.isEdit}" == "true");
+	isEdit = ("${parameter.isEdit}" == "true");
 	$(function() {
 		if (isEdit) {
-			var roleId = "${param.roleId}";
-			$.post("${basePath}ms/sysRole/toUpdate", {
-				"roleId" : roleId
-			}, function(d) {
+			var roleId = "${parameter.roleId}";
+			$.get("${basePath}ms/sysRole/info/" + roleId, function(d) {
 				if (d) {
 					$("#roleId").val(d.roleId);
 					$("#roleName").val(d.roleName);
 					$("#remark").val(d.remark);
 					$('#isDisable').combobox('setValue', d.isDisable);
                     $('#organizationId').combotree('setValue', d.organizationId);
+					<%
+					if(has(permissonDataUrl)){
+					%>
 					//如果包含数据权限
                     if($("#dataPermissions").length>0)
 					{
@@ -567,6 +565,7 @@
 							}
 						}
 					}
+                    <%}%>
                     url_temp = "${basePath}ms/sysRole/updateSysRole";
 				}
 			}, "json");
@@ -577,7 +576,7 @@
 
 	function resetChecketBox(row, data) {
 		if (isEdit) {
-			var roleId = "${param.roleId}";
+			var roleId = "${parameter.roleId}";
 			$.post("${basePath}ms/sysRole/searchButtons", {
 				"roleId" : roleId
 			}, function(d) {
@@ -643,7 +642,7 @@
 
 	var addUpateRoleForm = null;
 	$(document).ready(function() {
-        $('#organizationId').combotree('setValue', '${param.organizationId}');
+        $('#organizationId').combotree('setValue', '${parameter.organizationId}');
 		//form验证。
 		addUpateRoleForm = $('#addUpateRoleForm').Validform({
 			tiptype : 5
@@ -656,12 +655,16 @@
 			url : url_temp,
 			onSubmit : function() {
                 //如果包含数据权限
+				<%
+				if(has(permissonDataUrl)){
+				%>
                 if($("#dataPermissions").length>0)
                 {
                     var _dataPermissions = {};
                     _dataPermissions['${permissonDataKey}']=$('#dataPermissions_select').combobox('getValues') + "";
                     $("#dataPermissions").val(json2str(_dataPermissions));
                 }
+				<%}%>
 				if(addUpateRoleForm.check()){
 					// 验证是否有勾选项
 					var checkF = false;

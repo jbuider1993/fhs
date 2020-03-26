@@ -65,24 +65,7 @@ public class MsRoleController extends ModelSuperController<SysRoleVO, SysRoleDO>
     }
 
 
-    /**
-     * 验证角色名称是否存在
-     *
-     * @param request
-     * @param reponse
-     * @param sysRole
-     */
-    @RequiresPermissions("sysRole:see")
-    @RequestMapping("validataName")
-    public void validataName(HttpServletRequest request, HttpServletResponse reponse, SysRoleVO sysRole) {
-        Map<String, Object> map = super.getParameterMap();
-        sysRole = sysRoleService.findBean(sysRole);
-        if (sysRole != null && !ConverterUtils.toBoolean(map.get("isEdit"))) {
-            super.outWrite("角色名称重复");
-        } else {
-            super.outWrite("y");
-        }
-    }
+
 
     /**
      * 查询角色的按钮信息

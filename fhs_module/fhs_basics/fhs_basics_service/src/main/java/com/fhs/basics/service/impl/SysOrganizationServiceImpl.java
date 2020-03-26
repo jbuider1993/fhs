@@ -13,6 +13,7 @@ import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.result.HttpResult;
+import com.fhs.core.trans.anno.AutoTrans;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,7 @@ import java.util.Map;
  */
 @Service
 @DataSource("base_business")
+@AutoTrans(namespace = BaseTransConstant.ORG,fields = "name",useRedis = true)
 public class SysOrganizationServiceImpl extends BaseServiceImpl<SysOrganizationVO, SysOrganizationDO> implements SysOrganizationService {
 
     @Autowired

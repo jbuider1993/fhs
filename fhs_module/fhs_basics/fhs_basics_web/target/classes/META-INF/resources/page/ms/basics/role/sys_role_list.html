@@ -1,0 +1,100 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<%
+	layout("/page/tags/js_css_include.html",{}){}
+	layout("/page/tags/rende_loading.html",{}){}
+	%>
+</head>
+<style>
+input[type=checkbox]{
+	margin-top: 6px;
+}
+</style>
+</head>
+<body>
+
+	<table id="roleGrid" title="角色列表" class="easyui-datagrid" fit="true"
+		style="width: 95%;" url="${basePath}ms/sysRole/listData/${parameter.organizationId}"
+		pagination="true" rownumbers="true" fitColumns="true"
+		singleSelect="true" pageSize="10" toolbar="#toolbar" striped="true">
+		<thead>
+			<tr>
+				<th align='center' field="roleName" width="30%">角色名称</th>
+				<th align='center' field="transMap.isDisableName" width="10%">是否禁用</th>
+				<th align='center' field="transMap.orgName" width="29%">所属机构</th>
+				<th align='center' field="remark" width="28%">备注</th>
+			</tr>
+		</thead>
+	</table>
+
+
+	<div id="toolbar">
+		<div style="margin-bottom: 5px;">
+			<#shiro name="sysRole:add">
+			<a href="javascript:void(0)" class="easyui-linkbutton"
+			   iconCls="icon-add" plain="true" onclick="addRole()">添加
+			</a>
+		</#shiro>
+		<#shiro name="sysRole:update">
+		<a href="javascript:void(0)" class="easyui-linkbutton"
+		   iconCls="icon-edit" plain="true"
+		   onclick="addSelectRowFun('roleGrid',updateRole);">修改
+		</a>
+		</#shiro>
+		<#shiro name="sysRole:del">
+		<a href="javascript:void(0)" class="easyui-linkbutton"
+		   iconCls="icon-remove" plain="true"
+		   onclick="pubDel('roleGrid','${basePath}ms/sysMenu/del?id=','roleId');">删除
+		</a>
+		</#shiro>
+		</div>
+	</div>
+	<div id="dlg" class="easyui-dialog"  closed="true"
+		style="width: 1100px; height: 600px; padding: 10px;max-width: 95%;max-height: 90%" buttons="#dlg-buttons"></div>
+	<div id="dlg-buttons">
+		<a href="javascript:void(0);" class="easyui-linkbutton"
+			onclick="save()">保存</a><a href="javascript:void(0);"
+			class="easyui-linkbutton" onclick="closeDialog()">返回</a>
+	</div>
+
+</body>
+
+<script type="text/javascript">
+	//默认关闭dialog
+	$(function() {
+		$('#dlg').dialog('close');
+	});
+
+	//关闭dialog方法
+	function closeDialog() {
+		$('#dlg').dialog('close');
+	}
+
+	//打开dialog
+	function openDialog(url, title) {
+		$('#dlg').load(url, function() {
+			$('#dlg').dialog('open').dialog('setTitle', title);
+			$.parser.parse($('#dlg'));
+		});
+
+	}
+
+	//  角色添加
+	function addRole() {
+		openDialog(
+				'${basePath}/b/page-ms-basics-role/sys_role_add_update?isEdit=false&organizationId=${parameter.organizationId}',
+				'添加角色');
+	}
+
+	//角色修改
+	function updateRole(row) {
+		openDialog(
+				'${basePath}/b/page-ms-basics-role/sys_role_add_update?isEdit=true&roleId=' + row.roleId, '修改角色');
+	}
+
+	//重新加载
+	function reload() {
+		$('#roleGrid').datagrid('load', {});
+	}
+</script>
+</html>
