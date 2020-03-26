@@ -8,7 +8,7 @@ include("/page/tags/form_include.html"){}
    </div>
    <#BigInputFormTag  name='menuUrl' title='链接地址' required='true' />
    <div class="fitem">
-      <#WordBookFormTag  name='isDisable' title='是否禁用' code='yesOrNo' required='true' />
+      <#WordBookFormTag  name='isEnable' title='状态' code='is_enable' required='true' />
       <#WordBookFormTag  name='menuState' title='是否隐藏' code='yesOrNo' required='true' />
    </div>
    <div class="fitem">
@@ -26,7 +26,7 @@ include("/page/tags/form_include.html"){}
 
 <script>
     $(function () {
-         $('#isDisable').combobox('setValue',0);
+         $('#isEnable').combobox('setValue',1);
          $('#menuState').combobox('setValue',0);
     })
 

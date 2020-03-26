@@ -80,7 +80,7 @@ public class SysRoleDO extends BaseDO<SysRoleDO> {
     @Max(message = "{test.isDisable.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.isDisable.min}", value = -2147483648, groups = {Add.class, Update.class})
     @Trans(type = TransType.WORD_BOOK, key = "yesOrNo")
-    private Integer isDisable;
+    private Integer isEnable;
 
     /**
      * 所属机构
@@ -127,11 +127,11 @@ public class SysRoleDO extends BaseDO<SysRoleDO> {
     public SysRoleDO() {
     }
 
-    public SysRoleDO(Integer roleId, String roleName, String remark, Integer isDisable, String organizationId, String dataPermissions, String groupCode, String[] methods, String state) {
+    public SysRoleDO(Integer roleId, String roleName, String remark, Integer isEnable, String organizationId, String dataPermissions, String groupCode, String[] methods, String state) {
         this.roleId = roleId;
         this.roleName = roleName;
         this.remark = remark;
-        this.isDisable = isDisable;
+        this.isEnable = isEnable;
         this.organizationId = organizationId;
         this.dataPermissions = dataPermissions;
         this.groupCode = groupCode;

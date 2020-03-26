@@ -110,8 +110,8 @@ public class SysUserDO extends BaseDO<SysUserDO> {
     @NotNull(message = "{test.isDisable.null}", groups = {Update.class, Add.class})
     @Max(message = "{test.isDisable.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.isDisable.min}", value = -2147483648, groups = {Add.class, Update.class})
-    @Trans(type = Constant.WORD_BOOK, key = "is_disable")
-    private Integer isDisable;
+    @Trans(type = Constant.WORD_BOOK, key = "is_enable")
+    private Integer isEnable;
 
     /**
      * 是否超管 0:否 1:是
@@ -206,7 +206,7 @@ public class SysUserDO extends BaseDO<SysUserDO> {
     public SysUserDO() {
     }
 
-    public SysUserDO(String userId, String userLoginName, String userName, String password, String mobile, String groupCode, String email, Integer isDisable, Integer isAdmin, String provinceId, String cityId, String areaId, String address, Integer sex, String organizationId, String header, String state, String[] roleList, String oldPassword, String newPassword, Integer menuType, List<SysRoleDO> roles, String checkCode) {
+    public SysUserDO(String userId, String userLoginName, String userName, String password, String mobile, String groupCode, String email, Integer isEnable, Integer isAdmin, String provinceId, String cityId, String areaId, String address, Integer sex, String organizationId, String header, String state, String[] roleList, String oldPassword, String newPassword, Integer menuType, List<SysRoleDO> roles, String checkCode) {
         this.userId = userId;
         this.userLoginName = userLoginName;
         this.userName = userName;
@@ -214,7 +214,7 @@ public class SysUserDO extends BaseDO<SysUserDO> {
         this.mobile = mobile;
         this.groupCode = groupCode;
         this.email = email;
-        this.isDisable = isDisable;
+        this.isEnable = isEnable;
         this.isAdmin = isAdmin;
         this.provinceId = provinceId;
         this.cityId = cityId;

@@ -19,7 +19,7 @@ include("/page/tags/form_include.html"){}
 		<#WordBookFormTag  name='permissionType' title='权限类型' code='permission_type' onSelect='onSelectType' required='true' />
 	</div>
 	<div class="fitem">
-		<#WordBookFormTag  name='isDisable' title='是否禁用' code='yesOrNo' required='true' />
+		<#WordBookFormTag  name='isEnable' title='状态' code='is_enable' required='true' />
 	</div>
 	<%
 	layout("/page/tags/add_update_tag.html",{'nameSpace':'sysMenuPermission','idField':'permissionId'}){}

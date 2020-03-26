@@ -1,9 +1,12 @@
 package com.fhs.core.base.dox;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fhs.common.constant.Constant;
+import com.fhs.common.utils.DateUtils;
 import com.fhs.core.base.pojo.SuperBean;
 import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import com.mybatis.jpa.annotation.Between;
 import lombok.Data;
 import java.lang.reflect.Field;
@@ -38,28 +41,30 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> {
      * 创建人
      */
     @TableField("create_user")
-    @Trans(type = Constant.USER_INFO)
+    @Trans(type = TransType.AUTO_TRANS,key = "sysUser#createUser")
     protected String createUser;
 
     /**
      * 创建时间
      */
-    @TableField("create_time")
     @Between
+    @TableField("create_time")
+    @JSONField(format= DateUtils.DATETIME_PATTERN)
     protected Date createTime;
 
     /**
      * 更新人
      */
     @TableField("update_user")
-    @Trans(type = Constant.USER_INFO)
+    @Trans(type = TransType.AUTO_TRANS,key = "sysUser#updateUser")
     protected String updateUser;
 
     /**
      * 更新时间
      */
-    @TableField("update_time")
     @Between
+    @TableField("update_time")
+    @JSONField(format= DateUtils.DATETIME_PATTERN)
     protected Date updateTime;
 
     @TableField("is_delete")

@@ -20,7 +20,7 @@ input[type=checkbox]{
 		<thead>
 			<tr>
 				<th align='center' field="roleName" width="30%">角色名称</th>
-				<th align='center' field="transMap.isDisableName" width="10%">是否禁用</th>
+				<th align='center' field="transMap.isEnableName" width="10%">状态</th>
 				<th align='center' field="transMap.orgName" width="29%">所属机构</th>
 				<th align='center' field="remark" width="28%">备注</th>
 			</tr>
@@ -34,19 +34,19 @@ input[type=checkbox]{
 			<a href="javascript:void(0)" class="easyui-linkbutton"
 			   iconCls="icon-add" plain="true" onclick="addRole()">添加
 			</a>
-		</#shiro>
-		<#shiro name="sysRole:update">
-		<a href="javascript:void(0)" class="easyui-linkbutton"
-		   iconCls="icon-edit" plain="true"
-		   onclick="addSelectRowFun('roleGrid',updateRole);">修改
-		</a>
-		</#shiro>
-		<#shiro name="sysRole:del">
-		<a href="javascript:void(0)" class="easyui-linkbutton"
-		   iconCls="icon-remove" plain="true"
-		   onclick="pubDel('roleGrid','${basePath}ms/sysMenu/del?id=','roleId');">删除
-		</a>
-		</#shiro>
+			</#shiro>
+			<#shiro name="sysRole:update">
+			<a href="javascript:void(0)" class="easyui-linkbutton"
+			   iconCls="icon-edit" plain="true"
+			   onclick="addSelectRowFun('roleGrid',updateRole);">修改
+			</a>
+			</#shiro>
+			<#shiro name="sysRole:del">
+			<a href="javascript:void(0)" class="easyui-linkbutton"
+			   iconCls="icon-remove" plain="true"
+			   onclick="pubDel('roleGrid','${basePath}ms/sysMenu/del?id=','roleId');">删除
+			</a>
+			</#shiro>
 		</div>
 	</div>
 	<div id="dlg" class="easyui-dialog"  closed="true"

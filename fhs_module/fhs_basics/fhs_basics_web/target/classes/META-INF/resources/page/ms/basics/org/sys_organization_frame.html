@@ -1,0 +1,32 @@
+<html>
+<head>
+	<%
+		layout("/page/tags/js_css_include.html",{}){}
+	%>
+</head>
+<body style="width: 100%; ">
+<iframe width="17%" height="98%" frameborder="no" border="0"
+		marginwidth="0" marginheight="0" scrolling="auto"
+		allowtransparency="yes" id="left"
+		src="${basePath}/b/page-ms-basics-org/emp_organization_tree"></iframe>
+<iframe width="80%" height="98%" frameborder="no" border="0"
+		marginwidth="0" marginheight="0" scrolling="auto"
+		allowtransparency="yes" id="rightFrame"
+		src="${basePath}/b/page-ms-basics-org/sys_organization_list"></iframe>
+
+<script type="text/javascript">
+    function changeRight(treeId, name) {
+        if (!name) {
+            name = "";
+        }
+        if (treeId == '') {
+            return;
+        }
+        $('#rightFrame').attr(
+            'src',
+            '${basePath}/b/page-ms-basics-org/sys_organization_list?id='
+            + treeId+'&name='+ name);
+    }
+</script>
+</body>
+</html>

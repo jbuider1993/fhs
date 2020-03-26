@@ -129,7 +129,7 @@ public class MsRoleController extends ModelSuperController<SysRoleVO, SysRoleDO>
     @RequiresPermissions("sysRole:update")
     public HttpResult<Boolean> updateSysRole(HttpServletRequest request, HttpServletResponse response, SysRoleVO sysRole) {
         SysRoleVO oldRole = sysRoleService.findBeanById(sysRole.getRoleId());
-        if (Constant.ENABLED == oldRole.getIsDisable() && Constant.DISABLE == sysRole.getIsDisable()) {
+        if (Constant.ENABLED == oldRole.getIsEnable() && Constant.DISABLE == sysRole.getIsEnable()) {
             // 根据roleid查询用户关联表用户数
             Map<String, Object> paramMap = new HashMap<>();
             paramMap.put("roleId", sysRole.getRoleId());

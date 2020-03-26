@@ -43,14 +43,14 @@ public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenantV
         adminUser.setUserLoginName(tenant.getGroupCode() + "_admin");
         adminUser.setMobile(tenant.getMobile());
         adminUser.setOrganizationId(tenant.getGroupCode() + "_001");
-        adminUser.setIsDisable(Constant.INT_FALSE);
+        adminUser.setIsEnable(Constant.INT_TRUE);
         adminUser.preInsert(null);
         sysUserService.insertJpa(adminUser);
         SysOrganizationDO organization = new SysOrganizationDO();
         organization.setId(tenant.getGroupCode() + "_001");
         organization.setName(tenant.getTenantName());
         organization.setRanking("1");
-        organization.setIsDisable(Constant.INT_FALSE);
+        organization.setIsEnable(Constant.INT_TRUE);
         organization.preInsert(tenant.getCreateUser());
         organization.setParentId("");
         organization.setGroupCode(tenant.getGroupCode());

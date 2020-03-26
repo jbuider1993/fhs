@@ -5,7 +5,7 @@
     <select id="login" resultType="com.fhs.basics.dox.SysUserDO" parameterType="com.fhs.basics.dox.SysUserDO">
 		SELECT
 		user_name AS userName,
-		is_disable AS isDisable,
+		is_enable AS isEnable,
 		user_id AS userId,
 		user_login_name AS userLoginName,
 		is_admin AS isAdmin,
@@ -32,7 +32,7 @@
             <if test="groupCode !=null and groupCode!=''">
                 AND group_code = #{groupCode}
             </if>
-            AND is_disable=0
+            AND is_enable=1
         </where>
 	</select>
 
@@ -45,7 +45,7 @@
         email,
         sex,
         is_admin AS isAdmin,
-        ( CasE is_disable
+        ( CasE is_enable
         WHEN '0' THEN '启用' WHEN '1' THEN '禁用' END ) AS state,
         province_id AS provinceId,
         city_id AS cityId,
@@ -118,8 +118,8 @@
         ru.role_id
         LEFT JOIN t_ucenter_ms_user u ON u.user_id= ru.user_id LEFT JOIN
         t_ucenter_ms_menu_server s ON s.id = m.server_name_id
-        WHERE m.is_disable = 0
-        and m.is_disable = b.is_disable
+        WHERE m.is_enable = 0
+        and m.is_enable = b.is_enable
         <if test="userId !=null">
             AND u.user_id = #{userId}
         </if>
@@ -138,8 +138,8 @@
         s.server_url as serverUrl,
         CONCAT(server_url ,menu_url) AS menuUrl,
         menu_type AS menuType,
-        is_disable AS
-        isDisable,
+        is_enable AS
+        isEnable,
         image,
         server_name_id AS serverNameId,
         order_index AS orderIndex,
@@ -181,8 +181,8 @@
 		LEFT JOIN `t_ucenter_ms_user` u ON u.user_id =
 		ru.user_id
 		LEFT JOIN `t_ucenter_ms_menu_server` s ON s.id = m.server_name_id
-		WHERE m.is_disable = 0
-		AND m.is_disable = b.is_disable
+		WHERE m.is_enable = 0
+		AND m.is_enable = b.is_enable
 		AND u.user_id = #{userId}
 		ORDER BY
 		m.father_menu_id,m.order_index
@@ -216,7 +216,7 @@
         group_id = (
         <include refid="findManagerAllAppIds"></include>
         )
-        AND m.is_disable = 0
+        AND m.is_enable = 0
         ORDER BY
         m.father_menu_id,m.order_index
     </select>
@@ -269,9 +269,9 @@
 		AND m.`namespace` != ''
 		AND u.user_login_name =
 		#{userLoginName}
-		AND m.is_disable
-		= b.is_disable
-		AND m.is_disable = 0
+		AND m.is_enable
+		= b.is_enable
+		AND m.is_enable = 0
 		ORDER BY m.father_menu_id,
 		m.order_index) me
 		WHERE me.`namespace` IS NOT NULL
@@ -285,12 +285,12 @@
 		mobile,
 		email,
 		is_admin AS isAdmin,
-		( CasE is_disable WHEN '0' THEN '启用' WHEN '1' THEN '禁用' END ) AS state,
+		( CasE is_enable WHEN '0' THEN '启用' WHEN '1' THEN '禁用' END ) AS state,
 		organization_id AS organizationId
 		FROM t_ucenter_ms_user
 		WHERE
 		user_login_name = #{userLoginName}
-		AND is_disable = 0
+		AND is_enable = 0
 	</select>
     <!-- 通过权限编号集合嘻哈下权限 -->
     <select id="readMenuByButtonIds" parameterType="map" resultType="com.fhs.basics.dox.SysMenuDO">
@@ -305,8 +305,8 @@
         b.menu_id = m.menu_id LEFT JOIN
         t_ucenter_ms_menu_server s ON s.id =
         m.server_name_id
-        WHERE m.is_disable=b.is_disable
-        AND m.is_disable=0
+        WHERE m.is_enable=b.is_enable
+        AND m.is_enable=1
         AND
         b.permission_id In
         <foreach collection="Ids" index="index" item="item" open="("
@@ -347,8 +347,8 @@
         userLoginName,
         password,header,
         email,is_admin AS isAdmin,
-        is_disable
-        AS isDisable,
+        is_enable
+        AS isEnable,
         organization_id AS organizationId
         FROM t_ucenter_ms_user
         <where>
@@ -438,7 +438,7 @@
 		b.method AS method,
 		b.permission_type AS buttonType,
 		( CASE
-		b.is_disable WHEN '0' THEN '启用' WHEN '1' THEN '禁用' end ) AS
+		b.is_enable WHEN '0' THEN '启用' WHEN '1' THEN '禁用' end ) AS
 		state
 		FROM
 		t_ucenter_ms_menu_permission b
@@ -460,7 +460,7 @@
         method ,
         permission_type AS buttonType,
         menu_id AS menuId,
-        is_disable AS isDisable
+        is_enable AS isEnable
         FROM `t_ucenter_ms_menu_permission` where permission_id In
         <foreach collection="Ids" index="index" item="item" open="("
                  separator="," close=")">
@@ -520,7 +520,7 @@
             AND m.menu_id IN (
             <include refid="getRoleMenuIdOfGroup"></include>
             )
-            AND m.is_disable = 0
+            AND m.is_enable = 0
             ORDER BY m.father_menu_id,m.order_index
         </where>
     </select>
@@ -605,7 +605,7 @@
 		s.id
 		= m.server_name_id
 		WHERE
-		m.is_disable
+		m.is_enable
 		= 0
 		AND m.father_menu_id!=-1
 		AND
@@ -662,7 +662,7 @@
     <select id="checkOperatorLogin" parameterType="map" resultType="map">
 	   SELECT
 		user_name AS userName,
-		is_disable AS isDisable,
+		is_enable AS isEnable,
 		user_id AS userId,
 		user_login_name AS
 		userLoginName,isadmin,
@@ -680,8 +680,8 @@
     <select id="findUserByOrgId" parameterType="map" resultType="int">
         SELECT COUNT(1) FROM t_ucenter_ms_user
         WHERE organization_id LIKE CONCAT(#{organizationId}, '%')
-        <if test="isDisable != null and isDisable != ''">
-            AND is_disable = #{isDisable}
+        <if test="isEnable != null and isEnable != ''">
+            AND is_enable = #{isEnable}
         </if>
     </select>
 

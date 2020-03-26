@@ -43,7 +43,7 @@ public class UcenterMsTenantController extends ModelSuperController<UcenterMsTen
         MultiTenancyContext.setProviderId(null);
         user = userService.selectBean(user);
         ParamChecker.isNotNull(user, "用户信息为空，请联系运维");
-        user.setIsDisable(Constant.INT_FALSE);
+        user.setIsEnable(Constant.INT_TRUE);
         user.setPassword(Md5Util.MD5(newPass).toLowerCase());
         userService.updateJpa(user);
         return HttpResult.success(newPass);

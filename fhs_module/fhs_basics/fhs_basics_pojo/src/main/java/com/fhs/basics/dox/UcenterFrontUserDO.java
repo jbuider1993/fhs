@@ -100,8 +100,8 @@ public class UcenterFrontUserDO extends BaseDO<UcenterFrontUserDO> {
 
     //启用标识 0-启用 1-禁用
     @Length(message = "启用标识 0-启用 1-禁用字段的长度最大为1", groups = {Add.class, Update.class}, max = 1)
-    @TableField("is_disable")
-    private String isDisable;
+    @TableField("is_enable")
+    private String isEnable;
 
     //真实姓名
     @TableField("real_name")
@@ -111,7 +111,7 @@ public class UcenterFrontUserDO extends BaseDO<UcenterFrontUserDO> {
     public UcenterFrontUserDO() {
     }
 
-    public UcenterFrontUserDO(String userId, String userName, String nickName, String birthday, String mobile, String sex, String passwd, String userCard, String userResource, String language, String provinceId, String cityId, String areaId, String address, String imagePath, String isDisable, String realName) {
+    public UcenterFrontUserDO(String userId, String userName, String nickName, String birthday, String mobile, String sex, String passwd, String userCard, String userResource, String language, String provinceId, String cityId, String areaId, String address, String imagePath, String isEnable, String realName) {
         this.userId = userId;
         this.userName = userName;
         this.nickName = nickName;
@@ -127,7 +127,7 @@ public class UcenterFrontUserDO extends BaseDO<UcenterFrontUserDO> {
         this.areaId = areaId;
         this.address = address;
         this.imagePath = imagePath;
-        this.isDisable = isDisable;
+        this.isEnable = isEnable;
         this.realName = realName;
     }
 }

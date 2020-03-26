@@ -42,11 +42,6 @@ public interface SysOrganizationService extends BaseService<SysOrganizationVO, S
      */
     List<TreeModelVO> getTreesData(Map<String, Object> map);
 
-    /**
-     * @desc 刷新所有用户缓存
-     * @return httpResult
-     */
-    HttpResult<Map> refreshRedisCache();
 
     /**
      * 效验机构名称是否存在

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fhs.basics.api.rpc.FeignSysUserApiService;
+import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.basics.constant.BasicsMenuConstant;
 import com.fhs.basics.dox.SysUserDO;
 import com.fhs.basics.dox.UcenterMsTenantDO;
@@ -24,6 +25,7 @@ import com.fhs.core.config.EConfig;
 import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
+import com.fhs.core.trans.anno.AutoTrans;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.google.common.collect.HashMultimap;
 import org.springframework.beans.BeanUtils;
@@ -41,6 +43,7 @@ import java.util.*;
 @Primary
 @Service("sysUserServiceImpl")
 @DataSource("base_business")
+@AutoTrans(namespace = BaseTransConstant.USER_INFO,fields ="userName" )
 public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> implements SysUserService, FeignSysUserApiService {
 
     private final int ADMIN = 1;

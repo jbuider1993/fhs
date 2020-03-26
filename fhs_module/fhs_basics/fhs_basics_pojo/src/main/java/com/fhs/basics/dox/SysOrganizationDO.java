@@ -4,6 +4,7 @@ import com.fhs.common.constant.Constant;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.anno.TransTypes;
+import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
@@ -24,12 +25,12 @@ import javax.validation.constraints.NotNull;
  */
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Builder
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "t_ucenter_ms_organization")
-@Entity
 public class SysOrganizationDO extends BaseDO<SysOrganizationDO> {
 
     private static final long serialVersionUID = 1L;
@@ -44,7 +45,6 @@ public class SysOrganizationDO extends BaseDO<SysOrganizationDO> {
     /**
      * 机构名称
      */
-    @NotEmpty
     @NotNull(message = "机构名称字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "机构名称字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "name")
@@ -52,7 +52,6 @@ public class SysOrganizationDO extends BaseDO<SysOrganizationDO> {
     /**
      * 父类编号
      */
-    @NotEmpty
     @NotNull(message = "父类编号字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "父类编号字段的长度最大为32", groups = {Add.class, Update.class}, max = 255)
     @Column(name = "parent_id")
@@ -60,7 +59,6 @@ public class SysOrganizationDO extends BaseDO<SysOrganizationDO> {
     /**
      * 同级菜单排行第几
      */
-    @NotEmpty
     @NotNull(message = "同级菜单排行第几字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "同级菜单排行第几字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "ranking")
@@ -70,17 +68,10 @@ public class SysOrganizationDO extends BaseDO<SysOrganizationDO> {
      */
     @Max(message = "是否启用(0:启用 1:禁用)字段大于int最大值", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "是否启用(0:启用 1:禁用)字段小于int最小值", value = -2147483648, groups = {Add.class, Update.class})
-    @Trans(type = Constant.WORD_BOOK, key = "is_disable")
-    @Column(name = "is_disable")
-    private Integer isDisable;
-    /**
-     * 小区id
-     */
-    @NotEmpty
-    @NotNull(message = "小区id字段不可为null", groups = {Update.class, Delete.class})
-    @Length(message = "小区id字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
-    @Column(name = "project_id")
-    private String projectId;
+    @Trans(type = TransType.WORD_BOOK, key = "is_enable")
+    @Column(name = "is_enable")
+    private Integer isEnable;
+
 
     @Column(name = "group_code")
     private String groupCode;

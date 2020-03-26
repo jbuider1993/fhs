@@ -64,22 +64,7 @@ public class MsOrganizationController extends ModelSuperController<SysOrganizati
         super.outJsonp(jsonTree);
     }
 
-    /**
-     * 查询机构
-     *
-     * @param request
-     * @param response
-     * @param id
-     */
-    @RequiresPermissions("sysOrganization:see")
-    @RequestMapping("getPageListData")
-    public Pager<SysOrganizationVO> getPageListData(HttpServletRequest request, HttpServletResponse response, String id) {
-        Map<String, Object> map = super.getPageTurnNum();
-        map.put("parentId", id);
-        int count = sysOrganizationService.findCountFromMap(map);
-        List<SysOrganizationVO> dataList = sysOrganizationService.findForListFromMap(map);
-        return new Pager<SysOrganizationVO>(count, dataList);
-    }
+
 
     /**
      * 更新
@@ -95,7 +80,7 @@ public class MsOrganizationController extends ModelSuperController<SysOrganizati
     public HttpResult<Boolean> update(SysOrganizationVO e, BindingResult check, HttpServletRequest request, HttpServletResponse response) {
         SysOrganizationVO oldOrg = sysOrganizationService.findBeanById(e.getId());
         // 如果是启用改为禁用
-        if (Constant.ENABLED == oldOrg.getIsDisable() && Constant.DISABLE == e.getIsDisable()) {
+        if (Constant.ENABLED == oldOrg.getIsEnable() && Constant.DISABLE == e.getIsEnable()) {
             Map<String, Object> paramMap = new HashMap<>();
             paramMap.put("organizationId", e.getId());
             paramMap.put("isDisable", Constant.ENABLED);
@@ -154,7 +139,7 @@ public class MsOrganizationController extends ModelSuperController<SysOrganizati
                                          SysOrganizationVO sysOrganization) {
         if (!CheckUtils.isNullOrEmpty(sysOrganization.getParentId())) {
             SysOrganizationVO sysOrganizationQuery = sysOrganizationService.findBeanById(sysOrganization.getParentId());
-            if (!CheckUtils.isNullOrEmpty(sysOrganizationQuery) && Constant.ENABLED != sysOrganizationQuery.getIsDisable()) {
+            if (!CheckUtils.isNullOrEmpty(sysOrganizationQuery) && Constant.ENABLED != sysOrganizationQuery.getIsEnable()) {
                 return HttpResult.error(sysOrganizationQuery, "父机构处于禁用状态，不能添加子机构");
             }
         }
@@ -175,15 +160,5 @@ public class MsOrganizationController extends ModelSuperController<SysOrganizati
         // 查询根级组织 为当前系统的登录用户组织
         SysUserVO sysUser = super.getSessionuser();
         return sysOrganizationService.getSubNode(sysUser.getOrganizationId(), request.getParameter("parentId"));
-    }
-
-    /**
-     * @return 刷新缓存结果
-     * @desc 刷新所有机构缓存
-     */
-    @RequiresPermissions("sysOrganization:refreshRedisCache")
-    @RequestMapping("/refreshRedisCache")
-    public HttpResult<Map> refreshRedisCache() {
-        return sysOrganizationService.refreshRedisCache();
     }
 }

@@ -70,9 +70,9 @@ public class SysSystemDO extends BaseDO<SysSystemDO> {
      */
     @Max(message = "是否禁用 0:启用 1:禁用字段大于int最大值", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "是否禁用 0:启用 1:禁用字段小于int最小值", value = -2147483648, groups = {Add.class, Update.class})
-    @Trans(type = Constant.WORD_BOOK, key = "is_disable")
-    @Column(name = "is_disable")
-    private Integer isDisable;
+    @Trans(type = Constant.WORD_BOOK, key = "is_enable")
+    @Column(name = "is_enable")
+    private Integer isEnable;
     /**
      * 0 全新 1 集成现有
      */
@@ -102,13 +102,13 @@ public class SysSystemDO extends BaseDO<SysSystemDO> {
     public SysSystemDO() {
     }
 
-    public SysSystemDO(String id, String name, Integer sort, String logo, Integer isDisable, Integer type, String url, String indexUrl) {
+    public SysSystemDO(String id, String name, Integer sort, String logo, Integer isEnable, Integer type, String url, String indexUrl) {
         super();
         this.id = id;
         this.name = name;
         this.sort = sort;
         this.logo = logo;
-        this.isDisable = isDisable;
+        this.isEnable = isEnable;
         this.type = type;
         this.url = url;
         this.indexUrl = indexUrl;

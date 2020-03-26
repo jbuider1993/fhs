@@ -1,0 +1,18 @@
+<%
+include("/page/tags/form_include.html"){}
+%>
+<form id="addUpdateForm" method="post">
+		<#HideFormTag  name='parentId' title='父节点id' value='${parameter.parentId}' required='true' />
+		<div class="fitem">
+			<#InputFormTag  name='name' title='机构名称' required='true' />
+			<#WordBookFormTag  name='isEnable' title='装填' code='is_enable' required='true' />
+		</div>
+		<%
+		layout("/page/tags/add_update_tag.html",{'nameSpace':'sysOrganization','idField':'id'}){}
+		%>
+		<script type="text/javascript">
+			function initHandler(){
+				url_save = "${basePath}ms/sysOrganization/insertOrganization";
+			}
+		</script>
+</form>

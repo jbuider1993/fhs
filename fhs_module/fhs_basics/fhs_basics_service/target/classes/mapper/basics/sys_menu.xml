@@ -31,7 +31,7 @@
 		case when m.father_menu_id=1 then system_id else m.father_menu_id end  AS parentid
 		FROM
 		t_ucenter_ms_menu m
-		WHERE m.is_disable =0 and m.menu_id!=1
+		WHERE m.is_enable =0 and m.menu_id!=1
 		<if test="systemIds != null and systemIds != ''">
 			AND m.system_id IN(${systemIds})
 		</if>
@@ -42,7 +42,7 @@
 		resultType="com.fhs.basics.vo.TreeDataVO">
 
 		<include refid="selectMenuSql"></include>
-		WHERE m.is_disable =0
+		WHERE m.is_enable =0
 		<if test="fatherMenuId==null">
 			m.father_menu_id is NULL
 		</if>
@@ -112,9 +112,9 @@
 		menu_url AS menuUrl,
 		namespace,
 		menu_type AS menuType,
-		is_disable AS
-		isDisable,
-		( CASE is_disable WHEN '0' THEN '启用' WHEN '1'
+		is_enable AS
+		isEnable,
+		( CASE is_enable WHEN '0' THEN '启用' WHEN '1'
 		THEN '禁用' END ) AS state,
 		image,
 		server_name_id AS serverNameId,
@@ -152,9 +152,9 @@
 		WHERE
 		m.`namespace` IS NOT NULL
 		AND m.`namespace` !=''
-		AND m.`is_disable`
+		AND m.`is_enable`
 		= 0
-		AND b.`is_disable` = 0
+		AND b.`is_enable` = 0
 		ORDER BY
 		m.father_menu_id,m.order_index
 		) m
@@ -179,7 +179,7 @@
 		father_menu_id,
 		menu_url,
 		menu_type,
-		is_disable,
+		is_enable,
 		namespace,
 		server_name_id,
 		order_index,
@@ -193,7 +193,7 @@
 		#{fatherMenuId},
 		#{menuUrl},
 		#{menuType},
-		#{isDisable},
+		#{isEnable},
 		#{namespace},
 		#{serverNameId},
 		#{orderIndex},
@@ -226,7 +226,7 @@
 		`father_menu_id`=#{fatherMenuId},
 		`menu_url`=#{menuUrl},
 		`menu_type`=#{menuType},
-		`is_disable`=#{isDisable},
+		`is_enable`=#{isEnable},
 		namespace = #{namespace},
 		server_name_id=#{serverNameId},
 		order_index=#{orderIndex},
@@ -243,7 +243,7 @@
 	<update id="updateDisable" parameterType="com.fhs.basics.dox.SysMenuDO">
 		UPDATE `t_ucenter_ms_menu`
 		SET
-		`is_disable`=#{isDisable}
+		`is_enable`=#{isEnable}
 		WHERE father_menu_id=#{menuId}
 	</update>
 
@@ -274,8 +274,8 @@
 		menu_url AS menuUrl,
 		namespace,
 		menu_type AS menuType,
-		is_disable AS
-		isDisable,
+		is_enable AS
+		isEnable,
 		image,
 		server_name_id AS serverNameId,
 		order_index AS orderIndex,
@@ -308,8 +308,8 @@
 		CONCAT(s.`server_url`,m.menu_url)AS menuUrl,
 		m.namespace,
 		m.menu_type AS menuType,
-		m.is_disable AS
-		isDisable,
+		m.is_enable AS
+		isEnable,
 		image,
 		m.server_name_id AS serverNameId,
 		system_id AS systemId,

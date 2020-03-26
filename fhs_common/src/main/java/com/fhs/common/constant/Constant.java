@@ -13,11 +13,11 @@ public interface Constant
     /**
      * 禁用
      */
-    Integer DISABLE = 1;
+    Integer DISABLE = 0;
     /**
      * 启用
      */
-    Integer ENABLED = 0;
+    Integer ENABLED = 1;
     /**
      * 验证码生成几位参数
      */

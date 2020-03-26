@@ -60,7 +60,7 @@
 		<div class="fitem">
 			<div class="fitemDiv">
 				<label >是否启用:</label> 
-				<select id="isDisable" name="isDisable" class="easyui-combobox"
+				<select id="isEnable" name="isEnable" class="easyui-combobox"
 						prompt="状态" nullmsg="请选择"
 						data-options="
 									valueField: 'wordbookCode',
@@ -549,7 +549,7 @@
 					$("#roleId").val(d.roleId);
 					$("#roleName").val(d.roleName);
 					$("#remark").val(d.remark);
-					$('#isDisable').combobox('setValue', d.isDisable);
+					$('#isEnable').combobox('setValue', d.isEnable);
                     $('#organizationId').combotree('setValue', d.organizationId);
 					<%
 					if(has(permissonDataUrl)){

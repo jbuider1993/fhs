@@ -9,8 +9,7 @@
 		permission_id as permissionId,
 		method as method,
 		menu_id as menuId,
-		permission_type as permissionType,
-		( CASE is_disable WHEN '0' THEN '启用' WHEN '1' THEN '禁用' end ) AS state
+		permission_type as permissionType
 		FROM t_ucenter_ms_menu_permission
 		<where>
 			<if test="menuId !=null">
@@ -28,8 +27,7 @@
 		permission_name AS permissionName,
 		permission_id AS permissionId,
 		method AS account,
-		permission_type AS permissionType,
-		( CASE is_disable WHEN '0' THEN '启用' WHEN '1' THEN '禁用' end ) AS state
+		permission_type AS permissionType
 		FROM t_ucenter_ms_menu_permission
 		<where>
 			<if test="permissionType !=null and permissionType!=''">
@@ -49,69 +47,6 @@
 		</where>
 	</select>
 
-<!-- 	添加权限信息 -->
-	<insert id="add" parameterType="com.fhs.basics.dox.SysMenuPermissionDO">
-		INSERT INTO `t_ucenter_ms_menu_permission`
-		(
-		permission_name,
-		method,menu_id,
-		permission_type,
-		is_disable)
-		VALUES
-		(#{buttonName},
-		#{method},
-		#{menuId},
-		#{buttonType},
-		#{isDisable})
-	</insert>
-
-<!-- 	删除权限信息 -->
-	<delete id="delete" parameterType="com.fhs.basics.dox.SysMenuPermissionDO">
-		DELETE FROM
-		`t_ucenter_ms_menu_permission` WHERE
-		permission_id=#{permissionId}
-	</delete>
-
-<!-- 	修改权限信息 -->
-	<update id="update" parameterType="com.fhs.basics.dox.SysMenuPermissionDO">
-		UPDATE `t_ucenter_ms_menu_permission`
-		SET
-		`permission_name`=#{permissionName},
-		`method`=#{method},
-		`menu_id`=#{menuId},
-		`permission_type`=#{permissionType},
-		`is_disable`=#{isDisable}
-		WHERE permission_id=#{permissionId}
-	</update>
-
-<!-- 	查询总条数 -->
-	<select id="findCount" parameterType="com.fhs.basics.dox.SysMenuPermissionDO"
-		resultType="int">
-		SELECT COUNT(*)
-		FROM `t_ucenter_ms_menu_permission`
-		<where>
-			<if test="menuId !=null">
-				menu_id = #{menuId}
-			</if>
-			<if test="menuId ==null">
-				menu_id is NULL
-			</if>
-		</where>
-	</select>
-
-<!-- 	根据编号获取权限对象 -->
-	<select id="findBean" parameterType="com.fhs.basics.dox.SysMenuPermissionDO"
-		resultType="com.fhs.basics.dox.SysMenuPermissionDO">
-		SELECT
-		permission_id AS permissionId,
-		permission_name AS permissionName,
-		method ,
-		permission_type AS permissionType,
-		menu_id AS menuId,
-		is_disable AS isDisable
-		FROM `t_ucenter_ms_menu_permission` WHERE
-		permission_id=#{permissionId}
-	</select>
 
 <!-- 	根据权限编号集合获取权限对象集合 -->
 	<select id="readButtonByIds" parameterType="map" resultType="com.fhs.basics.dox.SysMenuPermissionDO">
@@ -119,8 +54,7 @@
 		 	b.permission_name as permissionName,
 		     b.permission_id as permissionId,
 		     b.method as method,
-		     b.permission_type as permissionType,
-		     ( CASE b.is_disable WHEN '0' THEN '启用' WHEN '1' THEN '禁用' end ) as state
+		     b.permission_type as permissionType
 	    	FROM
 		      t_ucenter_ms_menu_permission b
 	        	WHERE b.permission_id IN

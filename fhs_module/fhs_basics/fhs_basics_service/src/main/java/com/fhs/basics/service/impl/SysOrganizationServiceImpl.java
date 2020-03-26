@@ -92,23 +92,7 @@ public class SysOrganizationServiceImpl extends BaseServiceImpl<SysOrganizationV
         return mapper.getTreesData(map);
     }
 
-    /**
-     * @return httpResult
-     * @desc 刷新所有机构缓存
-     */
-    @Override
-    public HttpResult<Map> refreshRedisCache() {
-        List<SysOrganizationVO> sysOrganizationList = this.select();
-        sysOrganizationList.forEach(sysOrganization -> {
-            if (!StringUtil.isEmpty(sysOrganization.getName())) {
-                //删除redis的当前数据
-                redisCacheService.remove(BaseTransConstant.SYS_ORGANIZATION_NAME + sysOrganization.getId());
-                //重新放入redis中
-                redisCacheService.addStr(BaseTransConstant.SYS_ORGANIZATION_NAME + sysOrganization.getId(), sysOrganization.getName());
-            }
-        });
-        return HttpResult.success();
-    }
+
 
     @Override
     public boolean validataOrgName(SysOrganizationDO sysOrganization) {

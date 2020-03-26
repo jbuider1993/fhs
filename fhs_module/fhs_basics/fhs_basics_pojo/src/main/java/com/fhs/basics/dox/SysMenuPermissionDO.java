@@ -84,7 +84,7 @@ public class SysMenuPermissionDO extends BaseDO<SysMenuPermissionDO> {
     @Max(message = "{test.isDisable.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.isDisable.min}", value = -2147483648, groups = {Add.class, Update.class})
     @Trans(type = TransType.WORD_BOOK,key = "yesOrNo")
-    private Integer isDisable;
+    private Integer isEnable;
     /**
      * 按钮类型12345，查询，添加，修改，删除，其他
      */
@@ -99,112 +99,6 @@ public class SysMenuPermissionDO extends BaseDO<SysMenuPermissionDO> {
     @Transient
     private String state;
 
-    public String getState() {
-        return state;
-    }
 
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    /**
-     * 给主键进行加密
-     */
-    public void setPermissionIdE(String permissionIdE) {
-        permissionId = EncryptUtils.getDecodeIdFromIdE(permissionIdE);
-        this.permissionIdE = permissionIdE;
-    }
-
-    /**
-     * 获取加密主键
-     */
-    public String getPermissionIdE() {
-        return permissionIdE;
-    }
-
-    /**
-     * 给按钮id赋值
-     */
-    public void setPermissionId(Integer permissionId) {
-        permissionIdE = EncryptUtils.getEncodeIdEFromId(permissionId);
-        this.permissionId = permissionId;
-    }
-
-    /**
-     * 获取按钮id
-     */
-    public Integer getPermissionId() {
-        return permissionId;
-    }
-
-    /**
-     * 给按钮名称赋值
-     */
-    public void setPermissionName(String permissionName) {
-        this.permissionName = permissionName;
-    }
-
-    /**
-     * 获取按钮名称
-     */
-    public String getPermissionName() {
-        return permissionName;
-    }
-
-    /**
-     * 给Namespace方法名字赋值
-     */
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-    /**
-     * 获取Namespace方法名字
-     */
-    public String getMethod() {
-        return method;
-    }
-
-    /**
-     * 给菜单id赋值
-     */
-    public void setMenuId(Integer menuId) {
-        this.menuId = menuId;
-    }
-
-    /**
-     * 获取菜单id
-     */
-    public Integer getMenuId() {
-        return menuId;
-    }
-
-    /**
-     * 给是否禁用 0:启用 1:禁用赋值
-     */
-    public void setIsDisable(Integer isDisable) {
-        this.isDisable = isDisable;
-    }
-
-    /**
-     * 获取是是否禁用 0:启用 1:禁用
-     */
-    public Integer getIsDisable() {
-        return isDisable;
-    }
-
-    /**
-     * 给按钮类型12345，查询，添加，修改，删除，其他赋值
-     */
-    public void setPermissionType(Integer permissionType) {
-        this.permissionType = permissionType;
-    }
-
-    /**
-     * 获取按钮类型12345，查询，添加，修改，删除，其他
-     */
-    public Integer getPermissionType() {
-        return permissionType;
-    }
 
 }

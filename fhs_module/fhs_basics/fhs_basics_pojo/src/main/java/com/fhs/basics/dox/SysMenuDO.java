@@ -151,7 +151,7 @@ public class SysMenuDO extends BaseDO<SysMenuDO> {
     @NotNull(message = "{test.isDisable.null}", groups = {Update.class, Add.class})
     @Max(message = "{test.isDisable.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.isDisable.min}", value = -2147483648, groups = {Add.class, Update.class})
-    private Integer isDisable;
+    private Integer isEnable;
 
 
     private String checkHelpUrl;
