@@ -23,7 +23,7 @@ import java.util.List;
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2018 All Rights Reserved.
  */
 @RestController
-@RequestMapping("ms/sysSystem")
+@RequestMapping("ms/ucenter_ms_system")
 public class MsSystemController extends ModelSuperController<SysSystemVO, SysSystemDO> {
 
     @Autowired

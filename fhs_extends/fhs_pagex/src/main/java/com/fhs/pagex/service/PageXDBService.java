@@ -18,6 +18,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -154,8 +155,17 @@ public class PageXDBService {
             try {
                 Object tempObj = clazz.newInstance();
                 VO tempSuperBenn = (VO) tempObj;
+                Field field = null;
                 for (String key : row.keySet()) {
-                    ReflectUtils.setValue(tempObj, key, ConverterUtils.toString(row.get(key)));
+                    field = ReflectUtils.getDeclaredField(clazz, key);
+                    if (field.getType() == Date.class) {
+                        ReflectUtils.setValue(tempObj, key, row.get(key));
+                    } else if (field.getType() == Integer.class) {
+                        ReflectUtils.setValue(tempObj, key, ConverterUtils.toInteger(row.get(key)));
+                    }
+                    else{
+                        ReflectUtils.setValue(tempObj, key, ConverterUtils.toString(row.get(key)));
+                    }
                 }
                 superBeans.add(tempSuperBenn);
             } catch (InstantiationException e) {

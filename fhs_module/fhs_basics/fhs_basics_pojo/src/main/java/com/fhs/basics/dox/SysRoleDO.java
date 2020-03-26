@@ -79,7 +79,7 @@ public class SysRoleDO extends BaseDO<SysRoleDO> {
     @NotNull(message = "{test.isDisable.null}", groups = {Update.class, Add.class})
     @Max(message = "{test.isDisable.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.isDisable.min}", value = -2147483648, groups = {Add.class, Update.class})
-    @Trans(type = TransType.WORD_BOOK, key = "yesOrNo")
+    @Trans(type = TransType.WORD_BOOK, key = "is_enable")
     private Integer isEnable;
 
     /**
@@ -88,7 +88,7 @@ public class SysRoleDO extends BaseDO<SysRoleDO> {
     @NotNull(message = "所属机构字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "所属机构字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @Column(name = "organization_id")
-    @Trans(type = TransType.AUTO_TRANS,key = BaseTransConstant.ORG + "#org")
+    @Trans(type = TransType.AUTO_TRANS,key = BaseTransConstant.ORG )
     private String organizationId;
 
     /**

@@ -153,8 +153,8 @@
 		m.`namespace` IS NOT NULL
 		AND m.`namespace` !=''
 		AND m.`is_enable`
-		= 0
-		AND b.`is_enable` = 0
+		= 1
+		AND b.`is_enable` = 1
 		ORDER BY
 		m.father_menu_id,m.order_index
 		) m

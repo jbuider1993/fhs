@@ -180,8 +180,8 @@ public abstract class BaseFormTag extends PagexBaseTag implements InitializingBe
         //2 输出输出
         try {
             //输出全局的js
-            this.ctx.byteWriter.writeString(getScript(overallJs()));
             this.ctx.byteWriter.writeString(getContentHtml());
+            this.ctx.byteWriter.writeString(getScript(overallJs()));
             this.ctx.byteWriter.writeString(getScript(" $(function() {" + this.readyJs() +  "})"));
             this.ctx.byteWriter.writeString(getScript("loadSuccessFuns.push(function(info){  " + this.loadSuccessJs() +  "})"));
             this.ctx.byteWriter.writeString(getScript("onSaveFuns.push(function(info){  " + this.saveJs() +  "})"));
@@ -197,7 +197,10 @@ public abstract class BaseFormTag extends PagexBaseTag implements InitializingBe
      */
     protected  String getScript(String script)
     {
-        return "<script>" + script + "</script>";
+        if(!CheckUtils.isNullOrEmpty(script)){
+            return "<script>" + script + "</script>";
+        }
+        return "";
     }
 
     /**

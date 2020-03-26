@@ -55,7 +55,7 @@ public interface VO {
                     throw new RuntimeException("找不到" + this.getClass() + "的id注解");
                 }
             }
-            return null;
+            return fieldList.get(0);
         }
         fieldList.get(0).setAccessible(true);
         ID_FIELD_CACHE_MAP.put(this.getClass(), fieldList.get(0));

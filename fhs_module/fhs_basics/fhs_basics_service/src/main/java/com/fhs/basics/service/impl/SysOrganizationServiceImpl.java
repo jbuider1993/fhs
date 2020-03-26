@@ -31,7 +31,7 @@ import java.util.Map;
  */
 @Service
 @DataSource("base_business")
-@AutoTrans(namespace = BaseTransConstant.ORG,fields = "name",useRedis = true)
+@AutoTrans(namespace = BaseTransConstant.ORG,fields = "name",useRedis = true,defaultAlias = "org")
 public class SysOrganizationServiceImpl extends BaseServiceImpl<SysOrganizationVO, SysOrganizationDO> implements SysOrganizationService {
 
     @Autowired

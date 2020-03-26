@@ -1,9 +1,11 @@
 import com.fhs.pagex.vo.BasePagexVO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.anno.TransTypes;
+import com.baomidou.mybatisplus.annotation.TableId;
 @TransTypes(types = {${po.transTypes}})
 public class ${po.className} extends BasePagexVO<${po.className}>
 {
+    @TableId
     public String ${modelConfig.pkeyCamel};
 <% for(field in po.fieldList){%>
     //拼接注解

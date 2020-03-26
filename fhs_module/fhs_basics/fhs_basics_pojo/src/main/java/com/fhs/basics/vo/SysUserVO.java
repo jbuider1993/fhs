@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@TransTypes(types = {TransType.WORD_BOOK})
+@TransTypes(types = {TransType.WORD_BOOK,TransType.AUTO_TRANS})
 public class SysUserVO extends SysUserDO implements VO {
 
 }
