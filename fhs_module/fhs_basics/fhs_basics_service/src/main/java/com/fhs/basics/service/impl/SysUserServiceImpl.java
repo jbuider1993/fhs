@@ -483,20 +483,6 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserVO, SysUserDO> im
     }
 
     @Override
-    public HttpResult refreshRedisCache() {
-        List<SysUserVO> userList = this.select();
-        userList.forEach(sysUser -> {
-            if (!StringUtil.isEmpty(sysUser.getUserName())) {
-                redisCacheService.remove("basics:sysuser:username:" + sysUser.getUserId());
-                redisCacheService.remove("basics:sysuser:userheader:" + sysUser.getUserId());
-                redisCacheService.addStr("basics:sysuser:username:" + sysUser.getUserId(), sysUser.getUserName());
-                redisCacheService.addStr("basics:sysuser:userheader:" + sysUser.getUserId(), EConfig.getPathPropertiesValue("fhs_file_basePath") + "/downLoad/file?fileId=" + sysUser.getHeader());
-            }
-        });
-        return HttpResult.success();
-    }
-
-    @Override
     public List<LeftMenuVO> getMenu(SysUserDO user, String menuType) {
 
         Map<String, Object> paramMap = new HashMap<String, Object>();

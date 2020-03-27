@@ -18,7 +18,7 @@ include("/page/tags/form_include.html"){}
    </div>
    <#UploadFormTag  name='image' title='LOGO'  placeholder="请上传菜单LOGO"/>
    <div class="fitem">
-      <#SelectFormTag  name='systemId' title='子系统' url='${basePath}/ms/sysSystem/findList' required='true' valueField= 'id'
+      <#SelectFormTag  name='systemId' title='子系统' url='${basePath}/ms/ucenter_ms_system/findList' required='true' valueField= 'id'
       textField= 'name' />
       <#WordBookFormTag  name='menuType' title='菜单类型' code='menu_type' required='true' />
    </div>

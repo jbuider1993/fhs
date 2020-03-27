@@ -13,10 +13,6 @@
 		mobile,
 		email,
 		sex,
-		province_id AS provinceId,
-		city_id AS cityId,
-		area_id AS areaId,
-		address,header,
 		organization_id AS organizationId,
 		create_user AS createUser,
 		create_time AS createTime,
@@ -47,10 +43,7 @@
         is_admin AS isAdmin,
         ( CasE is_enable
         WHEN '0' THEN '启用' WHEN '1' THEN '禁用' END ) AS state,
-        province_id AS provinceId,
-        city_id AS cityId,
-        area_id AS areaId,
-        address,
+
         organization_id AS organizationId,
         create_user AS createUser,
         create_time AS createTime,

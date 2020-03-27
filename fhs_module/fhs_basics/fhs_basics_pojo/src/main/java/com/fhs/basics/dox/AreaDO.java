@@ -4,6 +4,7 @@ import com.fhs.basics.constant.BaseTransConstant;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.anno.TransTypes;
+import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
@@ -94,8 +95,8 @@ public class AreaDO extends BaseDO<AreaDO> {
      */
     @Max(message = "{area的areaParentId字段大于int最大值}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{area的areaParentId字段小于int小值", value = -2147483648, groups = {Add.class, Update.class})
-    @Column(name = "area_parent_id", nullable = true, length = 10)
-    @Trans(type = BaseTransConstant.AREA)
+    @Column(name = "area_parent_id")
+    @Trans(type = TransType.AUTO_TRANS,key = BaseTransConstant.AREA +"#area")
     private Integer areaParentId;
 
     /**

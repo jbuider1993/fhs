@@ -66,14 +66,20 @@ public class SysOrganizationDO extends BaseDO<SysOrganizationDO> {
     /**
      * 是否启用(0:启用 1:禁用)
      */
-    @Max(message = "是否启用(0:启用 1:禁用)字段大于int最大值", value = 2147483647, groups = {Add.class, Update.class})
-    @Min(message = "是否启用(0:启用 1:禁用)字段小于int最小值", value = -2147483648, groups = {Add.class, Update.class})
     @Trans(type = TransType.WORD_BOOK, key = "is_enable")
     @Column(name = "is_enable")
     private Integer isEnable;
 
-
+    /**
+     * 集团编码
+     */
     @Column(name = "group_code")
     private String groupCode;
+
+    /**
+     * 扩展字段
+     */
+    @Column(name = "ext_json")
+    private String extJson;
 
 }

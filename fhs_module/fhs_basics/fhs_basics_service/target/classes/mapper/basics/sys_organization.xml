@@ -23,17 +23,7 @@
             <include refid="sqlWhere"/>
         </where>
     </select>
-    <select id="findBean" parameterType="com.fhs.basics.dox.SysOrganizationDO"
-            resultType="com.fhs.basics.dox.SysOrganizationDO">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_ucenter_ms_organization
-        <where>
-            <if test="null != null and null != ''">
-                AND null = #{null}
-            </if>
-        </where>
-    </select>
+
 
     <select id="findCountFromMap" parameterType="map" resultType="java.lang.Integer">
         SELECT COUNT(1) AS count FROM t_ucenter_ms_organization

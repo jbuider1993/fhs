@@ -186,11 +186,7 @@ public interface SysUserService extends BaseService<SysUserVO, SysUserDO>
      */
     public List<String> findMenuButtonByName(String userName);
 
-    /**
-     * 刷新所有用户缓存
-     * @return
-     */
-    HttpResult refreshRedisCache();
+
 
     /**
      * 获取当前用户的 左侧菜单

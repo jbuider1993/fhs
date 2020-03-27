@@ -79,6 +79,9 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
             tempTrans = transFieldSett.getTrans();
             String namespace = transFieldSett.getNamespace();
             String alias = transFieldSett.getAlias();
+            if(transSettMap.containsKey(namespace) && CheckUtils.isNullOrEmpty(alias)){
+                alias = transSettMap.get(namespace).defaultAlias();
+            }
             String pkey = ConverterUtils.toString(ReflectUtils.getValue(obj, tempField.getName()));
             if (StringUtils.isEmpty(pkey)) {
                 continue;
@@ -108,7 +111,7 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
                     continue;
                 }
             }
-            if (alias != null) {
+            if (!CheckUtils.isNullOrEmpty(alias)) {
                 Map<String, String> tempMap = new HashMap<>();
                 Set<String> keys = transCache.keySet();
                 for (String key : keys) {

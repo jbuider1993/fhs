@@ -281,16 +281,6 @@ public class MsUserController extends ModelSuperController<SysUserVO, SysUserDO>
 
     }
 
-    /**
-     * 刷新所有用户缓存
-     *
-     * @return
-     */
-    @RequiresPermissions("sysUser:refreshRedisCache")
-    @RequestMapping("/refreshRedisCache")
-    public HttpResult refreshRedisCache() {
-        return sysUserService.refreshRedisCache();
-    }
 
     /**
      * @param request http请求
@@ -302,15 +292,11 @@ public class MsUserController extends ModelSuperController<SysUserVO, SysUserDO>
     @RequestMapping("/findPage/{organizationId}")
     @ResponseBody
     public Pager<SysUserVO> findPage(@PathVariable(value = "organizationId") String organizationId, HttpServletRequest request, SysUserVO sysUser) {
-        if (isPermitted(request, "see")) {
-            if (!CheckUtils.isNullOrEmpty(organizationId)) sysUser.setOrganizationId(organizationId);
-            PageSizeInfo pgeSizeInfo = getPageSizeInfo();
-            List<SysUserVO> dataList = sysUserService.findForList(sysUser, pgeSizeInfo.getPageStart(), pgeSizeInfo.getPageSize());
-            int count = sysUserService.findCountJpa(sysUser);
-            return new Pager<SysUserVO>(count, dataList);
-        } else {
-            throw new NotPremissionException();
-        }
+        if (!CheckUtils.isNullOrEmpty(organizationId)) sysUser.setOrganizationId(organizationId);
+        PageSizeInfo pgeSizeInfo = getPageSizeInfo();
+        List<SysUserVO> dataList = sysUserService.findForList(sysUser, pgeSizeInfo.getPageStart(), pgeSizeInfo.getPageSize());
+        int count = sysUserService.findCountJpa(sysUser);
+        return new Pager<SysUserVO>(count, dataList);
     }
 
     /**
@@ -323,7 +309,7 @@ public class MsUserController extends ModelSuperController<SysUserVO, SysUserDO>
     @RequiresPermissions("sysUser:see")
     @RequestMapping("info/{id}")
     @ResponseBody
-    public SysUserVO info(@PathVariable(value = "id", required = true) String id,HttpServletRequest request) throws Exception {
+    public SysUserVO info(@PathVariable(value = "id", required = true) String id, HttpServletRequest request) throws Exception {
         //根据用户id用户信息
         SysUserVO user = sysUserService.findSysUserById(id);
         return user;

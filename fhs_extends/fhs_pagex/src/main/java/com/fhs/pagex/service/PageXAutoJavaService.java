@@ -52,9 +52,6 @@ public class PageXAutoJavaService {
     static
     {
         transAbbreviationMap.put("book","wordbook");
-        transAbbreviationMap.put("user","sysUser");
-        transAbbreviationMap.put("type","classifyInfo");
-        transAbbreviationMap.put("fuser","basics:frontUser");
     }
 
 
@@ -79,7 +76,7 @@ public class PageXAutoJavaService {
         //po对象
         Map<String,Object> poMap = new HashMap<>();
         poMap.put("className", javaClassName);
-        StringBuilder transTypes = new StringBuilder("\"wordbook\",\"sysUser\",\"classifyInfo\",\"basics:frontUser\"");
+        StringBuilder transTypes = new StringBuilder("\"wordbook\",\"auto\"");
         List<Map<String,Object>> javaFieldList = new ArrayList<>();
         Map<String,Object> tempField = null;
         Map<String,String> tempTransMap = null;
@@ -123,7 +120,6 @@ public class PageXAutoJavaService {
         paramMap.put("po",poMap);
         paramMap.put("modelConfig",pagexListSettDTO.getModelConfig());
         String javaCode = BeetlUtil.renderBeelt("/pagex/auto_code/java_code_tag.html",paramMap);
-
         MemoryClassLoader loader = MemoryClassLoader.getInstrance();
         //如果已经存在则重新new一个类加载器，实现类刷新
         if( pageXDBService.getNamespaceClassMap().containsKey(namespace))

@@ -11,6 +11,7 @@
 package com.fhs.basics.dox;
 
 import com.fhs.common.constant.Constant;
+import com.fhs.common.utils.CheckUtils;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.anno.TransTypes;
@@ -21,9 +22,7 @@ import com.fhs.core.valid.group.Update;
 import com.fhs.basics.constant.BaseTransConstant;
 import com.mybatis.jpa.annotation.Like;
 import com.mybatis.jpa.annotation.RLike;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -42,10 +41,11 @@ import java.util.List;
  */
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "t_ucenter_ms_user")
-@TransTypes(types = {TransType.WORD_BOOK})
 public class SysUserDO extends BaseDO<SysUserDO> {
     /**
      *
@@ -119,33 +119,7 @@ public class SysUserDO extends BaseDO<SysUserDO> {
      */
     private Integer isAdmin;
 
-    /**
-     * 省
-     */
-    @Length(message = "的provinceId字段的长度最大为64", groups = {Add.class, Update.class}, max = 64, min = 0)
-    @Column(name = "province_id", nullable = true, length = 64)
-    private String provinceId;
 
-    /**
-     * 市
-     */
-    @Length(message = "的cityId字段的长度最大为64", groups = {Add.class, Update.class}, max = 64, min = 0)
-    @Column(name = "city_id", nullable = true, length = 64)
-    private String cityId;
-
-    /**
-     * 区
-     */
-    @Length(message = "的areaId字段的长度最大为64", groups = {Add.class, Update.class}, max = 64, min = 0)
-    @Column(name = "area_id", nullable = true, length = 64)
-    private String areaId;
-
-    /**
-     * 地址
-     */
-    @NotNull(message = "{test.address.null}", groups = {Update.class, Add.class})
-    @Length(message = "{test.address.length}", max = 200, min = 0)
-    private String address;
 
     /**
      * 性别
@@ -162,7 +136,7 @@ public class SysUserDO extends BaseDO<SysUserDO> {
     @Length(message = "{test.organizationId.length}", groups = {Add.class, Update.class}, max = 32, min = 0)
     @NotNull(message = "{test.organizationId.null}", groups = {Update.class, Add.class})
     @RLike
-    @Trans(type = BaseTransConstant.SYS_ORGANIZATION_INFO)
+    @Trans(type = TransType.AUTO_TRANS,key = BaseTransConstant.ORG )
     private String organizationId;
 
     @Column(name = "header")
@@ -179,6 +153,12 @@ public class SysUserDO extends BaseDO<SysUserDO> {
      */
     @Transient
     private String[] roleList;
+
+    /**
+     * 角色id逗号分隔
+     */
+    @Transient
+    private String roleIds;
 
     /**
      * 原始密码
@@ -198,38 +178,10 @@ public class SysUserDO extends BaseDO<SysUserDO> {
     @Transient
     private List<SysRoleDO> roles;
 
-    /**
-     * 验证码
-     */
-    @Transient
-    private String checkCode;
-
-    public SysUserDO() {
-    }
-
-    public SysUserDO(String userId, String userLoginName, String userName, String password, String mobile, String groupCode, String email, Integer isEnable, Integer isAdmin, String provinceId, String cityId, String areaId, String address, Integer sex, String organizationId, String header, String state, String[] roleList, String oldPassword, String newPassword, Integer menuType, List<SysRoleDO> roles, String checkCode) {
-        this.userId = userId;
-        this.userLoginName = userLoginName;
-        this.userName = userName;
-        this.password = password;
-        this.mobile = mobile;
-        this.groupCode = groupCode;
-        this.email = email;
-        this.isEnable = isEnable;
-        this.isAdmin = isAdmin;
-        this.provinceId = provinceId;
-        this.cityId = cityId;
-        this.areaId = areaId;
-        this.address = address;
-        this.sex = sex;
-        this.organizationId = organizationId;
-        this.header = header;
-        this.state = state;
-        this.roleList = roleList;
-        this.oldPassword = oldPassword;
-        this.newPassword = newPassword;
-        this.menuType = menuType;
-        this.roles = roles;
-        this.checkCode = checkCode;
+    public String[] getRoleList(){
+        if(CheckUtils.isNullOrEmpty(this.roleIds)){
+            return new String[]{};
+        }
+        return this.roleIds.split(",");
     }
 }

@@ -23,14 +23,7 @@
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_file_service</artifactId>
-            <version>2.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_file_service</artifactId>
-            <version>2.0.0</version>
-            <scope>compile</scope>
+            <version>${fhs.release.version}</version>
         </dependency>
     </dependencies>
     <artifactId>fhs_public_web</artifactId>

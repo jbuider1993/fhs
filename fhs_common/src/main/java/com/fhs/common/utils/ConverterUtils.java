@@ -1,9 +1,6 @@
 package com.fhs.common.utils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <类型转换工具类>
@@ -24,7 +21,13 @@ public class ConverterUtils
      */
     public static String toString(Object obj, String defaultVal)
     {
-        return (obj != null) ? obj.toString() : defaultVal;
+        if(obj == null){
+            return defaultVal;
+        }
+        if(obj instanceof Date){
+            return DateUtils.formartDate((Date)obj,DateUtils.DATETIME_PATTERN);
+        }
+        return obj.toString();
     }
 
 
@@ -64,7 +67,6 @@ public class ConverterUtils
      * <将对象转换为int>
      *
      * @param obj 需要转换为int的对象
-     * @param defaultVal 默认值
      * @return obj转换成的int值
      */
     public static Integer toInt(Object obj)

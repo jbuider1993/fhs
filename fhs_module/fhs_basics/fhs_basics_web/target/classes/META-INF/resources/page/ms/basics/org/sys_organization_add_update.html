@@ -5,7 +5,7 @@ include("/page/tags/form_include.html"){}
 		<#HideFormTag  name='parentId' title='父节点id' value='${parameter.parentId}' required='true' />
 		<div class="fitem">
 			<#InputFormTag  name='name' title='机构名称' required='true' />
-			<#WordBookFormTag  name='isEnable' title='装填' code='is_enable' required='true' />
+			<#WordBookFormTag  name='isEnable' title='状态' code='is_enable' required='true' />
 		</div>
 		<%
 		layout("/page/tags/add_update_tag.html",{'nameSpace':'sysOrganization','idField':'id'}){}

@@ -37,4 +37,10 @@ public @interface AutoTrans
      * @return 默认false
      */
     boolean useRedis() default false;
+
+    /**
+     * 默认的别名
+     * @return
+     */
+    String defaultAlias() default "";
 }
