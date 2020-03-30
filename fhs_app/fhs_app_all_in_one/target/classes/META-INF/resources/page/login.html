@@ -7,7 +7,6 @@
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <title>登录</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-<link rel="shortcut icon" href="${staticPath}/images/favicon.ico">
 <link href="${staticPath}/css/login.css" rel='stylesheet' type='text/css' />
 <script src="${staticPath}/js/jquery.min.js"></script>
 <script src="${staticPath}/js/jQuery.md5.js"></script>
@@ -90,11 +89,14 @@
 		}
 	}
 
-	$("body").keydown(function() {
-		if (event.keyCode == "13") {
-			login();
-	    };
-	});
+    window.onload=function(){
+        document.onkeydown=function(ev){
+            var event=ev ||event
+            if(event.keyCode==13){
+                login();
+            }
+        }
+    }
 
 	function reloadImg(){
 		$('#imgId').attr('src', '${basePath}/defaultKaptcha?date=' + new Date());

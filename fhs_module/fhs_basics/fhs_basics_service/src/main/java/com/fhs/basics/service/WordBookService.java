@@ -47,6 +47,7 @@ public interface WordBookService extends BaseService<WordbookVO, WordbookDO>
      * @param map map
      * @return 查询出来的数据集合
      */
+    @Override
     List<WordbookVO> findForListFromMap(Map<String, Object> map);
 
     /**
