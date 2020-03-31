@@ -31,5 +31,10 @@ public interface AreaService extends BaseService<AreaVO, AreaDO>
      */
     String findAddressById(Map<String, Object> map);
 
+    /**
+     * 刷新区域缓存
+     */
+    void refreshRedisCache();
+
 
 }

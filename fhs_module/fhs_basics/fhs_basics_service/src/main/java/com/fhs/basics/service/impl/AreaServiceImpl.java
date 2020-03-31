@@ -56,7 +56,20 @@ public class AreaServiceImpl extends BaseServiceImpl<AreaVO, AreaDO> implements 
         return address;
     }
 
-
+    @Override
+    public void refreshRedisCache() {
+        List<AreaVO> areaList = this.select();
+        for (AreaVO area : areaList) {
+            if (!StringUtil.isEmpty(area.getAreaName())) {
+                try {
+                    redisCacheService.remove(BaseTransConstant.AREA_NAME + area.getId());
+                    redisCacheService.addStr(BaseTransConstant.AREA_NAME + area.getId(), area.getAreaName());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
 
 }

@@ -36,11 +36,6 @@
             <artifactId>fhs_db</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_basics_api</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>
     </dependencies>
 
 </project>
