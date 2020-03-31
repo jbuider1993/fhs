@@ -3,6 +3,8 @@ package com.fhs.core.safe.xss;
 import com.fhs.common.utils.ConverterUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.support.WebBindingInitializer;
 
@@ -20,6 +22,8 @@ import java.beans.PropertyEditorSupport;
  * @UpdateDate: 2018/12/9 0009 14:06
  * @Version: 1.0
  */
+@Component
+@ConditionalOnProperty(prefix = "fhs.safe", name = "enable-xss", havingValue = "true", matchIfMissing = false)
 public class XSSStringEditor extends PropertyEditorSupport implements WebBindingInitializer {
 
     /**

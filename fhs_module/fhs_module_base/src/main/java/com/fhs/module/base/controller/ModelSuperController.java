@@ -12,6 +12,7 @@ import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
+import com.fhs.core.safe.repeat.anno.NotRepeat;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Update;
 import com.fhs.logger.Logger;
@@ -289,8 +290,9 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      * @param e     bean
      * @param check 检查结果
      */
-    @RequestMapping("add")
+    @NotRepeat
     @ResponseBody
+    @RequestMapping("add")
     @LogDesc(value = "添加", type = LogDesc.ADD)
     public HttpResult<Boolean> add(@Validated(Add.class) V e, BindingResult check, HttpServletRequest request,
                                    HttpServletResponse response) {

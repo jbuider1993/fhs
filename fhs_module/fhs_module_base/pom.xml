@@ -18,6 +18,11 @@
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_safe</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_json</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>

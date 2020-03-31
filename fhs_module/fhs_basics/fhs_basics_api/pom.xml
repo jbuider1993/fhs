@@ -28,11 +28,15 @@
             <version>${fhs.release.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_trans_service</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
             <version>${fhs.swagger.version}</version>
         </dependency>
-
     </dependencies>
 
 </project>

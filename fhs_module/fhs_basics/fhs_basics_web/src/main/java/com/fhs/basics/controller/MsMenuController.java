@@ -10,6 +10,7 @@ import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.JsonUtils;
 import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.result.HttpResult;
+import com.fhs.core.safe.repeat.anno.NotRepeat;
 import com.fhs.logger.Logger;
 import com.fhs.module.base.controller.ModelSuperController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -57,6 +58,7 @@ public class MsMenuController extends ModelSuperController<SysMenuVO, SysMenuDO>
      * @param response
      * @param adminMenu
      */
+    @NotRepeat
     @RequiresPermissions("sysMenu:add")
     @RequestMapping("addMenu")
     public HttpResult addMenu(HttpServletRequest request, HttpServletResponse response, SysMenuVO adminMenu) {

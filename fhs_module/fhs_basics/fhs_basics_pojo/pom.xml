@@ -16,11 +16,7 @@
             <artifactId>fhs_base_pojo</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_base_other</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_valid</artifactId>
