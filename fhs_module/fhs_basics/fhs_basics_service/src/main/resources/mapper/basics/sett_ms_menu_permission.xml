@@ -121,7 +121,7 @@
 	</select>
 
 	<!-- 根据permissionId 查询URL -->
-	<select id="getUrlByPermissionId" parameterType="com.fhs.basics.dox.SettMsMenuPermissionDO" resultType="com.fhs.basics.dox.SysMenuPermissionUrlRelaDO">
+	<select id="getUrlByPermissionId" parameterType="com.fhs.basics.dox.SettMsMenuPermissionDO" resultType="com.fhs.basics.vo.SettMsMenuPermissionUrlRelaVO">
 		SELECT
 			permission_id AS permissionId,
 			url AS url
@@ -137,7 +137,7 @@
 	</select>
 	
 	<!--添加权限URL-->
-	<insert id="addUrl" parameterType="com.fhs.basics.dox.SysMenuPermissionUrlRelaDO">
+	<insert id="addUrl" parameterType="com.fhs.basics.dox.SettMsMenuPermissionUrlRelaDO">
 		INSERT INTO t_ucenter_ms_menu_permission_url_rela
 		(
 		permission_id,
@@ -148,7 +148,7 @@
 	</insert>
 
 	<!--修改权限URL-->
-	<update id="updateUrl" parameterType="com.fhs.basics.dox.SysMenuPermissionUrlRelaDO">
+	<update id="updateUrl" parameterType="com.fhs.basics.dox.SettMsMenuPermissionUrlRelaDO">
 		UPDATE t_ucenter_ms_menu_permission_url_rela
 		SET
 		url=#{url}
@@ -157,7 +157,7 @@
 	</update>
 
 	<!--删除权限URL-->
-	<delete id="delUrl" parameterType="com.fhs.basics.dox.SysMenuPermissionUrlRelaDO">
+	<delete id="delUrl" parameterType="com.fhs.basics.dox.SettMsMenuPermissionUrlRelaDO">
 		DELETE FROM
 		t_ucenter_ms_menu_permission_url_rela
 		WHERE permission_id=#{permissionId}
