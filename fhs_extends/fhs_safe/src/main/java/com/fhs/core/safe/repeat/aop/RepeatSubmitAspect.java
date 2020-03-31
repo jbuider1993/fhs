@@ -1,6 +1,6 @@
 package com.fhs.core.safe.repeat.aop;
 
-import com.fhs.basics.vo.SysUserVO;
+import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.core.cache.service.RedisCacheService;
@@ -46,7 +46,7 @@ public class RepeatSubmitAspect {
         String key = null;
         try {
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-            SysUserVO user = (SysUserVO) request.getSession().getAttribute(Constant.SESSION_USER);
+            UcenterMsUserVO user = (UcenterMsUserVO) request.getSession().getAttribute(Constant.SESSION_USER);
             if (user == null) {
                 throw new HttpException("请重新登录", HttpException.NO_PERMISSION);
             }
