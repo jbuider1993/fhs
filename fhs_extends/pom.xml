@@ -27,6 +27,8 @@
         <module>fhs_pagex</module>
         <module>fhs_static</module>
         <module>fhs_feign</module>
+        <module>fhs_safe</module>
+        <module>fhs_auto_del</module>
     </modules>
 
     <dependencies>

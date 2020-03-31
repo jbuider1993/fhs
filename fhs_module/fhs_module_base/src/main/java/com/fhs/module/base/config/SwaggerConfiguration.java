@@ -1,11 +1,14 @@
 package com.fhs.module.base.config;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.EnvironmentAware;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * swagger配置
@@ -19,7 +22,9 @@ import springfox.documentation.service.ApiInfo;
  * @UpdateDate: 2018/9/9 0009 14:52
  * @Version: 1.0
  */
-
+@EnableSwagger2
+@Configuration
+@ConditionalOnProperty(prefix = "fhs.swagger", name = "enable", havingValue = "true", matchIfMissing = false)
 public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements EnvironmentAware {
     /**
      * 基础包
@@ -70,10 +75,10 @@ public class SwaggerConfiguration extends WebMvcConfigurerAdapter implements Env
     @Override
     public void setEnvironment(Environment environment) {
         this.environment = environment;
-        this.basePackage = this.environment.getProperty("swagger.basepackage");
-        this.creatName = this.environment.getProperty("swagger.service.developer");
-        this.serviceName = this.environment.getProperty("swagger.service.name");
-        this.description = this.environment.getProperty("swagger.service.description");
+        this.basePackage = this.environment.getProperty("fhs.swagger.basepackage");
+        this.creatName = this.environment.getProperty("fhs.swagger.service.developer");
+        this.serviceName = this.environment.getProperty("fhs.swagger.service.name");
+        this.description = this.environment.getProperty("fhs.swagger.service.description");
     }
 
 }

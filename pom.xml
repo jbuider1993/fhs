@@ -34,20 +34,6 @@
         <module>fhs_module</module>
         <module>fhs_spring_cloud</module>
         <module>fhs_app</module>
-        <!--<module>fhs_chart</module>
-        <module>fhs_cloud</module>
-        <module>fhs_core</module>
-        <module>fhs_eureka-server</module>
-        <module>fhs_file</module>
-        <module>fhs_file_admin</module>
-        <module>fhs_framework_api</module>
-        <module>fhs_framework_base_business</module>
-        <module>fhs_framework_base_business_admin</module>
-        <module>fhs_word</module>
-        <module>fhs_framework_parent</module>
-        <module>fhs_mini_admin</module>
-        <module>fhs_work_flow</module>
-        <module>fhs_work_flow_common</module>-->
 
     </modules>
 

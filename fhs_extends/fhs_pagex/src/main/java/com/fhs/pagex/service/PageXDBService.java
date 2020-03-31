@@ -1,13 +1,16 @@
 package com.fhs.pagex.service;
 
+import com.alibaba.druid.support.json.JSONUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alicp.jetcache.CacheUpdateManager;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.pojo.SuperBean;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.exception.BusinessException;
+import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.trans.service.impl.TransService;
 import com.fhs.logger.Logger;
 import com.fhs.pagex.dox.DefaultPageXDO;
@@ -54,6 +57,9 @@ public class PageXDBService {
 
     private static final String DO_CACHE_KEY = "docache:";
 
+    @Autowired
+    private CacheUpdateManager cacheUpdateManager;
+
 
     /**
      * 需要翻译的namespace集合
@@ -65,7 +71,6 @@ public class PageXDBService {
      */
     private Map<String, Class> namespaceClassMap = new ConcurrentHashMap<>();
 
-
     /**
      * 插入一条数据到db
      *
@@ -75,7 +80,9 @@ public class PageXDBService {
      */
     public int insert(EMap<String, Object> paramMap, String namespace) {
         insertAndUpdateX(paramMap, namespace, true);
-        return sqlsession.insert(getSqlNamespace() + namespace + "_insertPageX", paramMap);
+        int result =  sqlsession.insert(getSqlNamespace() + namespace + "_insertPageX", paramMap);
+        refreshCache(namespace);
+        return result;
     }
 
     /**
@@ -133,6 +140,20 @@ public class PageXDBService {
                 }
             }
         }
+        refreshCache(namespace);
+    }
+
+    /**
+     * 刷新缓存
+     * @param namespace 命名空间
+     */
+    private void refreshCache(String namespace){
+        cacheUpdateManager.clearCache(namespace);
+        //发送刷新的消息
+        Map<String, String> message = new HashMap<>();
+        message.put("transType", TransType.AUTO_TRANS);
+        message.put("namespace", namespace);
+        redisCacheService.convertAndSend("trans", JSONUtils.toJSONString(message));
     }
 
     /**
@@ -213,7 +234,9 @@ public class PageXDBService {
     public int update(EMap<String, Object> paramMap, String namespace) {
         insertAndUpdateX(paramMap, namespace, false);
         redisCacheService.remove(DO_CACHE_KEY + namespace + ":" + paramMap.get("id"));
-        return sqlsession.update(getSqlNamespace() + namespace + "_updatePageX", paramMap);
+        int result = sqlsession.update(getSqlNamespace() + namespace + "_updatePageX", paramMap);
+        refreshCache(namespace);
+        return result;
     }
 
     /**
@@ -225,7 +248,9 @@ public class PageXDBService {
      */
     public int del(String pkey, String namespace) {
         redisCacheService.remove(DO_CACHE_KEY + namespace + ":" + pkey);
-        return sqlsession.delete(getSqlNamespace() + namespace + "_delPageX", pkey);
+        int result =  sqlsession.delete(getSqlNamespace() + namespace + "_delPageX", pkey);
+        refreshCache(namespace);
+        return result;
     }
 
     /**

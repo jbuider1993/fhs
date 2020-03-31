@@ -12,12 +12,16 @@ import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.NotPremissionException;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
+import com.fhs.core.safe.repeat.anno.NotRepeat;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Update;
 import com.fhs.logger.Logger;
 import com.fhs.logger.anno.LogDesc;
 import com.fhs.module.base.common.ExcelExportTools;
 import com.mybatis.jpa.context.DataPermissonContext;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -246,6 +250,9 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     @RequestMapping("info/{id}")
     @ResponseBody
     @LogDesc(value = "根据ID集合查询对象数据", type = LogDesc.SEE)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "id", required = true,  paramType = "query")}
+    )
     public V info(@PathVariable("id") String id, HttpServletRequest request)
             throws Exception {
         if (isPermitted(request, "see")) {
@@ -288,10 +295,11 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      * @param e     bean
      * @param check 检查结果
      */
-    @RequestMapping("add")
+    @NotRepeat
     @ResponseBody
+    @RequestMapping("add")
     @LogDesc(value = "添加", type = LogDesc.ADD)
-    public HttpResult<Boolean> add(@Validated(Add.class) V e, BindingResult check, HttpServletRequest request,
+    public HttpResult<Boolean> add(@ModelAttribute@Validated(Add.class) V e, BindingResult check, HttpServletRequest request,
                                    HttpServletResponse response) {
         if (isPermitted(request, "add")) {
             if (!check.hasErrors()) {
@@ -322,6 +330,9 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      */
     @RequestMapping("del")
     @ResponseBody
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "id", required = true,  paramType = "query")}
+    )
     @LogDesc(value = "删除", type = LogDesc.DEL)
     public HttpResult<Boolean> del(@RequestParam("id") String id, HttpServletRequest request) {
         if (isPermitted(request, "del")) {
@@ -340,7 +351,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     @RequestMapping("update")
     @ResponseBody
     @LogDesc(value = "更新", type = LogDesc.UPDATE)
-    public HttpResult<Boolean> update(@Validated(Update.class) V e, BindingResult check, HttpServletRequest request,
+    public HttpResult<Boolean> update(@ModelAttribute@Validated(Update.class) V e, BindingResult check, HttpServletRequest request,
                                       HttpServletResponse response) {
         if (isPermitted(request, "update")) {
             if (e instanceof BaseDO) {

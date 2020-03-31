@@ -10,6 +10,7 @@ import com.fhs.common.utils.*;
 import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.result.HttpResult;
+import com.fhs.core.safe.repeat.anno.NotRepeat;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.logger.anno.LogDesc;
@@ -55,6 +56,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * @param sysUser
      * @param attr
      */
+    @NotRepeat
     @RequiresPermissions("sysUser:add")
     @RequestMapping("addUser")
     @LogDesc(type = LogDesc.ADD, value = "添加后台用户")

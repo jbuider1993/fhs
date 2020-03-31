@@ -26,6 +26,11 @@
             <artifactId>fhs_exception</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_cache</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

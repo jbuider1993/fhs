@@ -1,19 +1,28 @@
 package com.fhs.core.base.service.impl;
 
+import com.alibaba.druid.support.json.JSONUtils;
 import com.alicp.jetcache.Cache;
+import com.alicp.jetcache.CacheUpdateManager;
+import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.CreateCache;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.ListUtils;
 import com.fhs.common.utils.ReflectUtils;
+import com.fhs.core.autodel.service.AutoDelService;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
 import com.fhs.core.base.pojo.SuperBean;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.base.service.BaseService;
 import com.fhs.core.cache.annotation.Cacheable;
+import com.fhs.core.cache.annotation.Namespace;
+import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.exception.ParamException;
+import com.fhs.core.trans.anno.AutoTrans;
+import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.trans.service.impl.TransService;
 import com.fhs.logger.Logger;
 import com.mybatis.jpa.annotation.CatTableFlag;
@@ -25,6 +34,7 @@ import com.mybatis.jpa.statement.MybatisStatementAdapter;
 import org.apache.ibatis.executor.keygen.NoKeyGenerator;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.poi.ss.formula.functions.T;
+import org.checkerframework.checker.units.qual.A;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.InitializingBean;
@@ -35,21 +45,21 @@ import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
 /**
- * 业务层base类，主要提供对数据库的CRUD操作，在debug模式下面不处理异常，但是在正式环境下会处理异常，并记录到log中 所有的子类都需要实现getDao的方法注入自己的dao
+ * 业务层base类，主要提供对数据库的CRUD操作
  *
  * @author wanglei
  * @version [版本号, 2015年5月27日]
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements BaseService<V,D>, InitializingBean {
+public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements BaseService<V, D>, InitializingBean {
 
     protected final Logger log = Logger.getLogger(this.getClass());
 
     /**
      * 缓存 默认时间：半个小时
      */
-    @CreateCache(expire = 1800, name = "docache:")
+    @CreateCache(expire = 1800, name = "docache:", cacheType = CacheType.BOTH)
     private Cache<String, D> doCache;
 
     /**
@@ -65,13 +75,27 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
     @Autowired
     protected TransService transService;
 
+
+    /**
+     * 缓存的namespace
+     */
+    private String nameSpace;
+
+
     /**
      * 利用spring4新特性泛型注入
      */
     @Autowired
     protected FhsBaseMapper<D> baseMapper;
 
+    @Autowired
+    private CacheUpdateManager cacheUpdateManager;
 
+    @Autowired
+    private RedisCacheService redisCacheService;
+
+    @Autowired
+    private AutoDelService autoDelService;
 
     private static final Set<String> exist = new HashSet<>();
 
@@ -81,56 +105,73 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
     public BaseServiceImpl() {
         //判断自己是否需要支持缓存
         this.isCacheable = this.getClass().isAnnotationPresent(Cacheable.class);
-        if(isCacheable) {
-            this.namespace =this.getClass().getAnnotation(Cacheable.class).value();
+        if (isCacheable) {
+            this.namespace = this.getClass().getAnnotation(Cacheable.class).value();
         }
 
     }
 
     @Override
     public int addFromMap(Map<String, Object> info) {
-
-        return baseMapper.addFromMap(info);
+        int result = baseMapper.addFromMap(info);
+        this.refreshCache();
+        return result;
     }
 
     @Override
     public int add(D bean) {
-        return baseMapper.insertJpa(bean);
+        int result = baseMapper.insertJpa(bean);
+        this.refreshCache();
+        this.addCache(bean);
+        return result;
     }
 
     @Override
     public boolean updateFormMap(Map<String, Object> map) {
-        return baseMapper.updateFormMap(map) > 0;
+        boolean result = baseMapper.updateFormMap(map) > 0;
+        this.refreshCache();
+        return result;
     }
 
     @Override
     public boolean update(D bean) {
-        return this.updateJpa(bean);
+        boolean result = this.updateJpa(bean);
+        this.refreshCache();
+        this.updateCache(bean);
+        return result;
     }
 
     @Override
     public boolean updateJpa(D bean) {
-        return baseMapper.updateSelectiveById(bean) > 0;
+        boolean result = baseMapper.updateSelectiveById(bean) > 0;
+        this.refreshCache();
+        this.updateCache(bean);
+        return result;
     }
 
     @Override
     public boolean deleteFromMap(Map<String, Object> map) {
-        return baseMapper.deleteFromMap(map) > 0;
+        boolean result = baseMapper.deleteFromMap(map) > 0;
+        this.refreshCache();
+        return result;
     }
 
     @Override
     public boolean delete(D bean) {
-        return baseMapper.deleteBean(bean) > 0;
+        boolean result = baseMapper.deleteBean(bean) > 0;
+        this.refreshCache();
+        return result;
     }
 
     @Override
     public int findCountFromMap(Map<String, Object> map) {
-        return baseMapper.findCountFromMap(map);
+        int result = baseMapper.findCountFromMap(map);
+        return result;
     }
 
     @Override
     public int findCount(D bean) {
-        return (int)baseMapper.selectCountJpa(bean);
+        return (int) baseMapper.selectCountJpa(bean);
     }
 
     @Override
@@ -161,7 +202,7 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
     @SuppressWarnings({"unchecked"})
     @Override
     public List<V> findForListFromMap(Map<String, Object> map) {
-        List<D> dos =  baseMapper.findForListFromMap(map);
+        List<D> dos = baseMapper.findForListFromMap(map);
         return dos2vos(dos);
     }
 
@@ -188,19 +229,25 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     @Override
     public int updateBatch(List<Map<String, Object>> list) {
-        return baseMapper.updateBatch(list);
+        int result = baseMapper.updateBatch(list);
+        this.refreshCache();
+        return result;
     }
 
     @Override
     public int addBatch(Map<String, Object> paramMap) {
-        return baseMapper.addBatch(paramMap);
+        int result = baseMapper.addBatch(paramMap);
+        this.refreshCache();
+        return result;
     }
 
 
     @Override
     public int insertSelective(D entity) {
         addCache(entity);
-        return baseMapper.insertSelective(entity);
+        int result = baseMapper.insertSelective(entity);
+        this.refreshCache();
+        return result;
     }
 
     /**
@@ -208,10 +255,39 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
      *
      * @param entity 实体类
      */
-    private void addCache(D entity) {
+    protected void addCache(D entity) {
         if (this.isCacheable && JpaTools.persistentMetaMap.containsKey(entity.getClass().getName())) {
             String pkey = getPkeyVal(entity);
             this.doCache.put(namespace + ":" + pkey, entity);
+        }
+    }
+
+    /**
+     * 刷新缓存,包括do缓存,autotrans缓存,以及其他模块依赖的缓存
+     */
+    protected void refreshCache() {
+        cacheUpdateManager.clearCache(namespace);
+        AutoTrans autoTrans = this.getClass().getAnnotation(AutoTrans.class);
+        if (autoTrans != null) {
+            //发送刷新的消息
+            Map<String, String> message = new HashMap<>();
+            message.put("transType", TransType.AUTO_TRANS);
+            message.put("namespace", autoTrans.namespace());
+            redisCacheService.convertAndSend("trans", JSONUtils.toJSONString(message));
+        }
+        if (this.getClass().isAnnotationPresent(Namespace.class)) {
+            this.cacheUpdateManager.clearCache(this.getClass().getAnnotation(Namespace.class).value());
+        }
+    }
+
+    /**
+     * 清除缓存
+     *
+     * @param pkey 主键
+     */
+    protected void removeCache(Object pkey) {
+        if (this.isCacheable) {
+            this.doCache.remove(namespace + ":" + pkey);
         }
     }
 
@@ -227,7 +303,9 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     @Override
     public int insertJpa(D entity) {
-        return baseMapper.insertJpa(entity);
+        int result = baseMapper.insertJpa(entity);
+        this.refreshCache();
+        return result;
     }
 
 
@@ -239,30 +317,43 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     @Override
     public int batchInsert(List<D> list) {
-        return baseMapper.batchInsert(list);
+        int result = baseMapper.batchInsert(list);
+        this.refreshCache();
+        return result;
     }
 
     @Override
     public int deleteById(Object primaryValue) {
-        if (this.isCacheable) {
-            this.doCache.remove(namespace + ":" + ConverterUtils.toString(primaryValue));
-        }
-        return baseMapper.deleteByIdJpa(primaryValue);
+        autoDelService.deleteCheck(this.getClass(), primaryValue);
+        D d = baseMapper.selectByIdJpa(primaryValue);
+        d.setIsDelete(Constant.INT_TRUE);
+        int result = baseMapper.updateById(d);
+        autoDelService.deleteItemTBL(this.getClass(), primaryValue);
+        this.refreshCache();
+        removeCache(primaryValue);
+        return result;
     }
 
     @Override
     public int updateById(D entity) {
         updateCache(entity);
+        this.refreshCache();
         return baseMapper.updateByIdJpa(entity);
     }
 
     @Override
     public int updateSelectiveById(D entity) {
         updateCache(entity);
+        this.refreshCache();
         return baseMapper.updateSelectiveById(entity);
     }
 
-    private void updateCache(D entity) {
+    /**
+     * 缓存更新
+     *
+     * @param entity
+     */
+    protected void updateCache(D entity) {
         if (this.isCacheable) {
             String pkey = this.getPkeyVal(entity);
             this.doCache.remove(namespace + ":" + pkey);
@@ -271,8 +362,16 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
     }
 
     @Override
-    public int batchUpdate(List<D> entity) {
-        return baseMapper.batchUpdate(entity);
+    public int batchUpdate(List<D> entitys) {
+        if (entitys == null || entitys.isEmpty()) {
+            return 0;
+        }
+        int result = baseMapper.batchUpdate(entitys);
+        for (D entity : entitys) {
+            updateCache(entity);
+        }
+        this.refreshCache();
+        return result;
     }
 
     @Override
@@ -309,7 +408,7 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     @Override
     public List<V> select() {
-        return ListUtils.copyListToList(baseMapper.select(),this.getVOClass());
+        return ListUtils.copyListToList(baseMapper.select(), this.getVOClass());
     }
 
     @Override
@@ -330,21 +429,16 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     @Override
     public int deleteBean(D entity) {
-        return baseMapper.deleteBean(entity);
+        List<D> dos = baseMapper.selectPageJpa(entity, -1, -1);
+        for (D d : dos) {
+            d.setIsDelete(Constant.INT_TRUE);
+            autoDelService.deleteCheck(this.getClass(), d.getPkey());
+            autoDelService.deleteItemTBL(this.getClass(), d.getPkey());
+        }
+        //批量修改为已删除
+        return baseMapper.batchUpdate(dos);
     }
 
-
-    public List<V> selectNested(D entity, long pageStart, long pageSize) {
-        return dos2vos(baseMapper.selectNested(entity, pageStart, pageSize));
-    }
-
-
-    public List<V> selectNestedForOrder(D entity, long pageStart, long pageSize, String orderBy) {
-        return dos2vos(baseMapper.selectNestedForOrder(entity, pageStart, pageSize, orderBy));
-    }
-
-
-    private String nameSpace;
 
     @Override
     public Object callSqlIdForOne(String sqlId, Object param) {
@@ -362,7 +456,7 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
     }
 
     @Override
-    public List<Object> callSqlIdForMany(String sqlId, Object param) {
+    public List<?> callSqlIdForMany(String sqlId, Object param) {
         return sqlsession.selectList(nameSpace + "." + sqlId, param);
     }
 
@@ -371,14 +465,21 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
         return sqlsession.selectOne(nameSpace + "." + sqlId, param);
     }
 
-    @Override
-    public int deleteMP(Wrapper<D> wrapper) {
-        return baseMapper.delete(wrapper);
-    }
 
     @Override
-    public int deleteBatchIdsMP(Collection<? extends Serializable> idList) {
-        return baseMapper.deleteBatchIds(idList);
+    public int deleteBatchIds(List<?> idList) {
+        if (idList == null || idList.isEmpty()) {
+            return 0;
+        }
+        for (Object id : idList) {
+            autoDelService.deleteCheck(this.getClass(), id);
+            autoDelService.deleteItemTBL(this.getClass(), id);
+        }
+        List<D> dos = baseMapper.selectByIds(idList);
+        for (D d : dos) {
+            d.setIsDelete(Constant.INT_TRUE);
+        }
+        return baseMapper.batchUpdate(dos);
     }
 
     @Override
@@ -423,7 +524,7 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     @Override
     public List<V> findByIds(List<?> ids) {
-        return ListUtils.copyListToList(baseMapper.selectByIds(ids),this.getVOClass());
+        return dos2vos(baseMapper.selectByIds(ids));
     }
 
 
@@ -457,12 +558,13 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     /**
      * vo转DO
+     *
      * @param vo vo
      * @return
      */
     @Override
-    public D v2d(V vo){
-        return (D)vo;
+    public D v2d(V vo) {
+        return (D) vo;
     }
 
     @Override
@@ -500,12 +602,53 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     /**
      * do集合转vo集合
+     *
      * @param dos
      * @return
      */
-    public List<V> dos2vos(List<D> dos){
-        List<V> vos = ListUtils.copyListToList(dos,this.getVOClass());
+    public List<V> dos2vos(List<D> dos) {
+        List<V> vos = ListUtils.copyListToList(dos, this.getVOClass());
         transService.transMore(vos);
         return vos;
+    }
+
+    /**
+     * 自动删除子表数据
+     *
+     * @param field       字段
+     * @param mainTblPkey 主表pkey
+     * @return
+     */
+    public int deleteForMainTblPkey(String field, Object mainTblPkey) {
+        try {
+            D d = this.getDOClass().newInstance();
+            ReflectUtils.setValue(d, field, mainTblPkey);
+            return this.deleteBean(d);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * 根据主表id和 子表字段查询子表数据
+     *
+     * @param field       子表字段
+     * @param mainTblPkey 主表id
+     * @return 多少条子表数据
+     */
+    public int findCountForMainTblPkey(String field, Object mainTblPkey) {
+        try {
+            D d = this.getDOClass().newInstance();
+            ReflectUtils.setValue(d, field, mainTblPkey);
+            return this.findCount(d);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }

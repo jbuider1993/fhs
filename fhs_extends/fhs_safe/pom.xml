@@ -3,48 +3,34 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>fhs_base</artifactId>
+        <artifactId>fhs_extends</artifactId>
         <groupId>com.fhs-opensource</groupId>
         <version>2.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <version>2.0.0</version>
-    <artifactId>fhs_base_other</artifactId>
+    <artifactId>fhs_safe</artifactId>
+    <description>安全相关</description>
     <dependencies>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_trans_service</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_cache</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_db</artifactId>
+            <artifactId>fhs_exception</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_base_pojo</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <version>${fhs.spring-cloud-starter.version}</version>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>RELEASE</version>
+            <!--1.12.1-->
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_valid</artifactId>
-            <version>${fhs.release.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_auto_del</artifactId>
+            <artifactId>fhs_basics_pojo</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
     </dependencies>
