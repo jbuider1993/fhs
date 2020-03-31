@@ -10,7 +10,6 @@
     <modelVersion>4.0.0</modelVersion>
     <version>2.0.0</version>
     <artifactId>fhs_pub_pojo</artifactId>
-    <packaging>pom</packaging>
 
     <dependencies>
         <dependency>
@@ -18,14 +17,11 @@
             <artifactId>fhs_base_pojo</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_valid</artifactId>
             <version>${fhs.release.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>net.coobird</groupId>
