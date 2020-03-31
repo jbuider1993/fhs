@@ -27,6 +27,7 @@
         <module>fhs_pagex</module>
         <module>fhs_static</module>
         <module>fhs_feign</module>
+        <module>fhs_safe</module>
     </modules>
 
     <dependencies>
