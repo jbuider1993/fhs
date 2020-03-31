@@ -30,7 +30,7 @@ import java.util.Map;
  * @since 2019-03-11 14:14:58
  */
 @Primary
-@Service("ucenterFrontUserService")
+@Service("UcenterFrontUserService")
 @DataSource("base_business")
 public class UcenterFrontUserServiceImpl extends BaseServiceImpl<UcenterFrontUserVO, UcenterFrontUserDO> implements UcenterFrontUserService, FeignFrontUserApiService {
 

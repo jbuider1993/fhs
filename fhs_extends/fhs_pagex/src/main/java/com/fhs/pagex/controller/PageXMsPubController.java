@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fhs.basics.api.rpc.FeignSysMenuApiService;
-import com.fhs.basics.vo.SysMenuVO;
-import com.fhs.basics.vo.SysUserVO;
+import com.fhs.basics.vo.SettMsMenuVO;
+import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.cache.service.RedisCacheService;
@@ -61,7 +61,7 @@ public class PageXMsPubController extends PageXBaseController {
     /**
      * namesapce:menu map
      */
-    private Map<String, SysMenuVO> namesapceMenuMap = new HashMap<>();
+    private Map<String, SettMsMenuVO> namesapceMenuMap = new HashMap<>();
 
     @Autowired
     private RedisCacheService<String> redisCacheService;
@@ -76,7 +76,7 @@ public class PageXMsPubController extends PageXBaseController {
 
         checkPermiessAndNamespace( namespace,"add");
         EMap<String,Object> paramMap = super.getParameterMap();
-        SysUserVO user = getSessionUser( request);
+        UcenterMsUserVO user = getSessionUser( request);
         paramMap.put("createUser",user.getUserId());
         paramMap.put("groupCode",user.getGroupCode());
         paramMap.put("updateUser",user.getUserId());
@@ -114,9 +114,9 @@ public class PageXMsPubController extends PageXBaseController {
 
         // 获取菜单name及nameSpace
         if (namesapceMenuMap.isEmpty()) {
-            HttpResult<List<SysMenuVO>> result = feignSysMenuApiService.findIdAndNameAndNamespaceList();
-            List<SysMenuVO> sysMenuList = result.getData();
-            for (SysMenuVO adminMenu : sysMenuList) {
+            HttpResult<List<SettMsMenuVO>> result = feignSysMenuApiService.findIdAndNameAndNamespaceList();
+            List<SettMsMenuVO> sysMenuList = result.getData();
+            for (SettMsMenuVO adminMenu : sysMenuList) {
                 namesapceMenuMap.put(adminMenu.getNamespace(), adminMenu);
             }
         }
@@ -124,7 +124,7 @@ public class PageXMsPubController extends PageXBaseController {
         {
             return;
         }
-        SysUserVO user = getSessionUser(request);
+        UcenterMsUserVO user = getSessionUser(request);
         // 创建LogAdminOperatorLog 对象,并给各属性赋值
 //        LogAdminOperatorLogVo log = new LogAdminOperatorLogVo();
 //        log.setCreateTime(DateUtils.getCurrentDateStr(DateUtils.DATE_FULL_STR_SSS));
@@ -334,8 +334,8 @@ public class PageXMsPubController extends PageXBaseController {
      * @param request request
      * @return 系统用户
      */
-    private SysUserVO getSessionUser(HttpServletRequest request){
-        return (SysUserVO) request.getSession().getAttribute(Constant.SESSION_USER);
+    private UcenterMsUserVO getSessionUser(HttpServletRequest request){
+        return (UcenterMsUserVO) request.getSession().getAttribute(Constant.SESSION_USER);
     }
 
     /**

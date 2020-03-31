@@ -1,9 +1,9 @@
 package com.fhs.basics.controller;
 
-import com.fhs.basics.dox.SysUserDO;
-import com.fhs.basics.service.SysSystemService;
-import com.fhs.basics.service.SysUserService;
-import com.fhs.basics.vo.SysUserVO;
+import com.fhs.basics.dox.UcenterMsUserDO;
+import com.fhs.basics.service.SettMsSystemService;
+import com.fhs.basics.service.UcenterMsUserService;
+import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.Md5Util;
 import com.fhs.common.utils.SCaptcha;
@@ -46,13 +46,13 @@ public class MsLoginController {
      * 后台用户服务
      */
     @Autowired
-    private SysUserService sysUserService;
+    private UcenterMsUserService sysUserService;
 
     /**
      * 子系统服务
      */
     @Autowired
-    private SysSystemService sysSystemService;
+    private SettMsSystemService sysSystemService;
 
     /**
      * 登录地址
@@ -74,7 +74,7 @@ public class MsLoginController {
      * 用户登录
      */
     @RequestMapping("/securityLogin")
-    public HttpResult<Boolean> securityLogin(SysUserDO sysUser, HttpServletRequest request, HttpServletResponse response) {
+    public HttpResult<Boolean> securityLogin(UcenterMsUserDO sysUser, HttpServletRequest request, HttpServletResponse response) {
         String identifyCode = request.getParameter("identifyCode");
         Object sessionIdentify = request.getSession().getAttribute("identifyCode");
         if (null == sessionIdentify)//session 失效
@@ -108,7 +108,7 @@ public class MsLoginController {
      * 用户登录
      */
     @RequestMapping("/vueLogin")
-    public HttpResult<Map<String, String>> vueLogin(SysUserDO sysUser, HttpServletRequest request, HttpServletResponse response) {
+    public HttpResult<Map<String, String>> vueLogin(UcenterMsUserDO sysUser, HttpServletRequest request, HttpServletResponse response) {
         if (!useVue) {
             throw new ParamException("vue模式才能使用此方法");
         }
@@ -145,7 +145,7 @@ public class MsLoginController {
     @RequestMapping("/getUserByToken")
     public HttpResult<Map<String, Object>> getUserByToken(@RequestHeader("token") String token) {
         Map<String, Object> resultMap = new HashMap<>();
-        SysUserVO user = (SysUserVO) redisCacheService.get(USER_KEY + token);
+        UcenterMsUserVO user = (UcenterMsUserVO) redisCacheService.get(USER_KEY + token);
         if (user == null) {
             throw new ParamException("token失效");
         }

@@ -1,6 +1,6 @@
 package com.fhs.module.base.controller;
 
-import com.fhs.basics.vo.SysUserVO;
+import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.controller.BaseController;
@@ -23,7 +23,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -384,9 +383,9 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
      *
      * @return session里面的user
      */
-    protected SysUserVO getSessionuser() {
+    protected UcenterMsUserVO getSessionuser() {
         HttpServletRequest request = getRequest();
-        return (SysUserVO) request.getSession().getAttribute(Constant.SESSION_USER);
+        return (UcenterMsUserVO) request.getSession().getAttribute(Constant.SESSION_USER);
     }
 
     /**

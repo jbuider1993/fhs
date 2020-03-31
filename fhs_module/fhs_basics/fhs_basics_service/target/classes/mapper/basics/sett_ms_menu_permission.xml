@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fhs.basics.mapper.SettMsMenuPermissionMapper">
+
+<!-- 	获取权限集合 -->
+	<select id="findForListFromMap" parameterType="map" resultType="com.fhs.basics.dox.SettMsMenuPermissionDO">
+		SELECT
+		permission_name as permissionName,
+		permission_id as permissionId,
+		method as method,
+		menu_id as menuId,
+		permission_type as permissionType
+		FROM t_ucenter_ms_menu_permission
+		<where>
+			<if test="menuId !=null">
+				AND	menu_id = #{menuId}
+			</if>
+			<if test="start !=null and start!=''">
+				LIMIT ${start},${end}
+			</if>
+		</where>
+	</select>
+
+<!-- 	更加权限类型获取权限 -->
+	<select id="findMapListByType" parameterType="map" resultType="map">
+		SELECT
+		permission_name AS permissionName,
+		permission_id AS permissionId,
+		method AS account,
+		permission_type AS permissionType
+		FROM t_ucenter_ms_menu_permission
+		<where>
+			<if test="permissionType !=null and permissionType!=''">
+				AND permission_type = #{permissionType}
+			</if>
+			<if test="permissionType ==null and permissionType ==''">
+				AND permission_type is NULL
+			</if>
+
+			<if test="menuId !=null and menuId!=''">
+				AND menu_id = #{menuId}
+			</if>
+
+			<if test="menuId ==null or menuId ==''">
+				AND menu_id is NULL
+			</if>
+		</where>
+	</select>
+
+
+<!-- 	根据权限编号集合获取权限对象集合 -->
+	<select id="readButtonByIds" parameterType="map" resultType="com.fhs.basics.dox.SettMsMenuPermissionDO">
+		 SELECT
+		 	b.permission_name as permissionName,
+		     b.permission_id as permissionId,
+		     b.method as method,
+		     b.permission_type as permissionType
+	    	FROM
+		      t_ucenter_ms_menu_permission b
+	        	WHERE b.permission_id IN
+		<foreach collection="Ids" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+<!-- 批量添加基础权限 -->
+	<insert id="addBaseMenuBatch" parameterType="map">
+		INSERT INTO `t_ucenter_ms_menu_permission` (
+		  `permission_name`,
+		  `method`,
+		  `menu_id`,
+		  `is_disable`,
+		  `permission_type`
+		) VALUES
+		<foreach collection="baseButtonList" item="item" separator=",">
+			(#{item.permissionName}, #{item.method}, #{menuId}, 0, #{item.permissionType})
+		</foreach>
+	</insert>
+	<!-- 查询所有权限，如果传过来了groupCode,则查询该集团下的有效权限 -->
+
+	<select id="getButtonRoleCodeMap" resultType="map" parameterType="map">
+		SELECT
+		permission_id AS permissionId,
+		CONCAT(namespace, ':', method) AS roleCode
+		FROM t_ucenter_ms_menu menu,
+		t_ucenter_ms_menu_permission button
+		<if test="groupCode != null and groupCode != ''">
+			,
+			`t_admin_app_menu_item` app,
+			`t_admin_app_group_rela` rela,
+			 t_admin_group grou
+		</if>
+		WHERE menu.menu_id = button.menu_id
+		AND menu.menu_type like '%${menuType}%'
+		<if test="groupCode != null and groupCode != ''">
+			AND grou.group_code = #{groupCode}
+			AND grou.`group_id` = rela.`group_id`
+			AND app.model_type = 0
+			AND rela.app_id = app.app_id
+			AND app.model_key = menu.menu_id
+		</if>
+	</select>
+	<select id="getButtonIdByAccess" parameterType="map" resultType="map">
+		SELECT
+		permission_id AS permissionId,
+		CONCAT(namespace, ':', method) AS roleCode
+		FROM t_ucenter_ms_menu menu
+		INNER JOIN
+		`t_ucenter_ms_menu_permission` button
+		ON button.menu_id = menu.menu_id
+		INNER JOIN
+		 t_app_apply apply
+		ON   apply.apply_state  = 3
+		AND manager_code = CONCAT(#{groupCode},':',#{managerId})
+		INNER JOIN t_admin_app_menu_item app
+		ON apply.`app_id` = app.`app_id`
+		AND app.model_type = 0
+		AND app.model_key = menu.menu_id
+		WHERE  menu.menu_type LIKE '%${menuType}%'
+	</select>
+
+	<!-- 根据permissionId 查询URL -->
+	<select id="getUrlByPermissionId" parameterType="com.fhs.basics.dox.SettMsMenuPermissionDO" resultType="com.fhs.basics.dox.SysMenuPermissionUrlRelaDO">
+		SELECT
+			permission_id AS permissionId,
+			url AS url
+		FROM t_ucenter_ms_menu_permission_url_rela
+		WHERE permission_id = #{permissionId}
+	</select>
+
+	<!-- 根据permissionId 查询URL总数 -->
+	<select id="getUrlCoutByPermissionId" parameterType="com.fhs.basics.dox.SettMsMenuPermissionDO" resultType="java.lang.Integer">
+		SELECT count(1)
+		FROM t_ucenter_ms_menu_permission_url_rela
+		WHERE permission_id = #{permissionId}
+	</select>
+	
+	<!--添加权限URL-->
+	<insert id="addUrl" parameterType="com.fhs.basics.dox.SysMenuPermissionUrlRelaDO">
+		INSERT INTO t_ucenter_ms_menu_permission_url_rela
+		(
+		permission_id,
+		url)
+		VALUES
+		(#{permissionId},
+		#{url})
+	</insert>
+
+	<!--修改权限URL-->
+	<update id="updateUrl" parameterType="com.fhs.basics.dox.SysMenuPermissionUrlRelaDO">
+		UPDATE t_ucenter_ms_menu_permission_url_rela
+		SET
+		url=#{url}
+		WHERE permission_id=#{permissionId}
+		AND url=#{oldUrl}
+	</update>
+
+	<!--删除权限URL-->
+	<delete id="delUrl" parameterType="com.fhs.basics.dox.SysMenuPermissionUrlRelaDO">
+		DELETE FROM
+		t_ucenter_ms_menu_permission_url_rela
+		WHERE permission_id=#{permissionId}
+		AND url=#{url}
+	</delete>
+
+</mapper>
+

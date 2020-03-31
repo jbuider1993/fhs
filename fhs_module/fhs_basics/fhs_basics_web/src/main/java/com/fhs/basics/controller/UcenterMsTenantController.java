@@ -1,8 +1,8 @@
 package com.fhs.basics.controller;
 
 import com.fhs.basics.dox.UcenterMsTenantDO;
-import com.fhs.basics.service.SysUserService;
-import com.fhs.basics.vo.SysUserVO;
+import com.fhs.basics.service.UcenterMsUserService;
+import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.basics.vo.UcenterMsTenantVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.Md5Util;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UcenterMsTenantController extends ModelSuperController<UcenterMsTenantVO, UcenterMsTenantDO> {
 
     @Autowired
-    private SysUserService userService;
+    private UcenterMsUserService userService;
 
     /**
      * 重置某个停车场密码
@@ -38,7 +38,7 @@ public class UcenterMsTenantController extends ModelSuperController<UcenterMsTen
     public HttpResult<String> resetAdminPass(String groupCode) {
         ParamChecker.isNotNull(groupCode, "groupCode不能为空");
         String newPass = StringUtil.getUUID();
-        SysUserVO user = new SysUserVO();
+        UcenterMsUserVO user = new UcenterMsUserVO();
         user.setUserLoginName(groupCode + "_admin");
         MultiTenancyContext.setProviderId(null);
         user = userService.selectBean(user);

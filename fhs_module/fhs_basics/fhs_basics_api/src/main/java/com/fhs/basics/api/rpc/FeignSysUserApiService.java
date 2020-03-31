@@ -5,11 +5,10 @@ import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.feign.config.FeignConfiguration;
 import com.fhs.core.result.HttpResult;
 import com.fhs.basics.form.SysUserForm;
-import com.fhs.basics.vo.SysUserVO;
+import com.fhs.basics.vo.UcenterMsUserVO;
 import feign.Param;
 import feign.RequestLine;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.context.annotation.Primary;
 import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +36,7 @@ public interface FeignSysUserApiService {
      * @return HttpResult 包含用户信息
      */
     @RequestLine("GET /api/com.fhs.base.api.basics.rpc.FeignSysUserApiService/getSysUserByLoginName")
-    HttpResult<SysUserVO> getSysUserByName(@Param("userLoginName") String userLoginName);
+    HttpResult<UcenterMsUserVO> getSysUserByName(@Param("userLoginName") String userLoginName);
 
     /**
      * 根据用户登录名获取用户权限列表
@@ -53,7 +52,7 @@ public interface FeignSysUserApiService {
      * @return 处理结果
      */
     @RequestLine("POST /api/com.fhs.base.api.basics.rpc.FeignSysUserApiService/getSysUserList")
-    HttpResult<Pager<SysUserVO>> getSysUserList(@RequestBody SysUserForm sysUserForm);
+    HttpResult<Pager<UcenterMsUserVO>> getSysUserList(@RequestBody SysUserForm sysUserForm);
 
     /**
      * 根据用户ID获取用户权限URL
@@ -78,7 +77,7 @@ public interface FeignSysUserApiService {
      * @return 后端用户信息
      */
     @RequestLine("GET /api/com.fhs.base.api.basics.rpc.FeignSysUserApiService/getSysUserByUserId")
-    HttpResult<SysUserVO> getSysUserByUserId(SysUserForm sysUserForm);
+    HttpResult<UcenterMsUserVO> getSysUserByUserId(SysUserForm sysUserForm);
 
     /**
      * 根据组织id查询用户
@@ -86,5 +85,5 @@ public interface FeignSysUserApiService {
      * @return 用户列表
      */
     @RequestLine("GET /api/com.fhs.base.api.basics.rpc.FeignSysUserApiService/getSysUserByOrganizationId")
-    HttpResult<List<SysUserVO>> getSysUserByOrganizationId(@Param("organizationId") String organizationId);
+    HttpResult<List<UcenterMsUserVO>> getSysUserByOrganizationId(@Param("organizationId") String organizationId);
 }

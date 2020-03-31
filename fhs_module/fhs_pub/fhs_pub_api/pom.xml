@@ -17,6 +17,12 @@
             <artifactId>fhs_pub_service</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_feign</artifactId>
+            <version>2.0.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
 

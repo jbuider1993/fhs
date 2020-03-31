@@ -1,7 +1,7 @@
 package com.fhs.pub.controller;
 
 
-import com.fhs.pub.api.ueditor.ActionEnter;
+import com.fhs.pub.ueditor.ActionEnter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 

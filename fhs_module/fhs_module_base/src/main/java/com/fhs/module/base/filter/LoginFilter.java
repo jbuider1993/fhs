@@ -1,6 +1,6 @@
 package com.fhs.module.base.filter;
 
-import com.fhs.basics.vo.SysUserVO;
+import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.core.config.EConfig;
@@ -53,7 +53,7 @@ public class LoginFilter implements Filter{
             }
             else
             {
-                SysUserVO user = (SysUserVO)request.getSession().getAttribute(Constant.SESSION_USER);
+                UcenterMsUserVO user = (UcenterMsUserVO)request.getSession().getAttribute(Constant.SESSION_USER);
                 MultiTenancyContext.setProviderId(user.getGroupCode());
                 chain.doFilter (req, res);
             }

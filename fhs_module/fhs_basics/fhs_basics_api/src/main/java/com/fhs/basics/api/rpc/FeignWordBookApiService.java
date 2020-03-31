@@ -1,6 +1,6 @@
 package com.fhs.basics.api.rpc;
 
-import com.fhs.basics.vo.WordbookVO;
+import com.fhs.basics.vo.ServiceWordbookVO;
 import com.fhs.core.feign.config.FeignConfiguration;
 import com.fhs.core.result.HttpResult;
 import feign.Param;
@@ -22,5 +22,5 @@ public interface FeignWordBookApiService {
      * @return HttpResult 角色数据权限
      */
     @RequestLine("GET /api/FeignWordBookApiService/getWordBookListByWordBookGroupCode?wordBookGroupCode={wordBookGroupCode}")
-    HttpResult<List<WordbookVO>> getWordBookListByWordBookGroupCode(@Param("wordBookGroupCode") String wordBookGroupCode);
+    HttpResult<List<ServiceWordbookVO>> getWordBookListByWordBookGroupCode(@Param("wordBookGroupCode") String wordBookGroupCode);
 }
