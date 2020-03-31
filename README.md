@@ -140,7 +140,7 @@
 #### 技术栈
 - 前端:Easyui(美化过的Easyui),Layui(首页)，Validform，My 97(定制过主题)。
 - 后端校验：hibernate vilidator。
-- 后端：SpringBoot 1.5.13(后期升级2.x，先让别人踩坑) + Springcloud（可选）
+- 后端：SpringBoot + Springcloud（可选）
 - ORM：Mybatis(基础)+JPA(一对一&一对多查询，数据权限注解)+Plus(条件查询器)
 - 模板引擎：beetl+JSP
 - 无后端业务的快速开发引擎:PAGEX
