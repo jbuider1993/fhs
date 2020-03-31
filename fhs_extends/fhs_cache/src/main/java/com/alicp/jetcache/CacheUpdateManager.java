@@ -15,10 +15,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -30,11 +32,13 @@ import java.util.stream.Collectors;
  * 在项目启动完成后获取所有的@AutoRefresCache  标记的方法
  */
 @Data
+@Component
 public class CacheUpdateManager implements ApplicationContextAware, ApplicationListener<ApplicationReadyEvent> {
 
     /**
      * service的包路径
      */
+    @Value("${fhs.cache.packages:com.**.service.**}")
     private String[] packageNames = new String[]{};
     @Autowired
     private ConfigMap cacheConfigMap;

@@ -51,7 +51,7 @@ public interface BaseService<V extends VO,D extends BaseDO> extends AutoTransAbl
 
     /**
      * 更新数据库数据，参数为object
-     *
+     * 此方法支持将值设置为null
      * @param bean object
      * @return 默认为影响条数
      */
@@ -59,7 +59,7 @@ public interface BaseService<V extends VO,D extends BaseDO> extends AutoTransAbl
 
     /**
      * 更新数据库数据，参数为object
-     *
+     * 此方法忽略值为null的属性
      * @param bean object
      * @return 默认为影响条数
      */
@@ -238,7 +238,7 @@ public interface BaseService<V extends VO,D extends BaseDO> extends AutoTransAbl
 
 
     /**
-     * 批量更新
+     * 批量更新--必须要有id
      *
      * @param list 需要更新的数据
      * @return 受影响条数

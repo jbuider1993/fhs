@@ -37,6 +37,8 @@ fhs:
     not-contains: api;action;dao
     #声明式事物管理，具体请访问官网
     package: com.fhs;
+  cache: #CacheUpdateManager 支持缓存包扫码
+    packages: com.fhs.**.service.impl
   disable-apollo: true
 spring:
   main:
