@@ -1,6 +1,6 @@
 package com.fhs.basics.api.rpc;
 
-import com.fhs.basics.vo.SysMenuVO;
+import com.fhs.basics.vo.SettMsMenuVO;
 import com.fhs.core.feign.config.FeignConfiguration;
 import com.fhs.core.result.HttpResult;
 import feign.RequestLine;
@@ -28,6 +28,6 @@ public interface FeignSysMenuApiService {
      * 查询id,name,namespace列表
      */
     @RequestLine("GET /api/FeignSysMenuApiService/findIdAndNameAndNamespaceList")
-    HttpResult<List<SysMenuVO>> findIdAndNameAndNamespaceList();
+    HttpResult<List<SettMsMenuVO>> findIdAndNameAndNamespaceList();
 
 }

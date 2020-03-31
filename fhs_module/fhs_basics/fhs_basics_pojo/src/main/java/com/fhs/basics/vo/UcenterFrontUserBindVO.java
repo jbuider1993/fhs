@@ -1,6 +1,5 @@
 package com.fhs.basics.vo;
 
-import com.fhs.basics.dox.UcenterAlipaySettDO;
 import com.fhs.basics.dox.UcenterFrontUserBindDO;
 import com.fhs.common.constant.Constant;
 import com.fhs.core.base.pojo.vo.VO;

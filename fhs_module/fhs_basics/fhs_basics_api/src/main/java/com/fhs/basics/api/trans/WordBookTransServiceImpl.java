@@ -1,7 +1,7 @@
 package com.fhs.basics.api.trans;
 
 import com.fhs.basics.api.rpc.FeignWordBookApiService;
-import com.fhs.basics.vo.WordbookVO;
+import com.fhs.basics.vo.ServiceWordbookVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.common.utils.ConverterUtils;
@@ -140,9 +140,9 @@ public class WordBookTransServiceImpl implements ITransTypeService, Initializing
             wordbookGroupcode = ConverterUtils.toString(message.get("wordbookGroupCode"));
 
         }
-        HttpResult<List<WordbookVO>> result = wordBookService.getWordBookListByWordBookGroupCode(wordbookGroupcode);
+        HttpResult<List<ServiceWordbookVO>> result = wordBookService.getWordBookListByWordBookGroupCode(wordbookGroupcode);
         if (result.getCode() == Constant.SUCCESS_CODE) {
-            List<WordbookVO> wordbookVOList = result.getData();
+            List<ServiceWordbookVO> wordbookVOList = result.getData();
             wordbookVOList.forEach(wordbookVO -> {
                 wordBookTransMap.put(wordbookVO.getWordbookGroupCode() + "_" + wordbookVO.getWordbookCode(), wordbookVO.getWordbookDesc());
                 unWordBookTransMap.put(wordbookVO.getWordbookGroupCode() + "_" + wordbookVO.getWordbookDesc(), wordbookVO.getWordbookCode());

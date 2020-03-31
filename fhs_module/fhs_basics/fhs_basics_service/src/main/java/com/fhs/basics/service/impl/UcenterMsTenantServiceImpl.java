@@ -1,10 +1,10 @@
 package com.fhs.basics.service.impl;
 
-import com.fhs.basics.dox.SysOrganizationDO;
-import com.fhs.basics.dox.SysUserDO;
+import com.fhs.basics.dox.UcenterMsOrganizationDO;
+import com.fhs.basics.dox.UcenterMsUserDO;
 import com.fhs.basics.dox.UcenterMsTenantDO;
-import com.fhs.basics.service.SysOrganizationService;
-import com.fhs.basics.service.SysUserService;
+import com.fhs.basics.service.UcenterMsOrganizationService;
+import com.fhs.basics.service.UcenterMsUserService;
 import com.fhs.basics.service.UcenterMsTenantService;
 import com.fhs.basics.vo.UcenterMsTenantVO;
 import com.fhs.common.constant.Constant;
@@ -27,14 +27,14 @@ public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenantV
 
     @Lazy
     @Autowired
-    private SysUserService sysUserService;
+    private UcenterMsUserService sysUserService;
 
     @Autowired
-    private SysOrganizationService organizationService;
+    private UcenterMsOrganizationService organizationService;
 
     @Override
     public int insert(UcenterMsTenantDO tenant) {
-        SysUserDO adminUser = new SysUserDO();
+        UcenterMsUserDO adminUser = new UcenterMsUserDO();
         adminUser.setGroupCode(tenant.getGroupCode());
         adminUser.setPassword(Md5Util.MD5(tenant.getGroupCode() + "123456").toLowerCase());
         adminUser.setUserId(StringUtil.getUUID());
@@ -46,7 +46,7 @@ public class UcenterMsTenantServiceImpl extends BaseServiceImpl<UcenterMsTenantV
         adminUser.setIsEnable(Constant.INT_TRUE);
         adminUser.preInsert(null);
         sysUserService.insertJpa(adminUser);
-        SysOrganizationDO organization = new SysOrganizationDO();
+        UcenterMsOrganizationDO organization = new UcenterMsOrganizationDO();
         organization.setId(tenant.getGroupCode() + "_001");
         organization.setName(tenant.getTenantName());
         organization.setRanking("1");

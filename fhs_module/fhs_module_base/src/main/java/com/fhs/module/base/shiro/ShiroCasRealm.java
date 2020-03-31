@@ -1,7 +1,7 @@
 package com.fhs.module.base.shiro;
 
 import com.fhs.basics.api.rpc.FeignSysUserApiService;
-import com.fhs.basics.vo.SysUserVO;
+import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.common.spring.SpringContextUtil;
 import com.fhs.core.result.HttpResult;
 import com.fhs.logger.Logger;
@@ -41,8 +41,8 @@ public class ShiroCasRealm extends Pac4jRealm {
 		}
 		try {
 			String loginName  = ((Pac4jPrincipal) SecurityUtils.getSubject().getPrincipal()).getProfile().getId();
-			HttpResult<SysUserVO> httpResult = feignSysUserService.getSysUserByName(loginName);
-			SysUserVO user = httpResult.getData();
+			HttpResult<UcenterMsUserVO> httpResult = feignSysUserService.getSysUserByName(loginName);
+			UcenterMsUserVO user = httpResult.getData();
 			HttpServletRequest req = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 			LOGGER.info("用户已经登录");
 			HttpResult<List<String>> menuResult =  feignSysUserService.selectMenuByUname(loginName);

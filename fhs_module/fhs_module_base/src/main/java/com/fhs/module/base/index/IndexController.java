@@ -1,7 +1,7 @@
 package com.fhs.module.base.index;
 
 import com.fhs.basics.api.rpc.FeignSysUserApiService;
-import com.fhs.basics.vo.SysUserVO;
+import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.cache.service.RedisCacheService;
@@ -113,10 +113,10 @@ public class IndexController {
             userLoginName = SecurityUtils.getSubject().getPrincipal().toString();
         }
         // 根据登录名称获取用户信息,并放入session
-        HttpResult<SysUserVO> result = feignSysUserService.getSysUserByName(userLoginName);
+        HttpResult<UcenterMsUserVO> result = feignSysUserService.getSysUserByName(userLoginName);
         LOGGER.infoMsg("后端用户登录成功，用户信息:{}",result.getData());
         if (result.getCode() == 200){
-            SysUserVO user = result.getData();
+            UcenterMsUserVO user = result.getData();
            /* feignlogAdminOperatorLogApiService.addLogAdminOperatorLog(
                     LogAdminOperatorLogVo.builder().operatorId(user.getUserId()).url(request.getRequestURI())
                     .createTime(DateUtils.getCurrentDateStr(DateUtils.DATE_FULL_STR_SSS))
