@@ -1,23 +1,39 @@
 ###################  项目启动端口  ###################
 server:
-  port: 8081
+  port: 8082
   context-path: /
   tomcat:
     uri-encoding: UTF-8
-
 # 该配置节点为独立的节点，有很多同学容易将这个配置放在spring的节点下，导致配置无法被识别
 mybatis-plus:
   mapper-locations: classpath*:mapper/*/*.xml
   type-aliases-package: com.fhs.basics.dox;
+eureka:
+  instance:
+    hostname: eureka.fhs.xhb.com
+    instanceId: ${spring.cloud.client.ipAddress}:${server.port}
+    preferIpAddress: true
+  client:
+    fetchRegistry: true
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:20881/eureka/
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+
 
 fhs:
   autoware:
     package: com.fhs.*;com.fhs.*.*;
   login:
     #是否开启cas默认关闭
-    enable-cas: false
-    #登录地址
-    url: /b/page/login
+    enable-cas: true
+    cas:
+      shiroServerUrlPrefix: http://localhost:8082/
+      loginUrl: http://114.115.211.214/cas?service=${shiro.cas.shiroServerUrlPrefix}/shiro-cas
   mybatis-jpa:
     #多个用;分隔
     entity-package: com.**.**.dox

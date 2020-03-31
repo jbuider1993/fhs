@@ -1,4 +1,4 @@
-package com.fhs.core.autodel.anno;
+package com.fhs.core.base.autodel.anno;
 
 
 import java.lang.annotation.ElementType;

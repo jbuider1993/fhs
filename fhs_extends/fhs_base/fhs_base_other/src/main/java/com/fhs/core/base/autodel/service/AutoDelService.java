@@ -1,9 +1,7 @@
-package com.fhs.core.autodel.service;
+package com.fhs.core.base.autodel.service;
 
 import com.fhs.common.spring.ScannerUtils;
 import com.fhs.common.spring.SpringContextUtil;
-import com.fhs.core.autodel.anno.AutoDel;
-import com.fhs.core.autodel.anno.AutoDelSett;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.exception.ParamException;
 import org.apache.commons.collections.map.HashedMap;
@@ -13,7 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
-
+import com.fhs.core.base.autodel.anno.AutoDel;
+import com.fhs.core.base.autodel.anno.AutoDelSett;
 import java.util.Map;
 import java.util.Set;
 

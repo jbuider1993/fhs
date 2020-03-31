@@ -13,6 +13,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>fhs_app_all_in_one</module>
+        <module>fhs_app_basics</module>
+        <module>fhs_app_eureka_server</module>
     </modules>
 
 

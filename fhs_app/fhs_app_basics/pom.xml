@@ -3,29 +3,25 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>fhs_extends</artifactId>
+        <artifactId>fhs_app</artifactId>
         <groupId>com.fhs-opensource</groupId>
         <version>2.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <version>2.0.0</version>
-    <artifactId>fhs_db</artifactId>
+    <artifactId>fhs_app_basics</artifactId>
+    <description>
+        basics的启动模块,分布式模式运行,需要cas
+    </description>
     <dependencies>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
-            <artifactId>mybatis-jpa-jack</artifactId>
-            <version>${fhs.mybatis-jpa-jack.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fhs-opensource</groupId>
-            <artifactId>fhs_exception</artifactId>
+            <artifactId>fhs_basics_web</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
-
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
         </dependency>
     </dependencies>
-
 </project>

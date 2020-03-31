@@ -44,13 +44,13 @@ public class ShiroConfiguration {
     /*
      *cas server地址
      */
-    @Value("${shiro.cas.casServerUrlPrefix:}")
+    @Value("${fhs.login.cas.casServerUrlPrefix:}")
     private String casServerUrlPrefix;
 
     /*
      * 当前工程对外提供的服务地址
      */
-    @Value("${shiro.cas.shiroServerUrlPrefix:}")
+    @Value("${fhs.login.cas.shiroServerUrlPrefix:}")
     private String shiroServerUrlPrefix;
 
     /*
