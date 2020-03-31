@@ -34,7 +34,7 @@ fhs:
     pool-size: 10
   transcatoin: #声明式事物 类名包含service的，但是不包含api，action,dao的类开启
     contains: service
-    not-contains: api;action;dao
+    not-contains: api;controller;mapper
     #声明式事物管理，具体请访问官网
     package: com.fhs;
   cache: #CacheUpdateManager 支持缓存包扫码

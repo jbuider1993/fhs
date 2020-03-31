@@ -33,3 +33,12 @@
 /fhs_extends/fhs_base/fhs_base_other/target
 /fhs_extends/fhs_base/fhs_base_pojo/target
 /fhs_app/fhs_app_all_in_one/target
+/fhs_extends/fhs_auto_del/target
+/fhs_extends/fhs_pagex/target
+/fhs_extends/fhs_static/target
+/fhs_module/fhs_basics/fhs_basics_api/target
+/fhs_module/fhs_basics/fhs_basics_pojo/target
+/fhs_module/fhs_basics/fhs_basics_service/target
+/fhs_module/fhs_basics/fhs_basics_web/target
+/fhs_module/fhs_module_base/target
+/fhs_module/fhs_pub/fhs_pub_service/target
