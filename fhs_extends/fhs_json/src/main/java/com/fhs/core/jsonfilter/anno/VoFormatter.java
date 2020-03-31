@@ -1,4 +1,4 @@
-package com.fhs.core.jsonfilter.annotation;
+package com.fhs.core.jsonfilter.anno;
 
 import java.lang.annotation.*;
 

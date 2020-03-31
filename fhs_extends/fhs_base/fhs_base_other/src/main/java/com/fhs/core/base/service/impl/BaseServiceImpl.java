@@ -7,9 +7,11 @@ import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.CreateCache;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.ListUtils;
 import com.fhs.common.utils.ReflectUtils;
+import com.fhs.core.autodel.service.AutoDelService;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
 import com.fhs.core.base.pojo.SuperBean;
@@ -44,19 +46,20 @@ import java.util.*;
 
 /**
  * 业务层base类，主要提供对数据库的CRUD操作
+ *
  * @author wanglei
  * @version [版本号, 2015年5月27日]
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements BaseService<V,D>, InitializingBean {
+public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements BaseService<V, D>, InitializingBean {
 
     protected final Logger log = Logger.getLogger(this.getClass());
 
     /**
      * 缓存 默认时间：半个小时
      */
-    @CreateCache(expire = 1800, name = "docache:",cacheType = CacheType.BOTH)
+    @CreateCache(expire = 1800, name = "docache:", cacheType = CacheType.BOTH)
     private Cache<String, D> doCache;
 
     /**
@@ -91,7 +94,8 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
     @Autowired
     private RedisCacheService redisCacheService;
 
-
+    @Autowired
+    private AutoDelService autoDelService;
 
     private static final Set<String> exist = new HashSet<>();
 
@@ -101,8 +105,8 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
     public BaseServiceImpl() {
         //判断自己是否需要支持缓存
         this.isCacheable = this.getClass().isAnnotationPresent(Cacheable.class);
-        if(isCacheable) {
-            this.namespace =this.getClass().getAnnotation(Cacheable.class).value();
+        if (isCacheable) {
+            this.namespace = this.getClass().getAnnotation(Cacheable.class).value();
         }
 
     }
@@ -116,7 +120,7 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     @Override
     public int add(D bean) {
-        int result =  baseMapper.insertJpa(bean);
+        int result = baseMapper.insertJpa(bean);
         this.refreshCache();
         this.addCache(bean);
         return result;
@@ -131,7 +135,7 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     @Override
     public boolean update(D bean) {
-        boolean result =  this.updateJpa(bean);
+        boolean result = this.updateJpa(bean);
         this.refreshCache();
         this.updateCache(bean);
         return result;
@@ -147,14 +151,14 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     @Override
     public boolean deleteFromMap(Map<String, Object> map) {
-        boolean result =  baseMapper.deleteFromMap(map) > 0;
+        boolean result = baseMapper.deleteFromMap(map) > 0;
         this.refreshCache();
         return result;
     }
 
     @Override
     public boolean delete(D bean) {
-        boolean result =  baseMapper.deleteBean(bean) > 0;
+        boolean result = baseMapper.deleteBean(bean) > 0;
         this.refreshCache();
         return result;
     }
@@ -167,7 +171,7 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     @Override
     public int findCount(D bean) {
-        return (int)baseMapper.selectCountJpa(bean);
+        return (int) baseMapper.selectCountJpa(bean);
     }
 
     @Override
@@ -198,7 +202,7 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
     @SuppressWarnings({"unchecked"})
     @Override
     public List<V> findForListFromMap(Map<String, Object> map) {
-        List<D> dos =  baseMapper.findForListFromMap(map);
+        List<D> dos = baseMapper.findForListFromMap(map);
         return dos2vos(dos);
     }
 
@@ -232,7 +236,7 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     @Override
     public int addBatch(Map<String, Object> paramMap) {
-        int result =  baseMapper.addBatch(paramMap);
+        int result = baseMapper.addBatch(paramMap);
         this.refreshCache();
         return result;
     }
@@ -261,7 +265,7 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
     /**
      * 刷新缓存,包括do缓存,autotrans缓存,以及其他模块依赖的缓存
      */
-    protected void refreshCache(){
+    protected void refreshCache() {
         cacheUpdateManager.clearCache(namespace);
         AutoTrans autoTrans = this.getClass().getAnnotation(AutoTrans.class);
         if (autoTrans != null) {
@@ -278,9 +282,10 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     /**
      * 清除缓存
+     *
      * @param pkey 主键
      */
-    protected void removeCache(Object pkey){
+    protected void removeCache(Object pkey) {
         if (this.isCacheable) {
             this.doCache.remove(namespace + ":" + pkey);
         }
@@ -319,7 +324,11 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     @Override
     public int deleteById(Object primaryValue) {
-        int result = baseMapper.deleteByIdJpa(primaryValue);
+        autoDelService.deleteCheck(this.getClass(), primaryValue);
+        D d = baseMapper.selectByIdJpa(primaryValue);
+        d.setIsDelete(Constant.INT_TRUE);
+        int result = baseMapper.updateById(d);
+        autoDelService.deleteItemTBL(this.getClass(), primaryValue);
         this.refreshCache();
         removeCache(primaryValue);
         return result;
@@ -341,6 +350,7 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     /**
      * 缓存更新
+     *
      * @param entity
      */
     protected void updateCache(D entity) {
@@ -353,7 +363,7 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     @Override
     public int batchUpdate(List<D> entitys) {
-        if(entitys== null || entitys.isEmpty()){
+        if (entitys == null || entitys.isEmpty()) {
             return 0;
         }
         int result = baseMapper.batchUpdate(entitys);
@@ -398,7 +408,7 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     @Override
     public List<V> select() {
-        return ListUtils.copyListToList(baseMapper.select(),this.getVOClass());
+        return ListUtils.copyListToList(baseMapper.select(), this.getVOClass());
     }
 
     @Override
@@ -419,7 +429,14 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     @Override
     public int deleteBean(D entity) {
-        return baseMapper.deleteBean(entity);
+        List<D> dos = baseMapper.selectPageJpa(entity, -1, -1);
+        for (D d : dos) {
+            d.setIsDelete(Constant.INT_TRUE);
+            autoDelService.deleteCheck(this.getClass(), d.getPkey());
+            autoDelService.deleteItemTBL(this.getClass(), d.getPkey());
+        }
+        //批量修改为已删除
+        return baseMapper.batchUpdate(dos);
     }
 
 
@@ -439,7 +456,7 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
     }
 
     @Override
-    public List<Object> callSqlIdForMany(String sqlId, Object param) {
+    public List<?> callSqlIdForMany(String sqlId, Object param) {
         return sqlsession.selectList(nameSpace + "." + sqlId, param);
     }
 
@@ -448,14 +465,21 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
         return sqlsession.selectOne(nameSpace + "." + sqlId, param);
     }
 
-    @Override
-    public int deleteMP(Wrapper<D> wrapper) {
-        return baseMapper.delete(wrapper);
-    }
 
     @Override
-    public int deleteBatchIdsMP(Collection<? extends Serializable> idList) {
-        return baseMapper.deleteBatchIds(idList);
+    public int deleteBatchIds(List<?> idList) {
+        if (idList == null || idList.isEmpty()) {
+            return 0;
+        }
+        for (Object id : idList) {
+            autoDelService.deleteCheck(this.getClass(), id);
+            autoDelService.deleteItemTBL(this.getClass(), id);
+        }
+        List<D> dos = baseMapper.selectByIds(idList);
+        for (D d : dos) {
+            d.setIsDelete(Constant.INT_TRUE);
+        }
+        return baseMapper.batchUpdate(dos);
     }
 
     @Override
@@ -534,12 +558,13 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     /**
      * vo转DO
+     *
      * @param vo vo
      * @return
      */
     @Override
-    public D v2d(V vo){
-        return (D)vo;
+    public D v2d(V vo) {
+        return (D) vo;
     }
 
     @Override
@@ -577,12 +602,53 @@ public abstract class BaseServiceImpl<V extends VO,D extends BaseDO> implements 
 
     /**
      * do集合转vo集合
+     *
      * @param dos
      * @return
      */
-    public List<V> dos2vos(List<D> dos){
-        List<V> vos = ListUtils.copyListToList(dos,this.getVOClass());
+    public List<V> dos2vos(List<D> dos) {
+        List<V> vos = ListUtils.copyListToList(dos, this.getVOClass());
         transService.transMore(vos);
         return vos;
+    }
+
+    /**
+     * 自动删除子表数据
+     *
+     * @param field       字段
+     * @param mainTblPkey 主表pkey
+     * @return
+     */
+    public int deleteForMainTblPkey(String field, Object mainTblPkey) {
+        try {
+            D d = this.getDOClass().newInstance();
+            ReflectUtils.setValue(d, field, mainTblPkey);
+            return this.deleteBean(d);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * 根据主表id和 子表字段查询子表数据
+     *
+     * @param field       子表字段
+     * @param mainTblPkey 主表id
+     * @return 多少条子表数据
+     */
+    public int findCountForMainTblPkey(String field, Object mainTblPkey) {
+        try {
+            D d = this.getDOClass().newInstance();
+            ReflectUtils.setValue(d, field, mainTblPkey);
+            return this.findCount(d);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }

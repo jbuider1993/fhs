@@ -335,7 +335,7 @@ public interface BaseService<V extends VO,D extends BaseDO> extends AutoTransAbl
      * @param param 参数
      * @return 集合
      */
-    List<Object> callSqlIdForMany(String sqlId, Object param);
+    List<?> callSqlIdForMany(String sqlId, Object param);
 
     /**
      * 调用一个方法返回一个int
@@ -359,13 +359,7 @@ public interface BaseService<V extends VO,D extends BaseDO> extends AutoTransAbl
      */
     List<V> selectPageForOrder(D entity, long pageStart, long pageSize, String orderBy);
 
-    /**
-     * mybatis plus方法
-     *
-     * @param wrapper 过滤条件
-     * @return 受影响行数
-     */
-    int deleteMP(Wrapper<D> wrapper);
+
 
     /**
      * 根据id集合删除
@@ -373,7 +367,7 @@ public interface BaseService<V extends VO,D extends BaseDO> extends AutoTransAbl
      * @param idList id集合
      * @return 受影响行数
      */
-    int deleteBatchIdsMP(Collection<? extends Serializable> idList);
+    int deleteBatchIds(List<?> idList);
 
     /**
      * 根据id集合查询

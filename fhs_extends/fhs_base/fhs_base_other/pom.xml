@@ -42,6 +42,11 @@
             <artifactId>fhs_valid</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_auto_del</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
