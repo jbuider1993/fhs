@@ -40,6 +40,13 @@ fhs:
   cache: #CacheUpdateManager 支持缓存包扫码
     packages: com.fhs.**.service.impl
   disable-apollo: true
+  swagger: # ip:port/doc.html 是swagger-ui的地址,本插件用的是swagger-bootstrap-ui
+    enable: false
+    basepackage: com.fhs
+    service:
+      description: 项目api
+      developer: fhs developers
+      name: 公共接口文档
 spring:
   main:
     allow-bean-definition-overriding: true
@@ -83,13 +90,7 @@ spring:
     validationQuery: select 'x'
 
 
-swagger:
-  #第一个版本默认禁用了swagger，后面会放开，或者你自己在启动类加上加个@EnableSwagger2
-  basepackage: com.fhs
-  service:
-    description: 项目api
-    developer: fhs developers
-    name: 公共接口文档
+
 
 logging:
   config: classpath:logback-spring.xml
