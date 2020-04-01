@@ -44,6 +44,10 @@ layout("/page/tags/add_update_tag.html",{'nameSpace':'sysUser','idField':'userId
         if (isEdit || isView) {
             $("#userLoginName").attr('readonly', true);
         }
+        setTimeout(function(){
+            $('#userName').attr('readonly',false);
+            $('#password').attr('readonly',false);
+        },500);
     }
 
     //组织机构变更
@@ -81,9 +85,12 @@ layout("/page/tags/add_update_tag.html",{'nameSpace':'sysUser','idField':'userId
             },
             success: function (d) {
                 d = $.parseJSON(d);
-                if (d.code == 500) {
+                if (d.code == 409) {
                     EalertE('登录名已经存在');
                     return;
+                }
+                if(d.code==500){
+                    EalertE(d.message);
                 }
                 if (d.code == 200) {
                     Ealert("操作成功！");
@@ -108,9 +115,6 @@ layout("/page/tags/add_update_tag.html",{'nameSpace':'sysUser','idField':'userId
         reloadRoles(info.organizationId);
         $("input[name='password']").val('defaultPass');
         url_save = "${basePath}ms/sysUser/updateUser?userId=${parameter.id}";
-        setTimeout(function(){
-            $('#userName').attr('readonly',false);
-            $('#password').attr('readonly',false);
-        },500);
+
     }
 </script>
