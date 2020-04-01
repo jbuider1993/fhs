@@ -1,88 +1,88 @@
 <link rel="stylesheet" type="text/css"
-      href="${staticPath}css/common.css"/>
+      href="${fhs_static_url}css/common.css"/>
 <link rel="stylesheet" type="text/css"
-      href="${staticPath}css/loading_preloader.css" />
-<script type="text/javascript" src="${staticPath}js/jquery.min.js"></script>
+      href="${fhs_static_url}css/loading_preloader.css" />
+<script type="text/javascript" src="${fhs_static_url}js/jquery.min.js"></script>
 
-<script type="text/javascript" src="${staticPath}js/json2.js"></script>
+<script type="text/javascript" src="${fhs_static_url}js/json2.js"></script>
 <!--sweetalert2 start-->
-<script type="text/javascript" src="${staticPath}js/sweetalert/sweetalert2.js"></script>
+<script type="text/javascript" src="${fhs_static_url}js/sweetalert/sweetalert2.js"></script>
 <link rel="stylesheet" type="text/css"
-      href="${staticPath}js/sweetalert/sweetalert2.css" />
+      href="${fhs_static_url}js/sweetalert/sweetalert2.css" />
 <!--sweetalert2 end-->
 <!--topso start-->
 <link rel="stylesheet" type="text/css"
-      href="${staticPath}css/tipso.min.css"/>
-<script type="text/javascript" src="${staticPath}js/tipso.min.js"></script>
+      href="${fhs_static_url}css/tipso.min.css"/>
+<script type="text/javascript" src="${fhs_static_url}js/tipso.min.js"></script>
 <!--topso end-->
 <!--easyui start-->
 <script type="text/javascript"
-        src="${staticPath}js/easyui/jquery.easyui.min.js"></script>
+        src="${fhs_static_url}js/easyui/jquery.easyui.min.js"></script>
 <link rel="stylesheet" type="text/css"
-      href="${staticPath}js/easyui/themes/metro/easyui.css"/>
+      href="${fhs_static_url}js/easyui/themes/metro/easyui.css"/>
 <link rel="stylesheet" type="text/css"
-      href="${staticPath}js/easyui/themes/icon.css"/>
+      href="${fhs_static_url}js/easyui/themes/icon.css"/>
 <!--easyui end-->
 <!--my97 start-->
 <% if(isNotEmpty(date)){ %>
 <script type="text/javascript"
-        src="${staticPath}js/My97DatePicker/WdatePicker.js"></script>
+        src="${fhs_static_url}js/My97DatePicker/WdatePicker.js"></script>
 <% } %>
 <!--my97 end-->
 
 <!--upload start-->
 <% if(isNotEmpty(up) || isNotEmpty(ups)){ %>
 <link rel="stylesheet" type="text/css"
-      href="${staticPath}js/uploadfive/uploadifive.css" />
+      href="${fhs_static_url}js/uploadfive/uploadifive.css" />
 <script type="text/javascript"
-        src="${staticPath}js/uploadfive/jquery.uploadifive.js"></script>
+        src="${fhs_static_url}js/uploadfive/jquery.uploadifive.js"></script>
 <script type="text/javascript"
-        src="${staticPath}js/viewer/viewer.min.js"></script>
+        src="${fhs_static_url}js/viewer/viewer.min.js"></script>
 <link rel="stylesheet" type="text/css"
-      href="${staticPath}js/viewer/viewer.min.css" />
+      href="${fhs_static_url}js/viewer/viewer.min.css" />
 <script type="text/javascript"
-        src="${staticPath}js/uploadfive/jquery.uploadifive.js"></script>
-<script type="text/javascript" src="${staticPath}js/listUploadFiles.js"></script>
-<script type="text/javascript" src="${staticPath}js/uploadUtil.js"></script>
+        src="${fhs_static_url}js/uploadfive/jquery.uploadifive.js"></script>
+<script type="text/javascript" src="${fhs_static_url}js/listUploadFiles.js"></script>
+<script type="text/javascript" src="${fhs_static_url}js/uploadUtil.js"></script>
 <% } %>
 <!--upload end-->
 <!--toast start-->
-<script type="text/javascript" src="${staticPath}js/jquery.toast.js"></script>
+<script type="text/javascript" src="${fhs_static_url}js/jquery.toast.js"></script>
 <link rel="stylesheet" type="text/css"
-      href="${staticPath}css/jquery.toast.css"/>
+      href="${fhs_static_url}css/jquery.toast.css"/>
 <!--toast end-->
 <!--lc_switch start-->
 <% if(isNotEmpty(switchs)){ %>
-<script src="${staticPath}/js/switch/lc_switch.js" type="text/javascript"></script>
-<link href="${staticPath}/js/switch/lc_switch.css" rel="stylesheet"/>
+<script src="${fhs_static_url}/js/switch/lc_switch.js" type="text/javascript"></script>
+<link href="${fhs_static_url}/js/switch/lc_switch.css" rel="stylesheet"/>
 <% } %>
 <!--lc_switch end-->
 <!--validform start-->
 <link rel="stylesheet" type="text/css"
-      href="${staticPath}css/validform.css"/>
-<script type="text/javascript" src="${staticPath}js/Validform_v5.3.2.js"></script>
+      href="${fhs_static_url}css/validform.css"/>
+<script type="text/javascript" src="${fhs_static_url}js/Validform_v5.3.2.js"></script>
 <!--validform end-->
 <!--time start-->
 <% if(isNotEmpty(time)){ %>
 <link rel="stylesheet" type="text/css"
-      href="${staticPath}js/time/timedropper.css"/>
-<script type="text/javascript" src="${staticPath}js/time/timedropper.js"></script>
+      href="${fhs_static_url}js/time/timedropper.css"/>
+<script type="text/javascript" src="${fhs_static_url}js/time/timedropper.js"></script>
 <% } %>
 <!--time end-->
 <% if(isNotEmpty(bt)){ %>
-<script type="text/javascript" src="${staticPath}js/baidutemplate.js"></script>
+<script type="text/javascript" src="${fhs_static_url}js/baidutemplate.js"></script>
 <% } %>
 <% if(isNotEmpty(qr)){ %>
-<script type="text/javascript" src="${staticPath}js/jquery.qrcode.min.js"></script>
+<script type="text/javascript" src="${fhs_static_url}js/jquery.qrcode.min.js"></script>
 <% } %>
 <!-- um start -->
 <% if(isNotEmpty(um)){ %>
-<script type="text/javascript" src="${staticPath}/js/um/third-party/template.min.js"></script>
+<script type="text/javascript" src="${fhs_static_url}/js/um/third-party/template.min.js"></script>
 <script type="text/javascript" charset="utf-8"
-        src="${staticPath}/js/um/umeditor.config.js"> </script>
+        src="${fhs_static_url}/js/um/umeditor.config.js"> </script>
 <script type="text/javascript" charset="utf-8"
-        src="${staticPath}/js/um/umeditor.min.js"></script>
-<link href="${staticPath}/js/um/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+        src="${fhs_static_url}/js/um/umeditor.min.js"></script>
+<link href="${fhs_static_url}/js/um/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
 <% } %>
 <!--um end-->
 <!-- bmap start -->
@@ -94,8 +94,8 @@
 
 <% if(isNotEmpty(day)){ %>
 <script type="text/javascript" charset="utf-8"
-        src="${staticPath}/js/dayjs.min.js" ></script>
+        src="${fhs_static_url}/js/dayjs.min.js" ></script>
 <% } %>
 
 <script type="text/javascript" src="${basePath}js/systemConfig.js"></script>
-<script type="text/javascript" src="${staticPath}js/ecommon.js"></script>
+<script type="text/javascript" src="${fhs_static_url}js/ecommon.js"></script>

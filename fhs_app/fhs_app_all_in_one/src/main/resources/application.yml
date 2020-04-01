@@ -13,6 +13,8 @@ mybatis-plus:
 fhs:
   autoware:
     package: com.fhs.*;com.fhs.*.*;
+  autodel:
+    service-packege: com.**.service.**
   login:
     #是否开启cas默认关闭
     enable-cas: false

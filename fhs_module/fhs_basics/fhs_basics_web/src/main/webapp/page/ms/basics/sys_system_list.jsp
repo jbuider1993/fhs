@@ -32,7 +32,7 @@
 				valueField: 'wordbookCode',
 				textField: 'wordbookDesc',
 				editable : false,
-				url: '${systemServiceUrl}webApi/wordbook/getData?wordbookGroupCode=is_disable&jsonpCallback=?',
+				url: '${fhs_basics_url}webApi/wordbook/getData?wordbookGroupCode=is_disable&jsonpCallback=?',
 				showAll:true
 				">
 			</select>

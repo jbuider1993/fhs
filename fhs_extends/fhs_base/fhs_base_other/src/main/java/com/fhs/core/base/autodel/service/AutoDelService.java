@@ -28,7 +28,7 @@ public class AutoDelService implements ApplicationListener<ApplicationReadyEvent
     /**
      * service包的路径，多个用逗号分隔
      */
-    @Value("${fhs.auto.service.packege}")
+    @Value("${fhs.autodel.service-packege}")
     private String servicePackege;
 
 

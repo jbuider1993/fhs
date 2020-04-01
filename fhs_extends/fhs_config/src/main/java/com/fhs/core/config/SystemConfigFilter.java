@@ -108,7 +108,12 @@ public class SystemConfigFilter implements Filter, InitializingBean
         }
         final StringBuilder jsBuilder = new StringBuilder();
         jsBuilder.append("var basePath" + " = '" +  EConfig.getPathPropertiesValue("basePath") + "';");
+        jsBuilder.append("var basePath" + " = '" +  EConfig.getPathPropertiesValue("basePath") + "';");
         systemConfigMap.keySet().forEach(name->{
+            String val = systemConfigMap.get(name);
+            if(val.contains("fileServer")){
+                val = val.replace("${fhs_file_url}", EConfig.getPathPropertiesValue("fhs_file_url"));
+            }
             if(name.endsWith("_REG"))
             {
                 jsBuilder.append("var " + name + " = " +  systemConfigMap.get(name)+";");

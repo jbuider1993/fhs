@@ -21,7 +21,7 @@
 	<div class="fitem">
 		<div class="fitemDiv">
 			<label>&nbsp;</label> <img id="logoInputImg"
-									   src="${staticPath}/images/upload_default_show.png" class="headerImg" />
+									   src="${fhs_static_url}/images/upload_default_show.png" class="headerImg" />
 
 			<input type="hidden" id="logoInputVal">
 		</div>
@@ -53,7 +53,7 @@
 								valueField: 'wordbookCode',
 								textField: 'wordbookDesc',
 								editable : false,
-								url: '${systemServiceUrl}webApi/wordbook/getData?wordbookGroupCode=is_disable&jsonpCallback=?',
+								url: '${fhs_basics_url}webApi/wordbook/getData?wordbookGroupCode=is_disable&jsonpCallback=?',
 								onLoadSuccess : function (rec){
 									var peo = $(this).combobox('getValue');
 									if(peo==''){
@@ -75,7 +75,7 @@
 								valueField: 'wordbookCode',
 								textField: 'wordbookDesc',
 								editable : false,
-								url: '${systemServiceUrl}webApi/wordbook/getData?wordbookGroupCode=system_type&jsonpCallback=?',"
+								url: '${fhs_basics_url}webApi/wordbook/getData?wordbookGroupCode=system_type&jsonpCallback=?',"
 					datatype="*" nullmsg="请填写子系统类型">
 			</select>
 			<span class="form-field-required">*</span>

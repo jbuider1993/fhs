@@ -67,7 +67,7 @@
 									textField: 'wordbookDesc',
 									editable : false,
 									panelHeight: 'auto',
-									url: '${systemServiceUrl}webApi/wordbook/getData?wordbookGroupCode=is_disable&jsonpCallback=?',
+									url: '${fhs_basics_url}webApi/wordbook/getData?wordbookGroupCode=is_disable&jsonpCallback=?',
 									onLoadSuccess : function (rec){
 										var peo = $(this).combobox('getValue');
 										if(peo==''){

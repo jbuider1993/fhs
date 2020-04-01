@@ -26,7 +26,7 @@ public class WordBookGridTag extends  SelectGridTag {
     public String getHtmlForToolsBar() {
         tagSett.put("valueField","wordbookCode");
         tagSett.put("textField","wordbookDesc");
-        tagSett.put("url", EConfig.getPathPropertiesValue("systemServiceUrl") + "/webApi/wordbook/getData?wordbookGroupCode="+
+        tagSett.put("url", EConfig.getPathPropertiesValue("fhs_basics_url") + "/webApi/wordbook/getData?wordbookGroupCode="+
                 tagSett.get("code") + "&jsonpCallback=?");
         return super.getHtmlForToolsBar();
     }

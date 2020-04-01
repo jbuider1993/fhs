@@ -111,11 +111,11 @@
     //表单加载成功的时候
     function addressFormLoadSuccess(info){
         //加载市
-        var cityUrl = '${systemServiceUrl}/webApi/area/getProvinceData?areaParentId=' + info.provinceid + '&jsonpCallback=?';
+        var cityUrl = '${fhs_basics_url}/webApi/area/getProvinceData?areaParentId=' + info.provinceid + '&jsonpCallback=?';
         $('#cityid').combobox('reload', cityUrl);
 
         //加载区县
-        var areaUrl = '${systemServiceUrl}/webApi/area/getProvinceData?areaParentId=' + info.cityid + '&jsonpCallback=?';
+        var areaUrl = '${fhs_basics_url}/webApi/area/getProvinceData?areaParentId=' + info.cityid + '&jsonpCallback=?';
         $('#areaid').combobox('reload', areaUrl);
 
         $('#address2').val(info.address);
@@ -148,7 +148,7 @@
         <%  } %>
         nullmsg="请选择省"
         data-options="
-        url: '${systemServiceUrl}/webApi/area/getProvinceData?areaParentId=0&jsonpCallback=?',
+        url: '${fhs_basics_url}/webApi/area/getProvinceData?areaParentId=0&jsonpCallback=?',
         valueField: 'id',
         textField:'areaName',
         editable : false,
@@ -156,7 +156,7 @@
         provinceName = rec.areaName;
         $('#cityid').combobox('loadData', {});
         $('#areaid').combobox('loadData', {});
-        var cityUrl = '${systemServiceUrl}/webApi/area/getProvinceData?areaParentId='+rec.id+'&jsonpCallback=?';
+        var cityUrl = '${fhs_basics_url}/webApi/area/getProvinceData?areaParentId='+rec.id+'&jsonpCallback=?';
         $('#cityid').combobox('reload', cityUrl);
         $('#cityid').combobox('clear');
         $('#areaid').combobox('clear');
@@ -181,7 +181,7 @@
         onSelect: function(rec){
         cityName = rec.areaName;
         $('#areaid').combobox('loadData', {});
-        var url = '${systemServiceUrl}/webApi/area/getProvinceData?areaParentId='+rec.id+'&jsonpCallback=?';
+        var url = '${fhs_basics_url}/webApi/area/getProvinceData?areaParentId='+rec.id+'&jsonpCallback=?';
         $('#areaid').combobox('reload', url);
         $('#areaid').combobox('clear');
         }"/>

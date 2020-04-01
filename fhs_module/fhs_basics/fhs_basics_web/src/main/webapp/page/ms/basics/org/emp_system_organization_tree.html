@@ -1,18 +1,18 @@
 <html>
 <head>
-    <link href="${staticPath}js/zTree_v3/css/zTreeStyle/zTreeStyle.css"
+    <link href="${fhs_static_url}js/zTree_v3/css/zTreeStyle/zTreeStyle.css"
           rel="stylesheet" type="text/css"/>
     <script type="text/javascript"
-            src="${staticPath}js/zTree_v3/js/jquery-1.4.4.min.js"></script>
+            src="${fhs_static_url}js/zTree_v3/js/jquery-1.4.4.min.js"></script>
     <script type="text/javascript"
-            src="${staticPath}js/zTree_v3/js/jquery.ztree.core-3.5.js"></script>
+            src="${fhs_static_url}js/zTree_v3/js/jquery.ztree.core-3.5.js"></script>
     <script type="text/javascript"
-            src="${staticPath}js/zTree_v3/js/jquery.ztree.excheck-3.5.js"></script>
+            src="${fhs_static_url}js/zTree_v3/js/jquery.ztree.excheck-3.5.js"></script>
     <script type="text/javascript"
-            src="${staticPath}js/zTree_v3/js/jquery.ztree.exedit-3.5.js"></script>
-    <!-- #ÒýÈëZTree²å¼þ -->
+            src="${fhs_static_url}js/zTree_v3/js/jquery.ztree.exedit-3.5.js"></script>
+    <!-- #ï¿½ï¿½ï¿½ï¿½ZTreeï¿½ï¿½ï¿½ -->
 </head>
-<title>×éÖ¯»ú¹¹tree</title>
+<title>ï¿½ï¿½Ö¯ï¿½ï¿½ï¿½ï¿½tree</title>
 
 <script type="text/javascript">
     $(function () {
@@ -20,7 +20,7 @@
             function (jsonStr) {
                 $.fn.zTree.init($("#organizationTreeData"), setting, jsonStr);
                 var treeObj = $.fn.zTree.getZTreeObj("organizationTreeData");
-                //»ñÈ¡½Úµã
+                //ï¿½ï¿½È¡ï¿½Úµï¿½
                 var nodes = treeObj.getNodes();
                 if (nodes.length > 0) {
                     var node = nodes[0];
@@ -35,11 +35,11 @@
     });
 </script>
 <script type="text/javascript">
-    //ZTree ÅäÖÃ
+    //ZTree ï¿½ï¿½ï¿½ï¿½
     var setting = {
         data: {
             simpleData: {
-                idKey: "id", //Ö÷¼üid
+                idKey: "id", //ï¿½ï¿½ï¿½ï¿½id
                 pIdKey: "fatherId",
                 name: "name",
                 enable: true

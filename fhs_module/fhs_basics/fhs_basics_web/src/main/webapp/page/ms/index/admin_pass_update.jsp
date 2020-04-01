@@ -39,7 +39,7 @@
 		</center>
 	</div>
 
-<script type="text/javascript" src="${staticPath}js/jQuery.md5.js"></script>
+<script type="text/javascript" src="${fhs_static_url}js/jQuery.md5.js"></script>
 <script type="text/javascript">
 	var url_temp = "${basePath}ms/sysUser/updatePass";
 	var ResetPasswordForm = null;
