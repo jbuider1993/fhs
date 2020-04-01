@@ -112,7 +112,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public int add(D bean) {
-        int result = baseMapper.insertJpa(bean);
+        int result = baseMapper.insertSelective(bean);
         this.refreshCache();
         this.addCache(bean);
         return result;
@@ -298,7 +298,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public int insertJpa(D entity) {
-        int result = baseMapper.insertJpa(entity);
+        int result = baseMapper.insertSelective(entity);
         this.refreshCache();
         return result;
     }
@@ -306,7 +306,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public int insert(D entity) {
-        return baseMapper.insertJpa(entity);
+        return baseMapper.insertSelective(entity);
     }
 
 
@@ -322,7 +322,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         autoDelService.deleteCheck(this.nameSpace, primaryValue);
         D d = baseMapper.selectByIdJpa(primaryValue);
         d.setIsDelete(Constant.INT_TRUE);
-        int result = baseMapper.updateById(d);
+        int result = baseMapper.updateByIdJpa(d);
         autoDelService.deleteItemTBL(this.nameSpace, primaryValue);
         this.refreshCache();
         removeCache(primaryValue);

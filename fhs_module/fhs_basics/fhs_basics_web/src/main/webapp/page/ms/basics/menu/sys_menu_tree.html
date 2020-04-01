@@ -11,9 +11,9 @@
 	src="${fhs_static_url}js/zTree_v3/js/jquery.ztree.excheck-3.5.js"></script>
 <script type="text/javascript"
 	src="${fhs_static_url}js/zTree_v3/js/jquery.ztree.exedit-3.5.js"></script>
-<!-- #����ZTree��� -->
+
 </head>
-<title>�˵�tree</title>
+<title>菜单tree</title>
 
 <script type="text/javascript">
 
@@ -28,7 +28,7 @@
             function(jsonStr) {
                 $.fn.zTree.init($("#treeData"), setting, jsonStr);
                 var treeObj = $.fn.zTree.getZTreeObj("treeData");
-                //��ȡ�ڵ�
+
                 var nodes = treeObj.getNodes();
                 if (nodes.length > 0 ) {
                     var node = nodes[0];
@@ -51,11 +51,11 @@
 </script>
 <script type="text/javascript">
 
-	//ZTree ����
+
 	var setting = {
 		data : {
 			simpleData : {
-				idKey : "id", //����id
+				idKey : "id",
 				pIdKey : "pid",
 				name : "name",
 				menuType : "menuType",

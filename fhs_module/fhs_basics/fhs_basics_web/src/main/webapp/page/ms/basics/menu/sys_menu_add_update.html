@@ -2,6 +2,7 @@
 include("/page/tags/form_include.html"){}
 %>
 <form id="addUpdateForm" method="post">
+   <#HideFormTag  name='fatherMenuId' title='菜单名称' value='${parameter.parentId}' required='true'/>
    <div class="fitem">
       <#InputFormTag  name='menuName' title='菜单名称' required='true' />
       <#InputFormTag  name='namespace' title='Namespace' required='true' />

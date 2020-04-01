@@ -53,10 +53,11 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
      */
     @RequiresPermissions("sysOrganization:see")
     @RequestMapping("getTreesData")
-    public void getTreesData() {
+    public void getTreesData(String id) {
         Map<String, Object> map = super.getPageTurnNum();
         UcenterMsUserVO sysUser = super.getSessionuser();
         map.put("organizationId", sysUser.getOrganizationId());
+        map.put("pid", id);
         List<TreeModelVO> treesData = sysOrganizationService.getTreesData(map);
         String jsonTree = JsonUtils.list2json(treesData);
         super.getRequest().setAttribute("datas", jsonTree);

@@ -44,6 +44,12 @@
                 enable: true
             }
         },
+        async:{
+            autoParam:["id"],
+            enable:true,
+            type:"get",
+            url:'${basePath}ms/sysOrganization/getTreesData',
+        },
         callback: {
             onExpand: zTreeRegisterTarget,
             beforeClick: zTreeBeforeClick,
@@ -64,7 +70,13 @@
         window.parent
             .changeRight(treeNode.id, treeNode.name);
     }
-
+    function reloadData(){
+        var treeObj = $.fn.zTree.getZTreeObj("organizationTreeData");
+        var nodes = treeObj.getSelectedNodes();
+        if (nodes.length>0) {
+            treeObj.reAsyncChildNodes(nodes[0], "refresh");
+        }
+    }
     function beforeDrags(treeId, treeNodes) {
         return false;
     }

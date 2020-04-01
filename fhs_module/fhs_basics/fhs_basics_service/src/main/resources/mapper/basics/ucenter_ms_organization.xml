@@ -33,6 +33,7 @@
     </select>
 
     <sql id="sqlWhere">
+        AND is_delete=0
         <if test="id!=null and id != ''">
             AND id LIKE CONCAT('%', #{id}, '%')
         </if>
@@ -45,7 +46,7 @@
     <select id="getSubNodeDatas" parameterType="map" resultType="com.fhs.basics.vo.ComboboxNodeVO">
         SELECT id AS id, name AS text,parent_id AS parentId, id AS wxOrgId FROM
         t_ucenter_ms_organization
-        where is_enable = 1
+        where is_enable = 1 AND is_delete=0
         <if test="parentId !=null and parentId!='' and parentId != '-1'">
             AND parent_id =#{parentId}
         </if>
@@ -66,9 +67,13 @@
         TRIM(t.name) AS name,
         'd' AS nodeType
         FROM `t_ucenter_ms_organization` t
-        WHERE t.is_enable = 1
+        WHERE t.is_enable = 1 AND t.is_delete=0
         <if test="organizationId != null and organizationId != ''">
             AND t.id LIKE CONCAT(#{organizationId}, '%')
+        </if>
+        <if test="pid != null and pid != ''">
+            AND t.id LIKE CONCAT(#{pid}, '%')
+            AND t.id!=#{pid}
         </if>
         ORDER BY pid
     </select>
@@ -76,6 +81,7 @@
     <select id="findCountByNameAndParentId" parameterType="com.fhs.basics.dox.UcenterMsOrganizationDO" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM t_ucenter_ms_organization
         <where>
+            is_delete=0
             <if test="parentId != null and parentId != ''">
                 AND parent_id = #{parentId}
             </if>
@@ -88,7 +94,7 @@
     <!-- 根据条件查询机构数 -->
     <select id="findChildCountById" parameterType="map" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM t_ucenter_ms_organization
-        WHERE id LIKE CONCAT(#{organizationId}, '%') AND id != #{organizationId}
+        WHERE id LIKE CONCAT(#{organizationId}, '%') AND id != #{organizationId}  AND  is_delete=0
         <if test="isEnable != null and isEnable != ''">
             AND is_enable = #{isEnable}
         </if>
@@ -97,5 +103,4 @@
     <select id="findRank" resultType="java.lang.Integer" parameterType="map">
             SELECT MAX(ranking) FROM t_ucenter_ms_organization WHERE parent_id=#{parentId}
     </select>
-
 </mapper>

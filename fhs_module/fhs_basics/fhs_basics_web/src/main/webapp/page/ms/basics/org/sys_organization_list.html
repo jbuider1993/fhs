@@ -72,6 +72,7 @@
 
     //重新加载
     function reload() {
+        reloadOrgTree();
         $('#sysOrganizationGrid').datagrid('load', {
 
         });
@@ -79,7 +80,8 @@
 
 
     function reloadOrgTree() {
-        window.parent.document.getElementById('left').contentWindow.location.reload(true);
+        console.log(parent.document.getElementById('left').contentWindow);
+        parent.document.getElementById('left').contentWindow.reloadData();
     }
 </script>
 </html>

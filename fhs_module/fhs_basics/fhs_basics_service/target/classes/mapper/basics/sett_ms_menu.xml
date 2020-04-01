@@ -91,6 +91,7 @@
 		nodeType
 		FROM `t_sett_ms_menu` t
 		<where>
+		    t.is_delete = 0
 			<if test="menuType!=null and menuType!='' ">
 				AND t.menu_type LIKE CONCAT('%',#{menuType},'%')
 			</if>
