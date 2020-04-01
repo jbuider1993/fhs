@@ -22,7 +22,7 @@
         <fhs.release.version>2.0.0</fhs.release.version>
         <fhs.swagger.version>2.6.1</fhs.swagger.version>
         <fhs.jetcache.version>2.5.16</fhs.jetcache.version>
-        <fhs.mybatis-jpa-jack.version>1.0.7</fhs.mybatis-jpa-jack.version>
+        <fhs.mybatis-jpa-jack.version>1.0.9</fhs.mybatis-jpa-jack.version>
         <fhs.spring-cloud-starter.version>2.1.5.RELEASE</fhs.spring-cloud-starter.version>
     </properties>
 

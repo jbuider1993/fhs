@@ -4,6 +4,7 @@ import com.fhs.basics.dox.SettMsMenuServerDO;
 import com.fhs.basics.service.SettMsMenuServerService;
 import com.fhs.basics.vo.SettMsMenuServerVO;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
+import com.fhs.core.cache.annotation.Namespace;
 import com.fhs.core.db.ds.DataSource;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
  */
 @Service("settMsMenuServerService")
 @DataSource("base_business")
+@Namespace("sett_ms_system")
 public class SettMsMenuServerServiceImpl extends BaseServiceImpl<SettMsMenuServerVO, SettMsMenuServerDO> implements SettMsMenuServerService {
 
 }

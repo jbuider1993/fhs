@@ -98,7 +98,9 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         if (isCacheable) {
             this.namespace = this.getClass().getAnnotation(Cacheable.class).value();
         }
-
+        else if(this.getClass().isAnnotationPresent(Namespace.class)){
+            this.namespace = this.getClass().getAnnotation(Namespace.class).value();
+        }
     }
 
     @Override
@@ -172,6 +174,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @SuppressWarnings({"unchecked"})
     @Override
     public List<V> findForList(D bean) {
+        bean.setIsDelete(Constant.INT_FALSE);
         List<D> dos = baseMapper.selectPageJpa(bean, -1, -1);
         return dos2vos(dos);
     }
@@ -185,6 +188,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @SuppressWarnings({"unchecked"})
     @Override
     public List<V> findForList(D bean, int pageStart, int pageSize) {
+        bean.setIsDelete(Constant.INT_FALSE);
         List<D> dos = baseMapper.selectPageJpa(bean, pageStart, pageSize);
         return dos2vos(dos);
     }
@@ -208,6 +212,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public V findBean(D bean) {
+        bean.setIsDelete(Constant.INT_FALSE);
         return d2v(baseMapper.selectBean(bean));
     }
 
@@ -265,8 +270,8 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
             message.put("namespace", autoTrans.namespace());
             redisCacheService.convertAndSend("trans", JSONUtils.toJSONString(message));
         }
-        if (this.getClass().isAnnotationPresent(Namespace.class)) {
-            this.cacheUpdateManager.clearCache(this.getClass().getAnnotation(Namespace.class).value());
+        if (this.nameSpace !=null ) {
+            this.cacheUpdateManager.clearCache(nameSpace);
         }
     }
 
@@ -314,11 +319,11 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public int deleteById(Object primaryValue) {
-        autoDelService.deleteCheck(this.getClass(), primaryValue);
+        autoDelService.deleteCheck(this.nameSpace, primaryValue);
         D d = baseMapper.selectByIdJpa(primaryValue);
         d.setIsDelete(Constant.INT_TRUE);
         int result = baseMapper.updateById(d);
-        autoDelService.deleteItemTBL(this.getClass(), primaryValue);
+        autoDelService.deleteItemTBL(this.nameSpace, primaryValue);
         this.refreshCache();
         removeCache(primaryValue);
         return result;
@@ -356,7 +361,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         if (entitys == null || entitys.isEmpty()) {
             return 0;
         }
-        int result = baseMapper.batchUpdate(entitys);
+        int result = baseMapper.batchUpdateById(entitys);
         for (D entity : entitys) {
             updateCache(entity);
         }
@@ -382,17 +387,20 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public List<V> selectPage(D entity, long pageStart, long pageSize) {
+        entity.setIsDelete(Constant.INT_FALSE);
         return dos2vos(baseMapper.selectPageJpa(entity, pageStart, pageSize));
     }
 
     @Override
     public List<V> selectPageForOrder(D entity, long pageStart, long pageSize, String orderBy) {
+        entity.setIsDelete(Constant.INT_FALSE);
         return dos2vos(baseMapper.selectPageForOrder(entity, pageStart, pageSize, orderBy));
     }
 
 
     @Override
     public long selectCount(D entity) {
+        entity.setIsDelete(Constant.INT_FALSE);
         return baseMapper.selectCountJpa(entity);
     }
 
@@ -413,6 +421,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public V selectBean(D param) {
+        param.setIsDelete(Constant.INT_FALSE);
         return d2v(baseMapper.selectBean(param));
     }
 
@@ -420,13 +429,16 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @Override
     public int deleteBean(D entity) {
         List<D> dos = baseMapper.selectPageJpa(entity, -1, -1);
+        if(dos.isEmpty()){
+            return 0;
+        }
         for (D d : dos) {
             d.setIsDelete(Constant.INT_TRUE);
-            autoDelService.deleteCheck(this.getClass(), d.getPkey());
-            autoDelService.deleteItemTBL(this.getClass(), d.getPkey());
+            autoDelService.deleteCheck(this.nameSpace, d.getPkey());
+            autoDelService.deleteItemTBL(this.nameSpace, d.getPkey());
         }
         //批量修改为已删除
-        return baseMapper.batchUpdate(dos);
+        return baseMapper.batchUpdateById(dos);
     }
 
 
@@ -462,14 +474,17 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
             return 0;
         }
         for (Object id : idList) {
-            autoDelService.deleteCheck(this.getClass(), id);
-            autoDelService.deleteItemTBL(this.getClass(), id);
+            autoDelService.deleteCheck(this.nameSpace, id);
+            autoDelService.deleteItemTBL(this.nameSpace, id);
         }
         List<D> dos = baseMapper.selectByIds(idList);
+        if(dos.isEmpty()){
+            return 0;
+        }
         for (D d : dos) {
             d.setIsDelete(Constant.INT_TRUE);
         }
-        return baseMapper.batchUpdate(dos);
+        return baseMapper.batchUpdateById(dos);
     }
 
     @Override

@@ -22,7 +22,7 @@ public @interface AutoDelSett {
      * 主表的service
      * @return
      */
-   Class<? extends BaseServiceImpl> mainServiceClazz();
+   String namespace();
 
     /**
      * 主表主键对应我表的字段名 注意 index 需要和mainServiceClazz 对应上

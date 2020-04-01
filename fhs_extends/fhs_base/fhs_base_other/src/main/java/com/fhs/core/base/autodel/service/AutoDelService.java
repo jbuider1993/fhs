@@ -2,6 +2,7 @@ package com.fhs.core.base.autodel.service;
 
 import com.fhs.common.spring.ScannerUtils;
 import com.fhs.common.spring.SpringContextUtil;
+import com.fhs.common.utils.CheckUtils;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.exception.ParamException;
 import org.apache.commons.collections.map.HashedMap;
@@ -36,7 +37,7 @@ public class AutoDelService implements ApplicationListener<ApplicationReadyEvent
      * 用于根据一个被更新的类(表)找到 关联的子类(子表)
      * 然后又可找到相关字段
      */
-    private Map<Class<? extends BaseServiceImpl>, Map<Class<? extends BaseServiceImpl>, AutoDelSett>> cacheMap = new HashedMap();
+    private Map<String, Map<Class<? extends BaseServiceImpl>, AutoDelSett>> cacheMap = new HashedMap();
 
 
     @Override
@@ -54,10 +55,10 @@ public class AutoDelService implements ApplicationListener<ApplicationReadyEvent
                 }
                 AutoDel autoDel = serviceClazz.getAnnotation(AutoDel.class);
                 for (AutoDelSett autoDelMainService : autoDel.mainServiceSetts()) {
-                    itemTBLSett = cacheMap.containsKey(autoDelMainService.mainServiceClazz()) ?
-                            cacheMap.get(autoDelMainService.mainServiceClazz()) : new HashedMap();
+                    itemTBLSett = cacheMap.containsKey(autoDelMainService.namespace()) ?
+                            cacheMap.get(autoDelMainService.namespace()) : new HashedMap();
                     itemTBLSett.put((Class<? extends BaseServiceImpl>) serviceClazz, autoDelMainService);
-                    cacheMap.put(autoDelMainService.mainServiceClazz(), itemTBLSett);
+                    cacheMap.put(autoDelMainService.namespace(), itemTBLSett);
                 }
             }
         }
@@ -66,17 +67,20 @@ public class AutoDelService implements ApplicationListener<ApplicationReadyEvent
     /**
      * 删除子表数据
      *
-     * @param clazz  主表的class
+     * @param namespace 命名空间
      * @param pkey
      */
-    public void deleteItemTBL(Class<? extends BaseServiceImpl> clazz, Object pkey) {
-        Map<Class<? extends BaseServiceImpl>, AutoDelSett> itemTBLSett = cacheMap.get(clazz);
+    public void deleteItemTBL(String namespace, Object pkey) {
+        if(CheckUtils.isNullOrEmpty(namespace)){
+            return;
+        }
+        Map<Class<? extends BaseServiceImpl>, AutoDelSett> itemTBLSett = cacheMap.get(namespace);
         if (itemTBLSett == null) {
             return;
         }
         Set<Class<? extends BaseServiceImpl>> classSet = itemTBLSett.keySet();
         classSet.forEach(cl -> {
-            LOGGER.debug("auto del,main class:" + clazz.getName() + ",pkey:" + pkey);
+            LOGGER.debug("auto del,main namespace:" + namespace + ",pkey:" + pkey);
             SpringContextUtil.getBeanByClass(cl).deleteForMainTblPkey(itemTBLSett.get(cl).field(), pkey);
         });
     }
@@ -84,11 +88,14 @@ public class AutoDelService implements ApplicationListener<ApplicationReadyEvent
     /**
      * 删除主表检查子表是否有数据
      *
-     * @param clazz  主表的class
+     * @param namespace  命名空间
      * @param pkey
      */
-    public void deleteCheck(Class<? extends BaseServiceImpl> clazz, Object pkey) {
-        Map<Class<? extends BaseServiceImpl>, AutoDelSett> itemTBLSett = cacheMap.get(clazz);
+    public void deleteCheck(String namespace, Object pkey) {
+        if(CheckUtils.isNullOrEmpty(namespace)){
+            return;
+        }
+        Map<Class<? extends BaseServiceImpl>, AutoDelSett> itemTBLSett = cacheMap.get(namespace);
         if (itemTBLSett == null) {
             return;
         }

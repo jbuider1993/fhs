@@ -1,6 +1,6 @@
 var modelConfig = {
     title: '子系统管理', pkey: 'id', type: 'uuid', orderBy: 'update_time Desc',
-    namespace: "ucenter_ms_system", table: 't_ucenter_ms_system',trans: true};
+    namespace: "sett_ms_system", table: 't_sett_ms_system',trans: true};
 var listPage = {
     listFieldSett: function () {
         return [

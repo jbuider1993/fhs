@@ -17,6 +17,8 @@ import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.ListUtils;
 import com.fhs.common.utils.StringUtil;
+import com.fhs.core.base.autodel.anno.AutoDel;
+import com.fhs.core.base.autodel.anno.AutoDelSett;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.db.ds.DataSource;
@@ -33,6 +35,9 @@ import java.util.*;
  */
 @Service
 @DataSource("base_business")
+@AutoDel(mainServiceSetts= {
+        @AutoDelSett(namespace="sett_ms_system",isChecker = true,field ="systemId",desc = "菜单")
+})
 public class SettMsMenuServiceImpl extends BaseServiceImpl<SettMsMenuVO, SettMsMenuDO> implements SettMsMenuService, FeignSysMenuApiService {
 
     @Autowired

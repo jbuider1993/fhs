@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alicp.jetcache.CacheUpdateManager;
 import com.fhs.common.utils.*;
+import com.fhs.core.base.autodel.service.AutoDelService;
 import com.fhs.core.base.pojo.SuperBean;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.cache.service.RedisCacheService;
@@ -51,6 +52,9 @@ public class PageXDBService {
 
     @Autowired
     private TransService transService;
+
+    @Autowired
+    private AutoDelService autoDelService;
 
     @Autowired
     private RedisCacheService redisCacheService;
@@ -247,8 +251,10 @@ public class PageXDBService {
      * @return 删除了几行 理论来说是1
      */
     public int del(String pkey, String namespace) {
+        autoDelService.deleteCheck(namespace,pkey);
         redisCacheService.remove(DO_CACHE_KEY + namespace + ":" + pkey);
         int result =  sqlsession.delete(getSqlNamespace() + namespace + "_delPageX", pkey);
+        autoDelService.deleteItemTBL(namespace,pkey);
         refreshCache(namespace);
         return result;
     }

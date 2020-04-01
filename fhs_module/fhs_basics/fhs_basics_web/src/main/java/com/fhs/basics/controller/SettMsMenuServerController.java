@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @versio 1.0 陕西小伙伴网络科技有限公司 Copyright (c) 2017 All Rights Reserved.
  */
 @RestController
-@RequestMapping("ms/menuServer")
+@RequestMapping("ms/sett_ms_menu_server")
 public class SettMsMenuServerController extends ModelSuperController<SettMsMenuServerVO, SettMsMenuServerDO> {
 
 

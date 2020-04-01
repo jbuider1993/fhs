@@ -200,7 +200,7 @@ public class PageXAutoSqlService {
      */
     public String autoDel(PagexAddVO pagexAddDTO) {
         Map<String, Object> modelConfig = pagexAddDTO.getModelConfig();
-        StringBuilder sqlBuilder = new StringBuilder(" DELETE FROM  " + modelConfig.get("table") + " WHERE ");
+        StringBuilder sqlBuilder = new StringBuilder(" UPDATE   " + modelConfig.get("table") + " SET is_delete=1 WHERE ");
         sqlBuilder.append(modelConfig.get("pkey") + " = #{id}");
         return sqlBuilder.toString();
     }
@@ -297,7 +297,7 @@ public class PageXAutoSqlService {
      * @return 生成列表和查总数sql的过滤条件sql
      */
     private String autoPagerWhere(PagexListSettVO pagexListSettDTO) {
-        StringBuilder sqlBuilder = new StringBuilder("<where>");
+        StringBuilder sqlBuilder = new StringBuilder("<where>  is_delete=0 ");
         List<Map<String, Object>> fields = pagexListSettDTO.getFilters();
         String fieldName = null;
         String operator = null;
