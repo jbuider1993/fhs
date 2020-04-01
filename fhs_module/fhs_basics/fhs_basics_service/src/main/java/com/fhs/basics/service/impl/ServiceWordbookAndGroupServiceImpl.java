@@ -24,8 +24,7 @@ import java.util.Map;
  */
 @Service
 @DataSource("base_business")
-public class ServiceWordbookAndGroupServiceImpl implements ServiceWordbookAndGroupService
-{
+public class ServiceWordbookAndGroupServiceImpl implements ServiceWordbookAndGroupService {
 
     @Autowired
     private ServiceWordBookService wordBookService;
@@ -34,89 +33,76 @@ public class ServiceWordbookAndGroupServiceImpl implements ServiceWordbookAndGro
     private ServiceWordbookGroupService serviceWordbookGroupService;
 
     @Override
-    public boolean addWordbook(ServiceWordbookDO wordbook)
-    {
+    public boolean addWordbook(ServiceWordbookDO wordbook) {
         wordBookService.insertSelective(wordbook);
         this.refreshRedisCache(wordbook);
         return true;
     }
 
     @Override
-    public boolean updateWordbook(ServiceWordbookDO wordbook)
-    {
+    public boolean updateWordbook(ServiceWordbookDO wordbook) {
         wordBookService.updateSelectiveById(wordbook);
         this.refreshRedisCache(wordbook);
         return true;
     }
 
     @Override
-    public boolean delWordbook(ServiceWordbookDO wordbook)
-    {
+    public boolean delWordbook(ServiceWordbookDO wordbook) {
         wordBookService.deleteById(wordbook.getWordbookId());
         this.refreshRedisCache(wordbook);
         return true;
     }
 
     @Override
-    public int findWordbookCount(ServiceWordbookDO wordbook)
-    {
+    public int findWordbookCount(ServiceWordbookDO wordbook) {
         return wordBookService.findCount(wordbook);
     }
 
     @Override
-    public List<ServiceWordbookVO> findWordbookForListFromMap(Map<String, Object> map)
-    {
+    public List<ServiceWordbookVO> findWordbookForListFromMap(Map<String, Object> map) {
         return wordBookService.findForListFromMap(map);
     }
 
     @Override
-    public boolean addWordbookGroup(ServiceWordbookGroupDO wordbookGroup)
-    {
+    public boolean addWordbookGroup(ServiceWordbookGroupDO wordbookGroup) {
         serviceWordbookGroupService.add(wordbookGroup);
         return true;
     }
 
     @Override
-    public boolean updateWordbookGroup(ServiceWordbookGroupDO wordbookGroup)
-    {
+    public boolean updateWordbookGroup(ServiceWordbookGroupDO wordbookGroup) {
         serviceWordbookGroupService.update(wordbookGroup);
         return true;
     }
 
     @Override
-    public boolean delWordbookGroup(ServiceWordbookGroupDO wordbookGroup)
-    {
+    public boolean delWordbookGroup(ServiceWordbookGroupDO wordbookGroup) {
         serviceWordbookGroupService.delete(wordbookGroup);
         return true;
     }
 
     @Override
-    public int findWordbookGroupCount(ServiceWordbookGroupDO wordbookGroup)
-    {
+    public int findWordbookGroupCount(ServiceWordbookGroupDO wordbookGroup) {
         return serviceWordbookGroupService.findCount(wordbookGroup);
     }
 
     @Override
-    public List<ServiceWordbookGroupVO> findWordbookGroupForListFromMap(Map<String, Object> map)
-    {
+    public List<ServiceWordbookGroupVO> findWordbookGroupForListFromMap(Map<String, Object> map) {
         return serviceWordbookGroupService.findForListFromMap(map);
     }
 
     @Override
-    public ServiceWordbookVO getWordbookBean(ServiceWordbookDO wordbook)
-    {
+    public ServiceWordbookVO getWordbookBean(ServiceWordbookDO wordbook) {
         return wordBookService.selectById(wordbook.getWordbookId());
     }
 
     @Override
-    public ServiceWordbookGroupVO getWordbookGroupBean(ServiceWordbookGroupDO wordbookGroup)
-    {
+    public ServiceWordbookGroupVO getWordbookGroupBean(ServiceWordbookGroupDO wordbookGroup) {
         return serviceWordbookGroupService.findBean(wordbookGroup);
     }
 
     @Override
-    public boolean refreshRedisCache(ServiceWordbookDO wordbook)
-    {
+    public boolean refreshRedisCache(ServiceWordbookDO wordbook) {
         wordBookService.initWordBookDataCache(wordbook);
         return true;
     }

@@ -17,17 +17,16 @@ import java.util.Set;
 
 /**
  * 系统用户DAO
- * @author jianbo.qin
  *
+ * @author jianbo.qin
  */
 @Repository
 @MultiTenancyCheck
 @MapperDefinition(domainClass = UcenterMsUserDO.class)
-public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserDO>
-{
+public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserDO> {
     /**
      * 用户登录
-     * */
+     */
     @NotMultiTenancyCheck
     UcenterMsUserDO login(UcenterMsUserDO adminUser);
 
@@ -88,8 +87,8 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserDO>
     /**
      * 监测原始密码是否正确
      *
-     * @paramsysUserGroupcode
      * @return
+     * @paramsysUserGroupcode
      */
     @NotMultiTenancyCheck
     int validataPass(UcenterMsUserDO adminUser);
@@ -97,8 +96,8 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserDO>
     /**
      * 根据登录名获取用户数
      *
-     * @paramsysUserGroupcode
      * @return
+     * @paramsysUserGroupcode
      */
     @NotMultiTenancyCheck
     int getAdminUserCountByLoginName(UcenterMsUserDO adminUser);
@@ -106,8 +105,8 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserDO>
     /**
      * 修改用户密码
      *
-     * @paramsysUserGroupcode
      * @return
+     * @paramsysUserGroupcode
      */
     int updatePass(UcenterMsUserDO adminUser);
 
@@ -123,8 +122,8 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserDO>
     /**
      * 根据权限IDs获取权限对象
      *
-     * @paramadminUser
      * @return
+     * @paramadminUser
      */
     @NotMultiTenancyCheck
     List<SettMsMenuPermissionDO> searchUserButtonIds(Map<String, Object> map);
@@ -132,8 +131,8 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserDO>
     /**
      * 获取权限对象
      *
-     * @paramadminUser
      * @return
+     * @paramadminUser
      */
     @NotMultiTenancyCheck
     List<SettMsMenuDO> searchUserButtonAll(Map<String, Object> map);
@@ -159,8 +158,8 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserDO>
     /**
      * 根据用户名称获取菜单
      *
-     * @paramadminUser
      * @return
+     * @paramadminUser
      */
     @NotMultiTenancyCheck
     List<SettMsMenuDO> selectMenuByUname(Map<String, Object> paramMap);
@@ -237,6 +236,7 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserDO>
 
     /**
      * 根据admin有权限的菜单
+     *
      * @param user SysUser用户
      * @return 用户有权限的 菜单id
      */
@@ -245,6 +245,7 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserDO>
 
     /**
      * 根据userid获取user有权限的菜单
+     *
      * @param user 普通用户
      * @return 用户有权限的 菜单id
      */
@@ -253,6 +254,7 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserDO>
 
     /**
      * 根据条件查询用户数
+     *
      * @param paramMap 查询条件
      * @return 用户数
      */
@@ -261,6 +263,7 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserDO>
 
     /**
      * 根据用户ID获取用户权限URL
+     *
      * @param userId 用户ID
      * @return 用户权限URL列表
      */
@@ -269,6 +272,7 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserDO>
 
     /**
      * 查询所有权限URL
+     *
      * @return 用户权限URL列表
      */
     @NotMultiTenancyCheck
@@ -276,6 +280,7 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserDO>
 
     /**
      * 根据集团编码获取集团下所有的用户
+     *
      * @param groupCode 集团编码
      * @return 集团下所有的用户
      */

@@ -42,7 +42,7 @@ import java.util.*;
 @Primary
 @Service("ucenterMsUserService")
 @DataSource("base_business")
-@AutoTrans(namespace = BaseTransConstant.USER_INFO,fields ="userName" )
+@AutoTrans(namespace = BaseTransConstant.USER_INFO, fields = "userName")
 public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, UcenterMsUserDO> implements UcenterMsUserService, FeignSysUserApiService {
 
     private final int ADMIN = 1;
@@ -79,7 +79,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
 
     @Override
     public UcenterMsUserVO login(UcenterMsUserDO adminUser) {
-        return  d2v(sysUserMapper.login(adminUser));
+        return d2v(sysUserMapper.login(adminUser));
     }
 
     @Override
@@ -613,7 +613,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             String[] roleList = new String[roleVectorList.size()];
             roleVectorList.toArray(roleList);
             sysUser.setRoleList(roleList);
-            sysUser.setRoleIds(StringUtil.getStrForIn(roleVectorList,false));
+            sysUser.setRoleIds(StringUtil.getStrForIn(roleVectorList, false));
         } else {
             sysUser.setRoleList(new String[0]);
         }
@@ -706,12 +706,12 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
 
     @Override
     public HttpResult<UcenterMsUserVO> getSysUserByName(String userLoginName) {
-        return HttpResult.success(this.findBean(new UcenterMsUserVO().mk("userLoginName",userLoginName)));
+        return HttpResult.success(this.findBean(new UcenterMsUserVO().mk("userLoginName", userLoginName)));
     }
 
     @Override
     public HttpResult<List<String>> selectMenuByUname(String userLoginName) {
-        List<String> list = this.selectMenuByUname( this.findBean(new UcenterMsUserVO().mk("userLoginName",userLoginName)));
+        List<String> list = this.selectMenuByUname(this.findBean(new UcenterMsUserVO().mk("userLoginName", userLoginName)));
         return HttpResult.success(list);
     }
 
@@ -719,17 +719,17 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     public HttpResult<Pager<UcenterMsUserVO>> getSysUserList(SysUserForm sysUserForm) {
         UcenterMsUserVO sysUser = new UcenterMsUserVO();
         BeanUtils.copyProperties(sysUserForm, sysUser);
-        List<UcenterMsUserVO> sysUsersList = this.findForList(sysUser, sysUserForm.getPageStart()-1, sysUserForm.getPageSize());
-        if(sysUsersList.size() > 0) {
+        List<UcenterMsUserVO> sysUsersList = this.findForList(sysUser, sysUserForm.getPageStart() - 1, sysUserForm.getPageSize());
+        if (sysUsersList.size() > 0) {
             List<UcenterMsUserVO> sysUserVoList = new ArrayList<>();
             sysUsersList.forEach(sysUserForEach -> {
                 //正则表达式，替换手机号中间4位
-                sysUserForEach.setMobile(sysUserForEach.getMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
+                sysUserForEach.setMobile(sysUserForEach.getMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2"));
                 sysUserVoList.add(sysUserForEach);
             });
             int count = this.findCount(sysUser);
-            return count > 0 ? HttpResult.success(new Pager<>(count,sysUserVoList)) : HttpResult.success(new Pager<UcenterMsUserVO>(0, null));
-        }else {
+            return count > 0 ? HttpResult.success(new Pager<>(count, sysUserVoList)) : HttpResult.success(new Pager<UcenterMsUserVO>(0, null));
+        } else {
             return HttpResult.success(new Pager<UcenterMsUserVO>(0, null));
         }
     }

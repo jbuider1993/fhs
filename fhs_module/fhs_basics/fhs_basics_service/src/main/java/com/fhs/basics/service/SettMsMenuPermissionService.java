@@ -5,14 +5,14 @@ import com.fhs.basics.dox.SettMsMenuPermissionUrlRelaDO;
 import com.fhs.basics.vo.SettMsMenuPermissionUrlRelaVO;
 import com.fhs.basics.vo.SettMsMenuPermissionVO;
 import com.fhs.core.base.service.BaseService;
+
 import java.util.List;
 import java.util.Map;
 
 /**
  * 系统菜单和权限
  */
-public interface SettMsMenuPermissionService extends BaseService<SettMsMenuPermissionVO, SettMsMenuPermissionDO>
-{
+public interface SettMsMenuPermissionService extends BaseService<SettMsMenuPermissionVO, SettMsMenuPermissionDO> {
     /**
      * 根据按钮类型获取按钮集合
      *
@@ -22,7 +22,6 @@ public interface SettMsMenuPermissionService extends BaseService<SettMsMenuPermi
     List<Map<String, Object>> findMapListByType(Map<String, Object> map);
 
     /**
-     *
      * 一键添加增删改查菜单
      *
      * @param map
@@ -32,6 +31,7 @@ public interface SettMsMenuPermissionService extends BaseService<SettMsMenuPermi
 
     /**
      * 根据权限ID查询权限URL关联信息
+     *
      * @param sysMenuPermission 权限信息
      * @return SysMenuPermissionUrlRelaVO列表
      */
@@ -39,6 +39,7 @@ public interface SettMsMenuPermissionService extends BaseService<SettMsMenuPermi
 
     /**
      * 根据权限ID查询URL总数
+     *
      * @param sysMenuPermission 权限信息
      * @return URL总数
      */
@@ -46,6 +47,7 @@ public interface SettMsMenuPermissionService extends BaseService<SettMsMenuPermi
 
     /**
      * 添加权限URL
+     *
      * @param sysMenuPermissionUrlRela 权限URL关联信息
      * @return
      */
@@ -53,6 +55,7 @@ public interface SettMsMenuPermissionService extends BaseService<SettMsMenuPermi
 
     /**
      * 修改权限URL
+     *
      * @param sysMenuPermissionUrlRela 权限URL信息
      * @return
      */
@@ -60,6 +63,7 @@ public interface SettMsMenuPermissionService extends BaseService<SettMsMenuPermi
 
     /**
      * 删除权限URL
+     *
      * @param sysMenuPermissionUrlRela 权限URL信息
      * @return
      */

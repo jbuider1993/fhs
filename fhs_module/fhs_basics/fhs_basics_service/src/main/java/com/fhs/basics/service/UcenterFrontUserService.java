@@ -10,7 +10,7 @@ import com.fhs.core.base.service.BaseService;
  * @author jackwong
  * @since 2019-03-11 14:14:58
  */
-public interface UcenterFrontUserService extends BaseService<UcenterFrontUserVO, UcenterFrontUserDO>{
+public interface UcenterFrontUserService extends BaseService<UcenterFrontUserVO, UcenterFrontUserDO> {
 
     /**
      * 未知

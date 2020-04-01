@@ -141,7 +141,7 @@ public class ServiceWordBookServiceImpl extends BaseServiceImpl<ServiceWordbookV
     public HttpResult<List<ServiceWordbookVO>> getWordBookListByWordBookGroupCode(String wordBookGroupCode) {
         ServiceWordbookVO param = new ServiceWordbookVO();
         param.setWordbookGroupCode(wordBookGroupCode);
-        List<ServiceWordbookVO> wordbookList  = this.selectPage(param, Constant.PAGE_ALL,Constant.PAGE_ALL);
+        List<ServiceWordbookVO> wordbookList = this.selectPage(param, Constant.PAGE_ALL, Constant.PAGE_ALL);
         return HttpResult.success(wordbookList);
     }
 }

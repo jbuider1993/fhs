@@ -14,14 +14,13 @@ import java.util.Map;
 
 /**
  * 角色DAO
- * @author jianbo.qin
  *
+ * @author jianbo.qin
  */
 @Repository
 @MultiTenancyCheck
 @MapperDefinition(domainClass = UcenterMsRoleDO.class)
-public interface UcenterMsRoleMapper extends FhsBaseMapper<UcenterMsRoleDO>
-{
+public interface UcenterMsRoleMapper extends FhsBaseMapper<UcenterMsRoleDO> {
     /**
      * 添加角色的按钮信息
      *
@@ -73,13 +72,14 @@ public interface UcenterMsRoleMapper extends FhsBaseMapper<UcenterMsRoleDO>
     /**
      * 获取所有角色
      *
-     * @parammap
      * @return
+     * @parammap
      */
     public List<UcenterMsRoleDO> findForListAll();
 
     /**
      * 根据roleid查询用户关联表用户数
+     *
      * @param paramMap 查询条件
      * @return 关联用户数量
      */
@@ -88,6 +88,7 @@ public interface UcenterMsRoleMapper extends FhsBaseMapper<UcenterMsRoleDO>
 
     /**
      * 删除角色用户关联
+     *
      * @param adminRole
      */
     @NotMultiTenancyCheck

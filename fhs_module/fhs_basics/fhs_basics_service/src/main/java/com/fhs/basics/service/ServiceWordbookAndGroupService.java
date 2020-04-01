@@ -22,13 +22,12 @@ import java.util.Map;
 /**
  * 字典功能
  *
- * @author  nanshouxiao
- * @version  [版本号, 2015年12月22日]
- * @see  [相关类/方法]
- * @since  [产品/模块版本]
+ * @author nanshouxiao
+ * @version [版本号, 2015年12月22日]
+ * @see [相关类/方法]
+ * @since [产品/模块版本]
  */
-public interface ServiceWordbookAndGroupService
-{
+public interface ServiceWordbookAndGroupService {
 
     /**
      * 添加字典值

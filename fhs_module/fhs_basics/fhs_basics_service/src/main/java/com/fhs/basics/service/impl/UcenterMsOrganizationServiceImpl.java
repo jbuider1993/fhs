@@ -28,7 +28,7 @@ import java.util.Map;
  */
 @Service
 @DataSource("base_business")
-@AutoTrans(namespace = BaseTransConstant.ORG,fields = "name",useRedis = true,defaultAlias = "org")
+@AutoTrans(namespace = BaseTransConstant.ORG, fields = "name", useRedis = true, defaultAlias = "org")
 public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsOrganizationVO, UcenterMsOrganizationDO> implements UcenterMsOrganizationService {
 
     @Autowired
@@ -88,7 +88,6 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
     public List<TreeModelVO> getTreesData(Map<String, Object> map) {
         return mapper.getTreesData(map);
     }
-
 
 
     @Override

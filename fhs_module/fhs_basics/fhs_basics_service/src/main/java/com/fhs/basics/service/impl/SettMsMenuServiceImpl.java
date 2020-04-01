@@ -35,8 +35,8 @@ import java.util.*;
  */
 @Service
 @DataSource("base_business")
-@AutoDel(mainServiceSetts= {
-        @AutoDelSett(namespace="sett_ms_system",isChecker = true,field ="systemId",desc = "菜单")
+@AutoDel(mainServiceSetts = {
+        @AutoDelSett(namespace = "sett_ms_system", isChecker = true, field = "systemId", desc = "菜单")
 })
 public class SettMsMenuServiceImpl extends BaseServiceImpl<SettMsMenuVO, SettMsMenuDO> implements SettMsMenuService, FeignSysMenuApiService {
 

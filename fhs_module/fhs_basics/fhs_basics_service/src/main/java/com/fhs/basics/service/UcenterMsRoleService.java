@@ -13,8 +13,7 @@ import java.util.Map;
  * @Author: jackwong
  * @Date 2020-03-19
  */
-public interface UcenterMsRoleService extends BaseService<UcenterMsRoleVO, UcenterMsRoleDO>
-{
+public interface UcenterMsRoleService extends BaseService<UcenterMsRoleVO, UcenterMsRoleDO> {
     /**
      * 资源类型
      */
@@ -96,7 +95,8 @@ public interface UcenterMsRoleService extends BaseService<UcenterMsRoleVO, Ucent
     List<UcenterMsRoleVO> findRoleByGroupCode(Map<String, Object> map);
 
     /**
-     *  获取一个用户的所有角色
+     * 获取一个用户的所有角色
+     *
      * @param userId 用户id
      * @return 角色集合
      */
@@ -104,6 +104,7 @@ public interface UcenterMsRoleService extends BaseService<UcenterMsRoleVO, Ucent
 
     /**
      * 根据roleid查询用户关联表用户数
+     *
      * @param paramMap 查询条件
      * @return 关联用户数量
      */

@@ -12,12 +12,12 @@ import java.util.Map;
 
 /**
  * 菜单DAO
+ *
  * @author jianbo.qin
  */
 @Repository
 @MapperDefinition(domainClass = SettMsMenuDO.class)
-public interface SettMsMenuMapper extends FhsBaseMapper<SettMsMenuDO>
-{
+public interface SettMsMenuMapper extends FhsBaseMapper<SettMsMenuDO> {
     /**
      * 根据父Id获取树集合
      *
@@ -35,6 +35,7 @@ public interface SettMsMenuMapper extends FhsBaseMapper<SettMsMenuDO>
 
     /**
      * 根据MenuType查询菜单集合
+     *
      * @param paramMap
      * @return
      */

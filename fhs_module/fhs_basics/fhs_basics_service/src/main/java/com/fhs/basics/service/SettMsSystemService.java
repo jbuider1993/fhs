@@ -9,9 +9,9 @@ import com.fhs.core.base.service.BaseService;
 import java.util.List;
 
 /**
- * @Description:
- * @author  qixiaobo
+ * @author qixiaobo
  * @version [版本号, 2018-09-26]
+ * @Description:
  * @versio 1.0 陕西小伙伴网络科技有限公司  Copyright (c) 2018 All Rights Reserved.
  */
 public interface SettMsSystemService extends BaseService<SettMsSystemVO, SettMsSystemDO> {
@@ -23,12 +23,14 @@ public interface SettMsSystemService extends BaseService<SettMsSystemVO, SettMsS
 
     /**
      * 获取全部商户的combbox
+     *
      * @return
      */
     List<ComboboxNodeVO> getSystemComBoxData();
 
     /**
      * 查询当前登录用户拥有权限的子系统列表
+     *
      * @param sysUser 登录用户
      * @return 子系统列表
      */

@@ -24,53 +24,19 @@ import java.util.Map;
  */
 @Service
 @DataSource("base_business")
-public class ServiceWordbookGroupServiceImpl extends BaseServiceImpl<ServiceWordbookGroupVO, ServiceWordbookGroupDO> implements ServiceWordbookGroupService
-{
+public class ServiceWordbookGroupServiceImpl extends BaseServiceImpl<ServiceWordbookGroupVO, ServiceWordbookGroupDO> implements ServiceWordbookGroupService {
 
-    @Autowired
-    private ServiceWordbookGroupMapper mapper;
 
     @Autowired
     private ServiceWordbookMapper wordbookMapper;
 
     @Override
-    public int add(ServiceWordbookGroupDO bean)
-    {
-        return mapper.insertJpa(bean);
-    }
-
-    @Override
-    public boolean update(ServiceWordbookGroupDO bean)
-    {
-        return mapper.updateByIdJpa(bean) > 0;
-    }
-
-    @Override
-    public boolean delete(ServiceWordbookGroupDO bean)
-    {
-        int result = mapper.deleteBean(bean);
+    public boolean delete(ServiceWordbookGroupDO bean) {
+        int result = super.deleteBean(bean);
         ServiceWordbookDO deleteParam = new ServiceWordbookDO();
         deleteParam.setWordbookGroupCode(bean.getWordbookGroupCode());
         wordbookMapper.deleteBean(deleteParam);
         return result > 0;
 
-    }
-
-    @Override
-    public int findCount(ServiceWordbookGroupDO bean)
-    {
-        return (int)mapper.selectCountJpa(bean);
-    }
-
-    @Override
-    public List<ServiceWordbookGroupVO> findForListFromMap(Map<String, Object> map)
-    {
-        return dos2vos(mapper.findForListFromMap(map));
-    }
-
-    @Override
-    public ServiceWordbookGroupVO findBean(ServiceWordbookGroupDO bean)
-    {
-        return d2v(mapper.selectBean(bean));
     }
 }

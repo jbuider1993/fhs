@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 /**
  * <p>
- *  系统模块DAO
+ * 系统模块DAO
  * </p>
  *
  * @author jianbo.qin
