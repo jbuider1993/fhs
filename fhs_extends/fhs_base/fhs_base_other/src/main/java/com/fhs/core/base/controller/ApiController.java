@@ -7,6 +7,7 @@ import com.fhs.common.utils.ReflectUtils;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.valid.checker.ParamChecker;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,10 @@ import java.lang.reflect.Method;
 @Slf4j
 public class ApiController {
 
+
+    @Value("${fhs.api.password:fhs-framework}")
+    private String apiToken;
+
     /**
      * 执行RPC方法
      *
@@ -41,6 +46,9 @@ public class ApiController {
     public void doExec(@PathVariable() String serviceClass,@PathVariable() String methodName, HttpServletRequest request, HttpServletResponse response) {
         ParamChecker.isNotNullOrEmpty(serviceClass, "serviceClass 不可为空");
         ParamChecker.isNotNullOrEmpty(methodName, "methodName 不可为空");
+        if(!this.apiToken.equals(request.getHeader("apiToken"))){
+            throw new ParamException("token不正确,非法调用");
+        }
         try {
             Class clazz = Class.forName(serviceClass);
             if (!clazz.isAnnotationPresent(FeignClient.class)) {
