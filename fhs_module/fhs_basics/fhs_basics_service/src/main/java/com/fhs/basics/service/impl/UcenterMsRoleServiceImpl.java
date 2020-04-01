@@ -234,7 +234,7 @@ public class UcenterMsRoleServiceImpl extends BaseServiceImpl<UcenterMsRoleVO, U
         if (CheckUtils.isNullOrEmpty(id)) {
             return HttpResult.error(null, "角色ID不可为空");
         }
-        UcenterMsRoleVO sysRole = this.findBeanById(id);
+        UcenterMsRoleVO sysRole = this.selectById(id);
         Map<String, Object> map = new HashMap<>();
         map.put("roleId", sysRole.getRoleId());
         map.put("roleName", sysRole.getRoleName());

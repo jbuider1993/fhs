@@ -74,7 +74,7 @@ public interface UcenterMsUserMapper extends FhsBaseMapper<UcenterMsUserDO>
      * @return
      */
     @NotMultiTenancyCheck
-    SettMsMenuDO selectParentMenuByid(Map<String, Object> map);
+    SettMsMenuDO selectParentMenuById(Map<String, Object> map);
 
     /**
      * 根据Ids查询菜单

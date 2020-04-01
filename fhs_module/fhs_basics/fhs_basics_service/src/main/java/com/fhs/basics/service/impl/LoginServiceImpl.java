@@ -80,7 +80,7 @@ public class LoginServiceImpl implements LoginService {
      * @return accesstoken
      */
     public String login(String userId) {
-        UcenterFrontUserVO user = userService.findBeanById(userId);
+        UcenterFrontUserVO user = userService.selectById(userId);
         if (CheckUtils.isNullOrEmpty(userId)) {
             throw new ParamException("用户id不能为空");
         }
@@ -110,11 +110,11 @@ public class LoginServiceImpl implements LoginService {
     public String addBindAndUser(UcenterFrontUserDO user, String openId, int openIdType) {
         user.setUserId(StringUtil.getUUID());
         user.preInsert(null);
-        userService.insertJpa(user);
+        userService.insertSelective(user);
         UcenterFrontUserBindDO bind = UcenterFrontUserBindDO.builder().id(StringUtil.getUUID()).authOpenid(openId)
                 .authOpenidType(openIdType).userId(user.getUserId()).build();
         bind.preInsert(null);
-        userBindService.insertJpa(bind);
+        userBindService.insertSelective(bind);
         return user.getUserId();
     }
 

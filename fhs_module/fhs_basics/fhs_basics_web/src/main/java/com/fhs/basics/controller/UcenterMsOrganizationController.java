@@ -78,7 +78,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
     @Override
     @LogDesc(type = LogDesc.UPDATE, value = "更新")
     public HttpResult<Boolean> update(UcenterMsOrganizationVO e, BindingResult check, HttpServletRequest request, HttpServletResponse response) {
-        UcenterMsOrganizationVO oldOrg = sysOrganizationService.findBeanById(e.getId());
+        UcenterMsOrganizationVO oldOrg = sysOrganizationService.selectById(e.getId());
         // 如果是启用改为禁用
         if (Constant.ENABLED == oldOrg.getIsEnable() && Constant.DISABLE == e.getIsEnable()) {
             Map<String, Object> paramMap = new HashMap<>();
@@ -138,7 +138,7 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
     public HttpResult insertOrganization(HttpServletRequest request, HttpServletResponse response,
                                          UcenterMsOrganizationVO sysOrganization) {
         if (!CheckUtils.isNullOrEmpty(sysOrganization.getParentId())) {
-            UcenterMsOrganizationVO sysOrganizationQuery = sysOrganizationService.findBeanById(sysOrganization.getParentId());
+            UcenterMsOrganizationVO sysOrganizationQuery = sysOrganizationService.selectById(sysOrganization.getParentId());
             if (!CheckUtils.isNullOrEmpty(sysOrganizationQuery) && Constant.ENABLED != sysOrganizationQuery.getIsEnable()) {
                 return HttpResult.error(sysOrganizationQuery, "父机构处于禁用状态，不能添加子机构");
             }

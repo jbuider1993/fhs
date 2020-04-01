@@ -93,7 +93,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      * @param map
      * @return
      */
-    public SettMsMenuVO selectParentMenuByid(Map<String, Object> map);
+    public SettMsMenuVO selectParentMenuById(Map<String, Object> map);
 
     /**
      * 更加用户构建菜单数据
@@ -195,12 +195,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      */
     List<LeftMenuVO> getMenu(UcenterMsUserDO user, String menuType);
 
-    /**
-     * @desc 根据用户id获取用户信息
-     * @param userId 用户id
-     * @return 用户信息
-     */
-    UcenterMsUserVO findSysUserById(String userId);
+
 
     /**
      * 删除用户

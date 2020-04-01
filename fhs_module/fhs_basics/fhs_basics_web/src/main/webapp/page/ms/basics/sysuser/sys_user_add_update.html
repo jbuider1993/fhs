@@ -98,7 +98,7 @@ layout("/page/tags/add_update_tag.html",{'nameSpace':'sysUser','idField':'userId
 
     //重新加载角色列表
     function  reloadRoles(_orgId) {
-        $("#rroleIds_select").combobox({
+        $("#roleIds_select").combobox({
             url: '${basePath}ms/sysRole/getSelectOrganSysRoles/' + _orgId + '?isAdd=${parameter.isAdd}'
         });
 
@@ -111,6 +111,6 @@ layout("/page/tags/add_update_tag.html",{'nameSpace':'sysUser','idField':'userId
 		}
 		reloadRoles(info.organizationId);
         $('#userNameShow').val($('#userName').val());
-		url_save =  "${basePath}ms/sysUser/updateUser";
+		url_save =  "${basePath}ms/sysUser/updateUser?userId=${parameter.id}";
     }
 </script>

@@ -314,7 +314,7 @@
 
 
     <!-- 通过父节点编号查询菜单 -->
-    <select id="selectParentMenuByid" resultType="com.fhs.basics.dox.SettMsMenuDO"
+    <select id="selectParentMenuById" resultType="com.fhs.basics.dox.SettMsMenuDO"
             parameterType="map">
         SELECT m.menu_name as menuName,
         m.menu_id as menuId,

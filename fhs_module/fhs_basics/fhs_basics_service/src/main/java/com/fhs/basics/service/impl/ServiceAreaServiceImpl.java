@@ -42,15 +42,15 @@ public class ServiceAreaServiceImpl extends BaseServiceImpl<ServiceAreaVO, Servi
         String address = null;
         String provinceId = (String) map.get("provinceId");
         if (!CheckUtils.isNullOrEmpty(provinceId)) {
-            address = super.findBeanById(provinceId).getAreaName();
+            address = super.selectById(provinceId).getAreaName();
         }
         String cityId = (String) map.get("cityId");
         if (!CheckUtils.isNullOrEmpty(cityId)) {
-            address = address + super.findBeanById(cityId).getAreaName();
+            address = address + super.selectById(cityId).getAreaName();
         }
         String areaId = (String) map.get("areaId");
         if (!CheckUtils.isNullOrEmpty(areaId)) {
-            address = address + super.findBeanById(areaId).getAreaName();
+            address = address + super.selectById(areaId).getAreaName();
         }
         return address;
     }

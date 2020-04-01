@@ -121,7 +121,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         int count = 0;
         if (StringUtil.isEmpty(adminUser.getUserId())) { //新增
             adminUser.setUserId(StringUtil.getUUID());
-            count = this.insertJpa(adminUser);
+            count = this.insertSelective(adminUser);
         } else {//修改
             count = super.updateSelectiveById(adminUser);
         }
@@ -149,15 +149,13 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         boolean count = deleteUserRole(adminUser);
         if (count) {
             // 修改用户信息
-            boolean bean = super.updateSelectiveById(adminUser) > 0;
-            if (bean) {
-                if (adminUser.getRoleList().length > 0) {
-                    // 插入新的用户角色
-                    int count1 = addUserRole(adminUser);
-                    return count1 > 0;
-                } else {
-                    return true;
-                }
+            super.updateSelectiveById(adminUser);
+            if (adminUser.getRoleList().length > 0) {
+                // 插入新的用户角色
+                int count1 = addUserRole(adminUser);
+                return count1 > 0;
+            } else {
+                return true;
             }
         }
         return false;
@@ -315,7 +313,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     private JSONObject searchMenuByParentId(Integer parentId, JSONArray child, MyMap<String, JSONObject> parenmap) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("fatherMenuId", parentId);
-        SettMsMenuVO parentmenu = selectParentMenuByid(map);
+        SettMsMenuVO parentmenu = selectParentMenuById(map);
         if (parentmenu != null && parentmenu.getMenuId() != 0) {
             JSONObject menujson = parenmap.get(parentId.toString());
             JSONArray array = new JSONArray();
@@ -347,9 +345,9 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
      * 获取根据子菜单获取父菜单
      */
     @Override
-    public SettMsMenuVO selectParentMenuByid(Map<String, Object> map) {
+    public SettMsMenuVO selectParentMenuById(Map<String, Object> map) {
         SettMsMenuVO result = new SettMsMenuVO();
-        BeanUtils.copyProperties(sysUserMapper.selectParentMenuByid(map), result);
+        BeanUtils.copyProperties(sysUserMapper.selectParentMenuById(map), result);
         return result;
     }
 
@@ -601,9 +599,9 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
      * @desc 根据用户id获取用户信息
      */
     @Override
-    public UcenterMsUserVO findSysUserById(String userId) {
+    public UcenterMsUserVO selectById(Object userId) {
         //根据id获取用户信息
-        UcenterMsUserVO sysUser = this.findBeanById(userId);
+        UcenterMsUserVO sysUser = super.selectById(userId);
         //根据用户id获取当前用户的角色
         List<Map<String, Object>> sysUserRoleList = this.searchUserRole(sysUser);
         if (sysUserRoleList.size() > 0) {
@@ -615,6 +613,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             String[] roleList = new String[roleVectorList.size()];
             roleVectorList.toArray(roleList);
             sysUser.setRoleList(roleList);
+            sysUser.setRoleIds(StringUtil.getStrForIn(roleVectorList,false));
         } else {
             sysUser.setRoleList(new String[0]);
         }
@@ -737,7 +736,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
 
     @Override
     public HttpResult<List<String>> getPermissionUrlByUserIdFeign(String userId) {
-        UcenterMsUserVO sysUser = this.findBeanById(userId);
+        UcenterMsUserVO sysUser = this.selectById(userId);
         if (sysUser == null) {
             return HttpResult.error(null, "没有此用户");
         } else {

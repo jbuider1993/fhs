@@ -216,11 +216,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         return d2v(baseMapper.selectBean(bean));
     }
 
-    @Override
-    public V findBeanById(Object id) {
-        D dox = baseMapper.selectByIdJpa(id);
-        return d2v(dox);
-    }
+
 
     @Override
     public int updateBatch(List<Map<String, Object>> list) {
@@ -296,18 +292,6 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         return ConverterUtils.toString(ReflectUtils.getValue(entity, JpaTools.persistentMetaMap.get(entity.getClass().getName()).getPrimaryColumnMeta().getProperty()));
     }
 
-    @Override
-    public int insertJpa(D entity) {
-        int result = baseMapper.insertSelective(entity);
-        this.refreshCache();
-        return result;
-    }
-
-
-    @Override
-    public int insert(D entity) {
-        return baseMapper.insertSelective(entity);
-    }
 
 
     @Override
@@ -329,12 +313,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         return result;
     }
 
-    @Override
-    public int updateById(D entity) {
-        updateCache(entity);
-        this.refreshCache();
-        return baseMapper.updateByIdJpa(entity);
-    }
+
 
     @Override
     public int updateSelectiveById(D entity) {

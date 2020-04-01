@@ -65,7 +65,7 @@ public class BinaryUploader
                 serviceFile.setFileSuffix(suffix);
                 serviceFile.setFileId(fileId);
                 serviceFile.setUploadDate (currentDate);
-                service.insert (serviceFile);
+                service.insertSelective (serviceFile);
 
             }
 

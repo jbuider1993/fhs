@@ -51,7 +51,7 @@ public class UcenterMsOrganizationServiceImpl extends BaseServiceImpl<UcenterMsO
         String id = parentId + StringUtil.formatCountWith0("", "%03d", ranking);
         adminOrganization.setRanking(ranking + "");
         adminOrganization.setId(id);
-        int isAdd = super.insert(adminOrganization);
+        int isAdd = super.insertSelective(adminOrganization);
         if (isAdd >= 1) {
             return true;
         } else {

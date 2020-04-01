@@ -60,6 +60,6 @@ public class FileServerBusinessImpl implements FileServerBusiness {
      * @return
      */
     private boolean insertDataToDB(PubFileDO sf) {
-        return (fileService.insert(sf) > 0);
+        return (fileService.insertSelective(sf) > 0);
     }
 }

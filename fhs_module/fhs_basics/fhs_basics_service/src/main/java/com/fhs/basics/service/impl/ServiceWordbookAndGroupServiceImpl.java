@@ -36,7 +36,7 @@ public class ServiceWordbookAndGroupServiceImpl implements ServiceWordbookAndGro
     @Override
     public boolean addWordbook(ServiceWordbookDO wordbook)
     {
-        wordBookService.insertJpa(wordbook);
+        wordBookService.insertSelective(wordbook);
         this.refreshRedisCache(wordbook);
         return true;
     }
@@ -44,7 +44,7 @@ public class ServiceWordbookAndGroupServiceImpl implements ServiceWordbookAndGro
     @Override
     public boolean updateWordbook(ServiceWordbookDO wordbook)
     {
-        wordBookService.updateById(wordbook);
+        wordBookService.updateSelectiveById(wordbook);
         this.refreshRedisCache(wordbook);
         return true;
     }

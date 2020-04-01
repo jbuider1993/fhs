@@ -256,7 +256,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
     public V info(@PathVariable("id") String id, HttpServletRequest request)
             throws Exception {
         if (isPermitted(request, "see")) {
-            V bean = baseService.findBeanById(id);
+            V bean = baseService.selectById(id);
             return bean;
         } else {
             throw new NotPremissionException();
@@ -312,7 +312,7 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
                     }
                     baseDo.preInsert(getSessionuser().getUserId());
                 }
-                baseService.insert((D) e);
+                baseService.insertSelective((D) e);
                 return HttpResult.success(true);
             }
             return HttpResult.error(null, JsonUtils.list2json(check.getAllErrors()));

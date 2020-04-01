@@ -151,13 +151,7 @@ public interface BaseService<V extends VO,D extends BaseDO> extends AutoTransAbl
      */
     V findBean(D bean);
 
-    /**
-     * 查询一条数据 返回object
-     *
-     * @param id id
-     * @return
-     */
-    V findBeanById(Object id);
+
 
     /**
      * 批处理更新数据
@@ -183,22 +177,6 @@ public interface BaseService<V extends VO,D extends BaseDO> extends AutoTransAbl
      */
     int insertSelective(D entity);
 
-    /**
-     * insert -- jpa方法
-     *
-     * @param entity do
-     * @return 受影响的行数
-     */
-    int insertJpa(D entity);
-
-    /**
-     * 插入 -- jpa方法
-     *
-     * @param entity
-     * @return int 受影响的行数
-     * @since 1.0.0
-     */
-    int insert(D entity);
 
     /**
      * 批量插入 -- jpa方法
@@ -218,14 +196,7 @@ public interface BaseService<V extends VO,D extends BaseDO> extends AutoTransAbl
      */
     int deleteById(Object primaryValue);
 
-    /**
-     * 根据id更新 -- jpa方法
-     *
-     * @param entity 待更新数据
-     * @return 受影响行数
-     * @since 1.0.0
-     */
-    int updateById(D entity);
+
 
     /**
      * 根据id跟新 -- 判空  -- jpa方法

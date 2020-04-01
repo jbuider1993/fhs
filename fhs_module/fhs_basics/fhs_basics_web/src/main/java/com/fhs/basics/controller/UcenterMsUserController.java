@@ -101,21 +101,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         super.outWrite(isSuccess);
     }
 
-    /**
-     * 根据Id删除用户
-     *
-     * @param request
-     * @param response
-     * @param sysUser
-     */
-    @RequiresPermissions("sysUser:del")
-    @RequestMapping("delUser")
-    @LogDesc(type = LogDesc.DEL, value = "删除后台用户")
-    public HttpResult<Boolean> delUser(HttpServletRequest request, HttpServletResponse response,
-                                       @Validated({Delete.class}) UcenterMsUserVO sysUser) {
-        sysUserService.delete(sysUser);
-        return HttpResult.success(true);
-    }
+
 
     /**
      * @param id
@@ -127,7 +113,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @RequestMapping("/delSysUser")
     @LogDesc(value = "删除", type = LogDesc.DEL)
     public HttpResult<Boolean> delSysUser(@RequestParam("id") String id, HttpServletRequest request) {
-        UcenterMsUserVO sysUser = sysUserService.findBeanById(id);
+        UcenterMsUserVO sysUser = sysUserService.selectById(id);
         if (sysUser.getIsAdmin() == sysUserService.SYS_USER_IS_ADMIN) {
             throw new ParamException("超级用户不可删除");
         }
@@ -157,33 +143,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         return HttpResult.success(Boolean.TRUE);
     }
 
-    /**
-     * 插入用户角色关系表
-     *
-     * @param request
-     * @param response
-     * @param sysUser
-     */
-    @RequiresPermissions("sysUser:add")
-    @RequestMapping("addUserRole")
-    @ResponseBody
-    public HttpResult<Boolean> addUserRole(HttpServletRequest request, HttpServletResponse response, UcenterMsUserVO sysUser) {
-        sysUserService.addUserRole(sysUser);
-        return HttpResult.success(true);
-    }
 
-    /**
-     * 查询用户角色
-     *
-     * @param request
-     * @param response
-     * @param sysUser
-     */
-    @RequiresPermissions("sysUser:see")
-    @RequestMapping("searchUserRole")
-    public List<Map<String, Object>> searchUserRole(HttpServletRequest request, HttpServletResponse response, UcenterMsUserVO sysUser) {
-        return sysUserService.searchUserRole(sysUser);
-    }
 
     /**
      * 根据用户查询菜单
@@ -251,34 +211,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
 
     }
 
-    /**
-     * 校验登录名是否存在
-     *
-     * @param request
-     * @param response
-     * @param sysUser
-     */
-    @RequestMapping("validataLoginName")
-    public void validataLoginName(HttpServletRequest request, HttpServletResponse response, UcenterMsUserVO sysUser) {
-        String param = request.getParameter("param");
-        String isEdit = request.getParameter("isEdit");
-        if ("true".equals(isEdit)) {
-            super.outWrite("y");
-            return;
-        }
 
-        if (StringUtil.validtIsChinese(param)) {
-            super.outWrite("用户登录名不能包含中文");
-        }
-        sysUser.setUserLoginName(param);
-        boolean isSuccess = sysUserService.validataLoginName(sysUser);
-        if (isSuccess) {
-            super.outWrite("y");
-        } else {
-            super.outWrite("登录名已存在");
-        }
-
-    }
 
 
     /**
@@ -298,21 +231,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         return new Pager<UcenterMsUserVO>(count, dataList);
     }
 
-    /**
-     * 根据ID集合查询对象数据
-     *
-     * @param id id
-     * @throws Exception
-     */
-    @Override
-    @RequiresPermissions("sysUser:see")
-    @RequestMapping("info/{id}")
-    @ResponseBody
-    public UcenterMsUserVO info(@PathVariable(value = "id", required = true) String id, HttpServletRequest request) throws Exception {
-        //根据用户id用户信息
-        UcenterMsUserVO user = sysUserService.findSysUserById(id);
-        return user;
-    }
+
 
     /**
      * 获取自己的个人信息
@@ -323,7 +242,7 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @RequestMapping("getOwnUserInfo")
     @ResponseBody
     public UcenterMsUserVO getOwnUserInfo(HttpServletRequest request) {
-        return sysUserService.findSysUserById(super.getSessionuser().getUserId());
+        return sysUserService.selectById(super.getSessionuser().getUserId());
     }
 
 }

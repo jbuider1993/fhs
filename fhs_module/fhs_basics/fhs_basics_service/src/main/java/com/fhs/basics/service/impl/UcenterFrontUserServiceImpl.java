@@ -73,7 +73,7 @@ public class UcenterFrontUserServiceImpl extends BaseServiceImpl<UcenterFrontUse
 
     @Override
     public HttpResult<Boolean> add(UcenterFrontUserVO frontUserVo) {
-        return HttpResult.success(this.insertJpa(frontUserVo) > 0);
+        return HttpResult.success(this.insertSelective(frontUserVo) > 0);
     }
 
     @Override

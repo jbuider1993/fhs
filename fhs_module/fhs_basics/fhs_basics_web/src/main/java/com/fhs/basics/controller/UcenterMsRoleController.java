@@ -127,7 +127,7 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
     @RequestMapping("updateSysRole")
     @RequiresPermissions("sysRole:update")
     public HttpResult<Boolean> updateSysRole(HttpServletRequest request, HttpServletResponse response, UcenterMsRoleVO sysRole) {
-        UcenterMsRoleVO oldRole = sysRoleService.findBeanById(sysRole.getRoleId());
+        UcenterMsRoleVO oldRole = sysRoleService.selectById(sysRole.getRoleId());
         if (Constant.ENABLED == oldRole.getIsEnable() && Constant.DISABLE == sysRole.getIsEnable()) {
             // 根据roleid查询用户关联表用户数
             Map<String, Object> paramMap = new HashMap<>();

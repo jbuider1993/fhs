@@ -75,7 +75,7 @@ public class OrderNumberApiServiceController implements FeignOrderNumberApiServi
             serviceOrderLog.setType(type);
             serviceOrderLog.setTime(date);
             serviceOrderLog.setNumber(1);
-            orderNumberService.insertJpa(serviceOrderLog);
+            orderNumberService.insertSelective(serviceOrderLog);
         }
         Integer orderIndex = serviceOrderLog.getNumber();
         int minOrderIndex = orderIndex;
