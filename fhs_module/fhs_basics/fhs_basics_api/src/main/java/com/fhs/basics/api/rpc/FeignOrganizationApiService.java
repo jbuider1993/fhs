@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * 机构管理rest接口
  */
-@FeignClient(value = "system", configuration= FeignConfiguration.class,primary = false)
+@FeignClient(value = "basics", configuration= FeignConfiguration.class,primary = false)
 public interface FeignOrganizationApiService {
 
     /**

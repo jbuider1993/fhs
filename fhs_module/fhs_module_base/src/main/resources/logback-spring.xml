@@ -176,7 +176,7 @@
 
     <logger name="jdbc.connection" level="ERROR" />
     <logger name="com.baomidou.mybatisplus.MybatisConfiguration" level="ERROR" />
-
+    <logger name="com.baomidou.mybatisplus.core.toolkit.TableInfoHelper" level="ERROR" />
     <logger name="org.springframework.aop" level="DEBUG" />
     <logger name="org.springframework.jdbc" level="DEBUG" />
     <logger name="org.apache.zookeeper" level="ERROR"/>

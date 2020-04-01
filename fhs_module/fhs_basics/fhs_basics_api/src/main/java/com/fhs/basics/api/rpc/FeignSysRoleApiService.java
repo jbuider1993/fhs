@@ -19,7 +19,7 @@ import org.springframework.cloud.openfeign.FeignClient;
  * Copyright (c) 2017 All Rights Reserved.
  *
  */
-@FeignClient(value = "system", configuration= FeignConfiguration.class,primary = false)
+@FeignClient(value = "basics", configuration= FeignConfiguration.class,primary = false)
 public interface FeignSysRoleApiService {
 
 

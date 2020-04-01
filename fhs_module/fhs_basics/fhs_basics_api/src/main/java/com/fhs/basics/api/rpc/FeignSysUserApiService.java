@@ -27,7 +27,7 @@ import java.util.Map;
  *
  */
 
-@FeignClient(value = "system", configuration= FeignConfiguration.class,primary = false)
+@FeignClient(value = "basics", configuration= FeignConfiguration.class,primary = false)
 public interface FeignSysUserApiService {
 
     /**

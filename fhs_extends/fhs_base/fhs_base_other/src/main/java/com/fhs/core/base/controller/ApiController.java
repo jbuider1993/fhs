@@ -38,7 +38,7 @@ public class ApiController {
      * @param response     res
      */
     @RequestMapping("/api/{serviceClass}/{methodName}")
-    public void doExec(@PathVariable() String serviceClass, String methodName, HttpServletRequest request, HttpServletResponse response) {
+    public void doExec(@PathVariable() String serviceClass,@PathVariable() String methodName, HttpServletRequest request, HttpServletResponse response) {
         ParamChecker.isNotNullOrEmpty(serviceClass, "serviceClass 不可为空");
         ParamChecker.isNotNullOrEmpty(methodName, "methodName 不可为空");
         try {

@@ -1,13 +1,13 @@
 ###################  项目启动端口  ###################
 server:
-  port: 8082
+  port: 8083
   context-path: /
   tomcat:
     uri-encoding: UTF-8
 # 该配置节点为独立的节点，有很多同学容易将这个配置放在spring的节点下，导致配置无法被识别
 mybatis-plus:
   mapper-locations: classpath*:mapper/*/*.xml
-  type-aliases-package: com.fhs.basics.dox;
+  type-aliases-package: com.fhs.pub.dox;
 eureka:
   instance:
     hostname: eureka.fhs.xhb.com
@@ -34,7 +34,7 @@ fhs:
     #是否开启cas默认关闭
     enable-cas: true
     cas:
-      client-base-path: http://localhost:8082/ #当前项目的访问路径
+      client-base-path: http://localhost:8083/ #当前项目的访问路径
       server-url: http://114.115.211.214/cas # cas地址
   mybatis-jpa:
     #多个用;分隔
@@ -66,7 +66,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
   application:
-    name: basics
+    name: pub
   http:
     encoding:
       force: true

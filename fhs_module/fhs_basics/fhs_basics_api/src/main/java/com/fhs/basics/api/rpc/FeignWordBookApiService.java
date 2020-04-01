@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * 字典公共服务
  */
-@FeignClient(value = "system", configuration = FeignConfiguration.class,primary = false)
+@FeignClient(value = "basics", configuration = FeignConfiguration.class,primary = false)
 public interface FeignWordBookApiService {
 
     /**
@@ -21,6 +21,6 @@ public interface FeignWordBookApiService {
      * @param wordBookGroupCode 字典编码
      * @return HttpResult 角色数据权限
      */
-    @RequestLine("GET /api/FeignWordBookApiService/getWordBookListByWordBookGroupCode?wordBookGroupCode={wordBookGroupCode}")
+    @RequestLine("GET /api/com.fhs.basics.api.rpc.FeignWordBookApiService/getWordBookListByWordBookGroupCode?wordBookGroupCode={wordBookGroupCode}")
     HttpResult<List<ServiceWordbookVO>> getWordBookListByWordBookGroupCode(@Param("wordBookGroupCode") String wordBookGroupCode);
 }
