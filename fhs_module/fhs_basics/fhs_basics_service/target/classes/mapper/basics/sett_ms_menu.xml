@@ -8,7 +8,7 @@
 		m.menu_name AS NAME,
 		m.father_menu_id AS parentid
 		FROM
-		t_ucenter_ms_menu m
+		t_sett_ms_menu m
 	</sql>
 	<!-- 获取菜单的更目录节点数据 -->
 	<select id="findMenuRootTrees" resultType="com.fhs.basics.vo.TreeDataVO">
@@ -18,7 +18,7 @@
 		<!-- 根据menuType查询菜单 -->
 	<select id="findMenuTreesByMenuType" resultType="com.fhs.basics.vo.TreeDataVO" parameterType="map">
 		select  id,name,1 as parentid  from
-		t_ucenter_ms_system
+		t_sett_ms_system
 		<where>
 			<if test="systemIds != null and systemIds != ''">
 				AND id IN(${systemIds})
@@ -30,7 +30,7 @@
 		m.menu_name AS NAME,
 		case when m.father_menu_id=1 then system_id else m.father_menu_id end  AS parentid
 		FROM
-		t_ucenter_ms_menu m
+		t_sett_ms_menu m
 		WHERE m.is_enable =1 and m.menu_id!=1
 		<if test="systemIds != null and systemIds != ''">
 			AND m.system_id IN(${systemIds})
@@ -89,7 +89,7 @@
 		image,
 		'd' AS
 		nodeType
-		FROM `t_ucenter_ms_menu` t
+		FROM `t_sett_ms_menu` t
 		<where>
 			<if test="menuType!=null and menuType!='' ">
 				AND t.menu_type LIKE CONCAT('%',#{menuType},'%')
@@ -121,7 +121,7 @@
 		namespace,
 		check_help_url AS checkHelpUrl,
 		system_id AS systemId
-		FROM t_ucenter_ms_menu
+		FROM t_sett_ms_menu
 		<where>
 			<if test="menuType!=null">
 				AND menu_type LIKE CONCAT('%',#{menuType},'%')
@@ -146,9 +146,9 @@
 		m.menu_url AS menuUrl ,
 		m.father_menu_id AS fatherMenuId
 		FROM
-		t_ucenter_ms_menu m
+		t_sett_ms_menu m
 		LEFT JOIN
-		t_ucenter_ms_menu_permission b ON b.menu_id = m.menu_id
+		t_sett_ms_menu_permission b ON b.menu_id = m.menu_id
 		WHERE
 		m.`namespace` IS NOT NULL
 		AND m.`namespace` !=''
@@ -168,12 +168,12 @@
 		server_name AS
 		serverName,
 		server_url AS serverUrl
-		FROM t_ucenter_ms_menu_server
+		FROM t_sett_ms_menu_server
 	</select>
 
 	<!-- 添加菜单信息 -->
 	<insert id="add" parameterType="com.fhs.basics.dox.SettMsMenuDO">
-		INSERT INTO `t_ucenter_ms_menu`
+		INSERT INTO `t_sett_ms_menu`
 		(
 		menu_name,
 		father_menu_id,
@@ -206,21 +206,21 @@
 
 	<!-- 删除菜单信息 -->
 	<delete id="delete" parameterType="com.fhs.basics.dox.SettMsMenuDO">
-		DELETE FROM t_ucenter_ms_menu WHERE
+		DELETE FROM t_sett_ms_menu WHERE
 		menu_id=#{menuId}
 	</delete>
 
 	<!-- 更加菜单ID删除权限 -->
 	<delete id="deleteButton" parameterType="com.fhs.basics.dox.SettMsMenuDO">
 		DELETE FROM
-		t_ucenter_ms_menu_permission
+		t_sett_ms_menu_permission
 		WHERE
 		menu_id=#{menuId}
 	</delete>
 
 	<!-- 修改菜单信息 -->
 	<update id="update" parameterType="com.fhs.basics.dox.SettMsMenuDO">
-		UPDATE `t_ucenter_ms_menu`
+		UPDATE `t_sett_ms_menu`
 		SET
 		`menu_name`=#{menuName},
 		`father_menu_id`=#{fatherMenuId},
@@ -241,7 +241,7 @@
 
 
 	<update id="updateDisable" parameterType="com.fhs.basics.dox.SettMsMenuDO">
-		UPDATE `t_ucenter_ms_menu`
+		UPDATE `t_sett_ms_menu`
 		SET
 		`is_enable`=#{isEnable}
 		WHERE father_menu_id=#{menuId}
@@ -252,7 +252,7 @@
 	<select id="findCount" resultType="int">
 		SELECT COUNT(1)
 		FROM
-		`t_ucenter_ms_menu`
+		`t_sett_ms_menu`
 		<where>
 			<if test="menuType!=null">
 				AND menu_type LIKE CONCAT('%',#{menuType},'%')
@@ -285,7 +285,7 @@
 		configuration_home_menu AS
 		configurationHomeMenu,
 		system_id AS systemId
-		FROM `t_ucenter_ms_menu` WHERE
+		FROM `t_sett_ms_menu` WHERE
 		menu_id=#{menuId}
 	</select>
 
@@ -293,7 +293,7 @@
 	<select id="isExit" parameterType="map" resultType="int">
 		SELECT
 		COUNT(1)
-		FROM `t_ucenter_ms_menu` WHERE
+		FROM `t_sett_ms_menu` WHERE
 		father_menu_id=#{fatherMenuId}
 	</select>
 
@@ -318,8 +318,8 @@
 
 		m.check_help_url AS checkHelpUrl
 		FROM
-		t_ucenter_ms_menu m ,
-		t_ucenter_ms_menu_server s
+		t_sett_ms_menu m ,
+		t_sett_ms_menu_server s
 		WHERE
 		m.menu_id!= 0
 		AND m.`server_name_id` = s.`id`
@@ -333,7 +333,7 @@
 		menu_name as menuName,
 		menu_url as menuUrl
 		from
-		t_ucenter_ms_menu
+		t_sett_ms_menu
 		where menu_id = #{menuId}
 	</select>
 
@@ -344,7 +344,7 @@
 		configuration_home_menu as
 		configurationHomeMenu
 		from
-		t_ucenter_ms_menu
+		t_sett_ms_menu
 		where
 		menu_id = #{menuId}
 	</select>
@@ -355,7 +355,7 @@
 			menu_name AS menuName,
 			namespace AS namespace
 		FROM
-			t_ucenter_ms_menu
+			t_sett_ms_menu
 	</select>
 
 </mapper>

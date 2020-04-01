@@ -10,7 +10,7 @@
 		method as method,
 		menu_id as menuId,
 		permission_type as permissionType
-		FROM t_ucenter_ms_menu_permission
+		FROM t_sett_ms_menu_permission
 		<where>
 			<if test="menuId !=null">
 				AND	menu_id = #{menuId}
@@ -28,7 +28,7 @@
 		permission_id AS permissionId,
 		method AS account,
 		permission_type AS permissionType
-		FROM t_ucenter_ms_menu_permission
+		FROM t_sett_ms_menu_permission
 		<where>
 			<if test="permissionType !=null and permissionType!=''">
 				AND permission_type = #{permissionType}
@@ -56,7 +56,7 @@
 		     b.method as method,
 		     b.permission_type as permissionType
 	    	FROM
-		      t_ucenter_ms_menu_permission b
+		t_sett_ms_menu_permission b
 	        	WHERE b.permission_id IN
 		<foreach collection="Ids" index="index" item="item" open="("
 			separator="," close=")">
@@ -66,7 +66,7 @@
 
 <!-- 批量添加基础权限 -->
 	<insert id="addBaseMenuBatch" parameterType="map">
-		INSERT INTO `t_ucenter_ms_menu_permission` (
+		INSERT INTO `t_sett_ms_menu_permission` (
 		  `permission_name`,
 		  `method`,
 		  `menu_id`,
@@ -83,8 +83,8 @@
 		SELECT
 		permission_id AS permissionId,
 		CONCAT(namespace, ':', method) AS roleCode
-		FROM t_ucenter_ms_menu menu,
-		t_ucenter_ms_menu_permission button
+		FROM t_sett_ms_menu menu,
+		t_sett_ms_menu_permission button
 		<if test="groupCode != null and groupCode != ''">
 			,
 			`t_admin_app_menu_item` app,
@@ -105,9 +105,9 @@
 		SELECT
 		permission_id AS permissionId,
 		CONCAT(namespace, ':', method) AS roleCode
-		FROM t_ucenter_ms_menu menu
+		FROM t_sett_ms_menu menu
 		INNER JOIN
-		`t_ucenter_ms_menu_permission` button
+		`t_sett_ms_menu_permission` button
 		ON button.menu_id = menu.menu_id
 		INNER JOIN
 		 t_app_apply apply
@@ -125,20 +125,20 @@
 		SELECT
 			permission_id AS permissionId,
 			url AS url
-		FROM t_ucenter_ms_menu_permission_url_rela
+		FROM t_sett_ms_menu_permission_url_rela
 		WHERE permission_id = #{permissionId}
 	</select>
 
 	<!-- 根据permissionId 查询URL总数 -->
 	<select id="getUrlCoutByPermissionId" parameterType="com.fhs.basics.dox.SettMsMenuPermissionDO" resultType="java.lang.Integer">
 		SELECT count(1)
-		FROM t_ucenter_ms_menu_permission_url_rela
+		FROM t_sett_ms_menu_permission_url_rela
 		WHERE permission_id = #{permissionId}
 	</select>
 	
 	<!--添加权限URL-->
 	<insert id="addUrl" parameterType="com.fhs.basics.dox.SettMsMenuPermissionUrlRelaDO">
-		INSERT INTO t_ucenter_ms_menu_permission_url_rela
+		INSERT INTO t_sett_ms_menu_permission_url_rela
 		(
 		permission_id,
 		url)
@@ -149,7 +149,7 @@
 
 	<!--修改权限URL-->
 	<update id="updateUrl" parameterType="com.fhs.basics.dox.SettMsMenuPermissionUrlRelaDO">
-		UPDATE t_ucenter_ms_menu_permission_url_rela
+		UPDATE t_sett_ms_menu_permission_url_rela
 		SET
 		url=#{url}
 		WHERE permission_id=#{permissionId}
@@ -159,7 +159,7 @@
 	<!--删除权限URL-->
 	<delete id="delUrl" parameterType="com.fhs.basics.dox.SettMsMenuPermissionUrlRelaDO">
 		DELETE FROM
-		t_ucenter_ms_menu_permission_url_rela
+		t_sett_ms_menu_permission_url_rela
 		WHERE permission_id=#{permissionId}
 		AND url=#{url}
 	</delete>
