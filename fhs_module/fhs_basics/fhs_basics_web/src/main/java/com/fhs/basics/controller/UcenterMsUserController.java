@@ -135,8 +135,6 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     public HttpResult<Boolean> update(HttpServletRequest request, HttpServletResponse response, UcenterMsUserVO sysUser) {
         if ("defaultPass".equals(sysUser.getPassword())) {
             sysUser.setPassword(null);
-        } else {
-            sysUser.setPassword(Md5Util.MD5(sysUser.getPassword()).toLowerCase());
         }
         // 删除原有的角色
         sysUserService.updateUser(sysUser);

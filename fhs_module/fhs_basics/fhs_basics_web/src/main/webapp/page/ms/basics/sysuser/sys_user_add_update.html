@@ -2,102 +2,102 @@
 include("/page/tags/form_include.html"){}
 %>
 <form id="addUpdateForm" method="post">
-	<#HideFormTag  name='userName' title='用户姓名隐藏解决自动填充问题' value='${parameter.parentId}' required='true' />
-	<div class="fitem">
-		<#InputFormTag  name='userNameShow' title='姓名' required='true' />
-		<#InputFormTag  name='userLoginName' title='登录名' dataType='/^[a-zA-Z0-9_]{1,}$/' required='true'/>
-	</div>
-	<div class="fitem">
-		<#InputFormTag  name='mobile' title='手机号' dataType='m' required='true' />
-		<#WordBookFormTag  name='sex' title='性别' code='sex'  />
-	</div>
-	<input type="hidden" id="passWd" name="passWd"/>
-	<div class="fitem">
-		<#PasswordFormTag  name='password' title='密码' required='true' />
-		<#WordBookFormTag  name='isEnable' title='状态' code='is_enable' required='true' />
-	</div>
-	<div class="fitem">
-		<#InputFormTag  name='email' title='邮箱' dataType="e|empty" />
-	</div>
-	<div class="fitem">
-		<#SelectTreeFormTag  name='organizationId' onChange='orgChange' title='所属机构' url='${basePath}ms/sysOrganization/getOrgIdComBoxData'  required='true' />
-	</div>
-	<div class="fitem">
-		<#SelectFormTag  name='roleIds' title='角色' multiple='true'  valueField='roleId'
-		textField='roleName'  required='true' />
-	</div>
-	<#UploadFormTag  name='header' title='头像'  />
+    <div class="fitem">
+        <#InputFormTag name='userName' title='姓名' required='true' readonly='true'/>
+        <#InputFormTag name='userLoginName' title='登录名' dataType='/^[a-zA-Z0-9_]{1,}$/' required='true'/>
+    </div>
+    <div class="fitem">
+        <#InputFormTag name='mobile' title='手机号' dataType='m' required='true' />
+        <#WordBookFormTag name='sex' title='性别' code='sex' />
+    </div>
+    <input type="hidden" id="passWd" name="passWd"/>
+    <div class="fitem">
+        <#PasswordFormTag name='password' title='密码' required='true' autocomplete='off' readonly='true'/>
+        <#WordBookFormTag name='isEnable' title='状态' code='is_enable' required='true' />
+    </div>
+    <div class="fitem">
+        <#InputFormTag name='email' title='邮箱' dataType="e|empty" />
+    </div>
+    <div class="fitem">
+        <#SelectTreeFormTag name='organizationId' onChange='orgChange' title='所属机构'
+        url='${basePath}ms/sysOrganization/getOrgIdComBoxData' required='true' />
+    </div>
+    <div class="fitem">
+        <#SelectFormTag name='roleIds' title='角色' multiple='true' valueField='roleId'
+        textField='roleName' required='true' />
+    </div>
+    <#UploadFormTag name='header' title='头像' />
 
 </form>
 <%
 layout("/page/tags/add_update_tag.html",{'nameSpace':'sysUser','idField':'userId'}){}
 %>
 <script type="text/javascript">
-	function initHandler(){
-		url_save =  "${basePath}ms/sysUser/addUser";
-		//$('#organizationId').combotree({readonly:true});
-		//如果是添加的话，就默认赋值
-		if(!isEdit&& !isView)
-		{
-			$('#organizationId').combotree('setValue','${parameter.organizationId}');
-			reloadRoles('${parameter.organizationId}');
-		}
-		if(isEdit || isView){
-			$("#userLoginName").attr('readonly', true);
-		}
-	}
+    function initHandler() {
+        url_save = "${basePath}ms/sysUser/addUser";
+        //$('#organizationId').combotree({readonly:true});
+        //如果是添加的话，就默认赋值
+        if (!isEdit && !isView) {
+            $('#organizationId').combotree('setValue', '${parameter.organizationId}');
+            reloadRoles('${parameter.organizationId}');
+        }
+        if (isEdit || isView) {
+            $("#userLoginName").attr('readonly', true);
+        }
+    }
 
-	//组织机构变更
-	function orgChange(){
-		var organizationId = $("#organizationId").combotree("getValue");
-		reloadRoles(organizationId);
-	}
+    //组织机构变更
+    function orgChange() {
+        var organizationId = $("#organizationId").combotree("getValue");
+        reloadRoles(organizationId);
+    }
 
 
     //保存数据
     function save() {
-		onSaveFuns.forEach(function(_function,index,array){
-			if(!_function()){return};
-		});
-		$('#userName').val($('#userNameShow').val());
-		//保存数据
-		$('#header').val($('#headerInputVal').val());
-		$('#addUpdateForm').form('submit', {
-			url : url_save,
-			onSubmit : function() {
-				if(addUpdateForm.check())
-				{
-					//修改
-					if(isEdit && $("input[name='password']").val() != $("#passWd").val() ) {
-						$("input[name='password']").val($.md5($("input[name='password']").val()))
-					}
-					//新增
-					if(!isView && !isEdit) {
-						$("input[name='password']").val($.md5($("input[name='password']").val()))
-					}
-					return true;
-				}
-				return false;
-			},
-			success : function(d) {
-				d = $.parseJSON(d);
-				if (d.code == 500) {
-					EalertE('登录名已经存在');
-					return;
-				}
-				if (d.code == 200) {
-					Ealert("操作成功！");
-					closeDialog();
-					reload();
-				} else {
-					Ealert('操作失败');
-				}
-			}
-		});
+        console.log($("input[name='password']").val());
+        console.log($("#passWd").val());
+        onSaveFuns.forEach(function (_function, index, array) {
+            if (!_function()) {
+                return
+            }
+            ;
+        });
+        $('#addUpdateForm').form('submit', {
+            url: url_save,
+            onSubmit: function () {
+                if (addUpdateForm.check()) {
+                    //修改
+                    if (isEdit && $("input[name='password']").val() != 'defaultPass') {
+                        $("input[name='password']").val($.md5($("input[name='password']").val()))
+                    }
+                    //新增
+                    if (!isView && !isEdit) {
+                        $("input[name='password']").val($.md5($("input[name='password']").val()))
+                    }
+                    return true;
+                }
+                return false;
+            },
+            success: function (d) {
+                d = $.parseJSON(d);
+                if (d.code == 500) {
+                    EalertE('登录名已经存在');
+                    return;
+                }
+                if (d.code == 200) {
+                    Ealert("操作成功！");
+                    closeDialog();
+                    reload();
+                } else {
+                    Ealert('操作失败');
+                }
+            }
+        });
     };
 
     //重新加载角色列表
-    function  reloadRoles(_orgId) {
+    function reloadRoles(_orgId) {
         $("#roleIds_select").combobox({
             url: '${basePath}ms/sysRole/getSelectOrganSysRoles/' + _orgId + '?isAdd=${parameter.isAdd}'
         });
@@ -105,12 +105,12 @@ layout("/page/tags/add_update_tag.html",{'nameSpace':'sysUser','idField':'userId
     }
 
     function loadFormHandler(info) {
-        //加载数据
-        if(isEdit) {
-			$("#passWd").val(info.password);
-		}
-		reloadRoles(info.organizationId);
-        $('#userNameShow').val($('#userName').val());
-		url_save =  "${basePath}ms/sysUser/updateUser?userId=${parameter.id}";
+        reloadRoles(info.organizationId);
+        $("input[name='password']").val('defaultPass');
+        url_save = "${basePath}ms/sysUser/updateUser?userId=${parameter.id}";
+        setTimeout(function(){
+            $('#userName').attr('readonly',false);
+            $('#password').attr('readonly',false);
+        },500);
     }
 </script>
