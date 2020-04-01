@@ -168,7 +168,7 @@
 		WHEN b.permission_type = 3 THEN CONCAT("e_",b.menu_id)
 		WHEN b.permission_type = 4 THEN CONCAT("d_",b.menu_id) END AS boxId
 		FROM
-		t_ucenter_ms_menu_permission b
+		t_sett_ms_menu_permission b
 		LEFT JOIN t_ucenter_ms_role_permission ro
 		ON ro.permission_id = b.permission_id
 		LEFT JOIN t_ucenter_ms_role r
@@ -180,7 +180,7 @@
     <select id="searchButtonId" parameterType="map"
             resultType="java.lang.String">
 		SELECT b.permission_id
-		FROM t_ucenter_ms_menu_permission b
+		FROM t_sett_ms_menu_permission b
 		WHERE
 		b.permission_type = #{buttonType}
 		AND b.menu_id = #{menuId}

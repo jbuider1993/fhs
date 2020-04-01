@@ -1,43 +1,41 @@
-
-<%@ page contentType="text/html; charset=gbk" language="java"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>ĞŞ¸ÄÃÜÂë</title>
+<title>ä¿®æ”¹å¯†ç </title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 </head>
 
 <body class="skin-1">
-	<!--ĞŞ¸ÄÃÜÂë-->
+	<!--ä¿®æ”¹å¯†ç -->
 	<div id="resetPasswordlog">
 		<form id="resetPasswordForm" method="post">
 			<input id="userId" name="userId" type="hidden"
 				value="${param.userId}" />
 			<div class="fitem">
-				<label>Ô­&#8195;ÃÜ&#8195;Âë:</label> <input type="password" name="oldPassword"
-					datatype="*" nullmsg="ÇëÌîĞ´Ô­ÃÜÂë" ajaxPost="true"
+				<label>åŸ&#8195;å¯†&#8195;ç :</label> <input type="password" name="oldPassword"
+					datatype="*" nullmsg="è¯·å¡«å†™åŸå¯†ç " ajaxPost="true"
 					ajaxurl="${basePath}adminUser/validataPass" />
 			</div>
 			<div class="fitem">
-				<label>ĞÂ&#8195;ÃÜ&#8195;Âë:</label> <input type="password" id="newPassword"
+				<label>æ–°&#8195;å¯†&#8195;ç :</label> <input type="password" id="newPassword"
 					name="newPassword" class="inputxt Validform_error" datatype="*6-16"
-					nullmsg="ÇëÌîĞ´ĞÂÃÜÂë" errormsg="ÃÜÂë·¶Î§ÔÚ6~16Î»Ö®¼ä£¡" style="width:200px;" />
+					nullmsg="è¯·å¡«å†™æ–°å¯†ç " errormsg="å¯†ç èŒƒå›´åœ¨6~16ä½ä¹‹é—´ï¼" style="width:200px;" />
 			</div>
 			<div class="fitem">
-				<label>È·ÈÏĞÂÃÜÂë:</label> <input type="password" id="againNewPassword"
+				<label>ç¡®è®¤æ–°å¯†ç :</label> <input type="password" id="againNewPassword"
 					name="againNewPassword" recheck="newPassword"
-					class="inputxt Validform_error" datatype="*" nullmsg="ÇëÔÙ´ÎÌîĞ´ĞÂÃÜÂë"
-					errormsg="ÄúÁ½´ÎÊäÈëµÄÕËºÅÃÜÂë²»Ò»ÖÂ£¡" />
+					class="inputxt Validform_error" datatype="*" nullmsg="è¯·å†æ¬¡å¡«å†™æ–°å¯†ç "
+					errormsg="æ‚¨ä¸¤æ¬¡è¾“å…¥çš„è´¦å·å¯†ç ä¸ä¸€è‡´ï¼" />
 			</div>
 		</form>
 	</div>
 	<div id="dlg-buttons">
 		<center>
 			<a href="javascript:void(0)" class="easyui-linkbutton btn btn-suc l-btn l-btn-small"
-				onclick="save()">Ìá½»</a> <a href="javascript:void(0)"
-				class="easyui-linkbutton btn btn-can l-btn l-btn-small" onclick="closeDialog();">¹Ø±Õ</a>
+				onclick="save()">æäº¤</a> <a href="javascript:void(0)"
+				class="easyui-linkbutton btn btn-can l-btn l-btn-small" onclick="closeDialog();">å…³é—­</a>
 		</center>
 	</div>
 
@@ -45,11 +43,11 @@
 		var url_temp = "${basePath}adminUser/updatePass";
 		var resetPasswordForm = null;
 		$(document).ready(function() {
-			//formÑéÖ¤¡£
+			//forméªŒè¯ã€‚
             resetPasswordForm = $('#resetPasswordForm').Validform({
 				tiptype : 5
 			});
-			// Èç¹ûÊÇ±à¼­Ò³Ãæ£¬¾Í³õÊ¼»¯Ò»Ğ©Êı¾İ
+			// å¦‚æœæ˜¯ç¼–è¾‘é¡µé¢ï¼Œå°±åˆå§‹åŒ–ä¸€äº›æ•°æ®
 		})
 
 		function save() {
@@ -62,11 +60,11 @@
 				success : function(d) {
 					d = $.parseJSON(d);
 					if (d && d.result) {
-						Ealert("²Ù×÷³É¹¦£¡");
+						Ealert("æ“ä½œæˆåŠŸï¼");
 						closeDialog();
 						reload();
 					} else {
-						Ealert('²Ù×÷Ê§°Ü');
+						Ealert('æ“ä½œå¤±è´¥');
 					}
 				}
 			});
