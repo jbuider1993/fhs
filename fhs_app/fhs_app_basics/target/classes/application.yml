@@ -34,8 +34,8 @@ fhs:
     #是否开启cas默认关闭
     enable-cas: true
     cas:
-      shiroServerUrlPrefix: http://localhost:8082/
-      casServerUrlPrefix: http://114.115.211.214/cas
+      client-base-path: http://localhost:8082/ #当前项目的访问路径
+      server-url: http://114.115.211.214/cas # cas地址
   mybatis-jpa:
     #多个用;分隔
     entity-package: com.**.**.dox
