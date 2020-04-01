@@ -1,15 +1,13 @@
-<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
-<%@taglib prefix="hfs" uri="http://www.ylmo2o.com/tag/hfs"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:if test="${param.isFrame eq true}">
-	<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<jsp:include page="/page/ms/common/js_css_include.jsp"></jsp:include>
+		<%
+		include("/page/tags/form_include.html"){}
+		include("/page/tags/js_css_include.html"){}
+		%>
 	</head>
 	<body class="skin-1">
-</c:if>
 
-<jsp:include page="/page/ms/common/form_include.jsp"></jsp:include>
+
 	<!--修改密码-->
 	<div id="ResetPasswordlog">
 		<form id="ResetPasswordForm" method="post" style="text-align: center">
@@ -31,12 +29,14 @@
 			</div>
 		</form>
 	</div>
-	<div id="dlg-buttons">
-		<center>
+	<div id="dlg-buttons" style="text-align: center">
+
 			<a href="javascript:void(0)" class="easyui-linkbutton btn btn-suc l-btn l-btn-small"
-				onclick="save()">提交</a> <a href="javascript:void(0)"
-				class="easyui-linkbutton btn btn-can l-btn l-btn-small" onclick="top.closeDialog();;">关闭</a>
-		</center>
+				onclick="save()">提交</a>
+
+			<a href="javascript:void(0)"
+			   class="easyui-linkbutton btn btn-can l-btn l-btn-small" onclick="top.closeDialog();">关闭</a>
+
 	</div>
 
 <script type="text/javascript" src="${fhs_static_url}js/jQuery.md5.js"></script>
@@ -77,7 +77,6 @@
 
 	}
 </script>
-<c:if test="${not empty  param.isFrame}">
-	</body>
-	</html>
-</c:if>
+
+</body>
+</html>
