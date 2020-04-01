@@ -59,7 +59,7 @@
 		
 		<div class="fitem">
 			<div class="fitemDiv">
-				<label >是否启用:</label> 
+				<label >状态:</label>
 				<select id="isEnable" name="isEnable" class="easyui-combobox"
 						prompt="状态" nullmsg="请选择"
 						data-options="
@@ -67,7 +67,7 @@
 									textField: 'wordbookDesc',
 									editable : false,
 									panelHeight: 'auto',
-									url: '${fhs_basics_url}webApi/wordbook/getData?wordbookGroupCode=is_disable&jsonpCallback=?',
+									url: '${fhs_basics_url}webApi/wordbook/getData?wordbookGroupCode=is_enable&jsonpCallback=?',
 									onLoadSuccess : function (rec){
 										var peo = $(this).combobox('getValue');
 										if(peo==''){
