@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Primary
-@Service("sysUserServiceImpl")
+@Service("ucenterMsUserService")
 @DataSource("base_business")
 @AutoTrans(namespace = BaseTransConstant.USER_INFO,fields ="userName" )
 public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, UcenterMsUserDO> implements UcenterMsUserService, FeignSysUserApiService {
