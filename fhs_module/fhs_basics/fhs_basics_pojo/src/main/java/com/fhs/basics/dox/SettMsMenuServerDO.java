@@ -2,10 +2,15 @@ package com.fhs.basics.dox;
 
 
 import com.fhs.core.base.dox.BaseDO;
+import com.fhs.core.trans.anno.TransTypes;
+import com.fhs.core.trans.constant.TransType;
+import com.fhs.core.valid.group.Delete;
+import com.fhs.core.valid.group.Update;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author jianbo.qin
@@ -16,6 +21,7 @@ import javax.persistence.*;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
+@TransTypes(types = {TransType.WORD_BOOK})
 @Table(name = "t_sett_ms_menu_server")
 public class SettMsMenuServerDO extends BaseDO<SettMsMenuServerDO> {
 
@@ -25,6 +31,7 @@ public class SettMsMenuServerDO extends BaseDO<SettMsMenuServerDO> {
      * 服务编号
      */
     @Id
+    @NotNull(message = "id字段不可为null ", groups = {Update.class, Delete.class})
     private String id;
     /**
      * 服务名称
@@ -37,28 +44,13 @@ public class SettMsMenuServerDO extends BaseDO<SettMsMenuServerDO> {
     @Column(name = "server_url", nullable = true, length = 500)
     private String serverUrl;
 
-    public String getId() {
-        return id;
+    public SettMsMenuServerDO() {
+
     }
 
-    public void setId(String id) {
+    public SettMsMenuServerDO(String id, String serverName, String serverUrl) {
         this.id = id;
-    }
-
-    public String getServerName() {
-        return serverName;
-    }
-
-    public void setServerName(String serverName) {
         this.serverName = serverName;
-    }
-
-    public String getServerUrl() {
-        return serverUrl;
-    }
-
-    public void setServerUrl(String serverUrl) {
         this.serverUrl = serverUrl;
     }
-
 }

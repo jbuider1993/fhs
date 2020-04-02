@@ -110,130 +110,19 @@ public class ServiceAreaDO extends BaseDO<ServiceAreaDO> {
     @Column(name = "init_addr", nullable = true, length = 16)
     private String initAddr;
 
-    /**
-     * 给区域主键赋值
-     */
-    public void setId(Integer id) {
+    public ServiceAreaDO() {
+
+    }
+
+    public ServiceAreaDO(Integer id,String areaName,String areaShort,String areaIsHot,String areaCode, Integer areaSequence, Integer areaParentId, String initDate, String initAddr) {
         this.id = id;
-    }
-
-    /**
-     * 获取区域主键
-     */
-    public Integer getId() {
-        return id;
-    }
-
-    /**
-     * 给区域名称赋值
-     */
-    public void setAreaName(String areaName) {
         this.areaName = areaName;
-    }
-
-    /**
-     * 获取区域名称
-     */
-    public String getAreaName() {
-        return areaName;
-    }
-
-    /**
-     * 给区域代码赋值
-     */
-    public void setAreaCode(String areaCode) {
         this.areaCode = areaCode;
-    }
-
-    /**
-     * 获取区域代码
-     */
-    public String getAreaCode() {
-        return areaCode;
-    }
-
-    /**
-     * 给区域简称赋值
-     */
-    public void setAreaShort(String areaShort) {
         this.areaShort = areaShort;
-    }
-
-    /**
-     * 获取区域简称
-     */
-    public String getAreaShort() {
-        return areaShort;
-    }
-
-    /**
-     * 给是否热门(0:否、1:是)赋值
-     */
-    public void setAreaIsHot(String areaIsHot) {
         this.areaIsHot = areaIsHot;
-    }
-
-    /**
-     * 获取是否热门(0:否、1:是)
-     */
-    public String getAreaIsHot() {
-        return areaIsHot;
-    }
-
-    /**
-     * 给区域序列赋值
-     */
-    public void setAreaSequence(Integer areaSequence) {
         this.areaSequence = areaSequence;
-    }
-
-    /**
-     * 获取区域序列
-     */
-    public Integer getAreaSequence() {
-        return areaSequence;
-    }
-
-    /**
-     * 给上级主键赋值
-     */
-    public void setAreaParentId(Integer areaParentId) {
         this.areaParentId = areaParentId;
-    }
-
-    /**
-     * 获取上级主键
-     */
-    public Integer getAreaParentId() {
-        return areaParentId;
-    }
-
-    /**
-     * 获取初始时间
-     */
-    public String getInitDate() {
-        return initDate;
-    }
-
-    /**
-     * 给初始时间赋值
-     */
-    public void setInitDate(String initDate) {
         this.initDate = initDate;
-    }
-
-    /**
-     * 给初始地址赋值
-     */
-    public void setInitAddr(String initAddr) {
         this.initAddr = initAddr;
     }
-
-    /**
-     * 获取初始地址
-     */
-    public String getInitAddr() {
-        return initAddr;
-    }
-
 }
