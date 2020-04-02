@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>fhs_front</artifactId>
+        <groupId>com.fhs-opensource</groupId>
+        <version>2.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>fhs_front_service</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_front_api</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_front_interfaces</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_base_other</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_cache</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_config</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_db</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+
+
+
+    </dependencies>
+
+</project>

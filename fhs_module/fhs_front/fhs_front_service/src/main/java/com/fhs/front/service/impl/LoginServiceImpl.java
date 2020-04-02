@@ -1,14 +1,8 @@
-package com.fhs.basics.service.impl;
+package com.fhs.front.service.impl;
 
 import com.alicp.jetcache.Cache;
 import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.CreateCache;
-import com.fhs.basics.dox.UcenterFrontUserBindDO;
-import com.fhs.basics.dox.UcenterFrontUserDO;
-import com.fhs.basics.service.LoginService;
-import com.fhs.basics.service.UcenterFrontUserBindService;
-import com.fhs.basics.service.UcenterFrontUserService;
-import com.fhs.basics.vo.UcenterFrontUserVO;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.StringUtil;
@@ -16,6 +10,13 @@ import com.fhs.core.cache.service.RedisCacheService;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.db.ds.DataSource;
 import com.fhs.core.exception.ParamException;
+import com.fhs.front.dox.UcenterFrontUserBindDO;
+import com.fhs.front.dox.UcenterFrontUserDO;
+import com.fhs.front.interfaces.FhsOauth302;
+import com.fhs.front.service.LoginService;
+import com.fhs.front.service.UcenterFrontUserBindService;
+import com.fhs.front.service.UcenterFrontUserService;
+import com.fhs.front.vo.UcenterFrontUserVO;
 import com.fhs.logger.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Description: 用户登录服务
@@ -40,6 +43,8 @@ public class LoginServiceImpl implements LoginService {
      */
     @CreateCache(expire = 1800, name = "frontuser:token", cacheType = CacheType.BOTH)
     private Cache<String, String> frontUserTokenMap;
+
+    private Map<String, FhsOauth302> fhsOauth302Map = new HashMap<>();
 
     /**
      * ACCESS_TOKEN 和 userid的rediskey
@@ -115,6 +120,11 @@ public class LoginServiceImpl implements LoginService {
         bind.preInsert(null);
         userBindService.insertSelective(bind);
         return user.getUserId();
+    }
+
+    @Override
+    public Map<String, FhsOauth302> getOauthServiceMap() {
+        return this.fhsOauth302Map;
     }
 
     @Override

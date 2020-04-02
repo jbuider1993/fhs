@@ -15,6 +15,7 @@
         <module>fhs_module_base</module>
         <module>fhs_pub</module>
         <module>fhs_task</module>
+        <module>fhs_front</module>
     </modules>
     <artifactId>fhs_module</artifactId>
 

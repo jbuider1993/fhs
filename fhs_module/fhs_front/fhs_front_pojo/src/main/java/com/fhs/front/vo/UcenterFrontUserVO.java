@@ -1,13 +1,10 @@
-package com.fhs.basics.vo;
+package com.fhs.front.vo;
 
-import com.fhs.basics.dox.UcenterFrontUserBindDO;
-import com.fhs.basics.dox.UcenterFrontUserDO;
-import com.fhs.common.constant.Constant;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.trans.anno.TransTypes;
 import com.fhs.core.trans.constant.TransType;
+import com.fhs.front.dox.UcenterFrontUserDO;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.util.Map;
 

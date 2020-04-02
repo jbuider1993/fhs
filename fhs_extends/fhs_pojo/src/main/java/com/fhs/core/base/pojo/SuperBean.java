@@ -2,8 +2,6 @@ package com.fhs.core.base.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fhs.common.utils.StringUtil;
-import lombok.Data;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

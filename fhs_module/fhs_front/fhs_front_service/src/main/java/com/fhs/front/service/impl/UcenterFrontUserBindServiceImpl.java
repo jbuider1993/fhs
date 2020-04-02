@@ -1,10 +1,10 @@
-package com.fhs.basics.service.impl;
+package com.fhs.front.service.impl;
 
-import com.fhs.basics.dox.UcenterFrontUserBindDO;
-import com.fhs.basics.service.UcenterFrontUserBindService;
-import com.fhs.basics.vo.UcenterFrontUserBindVO;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.db.ds.DataSource;
+import com.fhs.front.dox.UcenterFrontUserBindDO;
+import com.fhs.front.service.UcenterFrontUserBindService;
+import com.fhs.front.vo.UcenterFrontUserBindVO;
 import org.springframework.stereotype.Service;
 
 /**

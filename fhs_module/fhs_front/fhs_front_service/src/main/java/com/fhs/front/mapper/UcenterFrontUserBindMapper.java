@@ -1,7 +1,7 @@
-package com.fhs.basics.mapper;
+package com.fhs.front.mapper;
 
-import com.fhs.basics.dox.UcenterFrontUserBindDO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
+import com.fhs.front.dox.UcenterFrontUserBindDO;
 import com.mybatis.jpa.annotation.MapperDefinition;
 import org.springframework.stereotype.Repository;
 

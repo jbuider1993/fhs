@@ -1,4 +1,4 @@
-package com.fhs.basics.form;
+package com.fhs.front.form;
 
 import com.fhs.core.base.form.BaseForm;
 import lombok.AllArgsConstructor;

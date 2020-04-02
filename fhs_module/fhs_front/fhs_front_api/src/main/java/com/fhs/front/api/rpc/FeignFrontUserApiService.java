@@ -1,9 +1,9 @@
-package com.fhs.basics.api.rpc;
+package com.fhs.front.api.rpc;
 
-import com.fhs.basics.form.GetSingleFrontUserForm;
-import com.fhs.basics.vo.UcenterFrontUserVO;
 import com.fhs.core.feign.config.FeignConfiguration;
 import com.fhs.core.result.HttpResult;
+import com.fhs.front.form.GetSingleFrontUserForm;
+import com.fhs.front.vo.UcenterFrontUserVO;
 import feign.RequestLine;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @versio  1.0
  * Copyright (c) 2017 All Rights Reserved.
  **/
-@FeignClient(value = "basics", configuration= FeignConfiguration.class,primary = false)
+@FeignClient(value = "front", configuration= FeignConfiguration.class,primary = false)
 public interface FeignFrontUserApiService {
 
        /**

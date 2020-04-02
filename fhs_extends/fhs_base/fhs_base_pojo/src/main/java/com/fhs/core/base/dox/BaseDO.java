@@ -10,7 +10,6 @@ import com.fhs.core.base.pojo.SuperBean;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
 import com.mybatis.jpa.annotation.Between;
-import lombok.Data;
 
 import java.lang.reflect.Field;
 import java.util.*;

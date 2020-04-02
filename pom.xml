@@ -24,6 +24,7 @@
         <fhs.jetcache.version>2.5.16</fhs.jetcache.version>
         <fhs.mybatis-jpa-jack.version>1.0.9</fhs.mybatis-jpa-jack.version>
         <fhs.spring-cloud-starter.version>2.1.5.RELEASE</fhs.spring-cloud-starter.version>
+        <fhs.wx-java.version>3.1.0</fhs.wx-java.version>
     </properties>
 
 

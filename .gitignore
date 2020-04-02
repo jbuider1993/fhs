@@ -43,3 +43,7 @@
 /fhs_module/fhs_module_base/target
 /fhs_module/fhs_pub/fhs_pub_service/target
 /fhs_module/fhs_pub/fhs_pub_web/target
+/fhs_app/fhs_app_basics/target
+/fhs_app/fhs_app_eureka_server/target
+/fhs_app/fhs_app_pub/target
+/log_dir_IS_UNDEFINED

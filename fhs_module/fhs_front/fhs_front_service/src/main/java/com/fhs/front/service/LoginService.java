@@ -1,6 +1,10 @@
-package com.fhs.basics.service;
+package com.fhs.front.service;
 
-import com.fhs.basics.dox.UcenterFrontUserDO;
+
+import com.fhs.front.dox.UcenterFrontUserDO;
+import com.fhs.front.interfaces.FhsOauth302;
+
+import java.util.Map;
 
 /**
  * @Description: 用户登录服务
@@ -36,4 +40,10 @@ public interface LoginService {
      * @return
      */
     String addBindAndUser(UcenterFrontUserDO user, String openId, int openIdType);
+
+    /**
+     * 获取系统支持的OAUTH登录服务
+     * @return
+     */
+    Map<String,FhsOauth302> getOauthServiceMap();
 }
