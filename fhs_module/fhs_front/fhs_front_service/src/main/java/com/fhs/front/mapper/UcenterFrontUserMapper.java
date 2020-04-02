@@ -1,6 +1,5 @@
 package com.fhs.basics.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.fhs.basics.dox.UcenterFrontUserDO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
 import com.mybatis.jpa.annotation.MapperDefinition;
