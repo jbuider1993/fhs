@@ -17,6 +17,17 @@ import java.util.Enumeration;
 public class NetworkUtil
 {
 
+    /**
+     * 获取客户端主机名称
+     */
+    public static String getHostName() {
+        try {
+            return InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException e) {
+        }
+        return "未知";
+    }
+
   
     /** 
      * 获取请求主机IP地址,如果通过代理进来，则透过防火墙获取真实IP地址; 

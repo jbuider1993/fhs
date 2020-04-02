@@ -1,0 +1,194 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <%
+    layout("/page/tags/js_css_include.html",{bt:true}){}
+    %>
+</head>
+
+<style>
+
+
+    table {
+        border-collapse: collapse;
+    }
+
+    .item_div {
+        background-color: white;
+        margin-left: 10px;
+        margin-top: 10px;
+        float: left;
+    }
+
+    .top_div {
+        width: 100%;
+        height: 40px;
+        border-bottom: #F8F8F8 1px solid;
+    }
+
+    .tips_div {
+        float: left;
+        height: 40px;
+        line-height: 40px;
+        text-align: left;
+        font-size: 14px;
+        padding-left: 20px;
+    }
+
+    .tips_right {
+        float: right;
+        height: 40px;
+        line-height: 40px;
+        text-align: left;
+        font-size: 12px;
+        padding-right: 20px;
+    }
+
+    .content_number {
+        font-size: 20px;
+        padding-top: 20px;
+        padding-left: 20px;
+    }
+
+    .content_div {
+        color: #656566;
+    }
+
+    .like_btn_a {
+        padding: 0px 2px 0px 2px;
+        border-radius: 2px;
+        color: white;
+    }
+</style>
+<body>
+
+
+
+</body>
+
+<script>
+    function loadInfo(){
+        $.ajax({
+            url:'${basePath}/ms/sys/info',
+            dataType:'json',
+            success:function(result){
+                if(result.code==200){
+                    var sysInfoHtml = baidu.template('sysInfo',result.data);
+                    $('body').html(sysInfoHtml);
+                }else{
+                    EalertE(result.message);
+                }
+            }
+        })
+    }
+
+    $(function(){
+        loadInfo();
+    })
+
+</script>
+<script id="sysInfo" type="text/html">
+    <div class="item_div" style="width:45%">
+        <div class="top_div">
+            <div class="tips_div" style=" color：#313232;">CPU信息</div>
+
+        </div>
+        <div class="content_div">
+            <table class="pubTable">
+                <tr>
+                    <th>属性</th>
+                    <th>值</th>
+                </tr>
+                <tr>
+                    <td>核心数</td>
+                    <td><@=cpu.cpuNum@></td>
+                </tr>
+                <tr>
+                    <td>用户使用率</td>
+                    <td><@=cpu.used@>%</td>
+                </tr>
+                <tr>
+                    <td>系统使用率</td>
+                    <td><@=cpu.sys@>%</td>
+                </tr>
+                <tr>
+                    <td>当前空闲率</td>
+                    <td><@=cpu.free@>%</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="item_div" style="width:45%">
+        <div class="top_div">
+            <div class="tips_div" style=" color：#313232;">内存</div>
+
+        </div>
+        <div class="content_div">
+            <table class="pubTable">
+                <tr>
+                    <th>属性</th>
+                    <th>内存</th>
+                    <th>JVM</th>
+                </tr>
+                <tr>
+                    <td>总内存</td>
+                    <td><@=mem.total@>GB</td>
+                    <td><@=jvm.total@>MB</td>
+                </tr>
+                <tr>
+                    <td>已使用内存</td>
+                    <td><@=mem.used@>GB</td>
+                    <td><@=jvm.used@>MB</td>
+                </tr>
+                <tr>
+                    <td>剩余内存</td>
+                    <td><@=mem.free@>GB</td>
+                    <td><@=jvm.free@>MB</td>
+                </tr>
+                <tr>
+                    <td>使用率</td>
+                    <td><@=mem.usage@>%</td>
+                    <td><@=jvm.usage@>%</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="item_div" style="width:91%">
+        <div class="top_div">
+            <div class="tips_div" style=" color：#313232;">磁盘信息</div>
+
+        </div>
+        <div class="content_div">
+            <table class="pubTable">
+                <tr>
+                    <th>盘符路径</th>
+                    <th>盘符类型</th>
+                    <th>文件系统</th>
+                    <th>总大小</th>
+                    <th>可用大小</th>
+                    <th>已用大小</th>
+                    <th>已用百分比</th>
+                </tr>
+                <@
+                for(i=0;i<sysFiles.length;i++){
+                var sysFile = sysFiles[i];
+
+                @>
+                    <tr>
+                        <td><@=sysFile.dirName@></td>
+                        <td><@=sysFile.typeName@></td>
+                        <td><@=sysFile.sysTypeName@></td>
+                        <td><@=sysFile.total@></td>
+                        <td><@=sysFile.free@></td>
+                        <td><@=sysFile.used@></td>
+                        <td><@=sysFile.usage@></td>
+                    </tr>
+                <@ }@>
+            </table>
+        </div>
+    </div>
+</script>
+
+</html>
