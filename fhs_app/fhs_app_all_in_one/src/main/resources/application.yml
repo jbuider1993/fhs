@@ -105,7 +105,7 @@ logback:
     level: INFO
   file:
     #日志存放路径
-    dir: c:/logs/base/
+    dir: c:/logs/all_in_one/
 
 jetcache:
   statIntervalMinutes: 15
