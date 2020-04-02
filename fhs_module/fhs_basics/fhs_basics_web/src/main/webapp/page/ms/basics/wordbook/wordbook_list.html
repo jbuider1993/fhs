@@ -163,7 +163,7 @@
     }
     // 字典类型页面查询后，字典清空
     function clearWordbookGrid(){
-        $('#wordbookListGrid').datagrid('clear');
+        $('#wordbookListGrid').datagrid("loadData", { total: 0, rows: [] });
         final_wordbookGroupCode = undefined;
     }
 
