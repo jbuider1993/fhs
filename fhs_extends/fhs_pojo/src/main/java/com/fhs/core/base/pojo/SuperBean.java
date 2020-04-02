@@ -13,7 +13,6 @@ import java.util.Map;
  * @param <T>
  */
 @SuppressWarnings({"serial", "rawtypes"})
-@Data
 public class SuperBean<T extends SuperBean>  extends BaseObject<T>{
 
     /**
@@ -48,5 +47,37 @@ public class SuperBean<T extends SuperBean>  extends BaseObject<T>{
     public void add2In(String field,List<String> inParam)
     {
         inFilter.put(field,StringUtil.getStrToIn(inParam));
+    }
+
+    public Map<String, String> getTransMap() {
+        return transMap;
+    }
+
+    public void setTransMap(Map<String, String> transMap) {
+        this.transMap = transMap;
+    }
+
+    public Map<String, String> getDataPermissin() {
+        return dataPermissin;
+    }
+
+    public void setDataPermissin(Map<String, String> dataPermissin) {
+        this.dataPermissin = dataPermissin;
+    }
+
+    public Map<String, String> getBetween() {
+        return between;
+    }
+
+    public void setBetween(Map<String, String> between) {
+        this.between = between;
+    }
+
+    public Map<String, String> getInFilter() {
+        return inFilter;
+    }
+
+    public void setInFilter(Map<String, String> inFilter) {
+        this.inFilter = inFilter;
     }
 }

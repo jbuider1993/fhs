@@ -1,5 +1,6 @@
 package com.fhs.pagex.loader;
 
+import com.fhs.logger.Logger;
 import com.sun.tools.javac.file.BaseFileObject;
 import com.sun.tools.javac.file.JavacFileManager;
 import com.sun.tools.javac.util.Context;
@@ -36,7 +37,6 @@ public class MemoryClassLoader extends URLClassLoader {
 
     private Map<String, byte[]> classBytes = new ConcurrentHashMap<>();
 
-    static URLClassLoader springClassLoader = (URLClassLoader) Thread.currentThread().getContextClassLoader();
 
     /**
      * 单利默认的
@@ -170,9 +170,58 @@ class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
 
     private JavacFileManager javaFileManager;
 
+    /**
+     * key 包名 value javaobj 主要给jdk编译class的时候找依赖class用
+     */
+    public final static Map<String, List<JavaFileObject>> CLASS_OBJECT_PACKAGE_MAP = new HashMap<>();
+
+    private static final Object lock = new Object();
+
+    private static boolean isInit = false;
+
+
+    public void init(){
+        try {
+            String jarBaseFile = MemoryClassLoader.getPath();
+            JarFile jarFile = new JarFile(new File(jarBaseFile));
+            List<JarEntry> entries = jarFile.stream().filter(jarEntry -> {
+                return jarEntry.getName().endsWith(".jar");
+            }).collect(Collectors.toList());
+            JarFile libTempJarFile = null;
+            List<JavaFileObject> onePackgeJavaFiles =  null;
+            String packgeName = null;
+            for (JarEntry entry : entries) {
+                libTempJarFile = jarFile.getNestedJarFile(jarFile.getEntry(entry.getName()));
+                if(libTempJarFile.getName().contains("tools.jar")){
+                    continue;
+                }
+                Enumeration<JarEntry> tempEntriesEnum = libTempJarFile.entries();
+                while (tempEntriesEnum.hasMoreElements()) {
+                    JarEntry jarEntry = tempEntriesEnum.nextElement();
+                    String classPath = jarEntry.getName().replace("/", ".");
+                    if (!classPath.endsWith(".class") || jarEntry.getName().lastIndexOf("/") == -1) {
+                        continue;
+                    } else {
+                        packgeName = classPath.substring(0, jarEntry.getName().lastIndexOf("/"));
+                        onePackgeJavaFiles = CLASS_OBJECT_PACKAGE_MAP.containsKey(packgeName) ? CLASS_OBJECT_PACKAGE_MAP.get(packgeName) :  new ArrayList<>();
+                        onePackgeJavaFiles.add(new MemorySpringBootInfoJavaClassObject(jarEntry.getName().replace("/", ".").replace(".class", ""),
+                                new URL(libTempJarFile.getUrl(), jarEntry.getName()), javaFileManager));
+                        CLASS_OBJECT_PACKAGE_MAP.put(packgeName,onePackgeJavaFiles);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        isInit = true;
+
+    }
+
+
+
     MemoryJavaFileManager(JavaFileManager fileManager) {
         super(fileManager);
-        this.javaFileManager = javaFileManager;
+        this.javaFileManager = (JavacFileManager)fileManager;
     }
 
     public Map<String, byte[]> getClassBytes() {
@@ -190,37 +239,12 @@ class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
 
 
     public List<JavaFileObject> getLibJarsOptions(String packgeName) {
-        List<JavaFileObject> result = new ArrayList<>();
-        try {
-            String jarBaseFile = MemoryClassLoader.getPath();
-            JarFile jarFile = new JarFile(new File(jarBaseFile));
-            List<JarEntry> entries = jarFile.stream().filter(jarEntry -> {
-                return jarEntry.getName().endsWith(".jar");
-            }).collect(Collectors.toList());
-            JarFile libTempJarFile = null;
-            List<JarEntry> tempEntries = null;
-            for (JarEntry entry : entries) {
-                tempEntries = new ArrayList<>();
-                libTempJarFile = jarFile.getNestedJarFile(jarFile.getEntry(entry.getName()));
-                Enumeration<JarEntry> tempEntriesEnum = libTempJarFile.entries();
-                while (tempEntriesEnum.hasMoreElements()) {
-                    JarEntry jarEntry = tempEntriesEnum.nextElement();
-                    String classPath = jarEntry.getName().replace("/", ".");
-                    if (!classPath.endsWith(".class") || jarEntry.getName().lastIndexOf("/") == -1) {
-                        continue;
-                    } else if (classPath.substring(0, jarEntry.getName().lastIndexOf("/")).equals(packgeName)) {
-                        tempEntries.add(jarEntry);
-                    }
-                }
-                for (JarEntry tempEntry : tempEntries) {
-                    result.add(new MemorySpringBootInfoJavaClassObject(tempEntry.getName().replace("/", ".").replace(".class", ""),
-                            new URL(libTempJarFile.getUrl(), tempEntry.getName()), javaFileManager));
-                }
+        synchronized (lock){
+            if(!isInit){
+                init();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return result;
+        return CLASS_OBJECT_PACKAGE_MAP.get(packgeName);
     }
 
     @Override
@@ -232,7 +256,10 @@ class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager> {
 
 
         if ("CLASS_PATH".equals(location.getName()) && MemoryClassLoader.isJar()) {
-            return getLibJarsOptions(packageName);
+            List<JavaFileObject> result =  getLibJarsOptions(packageName);
+            if(result!=null){
+                return result;
+            }
         }
 
         Iterable<JavaFileObject> it = super.list(location, packageName, kinds, recurse);
@@ -362,7 +389,7 @@ class MemorySpringBootInfoJavaClassObject extends BaseFileObject {
 
     @Override
     public Kind getKind() {
-        return Kind.valueOf("CLASS");
+        return JavaFileObject.Kind.valueOf("CLASS");
     }
 
     @Override
@@ -481,17 +508,14 @@ class SpringJavaFileManager extends JavacFileManager {
         }
     }
 
-    @Override
     protected ClassLoader getClassLoader(URL[] var1) {
         ClassLoader var2 = this.getClass().getClassLoader();
-        if (this.classLoaderClass != null) {
-            try {
-                Class loaderClass = Class.forName("org.springframework.boot.loader.LaunchedURLClassLoader");
-                Class[] var4 = new Class[]{URL[].class, ClassLoader.class};
-                Constructor var5 = loaderClass.getConstructor(var4);
-                return (ClassLoader) var5.newInstance(var1, var2);
-            } catch (Throwable var6) {
-            }
+        try {
+            Class loaderClass = Class.forName("org.springframework.boot.loader.LaunchedURLClassLoader");
+            Class[] var4 = new Class[]{URL[].class, ClassLoader.class};
+            Constructor var5 = loaderClass.getConstructor(var4);
+            return (ClassLoader) var5.newInstance(var1, var2);
+        } catch (Throwable var6) {
         }
         return new URLClassLoader(var1, var2);
     }
