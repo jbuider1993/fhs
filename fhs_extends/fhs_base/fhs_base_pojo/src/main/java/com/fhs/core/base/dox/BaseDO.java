@@ -11,6 +11,7 @@ import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
 import com.mybatis.jpa.annotation.Between;
 import lombok.Data;
+
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -34,7 +35,6 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> {
     private static final long serialVersionUID = 1L;
 
 
-
     /**
      * 子类id字段缓存
      */
@@ -45,7 +45,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> {
      * 创建人
      */
     @TableField("create_user")
-    @Trans(type = TransType.AUTO_TRANS,key = "sysUser#createUser")
+    @Trans(type = TransType.AUTO_TRANS, key = "sysUser#createUser")
     protected String createUser;
 
     /**
@@ -53,14 +53,14 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> {
      */
     @Between
     @TableField("create_time")
-    @JSONField(format= DateUtils.DATETIME_PATTERN)
+    @JSONField(format = DateUtils.DATETIME_PATTERN)
     protected Date createTime;
 
     /**
      * 更新人
      */
     @TableField("update_user")
-    @Trans(type = TransType.AUTO_TRANS,key = "sysUser#updateUser")
+    @Trans(type = TransType.AUTO_TRANS, key = "sysUser#updateUser")
     protected String updateUser;
 
     /**
@@ -68,13 +68,11 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> {
      */
     @Between
     @TableField("update_time")
-    @JSONField(format= DateUtils.DATETIME_PATTERN)
+    @JSONField(format = DateUtils.DATETIME_PATTERN)
     protected Date updateTime;
 
     @TableField("is_delete")
     protected Integer isDelete;
-
-
 
 
     /**
@@ -86,6 +84,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> {
         this.updateTime = now;
         this.createUser = userId;
         this.updateUser = userId;
+        this.isDelete = Constant.INT_FALSE;
     }
 
     /**
@@ -99,9 +98,10 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> {
 
     /**
      * 获取主键
-     * @return  主键
+     *
+     * @return 主键
      */
-    public Object getPkey(){
+    public Object getPkey() {
         Field idField = getIdField(true);
         try {
             return idField.get(this);
