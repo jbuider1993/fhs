@@ -5,6 +5,8 @@ import com.fhs.basics.service.ServiceWordbookAndGroupService;
 import com.fhs.basics.service.ServiceWordbookGroupService;
 import com.fhs.basics.vo.ServiceWordbookGroupVO;
 import com.fhs.basics.vo.ServiceWordbookVO;
+import com.fhs.basics.vo.UcenterMsUserVO;
+import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.JsonUtils;
 import com.fhs.core.base.controller.BaseController;
 import com.fhs.core.base.pojo.pager.Pager;
@@ -157,6 +159,7 @@ public class ServiceWordbookController extends BaseController {
     @RequestMapping("addWordbookGroup")
     public HttpResult<Boolean> addWordbookGroup(ServiceWordbookGroupVO wordbookGroup, HttpServletRequest request,
                                                 HttpServletResponse response) {
+        wordbookGroup.preInsert(((UcenterMsUserVO) request.getSession().getAttribute(Constant.SESSION_USER)).getUserId());
         wordbookAndGroupService.addWordbookGroup(wordbookGroup);
         return HttpResult.success(true);
     }
