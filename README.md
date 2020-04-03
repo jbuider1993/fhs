@@ -153,7 +153,7 @@
 #### 使用说明
 
 
- &#8194;&#8194;&#8194;&#8194;2  新出炉的文档 https://gitee.com/fhs-opensource/fhs-framework/wikis/pages
+ &#8194;&#8194;&#8194;&#8194;2  新出炉的文档 https://gitee.com/fhs-opensource/fhs-framework/wikis/pages?sort_id=2052774&doc_id=333929
 
   
 
