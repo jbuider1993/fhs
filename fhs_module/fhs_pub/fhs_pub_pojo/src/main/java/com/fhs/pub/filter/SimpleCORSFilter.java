@@ -15,8 +15,6 @@ import java.io.IOException;
  * @author jianbo.qin
  *
  */
-@Component
-@ServletComponentScan
 @WebFilter(urlPatterns = "/*",filterName = "SimpleCORSFilter")
 public class SimpleCORSFilter implements Filter
 {

@@ -14,7 +14,6 @@ import java.io.IOException;
 /**
  * 微信txt验证
  */
-@ServletComponentScan
 @WebFilter(urlPatterns = {"*"},filterName = "mpVerifyFilter" ,asyncSupported = true)
 public class MPVerifyFilter implements Filter {
 

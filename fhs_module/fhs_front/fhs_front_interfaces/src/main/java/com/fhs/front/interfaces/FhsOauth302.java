@@ -22,9 +22,9 @@ public interface FhsOauth302 {
    String getLoginUrl(HttpServletRequest request, HttpServletResponse response);
 
     /**
-     * 完成登录
+     * 完成登录,返回userid
      * @param request
      * @param response
      */
-   void complateLogin(HttpServletRequest request, HttpServletResponse response);
+    void complateLogin(HttpServletRequest request, HttpServletResponse response);
 }

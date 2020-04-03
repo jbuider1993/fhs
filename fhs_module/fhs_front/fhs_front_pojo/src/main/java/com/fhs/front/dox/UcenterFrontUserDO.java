@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Update;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,8 +21,9 @@ import org.hibernate.validator.constraints.Length;
  */
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Builder
+@EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
 @TableName("t_ucenter_front_user")
 public class UcenterFrontUserDO extends BaseDO<UcenterFrontUserDO> {
     private static final long serialVersionUID = 545604903343287075L;
@@ -101,7 +103,7 @@ public class UcenterFrontUserDO extends BaseDO<UcenterFrontUserDO> {
     //启用标识 0-启用 1-禁用
     @Length(message = "启用标识 0-启用 1-禁用字段的长度最大为1", groups = {Add.class, Update.class}, max = 1)
     @TableField("is_enable")
-    private String isEnable;
+    private int isEnable;
 
     //真实姓名
     @TableField("real_name")
@@ -111,23 +113,5 @@ public class UcenterFrontUserDO extends BaseDO<UcenterFrontUserDO> {
     public UcenterFrontUserDO() {
     }
 
-    public UcenterFrontUserDO(String userId, String userName, String nickName, String birthday, String mobile, String sex, String passwd, String userCard, String userResource, String language, String provinceId, String cityId, String areaId, String address, String imagePath, String isEnable, String realName) {
-        this.userId = userId;
-        this.userName = userName;
-        this.nickName = nickName;
-        this.birthday = birthday;
-        this.mobile = mobile;
-        this.sex = sex;
-        this.passwd = passwd;
-        this.userCard = userCard;
-        this.userResource = userResource;
-        this.language = language;
-        this.provinceId = provinceId;
-        this.cityId = cityId;
-        this.areaId = areaId;
-        this.address = address;
-        this.imagePath = imagePath;
-        this.isEnable = isEnable;
-        this.realName = realName;
-    }
+
 }

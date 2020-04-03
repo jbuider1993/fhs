@@ -47,3 +47,9 @@
 /fhs_app/fhs_app_eureka_server/target
 /fhs_app/fhs_app_pub/target
 /log_dir_IS_UNDEFINED
+/fhs_module/fhs_front/fhs_front_interfaces/target
+/fhs_module/fhs_front/fhs_front_pojo/target
+/fhs_module/fhs_front/fhs_front_service/target
+/fhs_module/fhs_front/fhs_front_wx/target
+/fhs_module/fhs_front/fhs_front_web/target
+/fhs_app/fhs_app_front_login_demo/target

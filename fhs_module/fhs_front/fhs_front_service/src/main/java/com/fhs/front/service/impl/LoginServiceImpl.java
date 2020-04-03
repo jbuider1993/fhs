@@ -3,6 +3,7 @@ package com.fhs.front.service.impl;
 import com.alicp.jetcache.Cache;
 import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.CreateCache;
+import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.StringUtil;
@@ -24,6 +25,9 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,6 +48,9 @@ public class LoginServiceImpl implements LoginService {
     @CreateCache(expire = 1800, name = "frontuser:token", cacheType = CacheType.BOTH)
     private Cache<String, String> frontUserTokenMap;
 
+    /**
+     * key ua value 对应的服务实现类
+     */
     private Map<String, FhsOauth302> fhsOauth302Map = new HashMap<>();
 
     /**
@@ -74,6 +81,8 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private UcenterFrontUserBindService userBindService;
 
+    @Autowired
+    private UcenterFrontUserService frontUserService;
 
     private Integer timeOutSecond;
 
@@ -125,6 +134,67 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public Map<String, FhsOauth302> getOauthServiceMap() {
         return this.fhsOauth302Map;
+    }
+
+    @Override
+    public FhsOauth302 getOauth302Impl(String userAgent) {
+        if (userAgent == null) {
+            throw new ParamException("暂时不支持此种浏览器访问,UA:" + userAgent);
+        }
+        userAgent = userAgent.toLowerCase();
+        //看看谁去处理
+        for (String ua : fhsOauth302Map.keySet()) {
+            if (userAgent.contains(ua)) {
+                return fhsOauth302Map.get(ua);
+            }
+        }
+        throw new ParamException("暂时不支持此种浏览器访问,UA:" + userAgent);
+    }
+
+
+
+    @Override
+    public void loginAndRedirect(HttpServletRequest request, HttpServletResponse response, String userId) {
+        UcenterFrontUserVO user = frontUserService.selectById(userId);
+        if (user == null) {
+            throw new ParamException("用户信息丢失:" + userId);
+        }
+        if (user.getIsEnable() != Constant.INT_TRUE) {
+            throw new ParamException("用户被禁用");
+        }
+        String accessToken = this.login(userId);
+        request.getSession().setAttribute("accessToken", accessToken);
+        String callback = request.getSession().getAttribute("callBack").toString();
+        try {
+            response.sendRedirect(checkUrl(callback, accessToken));
+        } catch (IOException e) {
+            LOGGER.error("302到登录前页面错误", e);
+        }
+    }
+
+    /**
+     * 对URL参数进行过滤处理.
+     *
+     * @param callback    回调地址
+     * @param accessToken token信息
+     * @return 解码后的回调地址
+     */
+    public String checkUrl(String callback, String accessToken)
+            throws  UnsupportedEncodingException{
+        callback = new String(callback.getBytes(), "utf-8");
+        callback = java.net.URLDecoder.decode(callback, "utf-8");
+        if (!callback.startsWith("http")) {
+            throw new ParamException("callback地址格式有误!");
+        }
+        if (callback.contains("?")) {
+            if (callback.endsWith("?")) {
+                return callback + "accessToken=" + accessToken;
+            } else {
+                return callback + "&accessToken=" + accessToken;
+            }
+        } else {
+            return callback + "?accessToken=" + accessToken;
+        }
     }
 
     @Override

@@ -16,8 +16,6 @@ import java.util.Map;
  * 数据权限过滤器
  * 会给DataPermissonContext设置数据权限
  */
-@Component
-@ServletComponentScan
 @WebFilter(urlPatterns = {"/ms/*"},filterName = "zDataPermissonFilter" ,asyncSupported = true)
 public class ZDataPermissonFilter implements Filter {
     @Override

@@ -4,6 +4,9 @@ package com.fhs.front.service;
 import com.fhs.front.dox.UcenterFrontUserDO;
 import com.fhs.front.interfaces.FhsOauth302;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 /**
@@ -46,4 +49,28 @@ public interface LoginService {
      * @return
      */
     Map<String,FhsOauth302> getOauthServiceMap();
+
+    /**
+     * 根据UA获取实现类
+     * @param ua  浏览器UA
+     * @return 对应的服务实现
+     */
+    FhsOauth302 getOauth302Impl(String ua);
+
+    /**
+     * 完成登录和返回
+     * @param request
+     * @param response
+     * @param userId 用户id
+     */
+    void loginAndRedirect(HttpServletRequest request, HttpServletResponse response, String userId);
+
+    /**
+     * 对URL参数进行过滤处理.
+     *
+     * @param callback    回调地址
+     * @param accessToken token信息
+     * @return 解码后的回调地址
+     */
+     String checkUrl(String callback, String accessToken) throws UnsupportedEncodingException;
 }

@@ -1,6 +1,7 @@
 package com.fhs.front.wx.storage;
 
 import com.fhs.logger.Logger;
+import lombok.Data;
 import me.chanjar.weixin.common.bean.WxAccessToken;
 import me.chanjar.weixin.common.util.ToStringUtils;
 import me.chanjar.weixin.common.util.http.apache.ApacheHttpClientBuilder;

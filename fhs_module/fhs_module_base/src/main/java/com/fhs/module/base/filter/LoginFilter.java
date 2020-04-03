@@ -18,7 +18,6 @@ import java.io.IOException;
  * by wanglei
  * 后台用户登录filter
  */
-@ServletComponentScan
 @WebFilter(urlPatterns = {"*"},filterName = "zLoginFilter" ,asyncSupported = true)
 public class LoginFilter implements Filter{
 
