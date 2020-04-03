@@ -53,3 +53,7 @@
 /fhs_module/fhs_front/fhs_front_wx/target
 /fhs_module/fhs_front/fhs_front_web/target
 /fhs_app/fhs_app_front_login_demo/target
+/fhs_module/fhs_task/fhs_task_api/target
+/fhs_module/fhs_task/fhs_task_pojo/target
+/fhs_module/fhs_task/fhs_task_service/target
+/fhs_module/fhs_task/fhs_task_web/target

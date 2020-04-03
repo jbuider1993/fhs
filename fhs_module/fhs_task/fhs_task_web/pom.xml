@@ -8,8 +8,26 @@
         <version>2.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <version>2.0.0</version>
     <artifactId>fhs_task_web</artifactId>
-
-
+    <description>
+        本服务不支持分布式部署,哪个项目依赖哪个项目跑定时任务可以,要把表创建到对应的库中
+    </description>
+    <dependencies>
+        <!--quartz依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-quartz</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_module_base</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_task_service</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+    </dependencies>
 </project>

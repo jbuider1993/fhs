@@ -76,7 +76,7 @@ spring:
     maxWait: 60000
     minEvictableIdleTimeMillis: 300000
     minIdle: 1
-    name: base_business
+    name: basics
     poolPreparedStatements: true
     testOnBorrow: false
     testOnReturn: false
@@ -88,8 +88,27 @@ spring:
     password: root
     validationQuery: select 'x'
 
-
-
+  quartz:
+    job-store-type: jdbc
+    properties:
+      org:
+        quartz:
+          jobStore:
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            clusterCheckinInterval: 2000
+            dataSource: basics
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            isClustered: true
+            tablePrefix: QRTZ_
+            useProperties: false
+          scheduler:
+            instanceId: AUTO
+            instanceName: clusteredScheduler
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 10
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
 
 logging:
   config: classpath:logback-spring.xml

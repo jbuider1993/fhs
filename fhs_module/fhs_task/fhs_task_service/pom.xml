@@ -10,6 +10,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>fhs_task_service</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_task_pojo</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+    </dependencies>
 
 
 </project>

@@ -70,11 +70,11 @@
 		  `permission_name`,
 		  `method`,
 		  `menu_id`,
-		  `is_disable`,
+		  `is_enable`,
 		  `permission_type`
 		) VALUES
 		<foreach collection="baseButtonList" item="item" separator=",">
-			(#{item.permissionName}, #{item.method}, #{menuId}, 0, #{item.permissionType})
+			(#{item.permissionName}, #{item.method}, #{menuId}, 1, #{item.permissionType})
 		</foreach>
 	</insert>
 	<!-- 查询所有权限，如果传过来了groupCode,则查询该集团下的有效权限 -->

@@ -82,7 +82,7 @@ public class SettMsMenuPermissionDO extends BaseDO<SettMsMenuPermissionDO> {
     @NotNull(message = "{test.isDisable.null}", groups = {Update.class, Add.class})
     @Max(message = "{test.isDisable.max}", value = 2147483647, groups = {Add.class, Update.class})
     @Min(message = "{test.isDisable.min}", value = -2147483648, groups = {Add.class, Update.class})
-    @Trans(type = TransType.WORD_BOOK,key = "yesOrNo")
+    @Trans(type = TransType.WORD_BOOK,key = "is_enable")
     private Integer isEnable;
     /**
      * 按钮类型12345，查询，添加，修改，删除，其他
