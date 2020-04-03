@@ -1,0 +1,126 @@
+.MyCanvas {
+	background: url("img/grid_10.png");
+}
+.buttonStyle {
+	margin-top: 5px; margin-left: 5px; cursor: pointer;
+}
+.draggable-model-proxy {
+	border: 1px solid rgb(204, 204, 204); border-image: none; position: absolute; z-index: 20; opacity: 0.7;
+}
+.task {
+	margin: 0px; padding: 0px;
+}
+.task-highlight {
+	margin: 0px; padding: 0px; border-radius: 5px; border: 3px double red;
+}
+.task-tip {
+	border-radius: 5px; border: 2px double rgb(173, 217, 237); border-image: none; color: rgb(77, 159, 191); font-size: 14px; display: none; position: absolute; background-color: rgb(229, 246, 254);
+}
+.task-top-left {
+	background: url("img/circle.png") no-repeat left top; left: 0px; top: 0px; font-size: 2px; position: absolute;
+}
+.task-top-right {
+	background: url("img/circle.png") no-repeat right top; left: 0px; top: 0px; font-size: 2px; position: absolute;
+}
+.task-header {
+	text-align: center; font-size: 9px; border-top-color: rgb(152, 185, 205); border-top-width: 2px; border-top-style: solid; background-color: rgb(224, 237, 255);
+}
+.task-textarea {
+	text-align: center; color: rgb(102, 102, 51); padding-top: 3px; font-size: 10px; font-weight: bolder; vertical-align: middle; border-top-color: rgb(152, 185, 205); border-right-color: rgb(152, 185, 205); border-left-color: rgb(152, 185, 205); border-top-width: 1px; border-right-width: 1px; border-left-width: 1px; border-top-style: solid; border-right-style: solid; border-left-style: solid; background-color: rgb(251, 251, 251);
+}
+.task-footer {
+	font-size: 2px; border-bottom-color: rgb(152, 185, 205); border-bottom-width: 1px; border-bottom-style: solid; background-color: rgb(251, 251, 251);
+}
+.bottom-top-left {
+	background: url("img/circle.png") no-repeat left bottom; left: 0px; top: 0px; font-size: 2px; position: absolute;
+}
+.bottom-top-right {
+	background: url("img/circle.png") no-repeat right bottom; left: 0px; top: 0px; font-size: 2px; position: absolute;
+}
+.user-task-icon {
+	background: url("icons/user.png") no-repeat;
+}
+.manual-task-icon {
+	background: url("icons/type.manual.png") no-repeat;
+}
+.script-task-icon {
+	background: url("icons/type.script.png") no-repeat;
+}
+.mail-task-icon {
+	background: url("icons/type.send.png") no-repeat;
+}
+.service-task-icon {
+	background: url("icons/type.service.png") no-repeat;
+}
+.receive-task-icon {
+	background: url("icons/type.receive.png") no-repeat;
+}
+.business-rule-task-icon {
+	background: url("icons/type.business.rule.png") no-repeat;
+}
+.subprocess-icon {
+	background: url("icons/type.subprocess.expanded.png") no-repeat;
+}
+.callactivity-icon {
+	background: url("icons/callactivity.png") no-repeat;
+}
+.sequence-flow-icon {
+	background: url("icons/ereference.gif") no-repeat;
+}
+.start-event-icon {
+	background: url("icons/type.startevent.none.png") no-repeat;
+}
+.end-event-icon {
+	background: url("icons/type.endevent.none.png") no-repeat;
+}
+.parallel-gateway-icon {
+	background: url("icons/type.gateway.parallel.png") no-repeat;
+}
+.exclusive-gateway-icon {
+	background: url("icons/type.gateway.exclusive.png") no-repeat;
+}
+.timer-boundary-event-icon {
+	background: url("icons/timer.png") no-repeat;
+}
+.error-boundary-event-icon {
+	background: url("icons/error.png") no-repeat;
+}
+.palette-icon {
+	background: url("icons/palette.png") no-repeat;
+}
+.palette-menu {
+	padding: 5px; overflow: auto;
+}
+.palette-menu-icon {
+	background: url("icons/tree_folder_open.gif") no-repeat;
+}
+.process-icon {
+	background: url("icons/process.gif") no-repeat;
+}
+.properties-icon {
+	background: url("icons/properties.gif") no-repeat;
+}
+.properties-menu {
+	overflow: auto;
+}
+.context-menu {
+	background: url("img/menu.gif") repeat-y rgb(240, 240, 240); margin: 0px; padding: 2px; border: 1px solid rgb(204, 204, 204); border-image: none; overflow: hidden; position: absolute;
+}
+.context-menu-item {
+	margin: 0px; padding: 0px; border: 1px solid transparent; border-image: none; height: 22px; line-height: 20px; overflow: hidden; font-size: 12px; position: relative; cursor: pointer; _border: 1px solid #f0f0f0;
+}
+.context-menu-text {
+	left: 28px; top: 0px; position: absolute;
+}
+.context-menu-icon {
+	left: 2px; top: 3px; width: 16px; height: 16px; position: absolute;
+}
+.context-menu-sep {
+	background: url("img/menu_sep.png") repeat-x; margin: 3px 0px 3px 24px; line-height: 2px; font-size: 2px;
+}
+.context-menu-active {
+	background: rgb(250, 250, 250); border: 1px solid rgb(126, 171, 205); border-image: none; -moz-border-radius: 3px; -webkit-border-radius: 3px;
+}
+.context-menu-shadow {
+	background: rgb(221, 221, 221); position: absolute; -moz-border-radius: 5px; -webkit-border-radius: 5px; -moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2); -webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+}

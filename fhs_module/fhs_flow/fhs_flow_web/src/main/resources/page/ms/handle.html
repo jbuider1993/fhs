@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>处理</title>
+    <style>
+        #claimTask {
+            display: none;
+        }
+    </style>
+
+</head>
+<body class="panel panel-default">
+<div id="tt" class="easyui-tabs">
+    <div title="详情" style="padding:20px;">
+        <table id="details">
+            <iframe src="https://www.baidu.com/" width="100%" height="100%" frameborder="0"
+                    class="layadmin-iframe"></iframe>
+        </table>
+    </div>
+    <div title="审批历史" data-options="" style="padding:20px;">
+        <table id="approval_history"></table>
+    </div>
+    <div title="流程图" data-options="" style="padding:20px;">
+        <table id="flow_chat">
+            <img id="flowImnage">
+        </table>
+    </div>
+</div>
+
+<div id="approval_operation">
+    <div class="infoGroup">
+        <legend>审批操作</legend>
+    </div>
+
+
+    <div class="fitem">
+        <div class="bigLabelDiv"><label>备注:</label></div>
+        <div class="bigContent"><textarea datatype="empty|*" nullmsg="备注不能为空" errormsg="备注输入了错误的格式"
+                                          class="form_textarea "
+                                          id="remark" name="remark" placeholder="请填写备注" prompt="请选择备注"></textarea></div>
+    </div>
+
+    <div class="handle-button">
+        <!-- 待认领状态下只显示认领按钮后才会有其他操作 -->
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="claimTask"
+           onclick="claimTask()">认领OK</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="complateTask" onclick="complateTask()">同意OK</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="print1" onclick="print1()">抄送</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="print2" onclick="print2()">转办</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="backTask" onclick="backTask()">驳回OK</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="backTask_node"
+           onclick="backTask_node()">驳回到指定操作OK</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="print3" onclick="print3()">前加签</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="print4" onclick="print4()">后加签</a>
+        <!-- 已办状态但还未到下一步操作 -->
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="withdraw" onclick="withdraw()">撤回OK</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="revoke" onclick="revoke()">撤销申请OK</a>
+    </div>
+</div>
+<div id="addOrUpdateDialog2" class="easyui-dialog" title="回退节点"
+     data-options="iconCls:'icon-save'" closed="true"
+     style="width: 45%; height: 45%; padding: 10px"
+     buttons="#dlg-buttons">
+</div>
+
+</body>
+<script>
+    $("#dlg-buttons").hide();
+    var taskId = "${parameter.taskId}";
+    var processInstanceId = "${parameter.processInstanceId}"
+
+    $(function () {
+        //我是申请人，显示撤销申请按钮
+        $.ajax({
+            async: false, //同步
+            type: 'post',
+            url: '${work_flow_basePath}ms/flow_instance/isRevokeApply?processInstanceId=' + processInstanceId,
+            success: function (res) {
+                if (res.code == 200) {
+                    if (res.data == false) {
+                        $("#revoke").hide();
+                    }
+                }
+            }
+        })
+        //回退节点为0
+        $.ajax({
+            async: false, //同步
+            type: 'post',
+            url: '${work_flow_basePath}ms/myWorks/findBackAvtivity?taskId=' + taskId,
+            success: function (res) {
+                if (res.code == 200) {
+                    if (res.data.length == 0) {
+                        $("#print2").hide();
+                        $("#backTask").hide();
+                        $("#backTask_node").hide();
+                        $("#print3").hide();
+                        $("#print4").hide();
+                        $("#withdraw").hide();
+                    }
+                }
+            }
+        })
+
+        isClaimTask();
+
+    })
+
+    //是否认领
+    function isClaimTask() {
+        $.ajax({
+            type: 'post',
+            url: '${work_flow_basePath}ms/myWorks/isClaimTask?taskId=' + taskId,
+            success: function (res) {
+                if (res.data) {
+                    $("#claimTask").show();
+                }
+            }
+        })
+    }
+
+    $('#tt').tabs({
+        onSelect: function (title, index) {
+            $("#approval_operation").hide();
+            if (index == 0) {
+                $("#approval_operation").show();
+            }
+            if (index == 1) {
+                $('#approval_history').datagrid({
+                    url: '${work_flow_basePath}ms/flowTaskHistory/getApprovalRecord?instanceId=' + processInstanceId,
+                    pagination: false,
+                    columns: [[
+                        {field: 'taskName', title: '任务名称', width: '30%', align: 'center'},
+                        {field: 'createTime', title: '任务创建时间', width: '15%', align: 'center'},
+                        {field: 'taskFinishTime', title: '处理时间', width: '15%', align: 'center'},
+                        {field: 'transMap.useStatusName', title: '处理状态', width: '15%', align: 'center'},
+                        {field: 'remark', title: '备注/意见', width: '25%', align: 'center'},
+                    ]]
+                });
+
+            }
+            if (index == 2) {
+                $("#flowImnage").attr("src", "${work_flow_basePath}ms/myWorks/getWorkFlowImg?processInstanceId=" + processInstanceId)
+            }
+        }
+    })
+
+    //驳回
+    function backTask() {
+        $.ajax({
+            type: 'post',
+            url: '${work_flow_basePath}ms/myWorks/backTask?taskId=' + taskId,
+            success: function (res) {
+                if (res.code == 200) {
+                    Ealert("操作成功");
+                    closeDialog();
+                    reload();
+                } else {
+                    EalertE(res.message);
+                }
+            }
+        })
+    }
+
+    //驳回指定节点
+    function backTask_node() {
+        openDialog2('${work_flow_basePath}b/page-ms/node?taskId=' + taskId, '可回退节点');
+    }
+
+    // 打开dialog2
+    function openDialog2(url, title) {
+        $('#addOrUpdateDialog2').load(url, function () {
+            $('#addOrUpdateDialog2').dialog('open').dialog('setTitle', title);
+            $.parser.parse($('#addOrUpdateDialog2'));
+        });
+    }
+
+    //签收/认领
+    function claimTask() {
+        $.ajax({
+            type: 'post',
+            url: '${work_flow_basePath}ms/myWorks/claimTask?taskId=' + taskId,
+            success: function (res) {
+                if (res.code == 200) {
+                    Ealert("操作成功");
+                    reload();
+                } else {
+                    EalertE(res.message);
+                }
+
+            }
+        })
+
+    }
+
+    //同意
+    function complateTask() {
+        $.ajax({
+            type: 'post',
+            url: '${work_flow_basePath}ms/myWorks/complateTask',
+            data: {taskId: taskId, remark: $("#remark").val()},
+            success: function (res) {
+                if (res.code == 200) {
+                    Ealert("操作成功");
+                    closeDialog();
+                    reload();
+                } else {
+                    EalertE(res.message);
+                }
+            }
+        })
+    }
+
+    //撤回
+    function withdraw() {
+        $.ajax({
+            type: 'post',
+            url: '${work_flow_basePath}ms/myWorks/withdraw?taskId=' + taskId,
+            success: function (res) {
+                if (res.code == 200) {
+                    Ealert("操作成功");
+                    closeDialog();
+                    reload();
+                } else {
+                    EalertE(res.message);
+                }
+            }
+        })
+    }
+
+    //撤销
+    function revoke() {
+        $.ajax({
+            type: 'post',
+            url: '${work_flow_basePath}ms/myWorks/revoke?taskId=' + taskId,
+            success: function (res) {
+                if (res.code == 200) {
+                    Ealert("操作成功");
+                    closeDialog();
+                    reload();
+                } else {
+                    EalertE(res.message);
+                }
+            }
+        })
+    }
+
+</script>
+
+</html>
