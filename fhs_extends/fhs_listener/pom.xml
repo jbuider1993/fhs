@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>fhs_extends</artifactId>
+        <groupId>com.fhs-opensource</groupId>
+        <version>2.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <version>2.0.0</version>
+    <artifactId>fhs_listener</artifactId>
+    <description>分布式监听器,用于写最简单的观察者模式,你可以动态给某个namespace的某个事件加N个监听器</description>
+    <dependencies>
+
+    </dependencies>
+</project>

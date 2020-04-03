@@ -28,6 +28,7 @@
         <module>fhs_static</module>
         <module>fhs_feign</module>
         <module>fhs_safe</module>
+        <module>fhs_listener</module>
     </modules>
 
     <dependencies>
