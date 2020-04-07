@@ -6,6 +6,7 @@ import com.fhs.basics.vo.SettMsMenuServerVO;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.cache.annotation.Namespace;
 import com.fhs.core.db.ds.DataSource;
+import com.fhs.core.trans.anno.AutoTrans;
 import org.springframework.stereotype.Service;
 
 
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 @Service("settMsMenuServerService")
 @DataSource("base_business")
 @Namespace("sett_ms_system")
+@AutoTrans(namespace = "sett_ms_system",fields = "serverName",useRedis = true)
 public class SettMsMenuServerServiceImpl extends BaseServiceImpl<SettMsMenuServerVO, SettMsMenuServerDO> implements SettMsMenuServerService {
 
 }

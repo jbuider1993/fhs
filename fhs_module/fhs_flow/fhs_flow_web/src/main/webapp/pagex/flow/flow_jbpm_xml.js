@@ -6,7 +6,7 @@ var listPage={
         return [
             {name:'name',title:'流程名称',width:'15%',align:'center'},
             {name:'process_key',title:'流程key',width:'15%',align:'center'},
-            {name:'server',title:'表单在哪个服务器上',width:'15%',align:'center'},
+            {name:'server',title:'表单在哪个服务器上',width:'15%',align:'center',trans:'auto',key:'sett_ms_system',showField:'transMap.serverName'},
             {name:'is_pagex',title:'表单是否是pagex实现',width:'14%',align:'center',trans:'book',key:'yesOrNo',showField:'transMap.is_pagexName'},
             {name:'status',title:'流程状态',width:'10%',trans:'book',key:'flow_status',showField:'transMap.statusName',align:'center'},
             {name:'create_user',title:'创建人',width:'15%',align:'center',trans:'user',showField:'transMap.create_userUserName'},
@@ -33,10 +33,11 @@ var listPage={
     otherFunctions:function(){
         return {
             createFlow:function (row) {
-                var content = '<iframe id="processIframe" src="' + "${path.basePath}/page/workFlow/index.html?xmlId=" + row.id  + "&processKey="+row.processKey+"&processName="+row.name+'" width="99%" height="100%" frameborder="0" scrolling="no" data-id="'+row.id+'"></iframe>';
+                var content = '<iframe id="processIframe" src="' + "${path.basePath}/b/page-work_flow/index?xmlId=" + row.id  + "&processKey="+row.processKey+"&processName="+row.name+'" width="99%" height="100%" frameborder="0" scrolling="no" data-id="'+row.id+'"></iframe>';
                 $('#addOrUpdateDialog').dialog({
                     title:'编辑流程实例',
                     content: content,
+                    with:'95%',
                 });
                 setTimeout(function(){
                     $('#addOrUpdateDialog').dialog('open');
@@ -53,7 +54,7 @@ var add={
         return [
             {name:'name',title:'流程名称',type:'input',required:true},
             {name:'process_key',title:'流程key',type:'input',required:true},
-            {name:'server',title:'表单在哪个服务器上',type:'book',code: 'flow_form_server',required:true},
+            {name:'server',title:'表单在哪个服务器上',type:'select',url: '${path.fhs_basics_url}ms/sett_ms_menu_server/getMenuServersJsonp?jsonpCallback=?',valuefield:'id',textfield:'serverName',required:true},
             {name:'is_pagex',title:'表单是否是pagex实现',type:'book',code:'yesOrNo',onSelect:'showUrlOrNamespace',dftIndex:1},
             {type:'divStart',id:'uriInput',style:'display:none;'},
             {name:'uri',title:'uri',type:'input'},

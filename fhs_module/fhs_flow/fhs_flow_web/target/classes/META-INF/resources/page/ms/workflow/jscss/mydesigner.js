@@ -208,7 +208,7 @@ function saveProcessDef() {
 
 //导出流程
 function exportProcessDef(obj) {
-	//obj.href="${ctx}/wf/procdef/procdef!exportProcessDef.action?procdefId="+processDefinitionId+"&processName="+processDefinitionName;
+	//obj.href="${basePath}/wf/procdef/procdef!exportProcessDef.action?procdefId="+processDefinitionId+"&processName="+processDefinitionName;
 }
 //流程图绘制
 function parseProcessDescriptor(data) {

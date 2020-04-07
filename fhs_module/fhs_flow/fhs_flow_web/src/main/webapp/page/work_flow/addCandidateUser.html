@@ -1,0 +1,118 @@
+<script type="text/javascript">
+    //alert("${basePath}/pm/group/group!getUserTreeOfGroup.action");
+    $(function () {
+        _task_unselected_candidate_user_panel = $('#task-unselect-candidate-user-panel').panel({
+            border: false,
+            noheader: true,
+            top: 0,
+            left: 0
+            //fit:true
+        });
+        _task_unselect_candidate_user_list = $('#task-unselect-candidate-user-list').datagrid({
+            title: "Users",
+            url: Config.Url.Get_Candidate_Users,
+            //singleSelect:true,
+            //width:900,
+            height: 400,
+            idField: 'userId',
+            pagination: true,
+            pageSize: 15,
+            pageNumber: 1,
+            pageList: [10, 15],
+            rownumbers: true,
+            sortName: 'userId',
+            sortOrder: 'asc',
+            striped: true,
+            onLoadSuccess: function (data) {
+                var rows = data.rows;
+                for (var i = 0; i < rows.length; i++) {
+                    if (task.getCandidateUser(rows[i].userId) != null) {
+                        $(this).datagrid('selectRow', i);
+                    }
+                }
+            },
+            toolbar: [{
+                text: "保存",
+                iconCls: 'icon-save',
+                handler: function () {
+                    addCandidateUsers();
+                }
+            }]
+        });
+        _task_unselect_candidate_user_group = $('#task-unselect-candidate-user-group').combobox({
+            url: Config.Url.Get_Groups_4_Combox,
+            //editable:false,
+            valueField: 'id',
+            textField: 'text',
+            onChange: function (n, o) {
+                $('#task-unselect-candidate-user-role').combobox({
+                    url: Config.Url.Get_Roles_4_Combox + "&organizationId=" + n,
+                    valueField: 'roleId',
+                    textField: 'roleName'
+                })
+            }
+        });
+        _task_unselect_candidate_user_role = $('#task-unselect-candidate-user-role').combobox({
+            url: Config.Url.Get_Roles_4_Combox,
+            valueField: 'roleId',
+            textField: 'roleName'
+        })
+    });
+
+    function searchCandidateUser() {
+        var userName = $("#task-unselect-candidate-user-userName").val();
+        var roleId = _task_unselect_candidate_user_role.combobox('getValue');
+        var organId = _task_unselect_candidate_user_group.combobox('getValue');
+        _task_unselect_candidate_user_list.datagrid('reload', {
+            userName: userName,
+            roleId: roleId,
+            organId: organId,
+        });
+    }
+
+    function addCandidateUsers() {
+        debugger;
+        var rows = _task_unselect_candidate_user_list.datagrid("getSelections");
+        for (var i = 0; i < rows.length; i++) {
+            var user = rows[i];
+            task.addCandidateUser({
+                userId: user.userId,
+                name: user.name,
+                organName: user.organName,
+                roleName: user.roleName,
+                mobile: user.mobile,
+                email: user.email
+            });
+        }
+        loadTaskCandidateUsers();
+        _task_candidate_win.window('close');
+    }
+</script>
+<div id="task-unselect-candidate-user-panel" style="padding:5px;">
+    <table border="0">
+        <tr>
+            <td>部门:</td>
+            <td><input type="text" id="task-unselect-candidate-user-group" name="task-unselect-candidate-user-group"
+                       value=""/></td>
+            <td>角色:</td>
+            <td><input type="text" id="task-unselect-candidate-user-role" name="task-unselect-candidate-user-role"
+                       value="" size=""/></td>
+            <td>姓名:</td>
+            <td><input type="text" id="task-unselect-candidate-user-userName"
+                       name="task-unselect-candidate-user-userName" value="" size="9"/></td>
+            <td><a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="searchCandidateUser();">查询</a></td>
+        </tr>
+    </table>
+    <table id="task-unselect-candidate-user-list">
+        <thead>
+        <tr>
+            <th field="userId" align="middle" checkbox="true"></th>
+            <th field="name" width="100" align="middle" sortable="true">姓名</th>
+            <th field="organName" width="100" align="middle" sortable="true">部门</th>
+            <th field="roleName" width="200" align="middle">角色</th>
+            <th field="mobile" width="100" align="middle">手机号</th>
+            <th field="email" width="150" align="middle">Email</th>
+        </tr>
+        </thead>
+    </table>
+</div>
