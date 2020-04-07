@@ -1,12 +1,15 @@
 package com.fhs.flow.vo;
 
 import com.fhs.common.constant.Constant;
+import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.anno.TransTypes;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Map;
 
 /**
  * 已办纪录
@@ -18,8 +21,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TransTypes(types = {Constant.USER_INFO,"wordbook"})
-public class TaskHistoryVO {
+@TransTypes(types = {Constant.USER_INFO, "wordbook"})
+public class TaskHistoryVO implements VO {
 
     private String taskId;
 
@@ -74,4 +77,21 @@ public class TaskHistoryVO {
      * 备注
      */
     private String remark;
+
+
+    /**
+     * 翻译map
+     */
+    private Map<String, String> transMap;
+
+
+    @Override
+    public Object getPkey() {
+        return this.taskId;
+    }
+
+    @Override
+    public Integer getIsDelete() {
+        return Constant.INT_FALSE;
+    }
 }

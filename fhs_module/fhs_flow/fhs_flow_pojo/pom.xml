@@ -12,9 +12,9 @@
     <artifactId>fhs_flow_pojo</artifactId>
     <dependencies>
         <dependency>
-        <groupId>com.fhs-opensource</groupId>
-        <artifactId>fhs_base_pojo</artifactId>
-        <version>${fhs.release.version}</version>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_base_pojo</artifactId>
+            <version>${fhs.release.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fhs-opensource</groupId>
@@ -32,6 +32,12 @@
             <groupId>org.activiti</groupId>
             <artifactId>activiti-engine</artifactId>
             <version>5.22.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.mybatis</groupId>
+                    <artifactId>mybatis</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
 

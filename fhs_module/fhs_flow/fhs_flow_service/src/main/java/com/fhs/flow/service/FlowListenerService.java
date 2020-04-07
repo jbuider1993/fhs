@@ -11,8 +11,7 @@ import com.fhs.flow.vo.FlowListenerVO;
  * @author jackwong
  * @since 2019-11-11 14:28:44
  */
-public interface FlowListenerService extends BaseService<FlowListenerVO, FlowListenerDO>{
+public interface FlowListenerService extends BaseService<FlowListenerVO, FlowListenerDO> {
 
-    
 
 }

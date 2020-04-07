@@ -16,6 +16,7 @@ import java.util.Map;
 
 /**
  * Activiti 扩展配置
+ *
  * @author qiaolin
  * @version 2018/10/22
  **/
@@ -30,7 +31,7 @@ public class ActivitiConfiguration {
     private String autoActivitiCreatTbl;
 
     @Bean
-    public ProcessEngineConfigurationConfigurer processEngineConfigurationConfigurer(){
+    public ProcessEngineConfigurationConfigurer processEngineConfigurationConfigurer() {
         ProcessEngineConfigurationConfigurer configurer = new ProcessEngineConfigurationConfigurer() {
 
             @Override
@@ -51,10 +52,11 @@ public class ActivitiConfiguration {
     }
 
     /**
-     *  用户自定义权限工厂
+     * 用户自定义权限工厂
+     *
      * @return
      */
-    private List<SessionFactory> getCustomSessionFactories(){
+    private List<SessionFactory> getCustomSessionFactories() {
         List<SessionFactory> sessionFactoryList = new ArrayList<>();
         // TODO 等用户权限做好了再开启这两个
         //sessionFactoryList.add(new GroupServiceFactory());
@@ -63,15 +65,15 @@ public class ActivitiConfiguration {
     }
 
     /**
-     *  需要spring 代理的bean 请在该方法中加入
+     * 需要spring 代理的bean 请在该方法中加入
+     *
      * @return
      */
-    private Map<Object, Object> getBeans(){
+    private Map<Object, Object> getBeans() {
         Map<Object, Object> beans = new HashMap<>();
 
         return beans;
     }
-
 
 
 }

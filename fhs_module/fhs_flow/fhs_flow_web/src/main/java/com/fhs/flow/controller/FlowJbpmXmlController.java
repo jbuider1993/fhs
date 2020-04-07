@@ -27,13 +27,13 @@ public class FlowJbpmXmlController extends ModelSuperController<FlowJbpmXmlVO, F
 
     /**
      * 部署工作流到引擎里面
+     *
      * @param xmlId 里面包含id即可
      */
     @RequestMapping("releaseWorkFlow")
     @RequiresPermissions("flow_jbpm_xml:releaseWorkFlow")
-    public HttpResult<Boolean> releaseWorkFlow(String  xmlId)
-    {
-        ParamChecker.isNotNull(xmlId,"id不能为空");
+    public HttpResult<Boolean> releaseWorkFlow(String xmlId) {
+        ParamChecker.isNotNull(xmlId, "id不能为空");
         flowJbpmXmlService.releaseWorkFlow(xmlId);
         return HttpResult.success(true);
     }

@@ -152,6 +152,8 @@
         <if test="systemIds != null and systemIds != ''">
             AND system_id IN(${systemIds})
         </if>
+        AND m.is_enable=1
+        AND m.is_delete = 0
         ORDER BY
         father_menu_id,order_index
     </select>

@@ -15,6 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/ms/flowListener")
 public class FlowListenerController extends ModelSuperController<FlowListenerVO, FlowListenerDO> {
-   
+
 
 }

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * 实例VO
+ *
  * @author Jackwong
  * @date 2019 -11-15 14:03:56
  */
@@ -23,7 +24,7 @@ public class InstanceVO extends FlowInstanceDO {
     /**
      * 是否是提交信息的节点
      */
-    private  Integer isSubmiTask;
+    private Integer isSubmiTask;
 
     /**
      * 表单的url

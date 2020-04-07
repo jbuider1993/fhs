@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class DefaultInstHistImgService  implements BpmImageService {
-    
+public class DefaultInstHistImgService implements BpmImageService {
+
     @Autowired
     private RepositoryService repositoryService;
     @Autowired
@@ -44,51 +44,52 @@ public class DefaultInstHistImgService  implements BpmImageService {
     @Override
     public InputStream draw(String actDefId, String processInstanceId) throws Exception {
 
-            Map<String, Paint> nodeMap = new HashMap();
-            Map<String, Paint> flowMap = new HashMap();
-            Map<String, Paint> gateMap = new HashMap();
+        Map<String, Paint> nodeMap = new HashMap();
+        Map<String, Paint> flowMap = new HashMap();
+        Map<String, Paint> gateMap = new HashMap();
 
-            // 获得历史活动记录实体（通过启动时间正序排序，不然有的线可以绘制不出来）
-            List<HistoricActivityInstance> historicActivityInstances = historyService
-                    .createHistoricActivityInstanceQuery().processInstanceId(processInstanceId)
-                    .orderByHistoricActivityInstanceStartTime().asc().list();
+        // 获得历史活动记录实体（通过启动时间正序排序，不然有的线可以绘制不出来）
+        List<HistoricActivityInstance> historicActivityInstances = historyService
+                .createHistoricActivityInstanceQuery().processInstanceId(processInstanceId)
+                .orderByHistoricActivityInstanceStartTime().asc().list();
 
-            for(HistoricActivityInstance historicActivityInstance : historicActivityInstances){
-                nodeMap.put(historicActivityInstance.getActivityId(),new Color(26,179,148));
-            }
-            if(!this.isFinished(processInstanceId)){
-                runtimeService.getActiveActivityIds(processInstanceId).forEach(activitiId->{
-                    nodeMap.put(activitiId,Color.RED);
-                });
-            }
+        for (HistoricActivityInstance historicActivityInstance : historicActivityInstances) {
+            nodeMap.put(historicActivityInstance.getActivityId(), new Color(26, 179, 148));
+        }
+        if (!this.isFinished(processInstanceId)) {
+            runtimeService.getActiveActivityIds(processInstanceId).forEach(activitiId -> {
+                nodeMap.put(activitiId, Color.RED);
+            });
+        }
 
 
-            // 计算活动线
-           List<String> highLightedFlows = getHighLightedFlows(
+        // 计算活动线
+        List<String> highLightedFlows = getHighLightedFlows(
                 (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService)
                         .getDeployedProcessDefinition(actDefId),
                 historicActivityInstances);
-            highLightedFlows.forEach(lineId->{
-                flowMap.put(lineId,Color.GRAY);
-            });
-            ThreadMapUtil.put("DefaultInstHistImgService_nodeMap", nodeMap);
-            ThreadMapUtil.put("DefaultInstHistImgService_flowMap", flowMap);
-            ThreadMapUtil.put("DefaultInstHistImgService_gateMap", gateMap);
-            InputStream imageStream = null;
+        highLightedFlows.forEach(lineId -> {
+            flowMap.put(lineId, Color.GRAY);
+        });
+        ThreadMapUtil.put("DefaultInstHistImgService_nodeMap", nodeMap);
+        ThreadMapUtil.put("DefaultInstHistImgService_flowMap", flowMap);
+        ThreadMapUtil.put("DefaultInstHistImgService_gateMap", gateMap);
+        InputStream imageStream = null;
 
-            try {
-                BpmnModel bpmnModel = this.repositoryService.getBpmnModel(actDefId);
-                BpmProcessDiagramGenerator diagramGenerator = new BpmProcessDiagramGenerator();
-                imageStream = diagramGenerator.generateDiagram(bpmnModel, "png", nodeMap, flowMap);
-            } finally {
-                IOUtils.closeQuietly(imageStream);
-            }
+        try {
+            BpmnModel bpmnModel = this.repositoryService.getBpmnModel(actDefId);
+            BpmProcessDiagramGenerator diagramGenerator = new BpmProcessDiagramGenerator();
+            imageStream = diagramGenerator.generateDiagram(bpmnModel, "png", nodeMap, flowMap);
+        } finally {
+            IOUtils.closeQuietly(imageStream);
+        }
 
-            return imageStream;
+        return imageStream;
     }
 
     /**
      * 判断一个流程是否已经完成了
+     *
      * @param processInstanceId 实例id
      * @return true 已经就结束  false 未结束
      */
@@ -98,12 +99,12 @@ public class DefaultInstHistImgService  implements BpmImageService {
 
 
     /**
+     * @param processDefinitionEntity   流程定义实例
+     * @param historicActivityInstances 流程活动节点实例
      * @author H.J
      * @date 2018/4/9 10:29
      * @title getHighLightedFlows
      * @description: 获取流程应该高亮的线
-     * @param processDefinitionEntity 流程定义实例
-     * @param historicActivityInstances 流程活动节点实例
      * @return: java.util.List<java.lang.String>
      */
     public List<String> getHighLightedFlows(ProcessDefinitionEntity processDefinitionEntity, List<HistoricActivityInstance> historicActivityInstances) {
@@ -111,11 +112,11 @@ public class DefaultInstHistImgService  implements BpmImageService {
         List<String> highFlows = new ArrayList<>();// 用以保存高亮的线flowId
         List<String> highActivitiImpl = new ArrayList<>();
 
-        for(HistoricActivityInstance historicActivityInstance : historicActivityInstances){
+        for (HistoricActivityInstance historicActivityInstance : historicActivityInstances) {
             highActivitiImpl.add(historicActivityInstance.getActivityId());
         }
 
-        for(HistoricActivityInstance historicActivityInstance : historicActivityInstances){
+        for (HistoricActivityInstance historicActivityInstance : historicActivityInstances) {
             ActivityImpl activityImpl = processDefinitionEntity.findActivity(historicActivityInstance.getActivityId());
             List<PvmTransition> pvmTransitions = activityImpl.getOutgoingTransitions();
             // 对所有的线进行遍历

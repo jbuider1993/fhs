@@ -11,10 +11,10 @@ import org.springframework.core.env.Environment;
 public class PropertyUtil {
 
     //private static Environment env = null;
-	private static IProperty propertyHolder = null;
+    private static IProperty propertyHolder = null;
     // spring boot 略 不同处理
-	private static Environment environment = null;
-    
+    private static Environment environment = null;
+
     /**
      * 根据键值获取属性文件中配置的值。
      *
@@ -23,9 +23,9 @@ public class PropertyUtil {
      * @return String
      */
     public static String getProperty(String property, String defaultValue) {
-    	if(propertyHolder == null){
-    		getEnvironment();
-    	}
+        if (propertyHolder == null) {
+            getEnvironment();
+        }
 
         String v = propertyHolder.getValue(property);
         if (StringUtil.isEmpty(v)) {
@@ -37,20 +37,20 @@ public class PropertyUtil {
 
 
     private static synchronized void getEnvironment() {
-    	propertyHolder = (CustPropertyPlaceholderConfigurer) AppUtil.getBean("custPlaceHolder");
-        
-        if(propertyHolder == null) {
-        	environment = AppUtil.getBean(Environment.class); 
-        	if(environment == null) {
-        		throw new BusinessException("Environment cannot be found");
-        	}
-        	
-        	propertyHolder = new IProperty() {
-				@Override
-				public String getValue(String key) {
-					return environment.getProperty(key);
-				}
-			};
+        propertyHolder = (CustPropertyPlaceholderConfigurer) AppUtil.getBean("custPlaceHolder");
+
+        if (propertyHolder == null) {
+            environment = AppUtil.getBean(Environment.class);
+            if (environment == null) {
+                throw new BusinessException("Environment cannot be found");
+            }
+
+            propertyHolder = new IProperty() {
+                @Override
+                public String getValue(String key) {
+                    return environment.getProperty(key);
+                }
+            };
         }
     }
 
@@ -116,21 +116,22 @@ public class PropertyUtil {
      */
     public static String getJdbcType() {
         String str = getProperty("jdbc.dbType");
-        if(StringUtil.isEmpty(str)) {
-        	str = getProperty("spring.datasource.dbType");
+        if (StringUtil.isEmpty(str)) {
+            str = getProperty("spring.datasource.dbType");
         }
-        
+
         return str;
     }
-    
+
     /**
      * <pre>
      * 获取表单备份地址
      * </pre>
+     *
      * @return
      */
     public static String getFormDefBackupPath() {
-    	return getProperty("formDefBackupPath");
+        return getProperty("formDefBackupPath");
     }
 
 }

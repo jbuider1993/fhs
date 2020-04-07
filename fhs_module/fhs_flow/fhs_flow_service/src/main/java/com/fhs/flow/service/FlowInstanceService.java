@@ -10,7 +10,7 @@ import com.fhs.flow.vo.FlowInstanceVO;
  * @author jackwong
  * @since 2019-11-11 19:40:44
  */
-public interface FlowInstanceService extends BaseService<FlowInstanceVO, FlowInstanceDO>{
+public interface FlowInstanceService extends BaseService<FlowInstanceVO, FlowInstanceDO> {
 
     /**
      * 进行中

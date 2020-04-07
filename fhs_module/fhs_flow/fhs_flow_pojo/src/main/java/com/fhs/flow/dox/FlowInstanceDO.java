@@ -9,6 +9,7 @@ import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.valid.group.*;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 

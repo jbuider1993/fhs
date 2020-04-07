@@ -49,7 +49,7 @@ public class FlowTaskHistoryController extends ModelSuperController<FlowTaskHist
         alreadyDoneList.forEach(alreadyDoneVO -> {
             alreadyDoneVO.setUseTime(DateUtils.timeCount(ConverterUtils.toInt(alreadyDoneVO.getUseTime())));
         });
-        transService.transMore((List<? extends VO>) alreadyDoneList);
+        transService.transMore(alreadyDoneList);
         int alreadyDoneCount = flowTaskHistoryService.findTaskHistoryCount(paramMap);
         return new Pager(alreadyDoneCount, alreadyDoneList);
     }
@@ -61,7 +61,7 @@ public class FlowTaskHistoryController extends ModelSuperController<FlowTaskHist
     public Pager<TaskHistoryVO> getApprovalRecord(String instanceId) {
         ParamChecker.isNotNullOrEmpty(instanceId, "流程实例id不能为空");
         List<TaskHistoryVO> approvalRecord = flowTaskHistoryService.findApprovalRecord(instanceId);
-        transService.transMore((List<? extends VO>) approvalRecord);
+        transService.transMore(approvalRecord);
         return new Pager(approvalRecord.size(), approvalRecord);
     }
 

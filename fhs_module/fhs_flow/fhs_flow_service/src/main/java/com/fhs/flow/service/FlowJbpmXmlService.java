@@ -10,7 +10,7 @@ import com.fhs.flow.vo.FlowJbpmXmlVO;
  * @author jackwong
  * @since 2019-11-11 14:29:04
  */
-public interface FlowJbpmXmlService extends BaseService<FlowJbpmXmlVO, FlowJbpmXmlDO>{
+public interface FlowJbpmXmlService extends BaseService<FlowJbpmXmlVO, FlowJbpmXmlDO> {
 
     /**
      * 已发布
@@ -19,6 +19,7 @@ public interface FlowJbpmXmlService extends BaseService<FlowJbpmXmlVO, FlowJbpmX
 
     /**
      * 发布工作流到引擎中，将状态改为已发布
+     *
      * @param xmlId 工作流配置对象
      */
     void releaseWorkFlow(String xmlId);

@@ -89,19 +89,19 @@ public class AppUtil implements ApplicationContextAware {
      * @param clazz
      * @return
      */
-    public static <T> Map<String, T> getImplInstance(Class<T> clazz){
+    public static <T> Map<String, T> getImplInstance(Class<T> clazz) {
         return context.getBeansOfType(clazz);
     }
-    
-    public static <T> List<T> getImplInstanceArray(Class<T> clazz){
-    	List<T> list = new ArrayList<>();
-    	
-    	Map<String,T> map = context.getBeansOfType(clazz);
-    	
-    	for (T t : map.values()) {
-    		list.add(t);
-		}
-    	return list;
+
+    public static <T> List<T> getImplInstanceArray(Class<T> clazz) {
+        List<T> list = new ArrayList<>();
+
+        Map<String, T> map = context.getBeansOfType(clazz);
+
+        for (T t : map.values()) {
+            list.add(t);
+        }
+        return list;
     }
 
     /**

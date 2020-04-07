@@ -17,8 +17,8 @@ public class MemoryCache<T> implements ICache<T> {
 
     @Override
     public void add(String key, T obj) {
-    	if(key == null){
-    	    return;
+        if (key == null) {
+            return;
         }
         map.put(key, obj);
         logger.info("MemoryCache add " + key);
@@ -26,7 +26,7 @@ public class MemoryCache<T> implements ICache<T> {
 
     @Override
     public void delByKey(String key) {
-    	if(key == null) return;
+        if (key == null) return;
         map.remove(key);
         logger.info("MemoryCache delByKey " + key);
     }
@@ -39,23 +39,23 @@ public class MemoryCache<T> implements ICache<T> {
 
     @Override
     public T getByKey(String key) {
-    	if(key == null){
-    	    return null;
+        if (key == null) {
+            return null;
         }
         return map.get(key);
     }
 
     @Override
     public boolean containKey(String key) {
-    	if(key == null) {
-    	    return false;
+        if (key == null) {
+            return false;
         }
         return map.containsKey(key);
     }
 
     @Override
     public void add(String key, T obj, int timeout) {
-    	
+
     }
 
 }

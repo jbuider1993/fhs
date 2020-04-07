@@ -42,8 +42,17 @@ public class PubWorkFlowServiceImpl implements PubWorkFlowService {
 
     */
 /**
-     * 引擎工厂
-     *//*
+ * 引擎工厂
+ * <p>
+ * 启动一个工作流，将表单保存到数据库中
+ * 1 给自建工作流实例表添加一条数据
+ * 2 给流程引擎添加数据(注意流程变量处理)
+ * 3 保存表单数据
+ * 4 更新自建流程实例数据
+ *
+ * @param paramMap 包含表单数据 流程id 用户信息
+ * @return businesskey
+ *//*
 
     @Autowired
     private ProcessEngineFactoryBean processEngineFactoryBean;
@@ -72,14 +81,14 @@ public class PubWorkFlowServiceImpl implements PubWorkFlowService {
         WorkFlowJbpmXml WorkFlowJbpmXml = jbpmXmlDBpubService.get(WorkFlowJbpmXml.class, paramMap.getStr("workFlowId"));
         */
 /**
-         * 启动一个工作流，将表单保存到数据库中
-         * 1 给自建工作流实例表添加一条数据
-         * 2 给流程引擎添加数据(注意流程变量处理)
-         * 3 保存表单数据
-         * 4 更新自建流程实例数据
-         * @param paramMap 包含表单数据 流程id 用户信息
-         * @return businesskey
-         *//*
+ * 启动一个工作流，将表单保存到数据库中
+ * 1 给自建工作流实例表添加一条数据
+ * 2 给流程引擎添加数据(注意流程变量处理)
+ * 3 保存表单数据
+ * 4 更新自建流程实例数据
+ * @param paramMap 包含表单数据 流程id 用户信息
+ * @return businesskey
+ *//*
 
         FormDesign form = formDBpubService.get(FormDesign.class,paramMap.getStr("formId"));
         DbParam dbParam = new DbParam();
