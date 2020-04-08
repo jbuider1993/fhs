@@ -46,6 +46,9 @@ fhs:
       description: 项目api
       developer: fhs developers
       name: 公共接口文档
+
+  activiti:
+    createtb: false #是否创建表
 spring:
   main:
     allow-bean-definition-overriding: true
@@ -109,7 +112,14 @@ spring:
             threadCount: 10
             threadPriority: 5
             threadsInheritContextClassLoaderOfInitializingThread: true
-
+    #Activiti property configuration
+  activiti:
+    database-schema-update: false
+    job-executor-activate: true
+    history-level: full
+    check-process-definitions: false
+    ext:
+      database-schema-update: false
 logging:
   config: classpath:logback-spring.xml
   level:

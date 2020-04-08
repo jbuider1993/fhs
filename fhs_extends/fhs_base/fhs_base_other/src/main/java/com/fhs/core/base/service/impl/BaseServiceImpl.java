@@ -11,6 +11,7 @@ import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.ConverterUtils;
 import com.fhs.common.utils.ListUtils;
 import com.fhs.common.utils.ReflectUtils;
+import com.fhs.common.utils.StringUtil;
 import com.fhs.core.base.autodel.service.AutoDelService;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.base.mapper.FhsBaseMapper;
@@ -31,6 +32,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
@@ -97,8 +99,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         this.isCacheable = this.getClass().isAnnotationPresent(Cacheable.class);
         if (isCacheable) {
             this.namespace = this.getClass().getAnnotation(Cacheable.class).value();
-        }
-        else if(this.getClass().isAnnotationPresent(Namespace.class)){
+        } else if (this.getClass().isAnnotationPresent(Namespace.class)) {
             this.namespace = this.getClass().getAnnotation(Namespace.class).value();
         }
     }
@@ -217,7 +218,6 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     }
 
 
-
     @Override
     public int updateBatch(List<Map<String, Object>> list) {
         int result = baseMapper.updateBatch(list);
@@ -235,10 +235,30 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public int insertSelective(D entity) {
+        initPkeyAndIsDel(entity);
         addCache(entity);
         int result = baseMapper.insertSelective(entity);
         this.refreshCache();
         return result;
+    }
+
+    private void initPkeyAndIsDel(D entity) {
+        entity.setIsDelete(Constant.INT_FALSE);
+        Field field = entity.getIdField(false);
+        if (field != null) {
+            field.setAccessible(true);
+            try {
+                if (field.get(entity) == null && field.getType() == String.class) {
+                    field.set(entity, StringUtil.getUUID());
+                }
+                if(entity.getCreateTime()==null){
+                    entity.setCreateTime(new Date());
+                    entity.setUpdateTime(new Date());
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -266,7 +286,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
             message.put("namespace", autoTrans.namespace());
             redisCacheService.convertAndSend("trans", JSONUtils.toJSONString(message));
         }
-        if (this.nameSpace !=null ) {
+        if (this.nameSpace != null) {
             this.cacheUpdateManager.clearCache(nameSpace);
         }
     }
@@ -293,9 +313,11 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     }
 
 
-
     @Override
     public int batchInsert(List<D> list) {
+        for (D d : list) {
+            initPkeyAndIsDel(d);
+        }
         int result = baseMapper.batchInsert(list);
         this.refreshCache();
         return result;
@@ -312,7 +334,6 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         removeCache(primaryValue);
         return result;
     }
-
 
 
     @Override
@@ -408,7 +429,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
     @Override
     public int deleteBean(D entity) {
         List<D> dos = baseMapper.selectPageJpa(entity, -1, -1);
-        if(dos.isEmpty()){
+        if (dos.isEmpty()) {
             return 0;
         }
         for (D d : dos) {
@@ -457,7 +478,7 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
             autoDelService.deleteItemTBL(this.nameSpace, id);
         }
         List<D> dos = baseMapper.selectByIds(idList);
-        if(dos.isEmpty()){
+        if (dos.isEmpty()) {
             return 0;
         }
         for (D d : dos) {

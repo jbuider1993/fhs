@@ -29,9 +29,16 @@
             <artifactId>fhs_pub_web</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
+        <!--在线定时任务模块,不需要的话可以去掉-->
         <dependency>
             <groupId>com.fhs-opensource</groupId>
             <artifactId>fhs_task_web</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <!--工作流模块,不需要的话可以去掉-->
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_flow_web</artifactId>
             <version>${fhs.release.version}</version>
         </dependency>
         <dependency>
