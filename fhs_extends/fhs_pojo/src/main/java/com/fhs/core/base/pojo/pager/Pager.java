@@ -1,5 +1,7 @@
 package com.fhs.core.base.pojo.pager;
 
+import com.fhs.common.utils.JsonUtils;
+
 import java.util.Collection;
 
 /**
@@ -51,5 +53,7 @@ public class Pager<T>
     {
         this.rows = rows;
     }
-
+    public String asJson(){
+        return JsonUtils.bean2json(this);
+    }
 }

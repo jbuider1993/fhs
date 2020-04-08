@@ -13,7 +13,7 @@
                     if (pp) {
                         pp.panel('refresh', '${basePath}/b/page-work_flow/taskGeneral');
                     }
-                } else if (title == 'Multi Instance') {
+                } else if (title == '多实例') {
                     var pp = $('#task-properties-accordion').accordion('getSelected');
                     if (pp) {
                         pp.panel('refresh', '${basePath}/b/page-work_flow/taskMultiInstance');
@@ -33,7 +33,7 @@
             shadow: true
         });
         $('#task-listeners-list').datagrid({
-            title: "Execution Listeners",
+            title: "执行监听器",
             //url:'${basePath}/wf/procdef/procdef!search.action',//加载表格数据的URL
             singleSelect: true,
             //width:500,
@@ -48,12 +48,12 @@
             //sortOrder:'asc',
             striped: true,
             toolbar: [{
-                text: 'New',
+                text: '新增',
                 iconCls: 'icon-add',
                 handler: function () {
                     _listener_win.window('open');
                     //_listener_frame.src="";
-                    _listener_win.window('refresh', 'executionListenerConfig.html');
+                    _listener_win.window('refresh', '${basePath}/b/page-work_flow/executionListenerConfig');
                     //alert(_listener_frame.document.body.innerHTML);
                 }
             }]
@@ -72,7 +72,7 @@
     function editListener(id) {
         listenerId = id;
         _listener_win.window('open');
-        _listener_win.window('refresh', 'executionListenerConfig.html');
+        _listener_win.window('refresh', '${basePath}/b/page-work_flow/executionListenerConfig');
     }
 
     function deleteListener(id) {

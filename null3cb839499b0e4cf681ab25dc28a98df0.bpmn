@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:activiti="http://activiti.org/bpmn"
+ xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+ xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+ xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+ typeLanguage="http://www.w3.org/2001/XMLSchema"
+ expressionLanguage="http://www.w3.org/1999/XPath"
+ targetNamespace="null">
+    <process  id="test1" name="test1">
+        <startEvent  id="Start" name="开始节点" activiti:initiator="_wf_default_v_applicant">
+        </startEvent>
+        <endEvent  id="End" name="结束节点">
+        </endEvent>
+        <userTask  id="taskb2869cc423939bad7880" name="提交请假" >
+            <extensionElements>
+                <activiti:taskListener event="create" class="1213" >
+                    <activiti:field name="11">
+                        <activiti:string>11</activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+            </extensionElements>
+        </userTask>
+        <sequenceFlow  id="connection040046e0243f6172aa15" name="22" sourceRef="Start" targetRef="taskb2869cc423939bad7880">
+        </sequenceFlow>
+        <sequenceFlow  id="connection84fc4e2555f5c142e474" name="111" sourceRef="taskb2869cc423939bad7880" targetRef="End">
+        </sequenceFlow>
+    </process>
+    <bpmndi:BPMNDiagram id="BPMNDiagram_test1">
+        <bpmndi:BPMNPlane bpmnElement="test1" id="BPMNPlane_test1">
+            <bpmndi:BPMNShape bpmnElement="Start" id="BPMNShape_Start">
+                <omgdc:Bounds height="40" width="40" x="157" y="58"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="End" id="BPMNShape_End">
+                <omgdc:Bounds height="40" width="40" x="508" y="57"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="taskb2869cc423939bad7880" id="BPMNShape_taskb2869cc423939bad7880">
+                <omgdc:Bounds height="60" width="118" x="303" y="49"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="connection040046e0243f6172aa15" id="BPMNEdge_connection040046e0243f6172aa15">
+                <omgdi:waypoint x="197" y="78"/>
+                <omgdi:waypoint x="303" y="79"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="connection84fc4e2555f5c142e474" id="BPMNEdge_connection84fc4e2555f5c142e474">
+                <omgdi:waypoint x="421" y="79"/>
+                <omgdi:waypoint x="508" y="77"/>
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</definitions>

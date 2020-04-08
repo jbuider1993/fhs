@@ -1,0 +1,11 @@
+<%
+layout("/pagex/list_template.html",{}){}
+%>
+<script>
+    /**
+     * 查看
+     */
+    function view(row) {
+        openDialog('${basePath}/ms/pagex/${namespace}_flow_view.jsp?isView=true&id=' + row.${modelConfig.pkeyCamel} + '&instanceId=' + row.instanceId, '查看');
+    }
+</script>

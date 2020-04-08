@@ -1,5 +1,6 @@
 package com.fhs.flow.service.impl;
 
+import com.fhs.core.trans.service.impl.TransService;
 import com.fhs.flow.dox.FlowTaskDO;
 import com.fhs.flow.mapper.WorkFlowTaskMapper;
 import com.fhs.flow.service.WorkFlowTaskService;
@@ -21,26 +22,33 @@ import java.util.Map;
 public class WorkFlowTaskServiceImpl implements WorkFlowTaskService {
 
     @Autowired
-    private WorkFlowTaskMapper workFlowTaskDAO;
+    private WorkFlowTaskMapper workFlowTaskMapper;
+
+    @Autowired
+    private TransService transService;
 
     @Override
     public List<FlowTaskVO> findNeedClaimTask(Map<String, Object> paramMap) {
-        return workFlowTaskDAO.findNeedClaimTask(paramMap);
+        List<FlowTaskVO> result = workFlowTaskMapper.findNeedClaimTask(paramMap);
+        transService.transMore(result);
+        return result;
     }
 
     @Override
     public int findNeedClaimTaskCount(Map<String, Object> paramMap) {
-        return workFlowTaskDAO.findNeedClaimTaskCount(paramMap);
+        return workFlowTaskMapper.findNeedClaimTaskCount(paramMap);
     }
 
     @Override
     public List<FlowTaskVO> findNeedComplateTask(Map<String, Object> paramMap) {
-        return workFlowTaskDAO.findNeedComplateTask(paramMap);
+        List<FlowTaskVO> result = workFlowTaskMapper.findNeedComplateTask(paramMap);
+        transService.transMore(result);
+        return result;
     }
 
     @Override
     public int findNeedComplateTaskCount(Map<String, Object> paramMap) {
-        return workFlowTaskDAO.findNeedComplateTaskCount(paramMap);
+        return workFlowTaskMapper.findNeedComplateTaskCount(paramMap);
     }
 
 

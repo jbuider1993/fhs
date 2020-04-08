@@ -159,7 +159,7 @@
                     _properties_panel_obj.panel('refresh',
                         '${basePath}/b/page-work_flow/containerProperties');
                 };
-                $('.easyui-linkbutton')
+                $('.easyui-linkbutton:not(.onlyBtn)')
                     .draggable(
                         {
                             proxy: function (source) {
@@ -408,26 +408,7 @@
 
 <!-- toolbar -->
 <div id="toolbar-panel" region="north" border="false" style="height: 36px; background: #E1F0F2;">
-    <div style="background: #E1F0F2; padding: 5px;">
-        <a href="javascript:void(0)" id="sb1" class="easyui-splitbutton" menu="#edit-menu" iconCls="icon-edit">编辑</a>
-        <!--			<a href="javascript:void(0)" id="sb2" class="easyui-splitbutton" menu="#mm2" iconCls="icon-ok" onclick="javascript:alert(work_flow.toXML())">Ok</a>-->
-        <!--			<a href="javascript:void(0)" id="mb2" class="easyui-menubutton" menu="#xml/diagram" onclick="viewXMLOrDiagram()">XML/Diagram</a>-->
-        <a href="javascript:void(0)" id="mb3" class="easyui-menubutton" menu="#mm3" iconCls="icon-help">帮助</a>
-    </div>
-    <div id="edit-menu" style="width: 150px;">
-        <div iconCls="icon-undo" onclick="undo()">Undo</div>
-        <div iconCls="icon-redo" onclick="redo()">Redo</div>
-        <div class="menu-sep"></div>
-        <!--		<div onclick="openProcessDef()">Open</div>-->
-        <div id="saveWfBt" iconCls="icon-save" onclick="saveXml()">保存</div>
-        <div iconCls="icon-export" onclick="exportProcessDef(this)">导出</div>
-        <div iconCls="icon-import" onclick="openImportDialog(this)">导入</div>
-    </div>
-    <div id="mm3" style="width: 150px;">
-        <div>帮助</div>
-        <div class="menu-sep"></div>
-        <div>关于</div>
-    </div>
+    <div id="saveWfBt" iconCls="icon-save" class="easyui-linkbutton onlyBtn"  onclick="saveXml()">保存</div>
 </div>
 <!-- task context menu -->
 <div id="task-context-menu" class="easyui-menu" style="width: 120px;">

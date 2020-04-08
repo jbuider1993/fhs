@@ -8,13 +8,13 @@
                 if (title == 'Variables') {
                     var pp = $('#process-properties-accordion').accordion('getSelected');
                     if (pp) {
-                        pp.panel('refresh', 'processVariable.html');
+                        pp.panel('refresh', '${basePath}/b/page-work_flow/processVariable');
                     }
                 }
                 if (title == 'Data Objects') {
                     var pp = $('#process-properties-accordion').accordion('getSelected');
                     if (pp) {
-                        pp.panel('refresh', 'processDataObject.html');
+                        pp.panel('refresh', '${basePath}/b/page-work_flow/processDataObject');
                     }
                 }
             }
@@ -53,7 +53,7 @@
                         _listener_win.window('open');
                         //_listener_frame.src="";
                         _listener_win.window('refresh',
-                            'processListenerConfig.html');
+                            '${basePath}/b/page-work_flow/processListenerConfig');
                         //alert(_listener_frame.document.body.innerHTML);
                     }
                 }]
@@ -74,7 +74,7 @@
 
     function editListener(id) {
         _listener_win.window('open');
-        _listener_win.window('refresh', 'processListenerConfig.html');
+        _listener_win.window('refresh', '${basePath}/b/page-work_flow/processListenerConfig');
     }
 
     function deleteListener(id) {

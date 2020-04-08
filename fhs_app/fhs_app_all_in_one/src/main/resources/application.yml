@@ -125,7 +125,7 @@ logging:
   level:
     com.fhs.basics: debug
     com.fhs.pagex: debug
-
+    com.fhs.flow: debug
 logback:
   #这里可以配置logstash ip和端口
   elk:

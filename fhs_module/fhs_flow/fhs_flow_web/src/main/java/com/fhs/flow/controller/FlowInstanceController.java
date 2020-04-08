@@ -29,10 +29,10 @@ public class FlowInstanceController extends ModelSuperController<FlowInstanceVO,
      * 是否执行完毕
      */
     @RequestMapping("isRevokeApply")
-    public HttpResult<Boolean> isRevokeApply(String processInstanceId, HttpServletRequest request) throws Exception {
-        ParamChecker.isNotNullOrEmpty(processInstanceId, "流程实例id不能为空");
+    public HttpResult<Boolean> isRevokeApply(String instanceId, HttpServletRequest request) throws Exception {
+        ParamChecker.isNotNullOrEmpty(instanceId, "流程实例id不能为空");
         FlowInstanceVO flowInstance = new FlowInstanceVO();
-        flowInstance.setActivitiProcessInstanceId(processInstanceId);
+        flowInstance.setActivitiProcessInstanceId(instanceId);
         flowInstance.setCreateUser(this.getSessionuser().getUserId());
         FlowInstanceVO instance = flowInstanceService.selectBean(flowInstance);
         if (instance == null) {

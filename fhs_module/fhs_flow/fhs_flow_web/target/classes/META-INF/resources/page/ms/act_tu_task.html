@@ -6,7 +6,7 @@
     <%
     layout("/page/tags/header.html",{}){}
     %>
-    <script type="text/javascript" src="${work_flow_basePath}js/ecommon.js"></script>
+    <script type="text/javascript" src="${fhs_static_url}js/ecommon.js"></script>
     <style>
         .panel window {
             width: 90%;
@@ -17,7 +17,7 @@
 <body>
 
 <table id="listGrid" class="easyui-datagrid" title="代办事项"
-       style="height: 90%;" url="${work_flow_basePath}ms/myWorks/getNeedComplateTask"
+       style="height: 90%;" url="${basePath}ms/myWorks/getNeedComplateTask"
        pagination="true" rownumbers="true" fitColumns="true"
        singleSelect="true" pageSize="10" striped="true" toolbar="#toolbar">
     <thead>
@@ -58,7 +58,7 @@
     }
 
     function handle(row) {
-        openDialog('${work_flow_basePath}b/page-ms/handle?taskId=' + row.taskId + "&processInstanceId=" + row.activitiInstanceId, '处理任务 {' + row.title + "}");
+        openDialog('${basePath}b/page-ms/handle?taskId=' + row.taskId + "&processInstanceId=" + row.activitiInstanceId, '处理任务 {' + row.title + "}");
     }
 
 </script>

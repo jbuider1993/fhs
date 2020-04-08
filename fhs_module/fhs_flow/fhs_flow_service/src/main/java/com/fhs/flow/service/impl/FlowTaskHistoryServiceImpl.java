@@ -2,6 +2,7 @@ package com.fhs.flow.service.impl;
 
 import com.fhs.common.utils.StringUtil;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
+import com.fhs.core.trans.service.impl.TransService;
 import com.fhs.flow.dox.FlowTaskHistoryDO;
 import com.fhs.flow.mapper.FlowTaskHistoryMapper;
 import com.fhs.flow.service.FlowTaskHistoryService;
@@ -23,7 +24,10 @@ import java.util.Map;
 public class FlowTaskHistoryServiceImpl extends BaseServiceImpl<FlowTaskHistoryVO, FlowTaskHistoryDO> implements FlowTaskHistoryService {
 
     @Autowired
-    private FlowTaskHistoryMapper taskHistoryDao;
+    private FlowTaskHistoryMapper taskHistoryMapper;
+
+    @Autowired
+    private TransService transService;
 
     @Override
     public FlowTaskHistoryVO buildFlowTaskHistory(String definitionKey, String instanceId) {
@@ -33,33 +37,35 @@ public class FlowTaskHistoryServiceImpl extends BaseServiceImpl<FlowTaskHistoryV
          */
         List<FlowTaskHistoryVO> brotherHitorys = super.findForList(FlowTaskHistoryDO.builder().instanceId(instanceId).definitionKey(definitionKey).build());
         if (!brotherHitorys.isEmpty()) {
-            return (FlowTaskHistoryVO) FlowTaskHistoryVO.builder().id(StringUtil.getUUID()).orderNum(brotherHitorys.get(0).getOrderNum()).definitionKey(definitionKey)
-                    .code(brotherHitorys.get(0).getCode()).instanceId(instanceId).build();
+            return d2v(FlowTaskHistoryVO.builder().id(StringUtil.getUUID()).orderNum(brotherHitorys.get(0).getOrderNum()).definitionKey(definitionKey)
+                    .code(brotherHitorys.get(0).getCode()).instanceId(instanceId).build());
         }
-        FlowTaskHistoryDO lastTaskHistory = taskHistoryDao.findLastTaskHistory(instanceId);
+        FlowTaskHistoryDO lastTaskHistory = taskHistoryMapper.findLastTaskHistory(instanceId);
         if (lastTaskHistory == null) {
-            return (FlowTaskHistoryVO) FlowTaskHistoryVO.builder().id(StringUtil.getUUID()).orderNum(1).definitionKey(definitionKey)
-                    .code("001").build();
+            return d2v(FlowTaskHistoryVO.builder().id(StringUtil.getUUID()).orderNum(1).definitionKey(definitionKey)
+                    .code("001").build());
         }
-        int maxOrderNum = taskHistoryDao.findMaxOrderNum(instanceId);
+        int maxOrderNum = taskHistoryMapper.findMaxOrderNum(instanceId);
         maxOrderNum++;
-        return (FlowTaskHistoryVO) FlowTaskHistoryDO.builder().id(StringUtil.getUUID()).orderNum(maxOrderNum).definitionKey(definitionKey)
-                .code(lastTaskHistory.getCode() + maxOrderNum).instanceId(instanceId).build();
+        return d2v(FlowTaskHistoryDO.builder().id(StringUtil.getUUID()).orderNum(maxOrderNum).definitionKey(definitionKey)
+                .code(lastTaskHistory.getCode() + maxOrderNum).instanceId(instanceId).build());
     }
 
     @Override
     public List<TaskHistoryVO> findTaskHistoryList(Map<String, Object> paramMap) {
-        return taskHistoryDao.findTaskHistoryList(paramMap);
+        List<TaskHistoryVO> result = taskHistoryMapper.findTaskHistoryList(paramMap);
+        transService.transMore(result);
+        return result;
     }
 
     @Override
     public int findTaskHistoryCount(Map<String, Object> paramMap) {
-        return taskHistoryDao.findTaskHistoryCount(paramMap);
+        return taskHistoryMapper.findTaskHistoryCount(paramMap);
     }
 
     @Override
     public List<TaskHistoryVO> findApprovalRecord(String instanceId) {
-        return taskHistoryDao.findApprovalRecord(instanceId);
+        return taskHistoryMapper.findApprovalRecord(instanceId);
     }
 
 }

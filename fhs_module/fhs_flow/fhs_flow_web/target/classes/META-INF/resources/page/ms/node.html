@@ -35,7 +35,7 @@
         //加载combobox数据
         $.ajax({
             type: 'post',
-            url: '${work_flow_basePath}ms/myWorks/findBackAvtivity?taskId=' + taskId,
+            url: '${basePath}ms/myWorks/findBackAvtivity?taskId=' + taskId,
             success: function (res) {
                 if (res.code == 200) {
                     $("#activityId").combobox("loadData", res.data);
@@ -58,7 +58,7 @@
         debugger;
         $.ajax({
             type: "POST",
-            url: "${work_flow_basePath}ms/myWorks/backTask",
+            url: "${basePath}ms/myWorks/backTask",
             data: {taskId: taskId, activityId: activityId, isPre: true, remark: remark},
             success: function (res) {
                 if (res.code == 200) {

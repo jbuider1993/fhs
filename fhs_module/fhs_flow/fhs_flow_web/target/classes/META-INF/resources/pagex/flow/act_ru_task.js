@@ -42,7 +42,7 @@ var listPage = {
         return {
             handle: function (row) {
                 debugger;
-                openDialog('${path.basePath}/b/page-ms/handle?taskId='+row.taskId,
+                openDialog('${path.basePath}/b/page-ms/handle?taskId='+row.taskId + '&instanceId=' + row.activitiInstanceId,
                     '处理任务 {' + row.title + "}");
             }
         };

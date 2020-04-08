@@ -42,6 +42,11 @@
             <version>${fhs.release.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_flow_pagex</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-data-redis</artifactId>
         </dependency>

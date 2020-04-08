@@ -51,9 +51,19 @@ public class FlowJbpmXmlServiceImpl extends BaseServiceImpl<FlowJbpmXmlVO, FlowJ
             //FileUtils.writeByteArrayToFile(new File(EConfig.getPathPropertiesValue("jbpmFilePath") + pngName), Base64Util.getByteFromBase64(workFlowJbpmXml.getImg()));
             // 创建发布配置对象
             DeploymentBuilder builder = repositoryService.createDeployment();
+            String preId = workFlowJbpmXml.getProcessKey() + workFlowJbpmXml.getVersion();
             //xml 版本号升级 默认版本是0 发布的时候版本号变成1
-            String xml = workFlowJbpmXml.getXml().replace(workFlowJbpmXml.getProcessKey() + workFlowJbpmXml.getVersion(),
-                    workFlowJbpmXml.getProcessKey() + (workFlowJbpmXml.getVersion() + 1));
+            String xml = null;
+            if( workFlowJbpmXml.getXml().contains(preId)){
+                xml = workFlowJbpmXml.getXml().replace(preId,
+                        workFlowJbpmXml.getProcessKey() + (workFlowJbpmXml.getVersion() + 1));
+            }
+            else{
+                xml = workFlowJbpmXml.getXml().replace(workFlowJbpmXml.getProcessKey(),
+                        workFlowJbpmXml.getProcessKey() + (workFlowJbpmXml.getVersion() + 1));
+            }
+            //xml 版本号升级 默认版本是0 发布的时候版本号变成1
+
             FileUtils.write(new File(EConfig.getPathPropertiesValue("jbpmFilePath") + xmlFileName), xml, "utf-8");
             // pngName = catImg(EConfig.getPathPropertiesValue("jbpmFilePath") + xmlFileName,EConfig.getPathPropertiesValue("jbpmFilePath") + pngName);
             // 设置发布信息

@@ -44,7 +44,33 @@ var listPage={
                 },500);
             },
             publishFlow:function (row) {
-
+                if(row.status==1){
+                    EalertE("流程已发布过了");
+                    return;
+                }
+                swal({
+                    title: '发布提示 ',
+                    text: "确定发布吗?",
+                    type: 'info',   //感叹号图标
+                    showCancelButton: true,   //显示取消按钮
+                    confirmButtonText: "是的，我要发布",
+                    confirmButtonColor: "#ec6c62",
+                    cancelButtonText: '取消',
+                }, function () {
+                    $.ajax({
+                        url:'${path.basePath}/ms/flow_jbpm_xml/releaseWorkFlow',
+                        dataType:'json',
+                        data:{xmlId:row.id},
+                        success:function(res){
+                            if(res.code==200){
+                                Ealert("发布成功");
+                                reload();
+                            }else{
+                                EalertE("发布失败,请查看后台日志")
+                            }
+                        }
+                    })
+                });
             }
         }
     }
@@ -79,7 +105,6 @@ var add={
             saveError:function(){
             },
             showUrlOrNamespace:function(record){
-                debugger;
                 if(record.wordbookCode == 1){
                     $("#uriInput").hide();
                     $("#namespaceInput").show();

@@ -164,11 +164,13 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
 
     @Override
     public int findCount(D bean) {
+        bean.setIsDelete(Constant.INT_FALSE);
         return (int) baseMapper.selectCountJpa(bean);
     }
 
     @Override
     public int findCountJpa(D bean) {
+        bean.setIsDelete(Constant.INT_FALSE);
         return (int) baseMapper.selectCountJpa(bean);
     }
 

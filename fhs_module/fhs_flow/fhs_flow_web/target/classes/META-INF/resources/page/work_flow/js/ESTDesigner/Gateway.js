@@ -24,7 +24,7 @@ ESTDesigner.event.BaseEvent=draw2d.shape.basic.Image.extend({
 ESTDesigner.gateway.ParallelGateway=ESTDesigner.event.BaseEvent.extend({
 	init:function(attr){
 		this._super($.extend({
-			path:"js/ESTDesigner/icons/type.gateway.parallel.png"
+			path:"/page/work_flow/js/ESTDesigner/icons/type.gateway.parallel.png"
 				},attr));
 		this.createPort("hybrid", new draw2d.layout.locator.LeftLocator());
 		this.createPort("hybrid", new draw2d.layout.locator.RightLocator());
@@ -42,7 +42,7 @@ ESTDesigner.gateway.ParallelGateway=ESTDesigner.event.BaseEvent.extend({
 ESTDesigner.gateway.ExclusiveGateway=ESTDesigner.event.BaseEvent.extend({
 	init:function(attr){
 		this._super($.extend({
-			path:"js/ESTDesigner/icons/type.gateway.exclusive.png"
+			path:"/page/work_flow/js/ESTDesigner/icons/type.gateway.exclusive.png"
 				},attr));
 		this.createPort("hybrid", new draw2d.layout.locator.LeftLocator());
 		this.createPort("hybrid", new draw2d.layout.locator.RightLocator());

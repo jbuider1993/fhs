@@ -2,7 +2,9 @@ package com.fhs.flow.service.impl;
 
 import com.fhs.common.utils.*;
 import com.fhs.core.exception.ParamException;
+import com.fhs.core.result.HttpResult;
 import com.fhs.core.valid.checker.ParamChecker;
+import com.fhs.flow.api.rpc.FeignWorkFlowApiService;
 import com.fhs.flow.dox.FlowInstanceDO;
 import com.fhs.flow.dox.FlowJbpmXmlDO;
 import com.fhs.flow.dox.FlowTaskHistoryDO;
@@ -10,10 +12,8 @@ import com.fhs.flow.service.FlowCoreService;
 import com.fhs.flow.service.FlowInstanceService;
 import com.fhs.flow.service.FlowJbpmXmlService;
 import com.fhs.flow.service.FlowTaskHistoryService;
-import com.fhs.flow.vo.BackAvtivityVO;
-import com.fhs.flow.vo.FlowInstanceVO;
-import com.fhs.flow.vo.FlowJbpmXmlVO;
-import com.fhs.flow.vo.FlowTaskHistoryVO;
+import com.fhs.flow.vo.*;
+import com.fhs.logger.Logger;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -51,7 +51,9 @@ import java.util.stream.Collectors;
  * @date 2019 -11-12 11:48:02
  */
 @Service
-public class FlowCoreServiceImpl implements FlowCoreService {
+public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiService {
+
+    private static final Logger LOGGER = Logger.getLogger(FlowCoreServiceImpl.class);
 
     @Autowired
     private RepositoryService repositoryService;
@@ -76,6 +78,7 @@ public class FlowCoreServiceImpl implements FlowCoreService {
 
     @Override
     public String updateStartProcessInstanceByKey(String processDefinitionKey, String businessKey, Map<String, Object> variables, Map<String, Object> extFormParam, String userId) throws Exception {
+        variables.putAll(extFormParam);
         FlowJbpmXmlVO flowJbpmXml = flowJbpmXmlService.selectBean(FlowJbpmXmlDO.builder().processKey(processDefinitionKey).build());
         ParamChecker.isNotNullOrEmpty(flowJbpmXml, "processDefinitionKey无效");
         int version = flowJbpmXml.getStatus() == FlowJbpmXmlService.STATUS_HAS_DEPLOY ? flowJbpmXml.getVersion() : (flowJbpmXml.getVersion() - 1);
@@ -97,12 +100,12 @@ public class FlowCoreServiceImpl implements FlowCoreService {
         flowInstance.setActivitiProcessInstanceId(processInstance.getId());
         flowInstanceService.insertSelective(flowInstance);
         List<Task> tasks = taskService.createTaskQuery().processInstanceId(flowInstance.getActivitiProcessInstanceId()).list();
-        FlowTaskHistoryVO taskHistory = null;
+        FlowTaskHistoryDO taskHistory = null;
         // 第一个节点是提交节点，自动通过
         for (Task task : tasks) {
             task.setAssignee(userId);
             taskService.complete(task.getId(), variables);
-            taskHistory = (FlowTaskHistoryVO) FlowTaskHistoryDO.builder().id(StringUtil.getUUID()).taskFinishTime(flowInstance.getCreateTime()).instanceId(flowInstance.getActivitiProcessInstanceId())
+            taskHistory =  FlowTaskHistoryDO.builder().id(StringUtil.getUUID()).taskFinishTime(flowInstance.getCreateTime()).instanceId(flowInstance.getActivitiProcessInstanceId())
                     .title("提交").status(FlowTaskHistoryService.STATUS_FINISH).result(FlowTaskHistoryService.RESULT_SUBMIT).build();
             taskHistory.setOrderNum(1);
             taskHistory.setCode("001");
@@ -114,7 +117,7 @@ public class FlowCoreServiceImpl implements FlowCoreService {
             checkProProcessInstanceIsEnd(task.getProcessInstanceId(), null);
             flowInstanceService.updateSelectiveById(FlowInstanceDO.builder().id(flowInstance.getId()).firstDefinitionKey(task.getTaskDefinitionKey()).build());
         }
-        return flowInstance.getId();
+        return processInstance.getId();
     }
 
 
@@ -809,5 +812,16 @@ public class FlowCoreServiceImpl implements FlowCoreService {
         context.setVariable(key, factory.createValueExpression(value, String.class));
         ValueExpression e = factory.createValueExpression(context, el, boolean.class);
         return (Boolean) e.getValue(context);
+    }
+
+    @Override
+    public HttpResult<String> startProcessInstanceForApi(StartProcessInstanceVO startProcessInstance) {
+        try {
+            return HttpResult.success(this.updateStartProcessInstanceByKey(startProcessInstance.getProcessDefinitionKey(),startProcessInstance.getBusinessKey(),
+                    startProcessInstance.getVariables(),startProcessInstance.getExtFormParam(),startProcessInstance.getUserId()));
+        } catch (Exception e) {
+            LOGGER.error("启动流程失败:" + startProcessInstance,e);
+            return HttpResult.error("");
+        }
     }
 }

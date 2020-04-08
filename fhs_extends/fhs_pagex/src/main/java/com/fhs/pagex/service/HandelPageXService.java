@@ -8,10 +8,7 @@ import javax.script.ScriptException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -135,10 +132,10 @@ public enum HandelPageXService {
      */
     private String getNamespace(String uri) {
         uri = uri.substring(uri.lastIndexOf("/") + 1);
-        uri = uri.replace(".jsp", "")
-                .replace("_add_update", "")
-                .replace("_list", "")
-                .replace("_tree", "");
+        Set<String> keys = pagexServiceMap.keySet();
+        for (String key : keys) {
+            uri = uri.replace("_" + key, "");
+        }
         return uri;
     }
 

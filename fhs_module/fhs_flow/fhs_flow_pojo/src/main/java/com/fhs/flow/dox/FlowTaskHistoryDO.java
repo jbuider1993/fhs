@@ -1,10 +1,12 @@
 package com.fhs.flow.dox;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.common.constant.Constant;
+import com.fhs.common.utils.DateUtils;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.valid.group.*;
@@ -43,6 +45,7 @@ public class FlowTaskHistoryDO extends BaseDO<FlowTaskHistoryDO> {
      * 完成时间
      */
     @TableField("task_finish_time")
+    @JSONField(format = DateUtils.DATETIME_PATTERN)
     private Date taskFinishTime;
 
     /**

@@ -303,11 +303,10 @@ ESTDesigner.tool.Parser.BaseParser = Class.extend({
 			init : function() {
 
 			},
-			_parseListener : function(listeners, listenerType, fieldType) {
+			_parseListener : function(listeners, listenerType, fieldType,_that) {
 				var parsedListeners = new draw2d.util.ArrayList();
 				listeners.each(function(i) {
 							var listener = eval("new " + listenerType + "()");
-
 							listener.event = $(this).attr('event');
 							var expression = $(this).attr('expression');
 							var clazz = $(this).attr('class');
@@ -321,7 +320,7 @@ ESTDesigner.tool.Parser.BaseParser = Class.extend({
 							var fields = $(this).find('activiti\\:field');
 							fields.each(function(i) {
 										var field = eval("new " + fieldType + "()");
-										this._parseField($(this), field);
+										_that._parseField($(this), field);
 										listener.setField(field);
 									});
 							parsedListeners.add(listener);
@@ -463,7 +462,7 @@ ESTDesigner.tool.Parser.UserTaskParser = ESTDesigner.tool.Parser.TaskParser.exte
 				var taskListeners = xmlNode.find('extensionElements')
 						.find('activiti\\:taskListener');
 				task.setTaskListeners(this._parseListener(taskListeners,
-						"ESTDesigner.model.TaskListener", "ESTDesigner.model.Field"));
+						"ESTDesigner.model.TaskListener", "ESTDesigner.model.Field",this));
 
 				this._parseTaskFormProp(xmlNode, task);
 				this._parseTaskPerformer(xmlNode, task);
@@ -906,6 +905,18 @@ ESTDesigner.model.Listener = ESTDesigner.model.BaseModel.extend({
 				this.serviceClass = null;
 				this.serviceExpression = null;
 				this.fields = new draw2d.util.ArrayList();
+			},
+			_parseField : function(xmlNode, field) {
+				field.name = xmlNode.attr('name');
+				var string = xmlNode.find('activiti\\:string').text();
+				var expression = xmlNode.find('activiti\\:expression').text();
+				if (string != null && string != "") {
+					field.type = 'string';
+					field.value = string;
+				} else if (expression != null && expression != "") {
+					field.type = 'expression';
+					field.value = expression;
+				}
 			},
 			setId : function(id) {
 				this.id = id;

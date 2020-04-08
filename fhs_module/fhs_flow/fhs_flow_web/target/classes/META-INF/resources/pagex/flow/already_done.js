@@ -11,7 +11,7 @@ var listPage = {
             {name: 'processName', title: '流程名称', width: '15%', align: 'center'},
             {name: 'taskName', title: '任务名称', width: '10%', align: 'center'},
             {name: 'processStatus', title: '流程状态', width: '10%', align: 'center',align: 'center',trans: 'book', showField: 'transMap.processStatusName'},
-            {name: 'createUser', title: '发起人', width: '10%', align: 'center',trans: 'user', showField: 'transMap.createUserUserName'},
+            {name: 'createUser', title: '发起人', width: '10%', align: 'center',trans: 'user', showField: 'transMap.userName'},
             {name: 'taskFinishTime', title: '办理时间', width: '15%', align: 'center'},
             {name: 'useTime', title: '处理用时', width: '10%', align: 'center'},
             {name: 'useStatus', title: '处理结果', width: '10%', align: 'center',align: 'center',trans: 'book', showField: 'transMap.useStatusName'},

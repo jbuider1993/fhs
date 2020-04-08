@@ -1,10 +1,12 @@
 package com.fhs.flow.dox;
 
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fhs.common.constant.Constant;
 
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import lombok.*;
 
 /**
@@ -23,6 +25,7 @@ public class FlowTaskDO extends BaseDO<FlowTaskDO> {
     /**
      * 任务id
      */
+    @TableId
     private String taskId;
 
     /**
@@ -79,6 +82,7 @@ public class FlowTaskDO extends BaseDO<FlowTaskDO> {
     /**
      * 实例创建人
      */
+    @Trans(type = TransType.AUTO_TRANS,key = Constant.USER_INFO)
     private String createUser;
 
 

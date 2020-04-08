@@ -113,10 +113,10 @@
 
     function listenerFieldsActionFormatter(value, rowData, rowIndex) {
         var id = rowIndex;
-        var s = '<img onclick="saveListenerField(' + id + ')" src="image/ok.png" title="' + "确定" + '" style="cursor:hand;"/>';
-        var c = '<img onclick="cancelListenerField(' + id + ')" src="image/cancel.png" title="' + "取消" + '" style="cursor:hand;"/>';
-        var e = '<img onclick="editListenerField(' + id + ')" src="image/modify.png" title="' + "修改" + '" style="cursor:hand;"/>';
-        var d = '<img onclick="deleteListenerField(' + id + ')" src="image/delete.gif" title="' + "删除" + '" style="cursor:hand;"/>';
+        var s = '<img onclick="saveListenerField(' + id + ')" src="${basePath}/page/work_flow/image/ok.png" title="' + "确定" + '" style="cursor:hand;"/>';
+        var c = '<img onclick="cancelListenerField(' + id + ')" src="${basePath}/page/work_flow/image/cancel.png" title="' + "取消" + '" style="cursor:hand;"/>';
+        var e = '<img onclick="editListenerField(' + id + ')" src="${basePath}/page/work_flow/image/modify.png" title="' + "修改" + '" style="cursor:hand;"/>';
+        var d = '<img onclick="deleteListenerField(' + id + ')" src="${basePath}/page/work_flow/image/delete.gif" title="' + "删除" + '" style="cursor:hand;"/>';
         if (rowData.editing)
             return s;
         else

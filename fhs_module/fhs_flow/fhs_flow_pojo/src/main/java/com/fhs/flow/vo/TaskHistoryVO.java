@@ -4,11 +4,13 @@ import com.fhs.common.constant.Constant;
 import com.fhs.core.base.pojo.vo.VO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.anno.TransTypes;
+import com.fhs.core.trans.constant.TransType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -21,7 +23,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TransTypes(types = {Constant.USER_INFO, "wordbook"})
+@TransTypes(types = {TransType.AUTO_TRANS,TransType.WORD_BOOK})
 public class TaskHistoryVO implements VO {
 
     private String taskId;
@@ -44,12 +46,13 @@ public class TaskHistoryVO implements VO {
     /**
      * 流程状态
      */
-    @Trans(type = "wordbook", key = "workFlow_process_status")
+    @Trans(type = TransType.WORD_BOOK, key = "workFlow_process_status")
     private String processStatus;
 
     /**
      * 发起人
      */
+    @Trans(type = TransType.AUTO_TRANS, key = Constant.USER_INFO)
     private String createUser;
 
     /**
@@ -65,7 +68,7 @@ public class TaskHistoryVO implements VO {
     /**
      * 处理结果
      */
-    @Trans(type = "wordbook", key = "workFlow_use_status")
+    @Trans(type = TransType.WORD_BOOK, key = "workFlow_use_status")
     private String useStatus;
 
     /**
@@ -82,7 +85,7 @@ public class TaskHistoryVO implements VO {
     /**
      * 翻译map
      */
-    private Map<String, String> transMap;
+    private Map<String, String> transMap = new HashMap<>();
 
 
     @Override

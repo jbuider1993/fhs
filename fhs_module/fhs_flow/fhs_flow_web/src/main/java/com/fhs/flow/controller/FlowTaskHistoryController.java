@@ -42,7 +42,7 @@ public class FlowTaskHistoryController extends ModelSuperController<FlowTaskHist
      * @return
      */
     @RequestMapping("getTaskHistoryList")
-    public Pager<TaskHistoryVO> getTaskHistoryList(HttpServletRequest request) {
+    public void getTaskHistoryList(HttpServletRequest request) {
         Map<String, Object> paramMap = super.getPageTurnNum();
         paramMap.put("userId", this.getSessionuser().getUserId());
         List<TaskHistoryVO> alreadyDoneList = flowTaskHistoryService.findTaskHistoryList(paramMap);
@@ -51,18 +51,18 @@ public class FlowTaskHistoryController extends ModelSuperController<FlowTaskHist
         });
         transService.transMore(alreadyDoneList);
         int alreadyDoneCount = flowTaskHistoryService.findTaskHistoryCount(paramMap);
-        return new Pager(alreadyDoneCount, alreadyDoneList);
+        super.outJsonp(new Pager(alreadyDoneCount, alreadyDoneList).asJson());
     }
 
     /**
      * 审批历史
      */
     @RequestMapping("getApprovalRecord")
-    public Pager<TaskHistoryVO> getApprovalRecord(String instanceId) {
+    public void getApprovalRecord(String instanceId) {
         ParamChecker.isNotNullOrEmpty(instanceId, "流程实例id不能为空");
         List<TaskHistoryVO> approvalRecord = flowTaskHistoryService.findApprovalRecord(instanceId);
         transService.transMore(approvalRecord);
-        return new Pager(approvalRecord.size(), approvalRecord);
+        super.outJsonp(new Pager(approvalRecord.size(), approvalRecord).asJson());
     }
 
 

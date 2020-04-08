@@ -8,8 +8,36 @@
         <version>2.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <version>2.0.0</version>
     <artifactId>fhs_flow_api</artifactId>
+    <dependencies>
 
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_pojo</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_basics_pojo</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_feign</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_flow_pojo</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${fhs.swagger.version}</version>
+        </dependency>
+
+    </dependencies>
 
 </project>

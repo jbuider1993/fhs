@@ -58,4 +58,28 @@ public class FlowJbpmXmlController extends ModelSuperController<FlowJbpmXmlVO, F
     }
 
 
+    /**
+     * 更新xml内容
+     *
+     * @param xml
+     * @param xmlId
+     * @return
+     */
+    @RequestMapping("updateXml")
+    @RequiresPermissions("flow_jbpm_xml:update")
+    public HttpResult<Boolean> updateXml(String xml, String xmlId) {
+        ParamChecker.isNotNullOrEmpty(xml, "xml不能为空");
+        ParamChecker.isNotNullOrEmpty(xmlId, "xmlId不能为空");
+        FlowJbpmXmlVO dbData = flowJbpmXmlService.selectById(xmlId);
+        ParamChecker.isNotNullOrEmpty(dbData, "xmlId无效");
+        FlowJbpmXmlDO updateParam = FlowJbpmXmlVO.builder().id(xmlId).xml(xml).build();
+        if (dbData.getStatus() == FlowConstant.XML_STATUS_RELEASE) {
+            updateParam.setStatus(FlowConstant.XML_STATUS_DRAFT);
+        }
+        updateParam.preUpdate(super.getSessionuser().getUserId());
+        flowJbpmXmlService.updateSelectiveById(updateParam);
+        return HttpResult.success(true);
+    }
+
+
 }

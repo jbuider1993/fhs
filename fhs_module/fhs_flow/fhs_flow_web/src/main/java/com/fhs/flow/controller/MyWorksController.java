@@ -262,13 +262,13 @@ public class MyWorksController extends BaseController {
     @RequestMapping("getWorkFlowImg")
     public void getWorkFlowImg(HttpServletRequest request, HttpServletResponse response) throws Exception {
         //processInstanceId
-        String processInstanceId = request.getParameter("processInstanceId");
-        ParamChecker.isNotNullOrEmpty(processInstanceId, "实例id为必传");
+        String instanceId = request.getParameter("instanceId");
+        ParamChecker.isNotNullOrEmpty(instanceId, "实例id为必传");
         //获取历史流程实例
-        HistoricProcessInstance processInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+        HistoricProcessInstance processInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(instanceId).singleResult();
         ParamChecker.isNotNullOrEmpty(processInstance, "实例id无效");
         String procDefId = processInstance.getProcessDefinitionId();
-        InputStream imageStream = bpmImageService.draw(procDefId, processInstanceId);
+        InputStream imageStream = bpmImageService.draw(procDefId, instanceId);
         FileUtils.downloadInputStream(imageStream, response, "workflow.png");
 
     }

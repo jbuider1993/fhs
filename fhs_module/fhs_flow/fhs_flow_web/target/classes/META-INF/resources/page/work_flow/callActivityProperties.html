@@ -192,7 +192,7 @@
                 handler: function () {
                     _listener_win.window('open');
                     //_listener_frame.src="";
-                    _listener_win.window('refresh', 'executionListenerConfig.html');
+                    _listener_win.window('refresh', '${basePath}/b/page-work_flow/executionListenerConfig');
                     //alert(_listener_frame.document.body.innerHTML);
                 }
             }]
@@ -286,7 +286,7 @@
 
     function editListener(id) {
         _listener_win.window('open');
-        _listener_win.window('refresh', 'executionListenerConfig.html');
+        _listener_win.window('refresh', '${basePath}/b/page-work_flow/executionListenerConfig');
     }
 
     function deleteListener(id) {

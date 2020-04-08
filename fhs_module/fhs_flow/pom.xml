@@ -8,7 +8,7 @@
         <version>2.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <version>2.0.0</version>
     <artifactId>fhs_flow</artifactId>
     <packaging>pom</packaging>
     <modules>
@@ -16,6 +16,7 @@
         <module>fhs_flow_pojo</module>
         <module>fhs_flow_service</module>
         <module>fhs_flow_web</module>
+        <module>fhs_flow_pagex</module>
     </modules>
 
 

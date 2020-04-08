@@ -58,7 +58,7 @@
         fth.`result` useStatus
         FROM t_flow_task_history fth
         LEFT JOIN t_flow_instance fi ON fi.activiti_process_instance_id = fth.instance_id
-        LEFT JOIN t_flow_jbpm_xml fjx ON fjx.id = fi.form_pkey
+        LEFT JOIN t_flow_jbpm_xml fjx ON fjx.id = fi.xml_id
         <include refid="AlreadyDoneWhere"/>
         ORDER BY task_finish_time DESC
         <if test="start!= null and end != null">
