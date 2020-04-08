@@ -103,8 +103,8 @@ function deleteListener(id){
 }
 function formActionBt(value,rowData,rowIndex){
 	var id = rowData.id;
-	var e = '<img onclick="editForm('+id+')" src="/image/edit.gif" title="'+"修改"+'" style="cursor:hand;"/>';   
-    var d = '<img onclick="deleteForm('+id+')" src="/image/delete.gif" title="'+"删除"+'" style="cursor:hand;"/>';
+	var e = '<img onclick="editForm('+id+')" src="${basePath}/page/work_flow//image/edit.gif" title="'+"修改"+'" style="cursor:hand;"/>';
+    var d = '<img onclick="deleteForm('+id+')" src="${basePath}/page/work_flow//image/delete.gif" title="'+"删除"+'" style="cursor:hand;"/>';
 	return e+'&nbsp;'+d;
 }
 function editForm(id){

@@ -241,16 +241,7 @@
                         }
                     }
                 });
-                $('#saveWfBt').click(function () {
-                    var xml = canvas.toXML();
-//                             console.log(xml);
-                    var data = {
-                        xml: xml,
-                        name: canvas.process.name,
-                        processVariables: canvas.process.getVariablesJSONObject()
-                    };
-                    Http.post(Config.Url.Save_Wf, data, EventHandler.OnSaveWf.Success, EventHandler.OnSaveWf.Error);
-                });
+
                 canvas.getCommandStack().addEventListener(function (e) {
                     if (e.isPostChangeEvent()) {
                         updatePreview(canvas);
@@ -291,6 +282,25 @@
         }
     }
 
+    //保存xml到后台
+    function saveXml(){
+        var processKey = getQueryVariable('processKey');
+        var processName = getQueryVariable('processName');
+        var xml = canvas.toXML(processKey, processName);
+        $.ajax({
+            url:'${basePath}/ms/flow_jbpm_xml/updateXml',
+            data:{xml:xml,xmlId:getQueryVariable('xmlId')},
+            dataType:'json',
+            success:function(res){
+                if(res.code==200){
+                    $.messager.alert('Info', "保存成功", 'info');
+                }
+                else{
+                    $.messager.alert('Error', "保存失败", 'error');
+                }
+            }
+        });
+    }
 
     /**
      * 流程信息查询失败
@@ -338,8 +348,8 @@
 <div region="west" split="true" iconCls="palette-icon" title="流程元素" style="width: 150px;">
     <div class="easyui-accordion" fit="true" border="false">
         <div id="event" title="事件" iconCls="palette-menu-icon" class="palette-menu">
-            <a href="##" class="easyui-linkbutton" plain="true" iconCls="start-event-icon">开始</a><br> <a href="##"
-                                                                                                         class="easyui-linkbutton"
+            <a href="##" class="easyui-linkbutton" plain="true" iconCls="start-event-icon" wfModel="ESTDesigner.event.Start"> 开始</a><br> <a href="##"
+                                                                                                         class="easyui-linkbutton"  wfModel="ESTDesigner.event.End"
                                                                                                          plain="true"
                                                                                                          iconCls="end-event-icon">结束</a><br>
         </div>
@@ -409,7 +419,7 @@
         <div iconCls="icon-redo" onclick="redo()">Redo</div>
         <div class="menu-sep"></div>
         <!--		<div onclick="openProcessDef()">Open</div>-->
-        <div id="saveWfBt" iconCls="icon-save">保存</div>
+        <div id="saveWfBt" iconCls="icon-save" onclick="saveXml()">保存</div>
         <div iconCls="icon-export" onclick="exportProcessDef(this)">导出</div>
         <div iconCls="icon-import" onclick="openImportDialog(this)">导入</div>
     </div>
