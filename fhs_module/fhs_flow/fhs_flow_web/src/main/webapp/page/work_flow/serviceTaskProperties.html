@@ -12,7 +12,7 @@
                     if (pp) {
                         pp.panel('refresh', '${basePath}/b/page-work_flow/taskGeneral');
                     }
-                } else if (title == 'Multi Instance') {
+                } else if (title == '多实例') {
                     var pp = $('#task-properties-accordion').accordion('getSelected');
                     if (pp) {
                         pp.panel('refresh', '${basePath}/b/page-work_flow/taskMultiInstance');
@@ -49,7 +49,7 @@
             //sortOrder:'asc',
             striped: true,
             toolbar: [{
-                text: 'New',
+                text: '新增',
                 iconCls: 'icon-add',
                 handler: function () {
                     if (fieldsEditCount > 0) {
@@ -103,7 +103,7 @@
         });
 
         $('#task-listeners-list').datagrid({
-            title: "Execution Listeners",
+            title: "执行监听器",
             //url:'${basePath}/wf/procdef/procdef!search.action',//加载表格数据的URL
             singleSelect: true,
             //width:500,
@@ -118,7 +118,7 @@
             //sortOrder:'asc',
             striped: true,
             toolbar: [{
-                text: 'New',
+                text: '新增',
                 iconCls: 'icon-add',
                 handler: function () {
                     _listener_win.window('open');
@@ -308,52 +308,52 @@
 </script>
 <div id="task-properties-layout" class="easyui-layout" fit="true">
     <div id="task-properties-toolbar-panel" region="north" border="false" style="height:30px;background:#E1F0F2;">
-        <a href="##" id="sb2" class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="saveTaskProperties()">Save</a>
+        <a href="##" id="sb2" class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="saveTaskProperties()">保存</a>
     </div>
     <div id="task-properties-panel" region="center" border="true">
         <div id="task-properties-accordion" class="easyui-accordion" fit="true" border="false">
             <div id="general" title="General" selected="true" class="properties-menu">
 
             </div>
-            <div id="mainConfig" title="Main Config" class="properties-menu">
+            <div id="mainConfig" title="主要配置" class="properties-menu">
                 <table id="main-properties">
                     <tr>
-                        <td align="right">Type:</td>
+                        <td align="right">类型:</td>
                         <td>
                             <input type="radio" id="javaClassType" name="_type" value="javaClass"
-                                   onclick="selectServiceTaskType(this)" checked/>Java Class
+                                   onclick="selectServiceTaskType(this)" checked/>Java类
                             <input type="radio" id="expressionType" name="_type" value="expression"
-                                   onclick="selectServiceTaskType(this)"/>Expression
+                                   onclick="selectServiceTaskType(this)"/>表达式
                             <input type="radio" id="delegateExpressionType" name="_type" value="delegateExpression"
-                                   onclick="selectServiceTaskType(this)"/>Delegate Expression
+                                   onclick="selectServiceTaskType(this)"/>委托表达式
                         </td>
                     </tr>
                     <tr id="serviceClassTr">
-                        <td align="right">Service Class:</td>
+                        <td align="right">服务等级:</td>
                         <td>
                             <input type="text" id="serviceClass" name="serviceClass" value="" size="50"/>
                         </td>
                     </tr>
                     <tr id="expressionTr" style="display:none;">
-                        <td align="right">Expression:</td>
+                        <td align="right">表达式:</td>
                         <td>
                             <input type="text" id="_expression" name="_expression" value="" size="50"/>
                         </td>
                     </tr>
                     <tr id="delegateExpressionTr" style="display:none;">
-                        <td align="right">Delegate Expression:</td>
+                        <td align="right">委托表达式:</td>
                         <td>
                             <input type="text" id="delegateExpression" name="delegateExpression" value="" size="50"/>
                         </td>
                     </tr>
                     <tr>
-                        <td align="right">Result Variable:</td>
+                        <td align="right">结果变量:</td>
                         <td>
                             <input type="text" id="resultVariable" name="resultVariable" value="" size="50"/>
                         </td>
                     </tr>
                     <tr>
-                        <td align="right">Fields:</td>
+                        <td align="right">字段:</td>
                         <td>
                             <div id="task-Fields-panel">
                                 <table id="task-Fields-list">
@@ -365,7 +365,7 @@
 										options:{
 										required:true,
 										validType:'length[1,100]'
-									}}">Field Name
+									}}">字段名称
                                         </th>
                                         <th field="type" width="100" align="middle" sortable="false" editor="{
 										type:'combobox',
@@ -374,16 +374,16 @@
 											data:[{id:'string',text:'String',selected:true},{id:'expression',text:'Expression'}],
 											valueField:'id',
 											textField:'text'
-									}}">Type
+									}}">类型
                                         </th>
                                         <th field="value" width="150" align="middle" sortable="false" editor="{
 										type:'validatebox',
 										options:{
 										validType:'length[1,100]'
-									}}">Value
+									}}">数值
                                         </th>
                                         <th field="action" width="80" align="middle" formatter="fieldsActionFormatter">
-                                            Action
+                                            操作
                                         </th>
                                     </tr>
                                     </thead>
@@ -392,27 +392,27 @@
                         </td>
                     </tr>
                     <tr>
-                        <td align="right">Documentation:</td>
+                        <td align="right">文献资料:</td>
                         <td><textarea id="documentation" name="documentation" cols="50" rows="5"></textarea></td>
                     </tr>
                 </table>
             </div>
-            <div id="listeners" title="Listeners" style="padding:5px;">
+            <div id="listeners" title="监听器" style="padding:5px;">
                 <table id="task-listeners-list">
                     <thead>
                     <tr>
-                        <th field="listenerImplimentation" width="200" align="middle" sortable="false">Listener
-                            Implimentation
+                        <th field="listenerImplimentation" width="200" align="middle" sortable="false">
+                            监听器说明
                         </th>
-                        <th field="type" width="70" align="middle" sortable="false">Type</th>
-                        <th field="event" width="70" align="middle" sortable="false">Event</th>
-                        <th field="fields" width="100" align="middle">Fields</th>
-                        <th field="action" width="100" align="middle" formatter="listenerActionBt">Action</th>
+                        <th field="type" width="70" align="middle" sortable="false">类型</th>
+                        <th field="event" width="70" align="middle" sortable="false">事件</th>
+                        <th field="fields" width="100" align="middle">字段</th>
+                        <th field="action" width="100" align="middle" formatter="listenerActionBt">操作</th>
                     </tr>
                     </thead>
                 </table>
             </div>
-            <div id="multi-instance" title="Multi Instance" class="properties-menu">
+            <div id="multi-instance" title="多实例" class="properties-menu">
 
             </div>
         </div>

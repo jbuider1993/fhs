@@ -12,7 +12,7 @@
                     if (pp) {
                         pp.panel('refresh', '${basePath}/b/page-work_flow/taskGeneral');
                     }
-                } else if (title == 'Multi Instance') {
+                } else if (title == '多实例') {
                     var pp = $('#task-properties-accordion').accordion('getSelected');
                     if (pp) {
                         pp.panel('refresh', '${basePath}/b/page-work_flow/taskMultiInstance');
@@ -64,7 +64,7 @@
             //sortOrder:'asc',
             striped: true,
             toolbar: [{
-                text: 'New',
+                text: '新增',
                 iconCls: 'icon-add',
                 handler: function () {
                     _listener_win.window('open');
@@ -426,32 +426,32 @@
                     </tr>
                 </table>
             </div>
-            <div id="formProperties" title="Form Properties" style="overflow: hidden;">
+            <div id="formProperties" title="表单属性" style="overflow: hidden;">
                 <table id="task-form-properties-list">
                     <thead>
                     <tr>
                         <th field="id" width="100" align="middle" sortable="false">Id</th>
-                        <th field="name" width="100" align="middle" sortable="false">Name</th>
-                        <th field="type" width="100" align="middle" sortable="false">Type</th>
-                        <th field="expression" width="100" align="middle" sortable="false">Expression</th>
-                        <th field="variable" width="100" align="middle" sortable="false">Variable</th>
-                        <th field="defaultValue" width="100" align="middle" sortable="false">Default</th>
-                        <th field="datePattern" width="100" align="middle" sortable="false">Date Pattern</th>
-                        <th field="readable" width="100" align="middle" sortable="false">Readable</th>
-                        <th field="writeable" width="100" align="middle" sortable="false">Writeable</th>
-                        <th field="required" width="100" align="middle" sortable="false">Required</th>
-                        <th field="formValues" width="100" align="middle" sortable="false">Form Values</th>
-                        <th field="action" width="100" align="middle" formatter="formActionBt">Action</th>
+                        <th field="name" width="100" align="middle" sortable="false">表单名称</th>
+                        <th field="type" width="100" align="middle" sortable="false">类型</th>
+                        <th field="expression" width="100" align="middle" sortable="false">表达式</th>
+                        <th field="variable" width="100" align="middle" sortable="false">变量</th>
+                        <th field="defaultValue" width="100" align="middle" sortable="false">默认值</th>
+                        <th field="datePattern" width="100" align="middle" sortable="false">日期格式</th>
+                        <th field="readable" width="100" align="middle" sortable="false">可读</th>
+                        <th field="writeable" width="100" align="middle" sortable="false">可写</th>
+                        <th field="required" width="100" align="middle" sortable="false">必要</th>
+                        <th field="formValues" width="100" align="middle" sortable="false">表单值</th>
+                        <th field="action" width="100" align="middle" formatter="formActionBt">操作</th>
                     </tr>
                     </thead>
                 </table>
             </div>
-            <div id="listeners" title="listeners" style="padding:5px;">
+            <div id="listeners" title="监听器" style="padding:5px;">
                 <table id="task-listeners-list">
                     <thead>
                     <tr>
-                        <th field="listenerImplimentation" width="200" align="middle" sortable="false">Listener
-                            Implimentation
+                        <th field="listenerImplimentation" width="200" align="middle" sortable="false">
+                            监听器说明
                         </th>
                         <th field="type" width="70" align="middle" sortable="false">类型</th>
                         <th field="event" width="70" align="middle" sortable="false">事件</th>
@@ -463,18 +463,18 @@
                 <table id="execution-listeners-list">
                     <thead>
                     <tr>
-                        <th field="listenerImplimentation" width="200" align="middle" sortable="false">Listener
-                            Implimentation
+                        <th field="listenerImplimentation" width="200" align="middle" sortable="false">
+                            监听器说明
                         </th>
-                        <th field="type" width="70" align="middle" sortable="false">Type</th>
-                        <th field="event" width="70" align="middle" sortable="false">Event</th>
-                        <th field="fields" width="100" align="middle">Fields</th>
-                        <th field="action" width="100" align="middle" formatter="executionListenerActionBt">Action</th>
+                        <th field="type" width="70" align="middle" sortable="false">类型</th>
+                        <th field="event" width="70" align="middle" sortable="false">事件</th>
+                        <th field="fields" width="100" align="middle">字段</th>
+                        <th field="action" width="100" align="middle" formatter="executionListenerActionBt">操作</th>
                     </tr>
                     </thead>
                 </table>
             </div>
-            <div id="multi-instance" title="Multi Instance" class="properties-menu">
+            <div id="multi-instance" title="多实例" class="properties-menu">
 
             </div>
         </div>
