@@ -6,12 +6,12 @@ var listenerId="";
 $(function(){
 	$('#task-properties-accordion').accordion({
 		onSelect:function(title,index){
-				if(title=='General'){
+				if(title=='通用'){
 					var pp = $('#task-properties-accordion').accordion('getSelected');
 					if (pp){
     				pp.panel('refresh','${basePath}/b/page-work_flow/taskGeneral');
 					}
-				}else if(title=='Multi Instance'){
+				}else if(title=='多实例'){
 					var pp = $('#task-properties-accordion').accordion('getSelected');
 					if (pp){
     				pp.panel('refresh','${basePath}/b/page-work_flow/taskMultiInstance');
@@ -31,7 +31,7 @@ $(function(){
 	    shadow:true
 	});
 	$('#task-listeners-list').datagrid({
-		title:"Execution Listeners",
+		title:"执行监听器",
 		//url:'${basePath}/wf/procdef/procdef!search.action',//���ر�����ݵ�URL
 		singleSelect:true,
 		//width:500,
@@ -46,7 +46,7 @@ $(function(){
 	    //sortOrder:'asc',
 	    striped:true,
 	    toolbar:[{
-	        text:'New',
+	        text:'新增',
 	        iconCls:'icon-add',
 	        handler:function(){
 	    		_listener_win.window('open');
@@ -61,8 +61,8 @@ $(function(){
 });
 function listenerActionBt(value,rowData,rowIndex){
 	var id = rowData.id;
-	var e = '<img onclick="editListener(\''+id+'\')" src="image/edit.gif" title="�޸�" style="cursor:hand;"/>';   
-    var d = '<img onclick="deleteListener(\''+id+'\')" src="image/delete.gif" title="ɾ��" style="cursor:hand;"/>';
+	var e = '<img onclick="editListener(\''+id+'\')" src="${basePath}/page/work_flow/image/edit.gif" title="修改" style="cursor:hand;"/>';
+    var d = '<img onclick="deleteListener(\''+id+'\')" src="${basePath}/page/work_flow/image/delete.gif" title="删除" style="cursor:hand;"/>';
 	return e+'&nbsp;'+d;
 }
 function editListener(id){
@@ -130,56 +130,56 @@ function loadTaskListeners(){
 </script>
 <div id="task-properties-layout" class="easyui-layout" fit="true">
 	<div id="task-properties-toolbar-panel" region="north" border="false" style="height:30px;background:#E1F0F2;">
-		<a href="##" id="sb2" class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="saveTaskProperties()">Save</a>
+		<a href="##" id="sb2" class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="saveTaskProperties()">保存</a>
 	</div>
 	<div id="task-properties-panel" region="center" border="true">
 		<div id="task-properties-accordion" class="easyui-accordion" fit="true" border="false">
-			<div id="general" title="General" selected="true" class="properties-menu">
+			<div id="general" title="通用" selected="true" class="properties-menu">
 				
 			</div>
-			<div id="mainConfig" title="Main Config" class="properties-menu">
+			<div id="mainConfig" title="主要配置" class="properties-menu">
 				<table id="main-properties">
 					<tr>
-						<td align="right">Rule Name:</td>
+						<td align="right">规则名称:</td>
 						<td>
 							<input type="text" id="ruleName" name="ruleName" size="50"/>
 						</td>
 					</tr>
 					<tr>
-						<td align="right">Input Variable:</td>
+						<td align="right">输入变量:</td>
 						<td>
 							<input type="text" id="inputVariable" name="inputVariable" size="50"/>
 						</td>
 					</tr>
 					<tr>
-						<td align="right">Excluded:</td>
+						<td align="right">是否排除:</td>
 						<td>
-							<input type="radio" id="excludeYes" name="excluded" value="true"/>Yes
-							<input type="radio" id="excludeNo" name="excluded" value="false" checked/>No
+							<input type="radio" id="excludeYes" name="excluded" value="true"/>是
+							<input type="radio" id="excludeNo" name="excluded" value="false" checked/>否
 						</td>
 					</tr>
 					<tr>
-						<td align="right">Result Variable:</td>
+						<td align="right">结果变量:</td>
 						<td>
 							<input type="text" id="resultVariable" name="resultVariable" size="50"/>
 						</td>
 					</tr>
 				</table>
 			</div>
-			<div id="listeners" title="Listeners" style="overflow: hidden;">
+			<div id="listeners" title="监听器" style="overflow: hidden;">
 				<table id="task-listeners-list">
 					<thead>
 					<tr>
-					<th field="listenerImplimentation" width="200" align="middle" sortable="false">Listener Implimentation</th>
-					<th field="type" width="70" align="middle" sortable="false">Type</th>
-					<th field="event" width="70" align="middle" sortable="false">Event</th>
-					<th field="fields" width="100" align="middle" >Fields</th>
-					<th field="action" width="100" align="middle" formatter="listenerActionBt">Action</th>
+					<th field="listenerImplimentation" width="200" align="middle" sortable="false">监听器说明</th>
+					<th field="type" width="70" align="middle" sortable="false">类型</th>
+					<th field="event" width="70" align="middle" sortable="false">事件</th>
+					<th field="fields" width="100" align="middle" >字段</th>
+					<th field="action" width="100" align="middle" formatter="listenerActionBt">操作</th>
 					</tr>
 					</thead>
 				</table>
 			</div>
-			<div id="multi-instance" title="Multi Instance" class="properties-menu">
+			<div id="multi-instance" title="多实例" class="properties-menu">
 				
 			</div>
 		</div>

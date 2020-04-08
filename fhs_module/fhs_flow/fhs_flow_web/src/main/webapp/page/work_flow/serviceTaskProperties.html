@@ -7,7 +7,7 @@
     $(function () {
         $('#task-properties-accordion').accordion({
             onSelect: function (title, index) {
-                if (title == 'General') {
+                if (title == '通用') {
                     var pp = $('#task-properties-accordion').accordion('getSelected');
                     if (pp) {
                         pp.panel('refresh', '${basePath}/b/page-work_flow/taskGeneral');
@@ -161,10 +161,10 @@
 
     function fieldsActionFormatter(value, rowData, rowIndex) {
         var id = rowIndex;
-        var s = '<img onclick="saveField(' + id + ')" src="image/ok.png" title="' + "确定" + '" style="cursor:hand;"/>';
-        var c = '<img onclick="cancelField(' + id + ')" src="image/cancel.png" title="' + "取消" + '" style="cursor:hand;"/>';
-        var e = '<img onclick="editField(' + id + ')" src="image/modify.png" title="' + "修改" + '" style="cursor:hand;"/>';
-        var d = '<img onclick="deleteField(' + id + ',\'' + rowData.id + '\')" src="image/delete.gif" title="' + "删除" + '" style="cursor:hand;"/>';
+        var s = '<img onclick="saveField(' + id + ')" src="${basePath}/page/work_flow/image/ok.png" title="' + "确定" + '" style="cursor:hand;"/>';
+        var c = '<img onclick="cancelField(' + id + ')" src="${basePath}/page/work_flow/image/cancel.png" title="' + "取消" + '" style="cursor:hand;"/>';
+        var e = '<img onclick="editField(' + id + ')" src="${basePath}/page/work_flow/image/modify.png" title="' + "修改" + '" style="cursor:hand;"/>';
+        var d = '<img onclick="deleteField(' + id + ',\'' + rowData.id + '\')" src="${basePath}/page/work_flow/image/delete.gif" title="' + "删除" + '" style="cursor:hand;"/>';
         if (rowData.editing)
             return s + '&nbsp;' + c;
         else
@@ -173,8 +173,8 @@
 
     function listenerActionBt(value, rowData, rowIndex) {
         var id = rowData.id;
-        var e = '<img onclick="editListener(\'' + id + '\')" src="image/edit.gif" title="' + "修改" + '" style="cursor:hand;"/>';
-        var d = '<img onclick="deleteListener(\'' + id + '\')" src="image/delete.gif" title="' + "删除" + '" style="cursor:hand;"/>';
+        var e = '<img onclick="editListener(\'' + id + '\')" src="${basePath}/page/work_flow/image/edit.gif" title="' + "修改" + '" style="cursor:hand;"/>';
+        var d = '<img onclick="deleteListener(\'' + id + '\')" src="${basePath}/page/work_flow/image/delete.gif" title="' + "删除" + '" style="cursor:hand;"/>';
         return e + '&nbsp;' + d;
     }
 
@@ -312,13 +312,13 @@
     </div>
     <div id="task-properties-panel" region="center" border="true">
         <div id="task-properties-accordion" class="easyui-accordion" fit="true" border="false">
-            <div id="general" title="General" selected="true" class="properties-menu">
+            <div id="general" title="通用" selected="true" class="properties-menu">
 
             </div>
             <div id="mainConfig" title="主要配置" class="properties-menu">
                 <table id="main-properties">
                     <tr>
-                        <td align="right">类型:</td>
+                        <td>类型:</td>
                         <td>
                             <input type="radio" id="javaClassType" name="_type" value="javaClass"
                                    onclick="selectServiceTaskType(this)" checked/>Java类
@@ -329,31 +329,31 @@
                         </td>
                     </tr>
                     <tr id="serviceClassTr">
-                        <td align="right">服务等级:</td>
+                        <td >服务类:</td>
                         <td>
                             <input type="text" id="serviceClass" name="serviceClass" value="" size="50"/>
                         </td>
                     </tr>
                     <tr id="expressionTr" style="display:none;">
-                        <td align="right">表达式:</td>
+                        <td >表达式:</td>
                         <td>
                             <input type="text" id="_expression" name="_expression" value="" size="50"/>
                         </td>
                     </tr>
                     <tr id="delegateExpressionTr" style="display:none;">
-                        <td align="right">委托表达式:</td>
+                        <td >委托表达式:</td>
                         <td>
                             <input type="text" id="delegateExpression" name="delegateExpression" value="" size="50"/>
                         </td>
                     </tr>
                     <tr>
-                        <td align="right">结果变量:</td>
+                        <td>结果变量:</td>
                         <td>
                             <input type="text" id="resultVariable" name="resultVariable" value="" size="50"/>
                         </td>
                     </tr>
                     <tr>
-                        <td align="right">字段:</td>
+                        <td>字段:</td>
                         <td>
                             <div id="task-Fields-panel">
                                 <table id="task-Fields-list">
@@ -392,7 +392,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td align="right">文献资料:</td>
+                        <td>说明:</td>
                         <td><textarea id="documentation" name="documentation" cols="50" rows="5"></textarea></td>
                     </tr>
                 </table>
