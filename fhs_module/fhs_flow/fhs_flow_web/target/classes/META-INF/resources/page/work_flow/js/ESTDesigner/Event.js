@@ -29,7 +29,7 @@ ESTDesigner.event.Start = ESTDesigner.event.BaseEvent
 			init : function(attr) {
 				this.type = "ESTDesigner.event.Start";
 				this._super($.extend({
-					path : "/page/workFlow/js/ESTDesigner/icons/type.startevent.none.png"
+					path : "/page/work_flow/js/ESTDesigner/icons/type.startevent.none.png"
 				}, attr));
 				this.createPort("output",
 						new draw2d.layout.locator.LeftLocator());
@@ -57,7 +57,7 @@ ESTDesigner.event.End = ESTDesigner.event.BaseEvent
 			init : function(attr) {
 				this.type = "ESTDesigner.event.End";
 				this._super($.extend({
-					path : "/page/workFlow/js/ESTDesigner/icons/type.endevent.none.png"
+					path : "/page/work_flow/js/ESTDesigner/icons/type.endevent.none.png"
 				}, attr));
 				this.createPort("input",
 						new draw2d.layout.locator.LeftLocator());

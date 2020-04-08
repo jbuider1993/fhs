@@ -123,10 +123,10 @@
     function processVariablesActionFormatter(value, rowData, rowIndex) {
         var id = rowIndex;
         var name = rowData.name;
-        var s = '<img onclick="saveProcessVariable(' + id + ')" src="image/ok.png" title="' + "确定" + '" style="cursor:hand;"/>';
-        var c = '<img onclick="cancelProcessVariable(' + id + ')" src="image/cancel.png" title="' + "取消" + '" style="cursor:hand;"/>';
-        var e = '<img onclick="editProcessVariable(' + id + ')" src="image/modify.png" title="' + "修改" + '" style="cursor:hand;"/>';
-        var d = '<img onclick="deleteProcessVariable(' + id + ')" src="image/delete.gif" title="' + "删除" + '" style="cursor:hand;"/>';
+        var s = '<img onclick="saveProcessVariable(' + id + ')" src="${basePath}/page/work_flow/image/ok.png" title="' + "确定" + '" style="cursor:hand;"/>';
+        var c = '<img onclick="cancelProcessVariable(' + id + ')" src="${basePath}/page/work_flow/image/cancel.png" title="' + "取消" + '" style="cursor:hand;"/>';
+        var e = '<img onclick="editProcessVariable(' + id + ')" src="${basePath}/page/work_flow/image/modify.png" title="' + "修改" + '" style="cursor:hand;"/>';
+        var d = '<img onclick="deleteProcessVariable(' + id + ')" src="${basePath}/page/work_flow/image/delete.gif" title="' + "删除" + '" style="cursor:hand;"/>';
         if (rowData.editing)
             return s;
         else

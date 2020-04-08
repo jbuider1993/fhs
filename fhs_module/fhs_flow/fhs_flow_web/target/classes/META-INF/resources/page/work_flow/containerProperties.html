@@ -5,16 +5,16 @@
     $(function () {
         $('#process-properties-accordion').accordion({
             onSelect: function (title, index) {
-                if (title == 'Variables') {
+                if (title == '变量') {
                     var pp = $('#process-properties-accordion').accordion('getSelected');
                     if (pp) {
-                        pp.panel('refresh', 'processVariable.html');
+                        pp.panel('refresh', '${basePath}/b/page-work_flow/processVariable');
                     }
                 }
-                if (title == 'Data Objects') {
+                if (title == '数据对象') {
                     var pp = $('#process-properties-accordion').accordion('getSelected');
                     if (pp) {
-                        pp.panel('refresh', 'processDataObject.html');
+                        pp.panel('refresh', '${basePath}/b/page-work_flow/processDataObject');
                     }
                 }
             }
@@ -47,13 +47,13 @@
                 //sortOrder:'asc',
                 striped: true,
                 toolbar: [{
-                    text: 'New',
+                    text: '新增',
                     iconCls: 'icon-add',
                     handler: function () {
                         _listener_win.window('open');
                         //_listener_frame.src="";
                         _listener_win.window('refresh',
-                            'processListenerConfig.html');
+                            '${basePath}/b/page-work_flow/processListenerConfig');
                         //alert(_listener_frame.document.body.innerHTML);
                     }
                 }]
@@ -64,17 +64,17 @@
     function listenerActionBt(value, rowData, rowIndex) {
         var id = rowData.id;
         var e = '<img onclick="editListener(\'' + id
-            + '\')" src="image/edit.gif" title="' + "修改"
+            + '\')" src="${basePath}/page/work_flow/image/edit.gif" title="' + "修改"
             + '" style="cursor:hand;"/>';
         var d = '<img onclick="deleteListener(\'' + id
-            + '\')" src="image/delete.gif" title="' + "删除"
+            + '\')" src="${basePath}/page/work_flow/image/delete.gif" title="' + "删除"
             + '" style="cursor:hand;"/>';
         return e + '&nbsp;' + d;
     }
 
     function editListener(id) {
         _listener_win.window('open');
-        _listener_win.window('refresh', 'processListenerConfig.html');
+        _listener_win.window('refresh', '${basePath}/b/page-work_flow/processListenerConfig');
     }
 
     function deleteListener(id) {
@@ -154,70 +154,69 @@
 <div id="process-properties-layout" class="easyui-layout" fit="true">
     <div id="task-properties-toolbar-panel" region="north" border="false" style="height: 30px; background: #E1F0F2;">
         <a href="##" id="sb2" class="easyui-linkbutton" plain="true" iconCls="icon-save"
-           onclick="saveProcessProperties()">Save</a>
+           onclick="saveProcessProperties()">保存</a>
     </div>
     <div id="process-properties-panel" region="center" border="true">
         <div id="process-properties-accordion" class="easyui-accordion" fit="true" border="false">
-            <div id="general" title="General" selected="true" class="properties-menu">
+            <div id="general" title="通用" selected="true" class="properties-menu">
                 <table id="general-properties">
                     <tr>
                         <td align="right">Id:</td>
                         <td><input type="text" id="id" name="id" size="50" value=""/></td>
                     </tr>
                     <tr>
-                        <td align="right">Name:</td>
+                        <td align="right">任务名称:</td>
                         <td><input type="text" id="name" name="name" size="50" value=""/></td>
                     </tr>
                     <tr>
-                        <td align="right">Documentation:</td>
+                        <td align="right">文献资料:</td>
                         <td><textarea id="documentation" name="documentation" cols="20" rows="5"></textarea></td>
                     </tr>
                 </table>
             </div>
-            <div id="variables" title="Variables" class="properties-menu">
+            <div id="variables" title="变量" class="properties-menu">
 
             </div>
-            <div id="dataObjects" title="Data Objects" class="properties-menu">
+            <div id="dataObjects" title="数据对象" class="properties-menu">
 
             </div>
-            <div id="listeners" title="Listeners" style="overflow: hidden;">
+            <div id="listeners" title="监听器" style="overflow: hidden;">
                 <table id="process-listeners-list">
                     <thead>
                     <tr>
-                        <th field="listenerImplimentation" width="200" align="middle" sortable="false">Listener
-                            Implimentation
+                        <th field="listenerImplimentation" width="200" align="middle" sortable="false">
+                            监听器说明
                         </th>
-                        <th field="type" width="70" align="middle" sortable="false">Type</th>
-                        <th field="event" width="70" align="middle" sortable="false">Event</th>
-                        <th field="fields" width="100" align="middle">Fields</th>
-                        <th field="action" width="100" align="middle" formatter="listenerActionBt">Action</th>
+                        <th field="type" width="70" align="middle" sortable="false">类型</th>
+                        <th field="event" width="70" align="middle" sortable="false">事件</th>
+                        <th field="fields" width="100" align="middle">字段</th>
+                        <th field="action" width="100" align="middle" formatter="listenerActionBt">操作</th>
                     </tr>
                     </thead>
                 </table>
             </div>
-            <div id="multi-instance" title="Multi Instance" class="properties-menu">
+            <div id="multi-instance" title="多实例" class="properties-menu">
                 <table>
                     <tr>
-                        <td align="right">Sequential:</td>
-                        <td><input type="radio" id="sequentialYes" name="sequential" value="true"/>Yes <input
-                                type="radio" id="sequentialNo" name="sequential"
-                                value="false" checked/>No
+                        <td align="right">是否有序:</td>
+                        <td><input type="radio" id="sequentialYes" name="sequential" value="true"/>是
+                            <input type="radio" id="sequentialNo" name="sequential" value="false" checked/>否
                         </td>
                     </tr>
                     <tr>
-                        <td align="right">Loop Cardinality:</td>
+                        <td align="right">循环基数:</td>
                         <td><input type="text" id="loopCardinality" name="loopCardinality" value="" size="50"/></td>
                     </tr>
                     <tr>
-                        <td align="right">Collection:</td>
+                        <td align="right">控制器:</td>
                         <td><input type="text" id="collection" name="collection" value="" size="50"/></td>
                     </tr>
                     <tr>
-                        <td align="right">Element Variable:</td>
+                        <td align="right">元素变量:</td>
                         <td><input type="text" id="elementVariable" name="elementVariable" value="" size="50"/></td>
                     </tr>
                     <tr>
-                        <td align="right">Completion Condition:</td>
+                        <td align="right">完成条件:</td>
                         <td><input type="text" id="completionCondition" name="completionCondition" value="" size="50"/>
                         </td>
                     </tr>

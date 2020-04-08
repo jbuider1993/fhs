@@ -23,7 +23,7 @@
             rownumbers: true,
             striped: true,
             toolbar: [{
-                text: 'New',
+                text: '新增',
                 iconCls: 'icon-add',
                 handler: function () {
                     if (formValuesEditCount > 0) {
@@ -72,10 +72,10 @@
 
     function formValuesActionFormatter(value, rowData, rowIndex) {
         var id = rowIndex;
-        var s = '<img onclick="saveFormValue(' + id + ')" src="image/ok.png" title="保存" style="cursor:hand;"/>';
-        var c = '<img onclick="cancelFormValue(' + id + ')" src="image/cancel.png" title="取消" style="cursor:hand;"/>';
-        var e = '<img onclick="editFormValue(' + id + ')" src="image/modify.png" title="修改" style="cursor:hand;"/>';
-        var d = '<img onclick="deleteFormValue(' + id + ')" src="image/delete.gif" title="删除" style="cursor:hand;"/>';
+        var s = '<img onclick="saveFormValue(' + id + ')" src="${basePath}/page/work_flow/image/ok.png" title="保存" style="cursor:hand;"/>';
+        var c = '<img onclick="cancelFormValue(' + id + ')" src="${basePath}/page/work_flow/image/cancel.png" title="取消" style="cursor:hand;"/>';
+        var e = '<img onclick="editFormValue(' + id + ')" src="${basePath}/page/work_flow/image/modify.png" title="修改" style="cursor:hand;"/>';
+        var d = '<img onclick="deleteFormValue(' + id + ')" src="${basePath}/page/work_flow/image/delete.gif" title="删除" style="cursor:hand;"/>';
         if (rowData.editing) {
             return s;
         } else {

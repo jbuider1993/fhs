@@ -161,10 +161,10 @@
 
     function fieldsActionFormatter(value, rowData, rowIndex) {
         var id = rowIndex;
-        var s = '<img onclick="saveField(' + id + ')" src="image/ok.png" title="' + "确定" + '" style="cursor:hand;"/>';
-        var c = '<img onclick="cancelField(' + id + ')" src="image/cancel.png" title="' + "取消" + '" style="cursor:hand;"/>';
-        var e = '<img onclick="editField(' + id + ')" src="image/modify.png" title="' + "修改" + '" style="cursor:hand;"/>';
-        var d = '<img onclick="deleteField(' + id + ',\'' + rowData.id + '\')" src="image/delete.gif" title="' + "删除" + '" style="cursor:hand;"/>';
+        var s = '<img onclick="saveField(' + id + ')" src="${basePath}/page/work_flow/image/ok.png" title="' + "确定" + '" style="cursor:hand;"/>';
+        var c = '<img onclick="cancelField(' + id + ')" src="${basePath}/page/work_flow/image/cancel.png" title="' + "取消" + '" style="cursor:hand;"/>';
+        var e = '<img onclick="editField(' + id + ')" src="${basePath}/page/work_flow/image/modify.png" title="' + "修改" + '" style="cursor:hand;"/>';
+        var d = '<img onclick="deleteField(' + id + ',\'' + rowData.id + '\')" src="${basePath}/page/work_flow/image/delete.gif" title="' + "删除" + '" style="cursor:hand;"/>';
         if (rowData.editing)
             return s + '&nbsp;' + c;
         else
@@ -173,8 +173,8 @@
 
     function listenerActionBt(value, rowData, rowIndex) {
         var id = rowData.id;
-        var e = '<img onclick="editListener(\'' + id + '\')" src="image/edit.gif" title="' + "修改" + '" style="cursor:hand;"/>';
-        var d = '<img onclick="deleteListener(\'' + id + '\')" src="image/delete.gif" title="' + "删除" + '" style="cursor:hand;"/>';
+        var e = '<img onclick="editListener(\'' + id + '\')" src="${basePath}/page/work_flow/image/edit.gif" title="' + "修改" + '" style="cursor:hand;"/>';
+        var d = '<img onclick="deleteListener(\'' + id + '\')" src="${basePath}/page/work_flow/image/delete.gif" title="' + "删除" + '" style="cursor:hand;"/>';
         return e + '&nbsp;' + d;
     }
 

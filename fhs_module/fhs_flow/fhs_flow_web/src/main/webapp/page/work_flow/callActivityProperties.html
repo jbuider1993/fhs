@@ -229,12 +229,12 @@
 
     function inputParamsActionFormatter(value, rowData, rowIndex) {
         var id = rowIndex;
-        var s = '<img onclick="saveInputParam(' + id + ')" src="image/ok.png" title="保存" style="cursor:hand;"/>';
-        var c = '<img onclick="cancelInputParam(' + id + ')" src="image/cancel.png" title="取消" style="cursor:hand;"/>';
-        var e = '<img onclick="editInputParam(' + id + ')" src="image/modify.png" title="修改" style="cursor:hand;"/>';
-        var d = '<img onclick="deleteInputParam(' + id + ',\'' + rowData.id + '\')" src="image/delete.gif" title="删除" style="cursor:hand;"/>';
+        var s = '<img onclick="saveInputParam(' + id + ')" src="${basePath}/page/work_flow/image/ok.png" title="保存" style="cursor:hand;"/>';
+        var c = '<img onclick="cancelInputParam(' + id + ')" src="${basePath}/page/work_flow/image/cancel.png" title="取消" style="cursor:hand;"/>';
+        var e = '<img onclick="editInputParam(' + id + ')" src="${basePath}/page/work_flow/image/modify.png" title="修改" style="cursor:hand;"/>';
+        var d = '<img onclick="deleteInputParam(' + id + ',\'' + rowData.id + '\')" src="${basePath}/page/work_flow/image/delete.gif" title="删除" style="cursor:hand;"/>';
         if (rowData.editing)
-            return s + '&nbsp;' + c;
+            return s ;
         else
             return e + '&nbsp;' + d;
     }
@@ -267,20 +267,20 @@
 
     function outputParamsActionFormatter(value, rowData, rowIndex) {
         var id = rowIndex;
-        var s = '<img onclick="saveOutputParam(' + id + ')" src="image/ok.png" title="保存" style="cursor:hand;"/>';
-        var c = '<img onclick="cancelOutputParam(' + id + ')" src="image/cancel.png" title="取消" style="cursor:hand;"/>';
-        var e = '<img onclick="editOutputParam(' + id + ')" src="image/modify.png" title="修改" style="cursor:hand;"/>';
-        var d = '<img onclick="deleteOutputParam(' + id + ',\'' + rowData.id + '\')" src="image/delete.gif" title="删除" style="cursor:hand;"/>';
+        var s = '<img onclick="saveOutputParam(' + id + ')" src="${basePath}/page/work_flow/image/ok.png" title="保存" style="cursor:hand;"/>';
+        var c = '<img onclick="cancelOutputParam(' + id + ')" src="${basePath}/page/work_flow/image/cancel.png" title="取消" style="cursor:hand;"/>';
+        var e = '<img onclick="editOutputParam(' + id + ')" src="${basePath}/page/work_flow/image/modify.png" title="修改" style="cursor:hand;"/>';
+        var d = '<img onclick="deleteOutputParam(' + id + ',\'' + rowData.id + '\')" src="${basePath}/page/work_flow/image/delete.gif" title="删除" style="cursor:hand;"/>';
         if (rowData.editing)
-            return s + '&nbsp;' + c;
+            return s;
         else
             return e + '&nbsp;' + d;
     }
 
     function listenerActionBt(value, rowData, rowIndex) {
         var id = rowData.id;
-        var e = '<img onclick="editListener(\'' + id + '\')" src="image/edit.gif" title="修改" style="cursor:hand;"/>';
-        var d = '<img onclick="deleteListener(\'' + id + '\')" src="image/delete.gif" title="删除" style="cursor:hand;"/>';
+        var e = '<img onclick="editListener(\'' + id + '\')" src="${basePath}/page/work_flow/image/edit.gif" title="修改" style="cursor:hand;"/>';
+        var d = '<img onclick="deleteListener(\'' + id + '\')" src="${basePath}/page/work_flow/image/delete.gif" title="删除" style="cursor:hand;"/>';
         return e + '&nbsp;' + d;
     }
 
