@@ -14,7 +14,7 @@
             rownumbers: true,
             striped: true,
             toolbar: [{
-                text: 'New',
+                text: '新增',
                 iconCls: 'icon-add',
                 handler: function () {
                     if (processDataObjectsEditCount > 0) {
@@ -147,7 +147,7 @@
 						options:{
 						required:true,
 						validType:'length[1,100]'
-					}}">Name
+					}}">数据对象名称
         </th>
         <th field="type" width="100" align="middle" sortable="false"
             editor="{
@@ -164,7 +164,7 @@
 							],
 							valueField:'id',
 							textField:'text'
-					}}">Type
+					}}">类型
         </th>
         <th field="value" width="100" align="middle" sortable="false"
             editor="{
@@ -172,9 +172,9 @@
 						options:{
 						required:false,
 						validType:'length[1,150]'
-					}}">Value
+					}}">数值
         </th>
-        <th field="action" width="80" align="middle" formatter="processDataObjectsActionFormatter">Action</th>
+        <th field="action" width="80" align="middle" formatter="processDataObjectsActionFormatter">操作</th>
     </tr>
     </thead>
 </table>

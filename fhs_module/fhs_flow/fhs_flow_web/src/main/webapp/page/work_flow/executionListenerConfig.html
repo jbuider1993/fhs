@@ -25,7 +25,7 @@
             //sortOrder:'asc',
             striped: true,
             toolbar: [{
-                text: 'New',
+                text: '新增',
                 iconCls: 'icon-add',
                 handler: function () {
                     if (listenerFieldsEditCount > 0) {
@@ -101,11 +101,11 @@
 
     function changeListenerServiceType(obj) {
         if (obj.value == 'javaClass') {
-            $('#listenerServiceLabel').html('Service Class:');
+            $('#listenerServiceLabel').html('服务类:');
             $('#listenerServiceClass').show();
             $('#listenerServiceExpression').hide();
         } else if (obj.value == 'expression') {
-            $('#listenerServiceLabel').html('Expression:');
+            $('#listenerServiceLabel').html('表达式:');
             $('#listenerServiceClass').hide();
             $('#listenerServiceExpression').show();
         }
@@ -323,11 +323,11 @@
 </script>
 <table>
     <tr>
-        <td align="right">Event:</td>
+        <td align="right">事件:</td>
         <td>
             <select id="listenerEventType" name="listenerEventType">
-                <option value="start">Start</option>
-                <option value="end">End</option>
+                <option value="start">开始</option>
+                <option value="end">结束</option>
             </select>
         </td>
     </tr>
@@ -335,13 +335,13 @@
         <td></td>
         <td align="left">
             <input type="radio" id="listenerServiceType" name="listenerServiceType" value="javaClass" checked="checked"
-                   onclick="changeListenerServiceType(this)">Java Class
+                   onclick="changeListenerServiceType(this)">Java类
             <input type="radio" id="listenerServiceType" name="listenerServiceType" value="expression"
-                   onclick="changeListenerServiceType(this)">Express
+                   onclick="changeListenerServiceType(this)">表达式
         </td>
     </tr>
     <tr>
-        <td id="listenerServiceLabel" align="right">Service Class:</td>
+        <td id="listenerServiceLabel" align="right">服务类:</td>
         <td>
             <input type="text" id="listenerServiceClass" name="listenerServiceClass" size="80" value=""/>
             <input type="text" id="listenerServiceExpression" name="listenerServiceExpression" size="80"
@@ -349,7 +349,7 @@
         </td>
     </tr>
     <tr>
-        <td align="right">Fields:</td>
+        <td align="right">字段:</td>
         <td>
             <table id="task-listeners-fields-list">
                 <thead>
@@ -360,7 +360,7 @@
 						options:{
 						required:true,
 						validType:'length[1,100]'
-					}}">Field Name
+					}}">字段名称
                     </th>
                     <th field="type" width="100" align="middle" sortable="false" editor="{
 						type:'combobox',
@@ -369,15 +369,15 @@
 							data:[{id:'string',text:'String',selected:true},{id:'expression',text:'Expression'}],
 							valueField:'id',
 							textField:'text'
-					}}">Type
+					}}">类型
                     </th>
                     <th field="value" width="200" align="middle" sortable="false" editor="{
 						type:'validatebox',
 						options:{
 						validType:'length[1,100]'
-					}}">Value
+					}}">数值
                     </th>
-                    <th field="action" width="80" align="middle" formatter="listenerFieldsActionFormatter">Action</th>
+                    <th field="action" width="80" align="middle" formatter="listenerFieldsActionFormatter">操作</th>
                 </tr>
                 </thead>
             </table>
@@ -385,8 +385,8 @@
     </tr>
     <tr>
         <td colspan="2" align="center">
-            <a href="##" id="fieldSaveBt" onclick="saveListenerConfig()">Save</a>
-            <a href="##" id="fieldCancelBt" onclick="closeTaskListenerWin()">Cancel</a>
+            <a href="##" id="fieldSaveBt" onclick="saveListenerConfig()">保存</a>
+            <a href="##" id="fieldCancelBt" onclick="closeTaskListenerWin()">取消</a>
         </td>
     </tr>
 </table>

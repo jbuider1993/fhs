@@ -7,7 +7,7 @@
     $(function () {
         $('#task-properties-accordion').accordion({
             onSelect: function (title, index) {
-                if (title == 'General') {
+                if (title == '通用') {
                     var pp = $('#task-properties-accordion').accordion('getSelected');
                     if (pp) {
                         pp.panel('refresh', '${basePath}/b/page-work_flow/taskGeneral');
@@ -49,7 +49,7 @@
             shadow: true
         });
         $('#task-listeners-list').datagrid({
-            title: "Task Listeners",
+            title: "任务监听器",
             //url:'${basePath}/wf/procdef/procdef!search.action',//加载表格数据的URL
             singleSelect: true,
             //width:500,
@@ -75,7 +75,7 @@
             }]
         });
         $('#execution-listeners-list').datagrid({
-            title: "Execution Listeners",
+            title: "执行监听器",
             //url:'${basePath}/wf/procdef/procdef!search.action',//加载表格数据的URL
             singleSelect: true,
             //width:500,
@@ -90,7 +90,7 @@
             //sortOrder:'asc',
             striped: true,
             toolbar: [{
-                text: 'New',
+                text: '新增',
                 iconCls: 'icon-add',
                 handler: function () {
                     _listener_win.window('open');
@@ -116,7 +116,7 @@
             //sortOrder:'asc',
             striped: true,
             toolbar: [{
-                text: 'New',
+                text: '新增',
                 iconCls: 'icon-add',
                 handler: function () {
                     _form_win.window('open');
@@ -368,7 +368,7 @@
     </div>
     <div id="task-properties-panel" region="center" border="true">
         <div id="task-properties-accordion" class="easyui-accordion" fit="true" border="false">
-            <div id="general" title="General" selected="true" class="properties-menu">
+            <div id="general" title="通用" selected="true" class="properties-menu">
 
             </div>
             <div id="main-config" title="主要配置" class="properties-menu">

@@ -14,7 +14,7 @@
             rownumbers: true,
             striped: true,
             toolbar: [{
-                text: 'New',
+                text: '新增',
                 iconCls: 'icon-add',
                 handler: function () {
                     if (processVariablesEditCount > 0) {
@@ -145,7 +145,7 @@
 						options:{
 						required:true,
 						validType:'length[1,100]'
-					}}">Variable Name
+					}}">变量名称
         </th>
         <th field="type" width="100" align="middle" sortable="false"
             editor="{
@@ -159,7 +159,7 @@
 							],
 							valueField:'id',
 							textField:'text'
-					}}">Type
+					}}">类型
         </th>
         <th field="scope" width="100" align="middle" sortable="false"
             editor="{
@@ -173,7 +173,7 @@
 							],
 							valueField:'id',
 							textField:'text'
-					}}">Scope
+					}}">范围
         </th>
         <th field="defaultValue" width="100" align="middle" sortable="false"
             editor="{
@@ -181,7 +181,7 @@
 						options:{
 						required:false,
 						validType:'length[1,150]'
-					}}">Default Value
+					}}">默认值
         </th>
         <th field="remark" width="100" align="middle" sortable="false"
             editor="{
@@ -189,9 +189,9 @@
 						options:{
 						required:false,
 						validType:'length[1,150]'
-					}}">Remark
+					}}">备注
         </th>
-        <th field="action" width="80" align="middle" formatter="processVariablesActionFormatter">Action</th>
+        <th field="action" width="80" align="middle" formatter="processVariablesActionFormatter">操作</th>
     </tr>
     </thead>
 </table>
