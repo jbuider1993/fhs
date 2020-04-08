@@ -11,7 +11,7 @@
                     if (pp) {
                         pp.panel('refresh', '${basePath}/b/page-work_flow/taskGeneral');
                     }
-                } else if (title == 'Multi Instance') {
+                } else if (title == '多实例') {
                     var pp = $('#task-properties-accordion').accordion('getSelected');
                     if (pp) {
                         pp.panel('refresh', '${basePath}/b/page-work_flow/taskMultiInstance');
@@ -31,7 +31,7 @@
             shadow: true
         });
         $('#task-listeners-list').datagrid({
-            title: "Execution Listeners",
+            title: "执行监听器",
             //url:'${basePath}/wf/procdef/procdef!search.action',//加载表格数据的URL
             singleSelect: true,
             //width:500,
@@ -46,7 +46,7 @@
             //sortOrder:'asc',
             striped: true,
             toolbar: [{
-                text: 'New',
+                text: '新增',
                 iconCls: 'icon-add',
                 handler: function () {
                     _listener_win.window('open');
@@ -120,29 +120,29 @@
 </script>
 <div id="task-properties-layout" class="easyui-layout" fit="true">
     <div id="task-properties-toolbar-panel" region="north" border="false" style="height:30px;background:#E1F0F2;">
-        <a href="##" id="sb2" class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="saveTaskProperties()">Save</a>
+        <a href="##" id="sb2" class="easyui-linkbutton" plain="true" iconCls="icon-save" onclick="saveTaskProperties()">保存</a>
     </div>
     <div id="task-properties-panel" region="center" border="true">
         <div id="task-properties-accordion" class="easyui-accordion" fit="true" border="false">
             <div id="general" title="General" selected="true" class="properties-menu">
 
             </div>
-            <div id="listeners" title="Listeners" style="padding:5px;">
+            <div id="listeners" title="监听器" style="padding:5px;">
                 <table id="task-listeners-list">
                     <thead>
                     <tr>
-                        <th field="listenerImplimentation" width="200" align="middle" sortable="false">Listener
-                            Implimentation
+                        <th field="listenerImplimentation" width="200" align="middle" sortable="false">
+                            监听器说明
                         </th>
-                        <th field="type" width="70" align="middle" sortable="false">Type</th>
-                        <th field="event" width="70" align="middle" sortable="false">Event</th>
-                        <th field="fields" width="100" align="middle">Fields</th>
-                        <th field="action" width="100" align="middle" formatter="listenerActionBt">Action</th>
+                        <th field="type" width="70" align="middle" sortable="false">类型</th>
+                        <th field="event" width="70" align="middle" sortable="false">事件</th>
+                        <th field="fields" width="100" align="middle">字段</th>
+                        <th field="action" width="100" align="middle" formatter="listenerActionBt">操作</th>
                     </tr>
                     </thead>
                 </table>
             </div>
-            <div id="multi-instance" title="Multi Instance" class="properties-menu">
+            <div id="multi-instance" title="多实例" class="properties-menu">
 
             </div>
         </div>
