@@ -35,7 +35,7 @@
                 handler: function () {
                     _listener_win.window('open');
                     //_listener_frame.src="";
-                    _listener_win.window('refresh', 'flowListenerConfig.html');
+                    _listener_win.window('refresh', '${basePath}/b/page-work_flow/flowListenerConfig');
                     //alert(_listener_frame.document.body.innerHTML);
                 }
             }]
@@ -52,7 +52,7 @@
 
     function editListener(id) {
         _listener_win.window('open');
-        _listener_win.window('refresh', 'flowListenerConfig.html');
+        _listener_win.window('refresh', '${basePath}/b/page-work_flow/flowListenerConfig');
     }
 
     function deleteListener(id) {

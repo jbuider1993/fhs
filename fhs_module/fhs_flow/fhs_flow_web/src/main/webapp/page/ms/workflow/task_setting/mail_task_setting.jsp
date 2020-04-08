@@ -95,7 +95,7 @@ function listenerActionBt(value,rowData,rowIndex){
 }
 function editListener(id){
 	_listener_win.window('open');
-	_listener_win.window('refresh','taskListenerConfig.html');
+	_listener_win.window('refresh','${basePath}/b/page-work_flow/taskListenerConfig');
 }
 function deleteListener(id){
 	task.deleteListener(id);

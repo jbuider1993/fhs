@@ -110,7 +110,7 @@
                     if (!is_open_properties_panel)
                         _designer.layout('expand', 'east');
                     _properties_panel_obj.panel('refresh',
-                        'processProperties.html');
+                        '${basePath}/b/page-work_flow/processProperties');
                 };
                 //注册connection右键菜单处理回调函数
                 canvas.connectionCallback = function (obj) {
@@ -119,7 +119,7 @@
 
                     line = obj;
                     _properties_panel_obj.panel('refresh',
-                        'flowProperties.html');
+                        '${basePath}/b/page-work_flow/flowProperties');
                 };
                 //task右键菜单处理函数
                 canvas.taskCallback = function (t, key) {
@@ -149,7 +149,7 @@
                             '${basePath}/b/page-work_flow/businessRuleTaskProperties');
                     else if (task.type == "ESTDesigner.task.CallActivityTask")
                         _properties_panel_obj.panel('refresh',
-                            '${basePath}/b/page-work_flow/callActivityProperties.html');
+                            '${basePath}/b/page-work_flow/callActivityProperties');
                 };
                 //container右键菜单处理函数
                 canvas.containerCallback = function (obj) {
@@ -157,7 +157,7 @@
                         _designer.layout('expand', 'east');
                     container = obj;
                     _properties_panel_obj.panel('refresh',
-                        'containerProperties.html');
+                        '${basePath}/b/page-work_flow/containerProperties');
                 };
                 $('.easyui-linkbutton')
                     .draggable(
