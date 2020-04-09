@@ -1,4 +1,4 @@
-package com.fhs.flow.page.controller;
+package com.fhs.flow.pagex.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -14,6 +14,8 @@ import com.fhs.core.exception.ParamException;
 import com.fhs.core.feign.autowired.annotation.AutowiredFhs;
 import com.fhs.core.result.HttpResult;
 import com.fhs.flow.api.rpc.FeignWorkFlowApiService;
+import com.fhs.flow.constant.FlowConstant;
+import com.fhs.flow.vo.ReSubmitVO;
 import com.fhs.flow.vo.StartProcessInstanceVO;
 import com.fhs.logger.anno.LogDesc;
 import com.fhs.pagex.common.ExcelExportTools;
@@ -66,6 +68,7 @@ public class PageXMsFlowPubController extends PageXBaseController {
         paramMap.put("createUser", user.getUserId());
         paramMap.put("groupCode", user.getGroupCode());
         paramMap.put("updateUser", user.getUserId());
+        paramMap.put("instanceStatus", FlowConstant.BUSINESS_INSTANCE_STATUS_APPROVAL);
         String pkey = StringUtil.getUUID();
         paramMap.put("pkey", pkey);
         super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
@@ -76,7 +79,7 @@ public class PageXMsFlowPubController extends PageXBaseController {
         // 流程key要在js中配置
         startProcessInstanceVO.setProcessDefinitionKey(ConverterUtils.toString(listPageSett.getModelConfig().get("processDefinitionKey")));
         startProcessInstanceVO.setVariables(paramMap);
-        startProcessInstanceVO.setExtFormParam(paramMap);
+        startProcessInstanceVO.setExtFormParam(new HashMap<>());
         startProcessInstanceVO.setUserId(getSessionUser(request).getUserId());
         HttpResult<String> rpcResult = feignWorkFlowApiService.startProcessInstanceForApi(startProcessInstanceVO);
         if(rpcResult.getCode() != Constant.SUCCESS_CODE){
@@ -97,9 +100,9 @@ public class PageXMsFlowPubController extends PageXBaseController {
      * @param namespace namespace
      * @param id        id
      */
-    @RequestMapping("{namespace}/update/{id}")
+    @RequestMapping("{namespace}/reSubmit/{taskId}/{id}")
     @Transactional(rollbackFor = Exception.class)
-    public HttpResult<Boolean> update(@PathVariable("namespace") String namespace, @PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
+    public HttpResult<Boolean> reSubmit(@PathVariable("namespace") String namespace,  @PathVariable("taskId") String taskId,@PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
         checkPermiessAndNamespace(namespace, "update");
         EMap<String, Object> paramMap = super.getParameterMap();
         paramMap.put("id", id);
@@ -107,7 +110,13 @@ public class PageXMsFlowPubController extends PageXBaseController {
         paramMap.put("updateUser", getSessionUser(request).getUserId());
         addLog(namespace, "更新", paramMap, request, LogDesc.UPDATE);
         super.setDB(PagexDataService.SIGNEL.getPagexAddDTOFromCache(namespace));
+        paramMap.put("instanceStatus", FlowConstant.BUSINESS_INSTANCE_STATUS_APPROVAL);
         int i = service.update(paramMap, namespace);
+        ReSubmitVO reSubmitVO = new ReSubmitVO();
+        paramMap.put("result",FlowConstant.RESULT_SUBMIT);
+        reSubmitVO.setVariablesMap(paramMap);
+        reSubmitVO.setTaskId(taskId);
+        feignWorkFlowApiService.reSubmit(reSubmitVO);
         refreshPageXTransCache(namespace);
         return HttpResult.success(i != 0);
     }

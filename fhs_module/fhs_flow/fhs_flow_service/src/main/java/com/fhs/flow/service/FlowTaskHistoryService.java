@@ -27,35 +27,7 @@ public interface FlowTaskHistoryService extends BaseService<FlowTaskHistoryVO, F
     int STATUS_FINISH = 1;
 
 
-    /**
-     * 提交申请
-     */
-    int RESULT_SUBMIT = 6;
 
-    /**
-     * 同意
-     */
-    int RESULT_PASS = 0;
-
-    /**
-     * 驳回
-     */
-    int RESULT_BACK = 1;
-
-    /**
-     * 人工终止
-     */
-    int RESULT_END = 2;
-
-    /**
-     * 撤销申请
-     */
-    int RESULT_REVOKE = 3;
-
-    /**
-     * 撤回审批
-     */
-    int RESULT_WITHDRAW = 4;
 
     /**
      * 根据当前需要记录节点的usertaskkey和instanceId来构建一个FlowTaskHistory

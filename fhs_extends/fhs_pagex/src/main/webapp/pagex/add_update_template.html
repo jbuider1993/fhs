@@ -70,11 +70,10 @@ include("/page/tags/form_include.html"){}
     <% } %>
     }
 
-    //保存
-    function save() {
+
+    //组件校验
+    function tagCheck(){
         var flag = true;
-
-
         <!--每个tag在onSaveList的时候执行的方法  -->
         <% for(onSave in tagOnSaveList){ %>
             if(!${onSave})
@@ -90,16 +89,23 @@ include("/page/tags/form_include.html"){}
                 flag = true;
             }
         }
-        if(!flag)
-        {
-            addUpdateForm.check();
+        return flag;
+    }
+
+    //表单校验
+    function formCheck(){
+        var flag = tagCheck();
+        if(flag){
+           return addUpdateForm.check();
         }
-        if(flag) {
+        return false;
+    }
+
+    //保存
+    function save() {
+        if(formCheck()) {
             $('#addUpdateForm').form('submit', {
                 url : url_save,
-                onSubmit : function() {
-                    return (addUpdateForm.check());
-                },
                 success : function(d) {
                     d = $.parseJSON(d);
                     if (d && d.result) {

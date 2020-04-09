@@ -1,6 +1,7 @@
 package com.fhs.flow.service;
 
 import com.fhs.flow.vo.BackAvtivityVO;
+import org.activiti.engine.impl.persistence.entity.TaskEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.task.Task;
 
@@ -125,4 +126,13 @@ public interface FlowCoreService {
      * @return 任务集合
      */
     List<Task> findTaskListByInstanceId(String instanceId);
+
+    /**
+     * 根据任务ID获得任务实例
+     *
+     * @param taskId 任务ID
+     * @return
+     * @throws Exception
+     */
+    TaskEntity findTaskById(String taskId);
 }

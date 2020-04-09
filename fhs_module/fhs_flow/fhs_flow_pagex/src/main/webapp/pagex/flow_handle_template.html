@@ -1,0 +1,55 @@
+<%
+layout("/pagex/list_template.html",{}){}
+%>
+
+<script>
+    document.getElementsByTagName('body')[0].innerHTML='<div id="formDetail">\n' +
+        '\n' +
+        '</div>';
+    $(function(){
+        //隐藏列表
+        $('.datagrid ').remove();
+        if (eval('${parameter.isEdit!"false"}')) {
+            $.ajax({
+                url:'${basePath}/ms/pagex/${namespace}_add_update.jsp?isEdit=true&id=${parameter.id}&taskId=${parameter.taskId!"notId"}',
+                success:function(resp){
+                    $('#formDetail').html(resp);
+                    $('body').append('<div id="buttonDiv"><center> <a href="#" id="subBtn" class="easyui-linkbutton" onclick="reSubmit()">重新提交</a></center></div>');
+                    $.parser.parse('#buttonDiv');
+                    parent.postMessage({type:'setHeight',height:new Number($('#formDetail').height()) +50}, '*');
+                }
+            });
+        }
+        else if(eval('${parameter.isView!"false"}')) {
+            $.ajax({
+                url:'${basePath}/ms/pagex/${namespace}_add_update.jsp?isView=true&id=${parameter.id}',
+                success:function(resp){
+                    $('#formDetail').html(resp);
+                    parent.postMessage({type:'setHeight',height:$('#formDetail').height()}, '*');
+                }
+            });
+        }
+
+    })
+
+    function reSubmit(){
+        if(formCheck()) {
+            $('#addUpdateForm').form('submit', {
+                url : '${basePath}/ms/x/flow/${namespace}/reSubmit/${parameter.taskId}/${parameter.id}',
+                success : function(d) {
+                    d = $.parseJSON(d);
+                    if (d && d.result) {
+                        parent.postMessage({type:'reSubmit',isSuccess:true}, '*');
+                        if (isExitsFunction("saveSucess")) {
+                            saveSucess();
+                        }
+                    }
+                    else{
+                        parent.postMessage({type:'reSubmit',isSuccess:false,message:d.message}, '*');
+                    }
+                }
+            });
+        };
+    }
+
+</script>

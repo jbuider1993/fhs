@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-@TransTypes(types = {TransType.WORD_BOOK})
+@TransTypes(types = {TransType.WORD_BOOK,TransType.AUTO_TRANS})
 public class FlowInstanceVO extends FlowInstanceDO implements VO {
 
 }

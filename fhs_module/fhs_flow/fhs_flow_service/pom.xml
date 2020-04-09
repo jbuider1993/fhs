@@ -37,6 +37,11 @@
             <version>${fhs.release.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>fhs_listener</artifactId>
+            <version>${fhs.release.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.activiti</groupId>
             <artifactId>activiti-spring-boot-starter-basic</artifactId>
             <version>5.22.0</version>

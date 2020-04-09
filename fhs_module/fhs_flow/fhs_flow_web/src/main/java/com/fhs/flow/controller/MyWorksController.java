@@ -2,6 +2,8 @@ package com.fhs.flow.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.fhs.basics.api.rpc.FeignServerApiService;
+import com.fhs.basics.vo.SettMsMenuServerVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.CheckUtils;
@@ -10,8 +12,11 @@ import com.fhs.core.base.controller.BaseController;
 import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.ParamException;
+import com.fhs.core.feign.autowired.annotation.AutowiredFhs;
+import com.fhs.core.listener.register.DistributedListenerRegister;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.valid.checker.ParamChecker;
+import com.fhs.flow.constant.FlowConstant;
 import com.fhs.flow.dox.FlowInstanceDO;
 import com.fhs.flow.service.*;
 import com.fhs.flow.vo.*;
@@ -22,6 +27,7 @@ import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,6 +46,7 @@ import java.util.Set;
  * @author wanglei
  */
 @RestController
+@AutowiredFhs
 @RequestMapping("/ms/myWorks")
 public class MyWorksController extends BaseController {
 
@@ -63,6 +70,19 @@ public class MyWorksController extends BaseController {
 
     @Autowired
     private FlowJbpmXmlService flowJbpmXmlService;
+
+    @Autowired
+    private DistributedListenerRegister distributedListenerRegister;
+
+
+    @Autowired
+    private FlowInstanceService flowInstanceService;
+
+    @AutowiredFhs
+    private FeignServerApiService serverApiService;
+
+    @Autowired
+    private FlowTaskHistoryService flowTaskHistoryService;
 
     /**
      * 查询待完成的工作
@@ -231,6 +251,7 @@ public class MyWorksController extends BaseController {
      * @return
      */
     @RequestMapping("backTask")
+    @Transactional(rollbackFor = Exception.class)
     public HttpResult<Boolean> backProcess(String taskId, String activityId, boolean isPre, HttpServletRequest request) throws Exception {
         ParamChecker.isNotNullOrEmpty(taskId, "任务id不能为空");
         if (CheckUtils.isNullOrEmpty(activityId)) {
@@ -241,14 +262,28 @@ public class MyWorksController extends BaseController {
             // 获取上一个任务
             if (isPre) {
                 activityId = activityList.get(activityList.size() - 1).getId();
-
-                //获取第一个任务
+            //获取第一个任务
             } else {
                 activityId = activityList.get(0).getId();
             }
         }
         Map<String, Object> paramMap = super.getParameterMap();
+        String instanceId = this.flowCoreService.findTaskById(taskId).getProcessInstanceId();
         flowCoreService.updateBackProcess(taskId, activityId, paramMap);
+        Map<String, Object> msgMap = new HashMap<>();
+        msgMap.put("instanceId", instanceId);
+        int status = isPre ? FlowConstant.BUSINESS_INSTANCE_STATUS_APPROVAL : FlowConstant.BUSINESS_INSTANCE_STATUS_RESUBMIT;
+        FlowInstanceVO instanceVO = flowInstanceService.findBean(FlowInstanceDO.builder().activitiProcessInstanceId(instanceId).build());
+        instanceVO.setStatus(status);
+
+        flowInstanceService.updateSelectiveById(instanceVO);
+        msgMap.put("businessKey", instanceVO.getFormPkey());
+        msgMap.put("instanceStatus", status);
+        msgMap.put("type", FlowConstant.INSTANCE_NEWS_TYPE_BACK);
+        FlowJbpmXmlVO xml  = flowJbpmXmlService.selectById(instanceVO.getXmlId());
+        ParamChecker.isNotNull(xml,"xml丢失");
+        msgMap.put("namespace",xml.getNamespace());
+        distributedListenerRegister.callListener(FlowConstant.LISTENER_INSTANCE, FlowConstant.ENVENT_NEWS, new Object(), msgMap);
         return HttpResult.success(true);
     }
 
@@ -272,6 +307,7 @@ public class MyWorksController extends BaseController {
         FileUtils.downloadInputStream(imageStream, response, "workflow.png");
 
     }
+
 
     /**
      * 根据id查询实例详情
@@ -302,10 +338,16 @@ public class MyWorksController extends BaseController {
             }
         }
         String formUrl = null;
+
+        HttpResult<SettMsMenuServerVO> menuServerVOHttpResut = serverApiService.getMenuServeById(xml.getServer());
+        if (menuServerVOHttpResut.getCode() != Constant.SUCCESS_CODE) {
+            throw new ParamException(menuServerVOHttpResut.getMessage());
+        }
+        String server = menuServerVOHttpResut.getData().getServerUrl();
         if (Constant.INT_TRUE == xml.getIsPagex()) {
-            formUrl = EConfig.getPathPropertiesValue(xml.getServer()) + "/ms/pagex/" + xml.getNamespace() + "_flowform.jsp?id=" + instance.getFormPkey();
+            formUrl = server + "/ms/pagex/" + xml.getNamespace() + "_flow_handle.jsp?id=" + instance.getFormPkey();
         } else {
-            formUrl = EConfig.getPathPropertiesValue(xml.getServer()) + xml.getUri();
+            formUrl = server + xml.getUri();
             formUrl = formUrl.contains("?") ? (formUrl + "&id=" + instance.getFormPkey()) : (formUrl + "?id=" + instance.getFormPkey());
         }
         JSONObject exParam = JSON.parseObject(instance.getExtFormParam());
@@ -316,6 +358,5 @@ public class MyWorksController extends BaseController {
         result.setFormUrl(formUrl);
         return HttpResult.success(result);
     }
-
 
 }

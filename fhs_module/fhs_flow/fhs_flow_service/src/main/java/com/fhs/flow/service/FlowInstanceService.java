@@ -12,16 +12,5 @@ import com.fhs.flow.vo.FlowInstanceVO;
  */
 public interface FlowInstanceService extends BaseService<FlowInstanceVO, FlowInstanceDO> {
 
-    /**
-     * 进行中
-     */
-    int STATUS_RUNNING = 0;
-    /**
-     * 结束
-     */
-    int STATUS_END = 1;
-    /**
-     * 撤销申请
-     */
-    int STATUS_REVOKE = 2;
+
 }

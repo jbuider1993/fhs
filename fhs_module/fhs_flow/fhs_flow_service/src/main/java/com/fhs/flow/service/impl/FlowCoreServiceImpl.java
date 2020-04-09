@@ -2,9 +2,11 @@ package com.fhs.flow.service.impl;
 
 import com.fhs.common.utils.*;
 import com.fhs.core.exception.ParamException;
+import com.fhs.core.listener.register.DistributedListenerRegister;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.flow.api.rpc.FeignWorkFlowApiService;
+import com.fhs.flow.constant.FlowConstant;
 import com.fhs.flow.dox.FlowInstanceDO;
 import com.fhs.flow.dox.FlowJbpmXmlDO;
 import com.fhs.flow.dox.FlowTaskHistoryDO;
@@ -12,6 +14,7 @@ import com.fhs.flow.service.FlowCoreService;
 import com.fhs.flow.service.FlowInstanceService;
 import com.fhs.flow.service.FlowJbpmXmlService;
 import com.fhs.flow.service.FlowTaskHistoryService;
+import com.fhs.flow.util.JsonUtil;
 import com.fhs.flow.vo.*;
 import com.fhs.logger.Logger;
 import org.activiti.engine.HistoryService;
@@ -59,6 +62,9 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
     private RepositoryService repositoryService;
 
     @Autowired
+    private DistributedListenerRegister distributedListenerRegister;
+
+    @Autowired
     private RuntimeService runtimeService;
 
     @Autowired
@@ -93,7 +99,7 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
         flowInstance.setFormPkey(businessKey);
         flowInstance.setExtFormParam(JsonUtils.map2json(extFormParam));
         flowInstance.setTitle(variables.containsKey("title") ? ConverterUtils.toString(variables.get("title")) : flowJbpmXml.getName());
-        flowInstance.setStatus(FlowInstanceService.STATUS_RUNNING);
+        flowInstance.setStatus(FlowConstant.BUSINESS_INSTANCE_STATUS_APPROVAL);
         flowInstance.preInsert(userId);
         ProcessInstance processInstance = this.runtimeService.startProcessInstanceByKey(flowJbpmXml.getProcessKey() + version, businessKey, variables);
         checkProProcessInstanceIsEnd(processInstance.getId(), null);
@@ -107,7 +113,7 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
             this.taskService.claim(task.getId(),userId);
             taskService.complete(task.getId(), variables);
             taskHistory =  FlowTaskHistoryDO.builder().id(StringUtil.getUUID()).taskFinishTime(flowInstance.getCreateTime()).instanceId(flowInstance.getActivitiProcessInstanceId())
-                    .title("提交").status(FlowTaskHistoryService.STATUS_FINISH).result(FlowTaskHistoryService.RESULT_SUBMIT).build();
+                    .title("提交").status(FlowTaskHistoryService.STATUS_FINISH).result(FlowConstant.RESULT_SUBMIT).build();
             taskHistory.setOrderNum(1);
             taskHistory.setCode("001");
             taskHistory.setDefinitionKey(task.getTaskDefinitionKey());
@@ -151,7 +157,7 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
 
     @Override
     public void updatePassProcess(String taskId, Map<String, Object> variables) throws Exception {
-        variables.put("result", FlowTaskHistoryService.RESULT_PASS);
+        variables.put("result", FlowConstant.RESULT_PASS);
         List<Task> tasks = getChildTask(taskId);
         for (Task task : tasks) {// 级联结束本节点发起的会签任务
             commitProcess(task.getId(), null, null);
@@ -174,7 +180,7 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
 
     @Override
     public void updateBackProcess(String taskId, String activityId, Map<String, Object> variables) throws Exception {
-        variables.put("result", FlowTaskHistoryService.RESULT_BACK);
+        variables.put("result", FlowConstant.RESULT_BACK);
         if (CheckUtils.isNullOrEmpty(activityId)) {
             throw new ParamException("驳回目标节点ID为空！");
         }
@@ -203,7 +209,7 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
      * @throws Exception
      */
     private void callBackProcess(String taskId, String activityId, Map<String, Object> variables) throws Exception {
-        variables.put("result", FlowTaskHistoryService.RESULT_WITHDRAW);
+        variables.put("result", FlowConstant.RESULT_WITHDRAW);
         if (CheckUtils.isNullOrEmpty(activityId)) {
             throw new ParamException("取回目标节点ID为空！");
         }
@@ -220,16 +226,16 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
     public void updateEndSuccessProcess(String taskId, Map<String, Object> variables, boolean isRevoke, String userId) throws Exception {
         ActivityImpl endActivity = findActivitiImpl(taskId, "end");
         if (isRevoke) {
-            variables.put("result", FlowTaskHistoryService.RESULT_REVOKE);
+            variables.put("result", FlowConstant.RESULT_REVOKE);
             Task task = this.findTaskById(taskId);
             FlowInstanceVO flowInstance = this.flowInstanceService.selectBean(FlowInstanceDO.builder().activitiProcessInstanceId(task.getProcessInstanceId()).build());
             ParamChecker.isNotNullOrEmpty(flowInstance, "task对应的 flowInstance 丢失,activitiProcessInstanceId:" + task.getProcessInstanceId());
             if (!userId.equals(flowInstance.getCreateUser())) {
                 throw new ParamException("您不是工单创建人，无法撤销");
             }
-            variables.put("result", FlowTaskHistoryService.RESULT_REVOKE);
+            variables.put("result", FlowConstant.RESULT_REVOKE);
         } else {
-            variables.put("result", FlowTaskHistoryService.RESULT_END);
+            variables.put("result", FlowConstant.RESULT_END);
         }
         commitProcess(taskId, variables, endActivity.getId());
     }
@@ -454,12 +460,21 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
                 if (!histories.isEmpty()) {
                     //看最后一个任务的结果，如果是撤回的话，那么实例状态就为撤回
                     Integer finalTaskResult = histories.get(0).getResult();
-                    if (FlowTaskHistoryService.RESULT_REVOKE == finalTaskResult) {
-                        this.flowInstanceService.updateSelectiveById(FlowInstanceDO.builder().id(instance.getId()).status(FlowInstanceService.STATUS_REVOKE).build());
+                    if (FlowConstant.RESULT_REVOKE == finalTaskResult) {
+                        this.flowInstanceService.updateSelectiveById(FlowInstanceDO.builder().id(instance.getId()).status(FlowConstant.BUSINESS_INSTANCE_STATUS_REVOKE).build());
                         return;
                     }
                 }
-                this.flowInstanceService.updateSelectiveById(FlowInstanceDO.builder().id(instance.getId()).status(FlowInstanceService.STATUS_END).build());
+                this.flowInstanceService.updateSelectiveById(FlowInstanceDO.builder().id(instance.getId()).status(FlowConstant.BUSINESS_INSTANCE_STATUS_END).build());
+                Map<String, Object> msgMap = new HashMap<>();
+                msgMap.put("instanceId", instance.getActivitiProcessInstanceId());
+                msgMap.put("businessKey", instance.getFormPkey());
+                msgMap.put("instanceStatus",  FlowConstant.BUSINESS_INSTANCE_STATUS_END );
+                msgMap.put("type", FlowConstant.INSTANCE_NEWS_TYPE_COMPLATE);
+                FlowJbpmXmlVO xml  = flowJbpmXmlService.selectById(instance.getXmlId());
+                ParamChecker.isNotNull(xml,"xml丢失");
+                msgMap.put("namespace",xml.getNamespace());
+                distributedListenerRegister.callListener(FlowConstant.LISTENER_INSTANCE, FlowConstant.ENVENT_NEWS, new Object(), msgMap);
             }
         }
     }
@@ -571,7 +586,7 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
      * @return
      * @throws Exception
      */
-    private TaskEntity findTaskById(String taskId) {
+    public TaskEntity findTaskById(String taskId) {
         TaskEntity task = (TaskEntity) taskService.createTaskQuery().taskId(
                 taskId).singleResult();
         if (task == null) {
@@ -824,5 +839,16 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
             LOGGER.error("启动流程失败:" + startProcessInstance,e);
             return HttpResult.error("");
         }
+    }
+
+    @Override
+    public HttpResult reSubmit(ReSubmitVO reSubmitVO) {
+        try {
+            this.commitProcess(reSubmitVO.getTaskId(),reSubmitVO.getVariablesMap(),null);
+        } catch (Exception e) {
+            LOGGER.error("重新提交流程提交失败:" + JsonUtil.toJSONString(reSubmitVO),e);
+            return HttpResult.error();
+        }
+        return HttpResult.success();
     }
 }

@@ -65,7 +65,9 @@ public class FlowTaskHistoryServiceImpl extends BaseServiceImpl<FlowTaskHistoryV
 
     @Override
     public List<TaskHistoryVO> findApprovalRecord(String instanceId) {
-        return taskHistoryMapper.findApprovalRecord(instanceId);
+        List<TaskHistoryVO> result = taskHistoryMapper.findApprovalRecord(instanceId);
+        transService.transMore(result);
+        return result;
     }
 
 }
