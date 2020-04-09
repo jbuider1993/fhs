@@ -24,7 +24,7 @@ ESTDesigner.connection.Connection = draw2d.Connection.extend({
 				if(this.name){
 					this.connectionNameLabel.setText(this.name);
 				}else{
-					this.connectionNameLabel.setText("Connection Name");
+					this.connectionNameLabel.setText(" ");
 				}
 				this.connectionNameLabel.setStroke(0);
 				var editor = new draw2d.ui.LabelInplaceEditor({
@@ -133,8 +133,12 @@ ESTDesigner.connection.Connection = draw2d.Connection.extend({
 			toXML : function() {
 				var sourceId = this.getSource().getParent().id;
 				var targetId = this.getTarget().getParent().id;
-				var name = this.id;
-				var lineName = this.name;
+				if (this.name == undefined){
+					var name = " ";
+				}else {
+					var name = this.name;
+					var lineName = this.name;
+				}
 				if (lineName != null && lineName != "")
 					name = lineName;
 				var xml = '<sequenceFlow id="' + this.id + '" name="' + name + '" sourceRef="'

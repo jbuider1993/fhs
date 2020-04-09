@@ -19,7 +19,7 @@
             rownumbers: true,
             striped: true,
             toolbar: [{
-                text: 'Add',
+                text: '新增',
                 iconCls: 'icon-add',
                 handler: function () {
                     _task_candidate_win.window('open');
@@ -33,7 +33,7 @@
 
     function candidateGroupsBtFormatter(value, rowData, rowIndex) {
         var roleName = rowData.roleName;
-        var d = '<img onclick="deleteCandidateGroup(\'' + roleName + '\')" src="image/delete.gif" title="' + "删除" + '" style="cursor:hand;"/>';
+        var d = '<img onclick="deleteCandidateGroup(\'' + roleName + '\')" src="${basePath}/page/work_flow/image/delete.gif" title="' + "删除" + '" style="cursor:hand;"/>';
         return d;
     }
 

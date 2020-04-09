@@ -219,8 +219,9 @@
 
     function saveTaskProperties() {
         saveTaskGeneral();
-        if (typeof saveTaskMultiInstance == 'function')
+        if (typeof saveTaskMultiInstance == 'function'){
             saveTaskMultiInstance();
+        }
         task.performerType = $('#performerType').combobox('getValue');
         task.expression = $('#expression').val();
         task.isUseExpression = $('input[name="useExpression"]:checked').val();
@@ -234,20 +235,24 @@
     function populateTaskProperites() {
         //$('#id').val(task.taskId);
         //$('#name').val(task.taskName);
+        $('#performerType').combobox('setValue',task.performerType);
+        $('#performerType').trigger('onChange');
         if (task.isUseExpression) {
             $('#expressionTr').show();
             $('#expression').val(task.expression);
+            $("input:radio[name='useExpression'][value='"+task.isUseExpression+"']").attr("checked",true)
+            task_candidate_panel.panel("close");
         } else {
             $('#expressionTr').hide();
         }
+
         $('#formKey').val(task.formKey);
         $('#dueDate').val(task.dueDate);
         $('#priority').val(task.priority);
         $('#documentation').val(task.documentation);
         loadTaskListeners();
         loadTaskFormProperties();
-        /*$('#performerType').combobox('setValue',task.performerType);
-        $('#performerType').trigger('onChange');*/
+
     }
 
     function loadTaskListeners() {

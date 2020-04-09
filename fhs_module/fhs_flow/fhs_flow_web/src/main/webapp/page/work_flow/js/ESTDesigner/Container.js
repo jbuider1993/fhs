@@ -262,7 +262,7 @@ ESTDesigner.container.SubProcess=ESTDesigner.container.BaseContainer.extend({
         this._super($.extend({
                             type : "ESTDesigner.container.SubProcess",
                             title : "",
-                            iconPath : "js/ESTDesigner/icons/type.subprocess.collapsed.png"
+                            iconPath : "/page/work_flow/js/ESTDesigner/icons/type.subprocess.collapsed.png"
                         }, attr), setter, getter);
         this.performerType = null;
         this.dueDate = null;

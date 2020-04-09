@@ -249,7 +249,7 @@ ESTDesigner.task.UserTask = ESTDesigner.task.BaseTask.extend({
 				this._super($.extend({
 									type : "ESTDesigner.task.UserTask",
 									title : "",
-									iconPath : "js/ESTDesigner/icons/type.user.png"
+									iconPath : "/page/work_flow/js/ESTDesigner/icons/type.user.png"
 								}, attr), setter, getter);
 				this.performerType = null;
 				this.dueDate = null;
@@ -438,7 +438,7 @@ ESTDesigner.task.ServiceTask = ESTDesigner.task.BaseTask.extend({
 				this._super($.extend({
 									type : "ESTDesigner.task.ServiceTask",
 									title : "",
-									iconPath : "js/ESTDesigner/icons/type.service.png"
+									iconPath : "/page/work_flow/js/ESTDesigner/icons/type.service.png"
 								}, attr), setter, getter);
 				this._type = null;
 				this._javaClass = null;
@@ -530,7 +530,7 @@ ESTDesigner.task.ScriptTask = ESTDesigner.task.BaseTask.extend({
 				this._super($.extend({
 									type : "ESTDesigner.task.ScriptTask",
 									title : "",
-									iconPath : "js/ESTDesigner/icons/type.script.png"
+									iconPath : "/page/work_flow/js/ESTDesigner/icons/type.script.png"
 								}, attr), setter, getter);
 				this.scriptLanguage = null;
 				this.script = null;
@@ -576,7 +576,7 @@ ESTDesigner.task.ReceiveTask = ESTDesigner.task.BaseTask.extend({
 				this._super($.extend({
 									type : "ESTDesigner.task.ReceiveTask",
 									title : "",
-									iconPath : "js/ESTDesigner/icons/type.receive.png"
+									iconPath : "/page/work_flow/js/ESTDesigner/icons/type.receive.png"
 								}, attr), setter, getter);
 			},
 			getStartElementXML : function() {
@@ -605,7 +605,7 @@ ESTDesigner.task.ManualTask = ESTDesigner.task.BaseTask.extend({
 				this._super($.extend({
 									type : "ESTDesigner.task.ManualTask",
 									title : "",
-									iconPath : "js/ESTDesigner/icons/type.manual.png"
+									iconPath : "/page/work_flow/js/ESTDesigner/icons/type.manual.png"
 								}, attr), setter, getter);
 			},
 			getStartElementXML : function() {
@@ -634,7 +634,7 @@ ESTDesigner.task.MailTask = ESTDesigner.task.BaseTask.extend({
 				this._super($.extend({
 									type : "ESTDesigner.task.MailTask",
 									title : "",
-									iconPath : "js/ESTDesigner/icons/type.send.png"
+									iconPath : "/page/work_flow/js/ESTDesigner/icons/type.send.png"
 								}, attr), setter, getter);
 				this.to = null;
 				this.from = null;
@@ -732,7 +732,7 @@ ESTDesigner.task.CallActivityTask = ESTDesigner.task.BaseTask.extend({
 									width : 150,
 									type : "ESTDesigner.task.CallActivityTask",
 									title : "",
-									iconPath : "js/ESTDesigner/icons/callactivity.png"
+									iconPath : "/page/work_flow/js/ESTDesigner/icons/callactivity.png"
 								}, attr), setter, getter);
 				this.setDimension(160, 60);
 				this.callElement = null;
@@ -867,7 +867,7 @@ ESTDesigner.task.BusinessRuleTask = ESTDesigner.task.BaseTask.extend({
 				this._super($.extend({
 									type : "ESTDesigner.task.BusinessRuleTask",
 									title : "",
-									iconPath : "js/ESTDesigner/icons/type.business.rule.png"
+									iconPath : "/page/work_flow/js/ESTDesigner/icons/type.business.rule.png"
 								}, attr), setter, getter);
 				this.setDimension(170, 60);
 				this.ruleName = null;
