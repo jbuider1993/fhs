@@ -10,6 +10,7 @@
  */
 package com.fhs.basics.dox;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.trans.anno.Trans;
@@ -80,6 +81,7 @@ public class UcenterMsUserDO extends BaseDO<UcenterMsUserDO> {
      * 密码
      */
     @Column(name = "password")
+    @JSONField(serialize = false)
     private String password;
 
     /**

@@ -10,7 +10,7 @@
         });
         _task_candidate_unselected_group_grid = $('#_task_candidate_unselected_group_table').datagrid({
             title: "用户组",
-            url: Config.Url.Get_Roles_4_Combox,
+            url: '${fhs_basics_url}/ms/sysUser/findUsers?jsonpCallback=?',
             //singleSelect:true,
             idField: 'roleId',
             height: 400,

@@ -235,6 +235,7 @@
                             var processKey = getQueryVariable('processKey');
                             var processName = getQueryVariable('processName');
                             $('#descriptorarea').text(canvas.toXML(processKey, processName));
+                            console.log(canvas.toXML(processKey, processName));
                             $('#descriptorarea').each(function (i, block) {
                                 hljs.highlightBlock(block);
                             });
@@ -291,6 +292,7 @@
             url:'${basePath}/ms/flow_jbpm_xml/updateXml',
             data:{xml:xml,xmlId:getQueryVariable('xmlId')},
             dataType:'json',
+            method:'post',
             success:function(res){
                 if(res.code==200){
                     $.messager.alert('Info', "保存成功", 'info');
@@ -399,7 +401,7 @@
                  style="width: 100%; height: 100%; padding: 0; border: none; overflow: auto;"></div>
         </div>
         <div id="xml-area" title="XML"
-             style="width: 100%; height: 100%; overflow: hidden; overflow-x: hidden; overflow-y: hidden;">
+             style="width: 100%; height: 100%; ">
             <pre><code id="descriptorarea"></code></pre>
         </div>
     </div>

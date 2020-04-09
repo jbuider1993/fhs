@@ -104,6 +104,7 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
         // 第一个节点是提交节点，自动通过
         for (Task task : tasks) {
             task.setAssignee(userId);
+            this.taskService.claim(task.getId(),userId);
             taskService.complete(task.getId(), variables);
             taskHistory =  FlowTaskHistoryDO.builder().id(StringUtil.getUUID()).taskFinishTime(flowInstance.getCreateTime()).instanceId(flowInstance.getActivitiProcessInstanceId())
                     .title("提交").status(FlowTaskHistoryService.STATUS_FINISH).result(FlowTaskHistoryService.RESULT_SUBMIT).build();

@@ -93,10 +93,10 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
      * @return
      */
     @RequestMapping("realRoleComBoxData")
-    public List<UcenterMsRoleVO> realRoleComBoxData() {
+    public void realRoleComBoxData() {
         Map<String, Object> map = super.getPageTurnNum();
         map.put("organizationId", super.getSessionuser().getOrganizationId());
-        return sysRoleService.findForListFromMap(map);
+        super.outJsonp(JsonUtils.list2json(sysRoleService.findForListFromMap(map)));
     }
 
     /**

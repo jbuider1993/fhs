@@ -1,5 +1,6 @@
 <script type="text/javascript">
     //alert("${basePath}/pm/group/group!getUserTreeOfGroup.action");
+    var _task_unselect_candidate_user_group = null;
     $(function () {
         _task_unselected_candidate_user_panel = $('#task-unselect-candidate-user-panel').panel({
             border: false,
@@ -9,8 +10,8 @@
             //fit:true
         });
         _task_unselect_candidate_user_list = $('#task-unselect-candidate-user-list').datagrid({
-            title: "Users",
-            url: Config.Url.Get_Candidate_Users,
+            title: "用户列表",
+            url: '${fhs_basics_url}/ms/sysUser/findUsers?jsonpCallback=?',
             //singleSelect:true,
             //width:900,
             height: 400,
@@ -40,53 +41,51 @@
             }]
         });
         _task_unselect_candidate_user_group = $('#task-unselect-candidate-user-group').combobox({
-            url: Config.Url.Get_Groups_4_Combox,
+            url: '${fhs_basics_url}/ms/sysOrganization/getOrgIdComBoxData?jsonpCallback=?',
             //editable:false,
             valueField: 'id',
             textField: 'text',
             onChange: function (n, o) {
-                $('#task-unselect-candidate-user-role').combobox({
+                /*$('#task-unselect-candidate-user-role').combobox({
                     url: Config.Url.Get_Roles_4_Combox + "&organizationId=" + n,
                     valueField: 'roleId',
                     textField: 'roleName'
-                })
+                })*/
             }
         });
-        _task_unselect_candidate_user_role = $('#task-unselect-candidate-user-role').combobox({
-            url: Config.Url.Get_Roles_4_Combox,
-            valueField: 'roleId',
-            textField: 'roleName'
-        })
-    });
+    /* _task_unselect_candidate_user_role = $('#task-unselect-candidate-user-role').combobox({
+         url: Config.Url.Get_Roles_4_Combox,
+         valueField: 'roleId',
+         textField: 'roleName'
+     })*/
+ });
 
-    function searchCandidateUser() {
-        var userName = $("#task-unselect-candidate-user-userName").val();
-        var roleId = _task_unselect_candidate_user_role.combobox('getValue');
-        var organId = _task_unselect_candidate_user_group.combobox('getValue');
-        _task_unselect_candidate_user_list.datagrid('reload', {
-            userName: userName,
-            roleId: roleId,
-            organId: organId,
-        });
-    }
+ function searchCandidateUser() {
+     var userName = $("#task-unselect-candidate-user-userName").val();
+   //  var roleId = _task_unselect_candidate_user_role.combobox('getValue');
+     var organId = _task_unselect_candidate_user_group.combobox('getValue');
+     _task_unselect_candidate_user_list.datagrid('reload', {
+         userName: userName,
+       //  roleId: roleId,
+         orgId: organId,
+     });
+ }
 
-    function addCandidateUsers() {
-        debugger;
-        var rows = _task_unselect_candidate_user_list.datagrid("getSelections");
-        for (var i = 0; i < rows.length; i++) {
-            var user = rows[i];
-            task.addCandidateUser({
-                userId: user.userId,
-                name: user.name,
-                organName: user.organName,
-                roleName: user.roleName,
-                mobile: user.mobile,
-                email: user.email
-            });
-        }
-        loadTaskCandidateUsers();
-        _task_candidate_win.window('close');
-    }
+ function addCandidateUsers() {
+     var rows = _task_unselect_candidate_user_list.datagrid("getSelections");
+     for (var i = 0; i < rows.length; i++) {
+         var user = rows[i];
+         task.addCandidateUser({
+             userId: user.userId,
+             name: user.userName,
+             orgName: user.transMap.orgName,
+             mobile: user.mobile,
+             email: user.email
+         });
+     }
+     loadTaskCandidateUsers();
+     _task_candidate_win.window('close');
+ }
 </script>
 <div id="task-unselect-candidate-user-panel" style="padding:5px;">
     <table border="0">
@@ -94,9 +93,9 @@
             <td>部门:</td>
             <td><input type="text" id="task-unselect-candidate-user-group" name="task-unselect-candidate-user-group"
                        value=""/></td>
-            <td>角色:</td>
+           <!-- <td>角色:</td>
             <td><input type="text" id="task-unselect-candidate-user-role" name="task-unselect-candidate-user-role"
-                       value="" size=""/></td>
+                       value="" size=""/></td>-->
             <td>姓名:</td>
             <td><input type="text" id="task-unselect-candidate-user-userName"
                        name="task-unselect-candidate-user-userName" value="" size="9"/></td>
@@ -107,9 +106,9 @@
         <thead>
         <tr>
             <th field="userId" align="middle" checkbox="true"></th>
-            <th field="name" width="100" align="middle" sortable="true">姓名</th>
-            <th field="organName" width="100" align="middle" sortable="true">部门</th>
-            <th field="roleName" width="200" align="middle">角色</th>
+            <th field="userName" width="100" align="middle" sortable="true">姓名</th>
+            <th field="transMap.orgName" width="100" align="middle" sortable="true">部门</th>
+         <!--   <th field="roleName" width="200" align="middle">角色</th>-->
             <th field="mobile" width="100" align="middle">手机号</th>
             <th field="email" width="150" align="middle">Email</th>
         </tr>

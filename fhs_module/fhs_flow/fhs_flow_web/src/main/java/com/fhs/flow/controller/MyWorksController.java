@@ -106,7 +106,7 @@ public class MyWorksController extends BaseController {
     public HttpResult<Boolean> claimTask(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Task task = taskService.createTaskQuery().taskId(request.getParameter("taskId")).singleResult();
         if (task.getAssignee() == null) {
-            taskService.claim(request.getParameter("taskId"), getSessionuser(request).getUserLoginName());
+            taskService.claim(request.getParameter("taskId"), getSessionuser(request).getUserId());
         }
         return HttpResult.success(true);
     }

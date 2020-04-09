@@ -156,9 +156,9 @@ public class UcenterMsOrganizationController extends ModelSuperController<Ucente
      * @return combotree数据格式
      */
     @RequestMapping(value = "/getOrgIdComBoxData")
-    public List<ComboboxNodeVO> getOrgIdComBoxData(HttpServletRequest request, HttpServletResponse response) {
+    public void getOrgIdComBoxData(HttpServletRequest request, HttpServletResponse response) {
         // 查询根级组织 为当前系统的登录用户组织
         UcenterMsUserVO sysUser = super.getSessionuser();
-        return sysOrganizationService.getSubNode(sysUser.getOrganizationId(), request.getParameter("parentId"));
+        super.outJsonp(JsonUtils.list2json(sysOrganizationService.getSubNode(sysUser.getOrganizationId(), request.getParameter("parentId"))));
     }
 }

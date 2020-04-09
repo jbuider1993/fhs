@@ -9,12 +9,15 @@ import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.exception.ParamException;
+import com.fhs.core.jsonfilter.anno.JsonFilter;
+import com.fhs.core.jsonfilter.anno.ObjFilter;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.safe.repeat.anno.NotRepeat;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.logger.anno.LogDesc;
 import com.fhs.module.base.controller.ModelSuperController;
+import net.sf.jsqlparser.expression.UserVariable;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -101,6 +104,18 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
         super.outWrite(isSuccess);
     }
 
+    /**
+     * jsonp接口.用于其他系统用户列表
+     * @param request
+     */
+    @RequestMapping("findUsers")
+    public void findUsersJsonp(HttpServletRequest request){
+        PageSizeInfo pageSizeInfo = super.getPageSizeInfo();
+        UcenterMsUserDO queryParam = UcenterMsUserDO.builder().userName(request.getParameter("userName")).organizationId(request.getParameter("orgId")).build();
+        List<UcenterMsUserVO> users = sysUserService.selectPage(queryParam,
+                pageSizeInfo.getPageStart(),pageSizeInfo.getPageSize());
+        super.outJsonp(new Pager<UcenterMsUserVO>(sysUserService.selectCount(queryParam),users).asJson());
+    }
 
 
     /**
