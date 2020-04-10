@@ -81,6 +81,10 @@ public class TaskHistoryVO implements VO {
      */
     private String remark;
 
+    /**
+     * 实例id
+     */
+    private String instanceId;
 
     /**
      * 翻译map
