@@ -47,8 +47,8 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
      * 获取用户jsontree 用于easyui下拉tree数据源
      */
     @RequestMapping("getUserTree")
-    public List<SysUserOrgVO> getUserTree() {
-        return sysUserService.getUserOrgTreeList(super.getSessionuser().getGroupCode());
+    public void  getUserTree() {
+        super.outJsonp(JsonUtils.list2json(sysUserService.getUserOrgTreeList(super.getSessionuser().getGroupCode())));
     }
 
     /**
