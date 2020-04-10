@@ -16,16 +16,11 @@ multiple="true" name="cc_to_users" required="true"  />
 
     //提交
     function saveCC() {
-        var _tree = $('#cc_to_users_select').combotree('tree')
-        var nodes = _tree.tree('getChecked');
-        var ccUserTos = [];
-        for(i=0;i<nodes.length;i++){
-            var node = nodes[i];
-            if(node.isUser===1){
-                ccUserTos.push(node.id);
-            }
+        var ccUserTos = getSelectUsers('cc_to_users_select');
+        if(ccUserTos===''){
+            EalertE('请至少选择一个用户(选中组织机构请确定组织机构下有用户)');
+            return;
         }
-        ccUserTos = ccUserTos + '';
         $.ajax({
             type: "POST",
             url: "${basePath}ms/flow_instance/updateCCTo",
