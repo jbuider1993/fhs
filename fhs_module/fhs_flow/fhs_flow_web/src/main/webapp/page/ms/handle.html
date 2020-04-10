@@ -130,13 +130,14 @@
             })
 
             isClaimTask();
-            addChildListener();
+
         <%}%>
         <%
         if(nvl(parameter.isView,'false') == 'true'){
         %>
             $('#formDetailFrame').attr('src',formUrl + '&isView=true');
         <%}%>
+        addChildListener();
     })
 
     //添加监听器
