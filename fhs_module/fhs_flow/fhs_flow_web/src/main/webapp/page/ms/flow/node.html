@@ -1,10 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>可退回节点</title>
-</head>
-<body>
 
 <div class="fitem">
     <div class='fitemDiv' style="width:100%"><label style="width:15%">节点:</label>
@@ -27,7 +20,6 @@
         <a href="#" class="easyui-linkbutton" onclick="closeDialog2()">取消</a>
     </center>
 </div>
-</body>
 <script>
     var taskId = "${parameter.taskId}";
 
@@ -46,16 +38,11 @@
     })
 
 
-    // 关闭dialog2
-    function closeDialog2() {
-        $('#addOrUpdateDialog2').dialog('close');
-    }
 
     //提交
     function save() {
         var activityId = $("#activityId").combobox("getValue");
         var remark = $("#nodeRemark").val();
-        debugger;
         $.ajax({
             type: "POST",
             url: "${basePath}ms/myWorks/backTask",
@@ -71,9 +58,4 @@
         });
     }
 
-    $("#ajaxBtn").click(function () {
-
-    })
-
 </script>
-</html>

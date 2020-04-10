@@ -1,5 +1,7 @@
 package com.fhs.flow.controller;
 
+import com.fhs.common.utils.CheckUtils;
+import com.fhs.common.utils.StringUtil;
 import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.valid.checker.ParamChecker;
@@ -13,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * fhs的流程实例，为activiti的实例扩展表(FlowInstance)表控制层
@@ -48,4 +53,28 @@ public class FlowInstanceController extends ModelSuperController<FlowInstanceVO,
         e.setCcTo(super.getSessionuser().getUserId());
         return super.findPage(e, request, response);
     }
+
+    /**
+     *  更新抄送人
+     * @param ccTo 抄送人
+     * @return
+     */
+    @RequestMapping("updateCCTo")
+    public HttpResult updateCCTo(String ccTo, String instanceId) {
+        ParamChecker.isNotNull(ccTo, "抄送人不能为空");
+        ParamChecker.isNotNull(instanceId, "instanceId不能为空");
+        FlowInstanceVO instanceVO = this.flowInstanceService.selectBean(FlowInstanceDO.builder().activitiProcessInstanceId(instanceId).build());
+        ParamChecker.isNotNull(instanceVO, "instanceId无效");
+        if(CheckUtils.isNullOrEmpty(instanceVO.getCcTo())){
+            instanceVO.setCcTo(ccTo);
+        }else{
+            Set<String> ccToSet = new HashSet<>(Arrays.asList(instanceVO.getCcTo().split(",")));
+            ccToSet.addAll(Arrays.asList(ccTo.split(",")));
+            instanceVO.setCcTo(StringUtil.getStrForIn(ccToSet,false));
+        }
+        flowInstanceService.updateJpa(instanceVO);
+        return HttpResult.success();
+    }
+
+
 }

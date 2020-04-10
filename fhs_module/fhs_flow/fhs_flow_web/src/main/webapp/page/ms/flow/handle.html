@@ -43,13 +43,16 @@
                                           class="form_textarea "
                                           id="remark" name="remark" placeholder="请填写备注" prompt="请选择备注"></textarea></div>
     </div>
-
+    <div class="fitem">
+        <div class="bigLabelDiv"><label>抄送人:</label></div>
+        <div class="bigContent" id="ccUserDiv" style="padding-top: 8px;padding-left: 10px;"></div>
+    </div>
     <div class="handle-button">
         <!-- 待认领状态下只显示认领按钮后才会有其他操作 -->
         <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="claimTask"
            onclick="claimTask()">认领OK</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="complateTask" onclick="complateTask()">同意OK</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="ccTo" onclick="ccTo()">抄送</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="ccTo" onclick="addCCTo()">抄送</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="delegate" onclick="delegate()">转办</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="backTask" onclick="backTask()">驳回OK</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="backTask_node"
@@ -64,7 +67,7 @@
 <div id="addOrUpdateDialog2" class="easyui-dialog" title="回退节点"
      data-options="iconCls:'icon-save'" closed="true"
      style="width: 45%; height: 68%; padding: 10px"
-     buttons="#dlg-buttons">
+     >
 </div>
 <%
    }
@@ -79,7 +82,7 @@ if(nvl(parameter.isView,'false') == 'true' && nvl(parameter.isTaskHistory,'false
     $("#dlg-buttons").hide();
     var taskId = "${parameter.taskId!}";
     var instanceId = "${parameter.instanceId}"
-
+    var formUrl = null;
     $(function () {
         //我是申请人，显示撤销申请按钮
         $.ajax({
@@ -94,18 +97,8 @@ if(nvl(parameter.isView,'false') == 'true' && nvl(parameter.isTaskHistory,'false
                 }
             }
         })
-        var formUrl = null;
-        //获取表单
-        $.ajax({
-            async: false, //同步
-            type: 'get',
-            url: '${basePath}ms/myWorks/findInstanceById?instanceId=' + instanceId,
-            success: function (res) {
-                if (res.code == 200) {
-                    formUrl = res.data.formUrl;
-                }
-            }
-        })
+
+        loadInstance();
 
         <%
         if(nvl(parameter.isView,'false')=='false'){
@@ -181,6 +174,23 @@ if(nvl(parameter.isView,'false') == 'true' && nvl(parameter.isTaskHistory,'false
         })
     }
 
+    function loadInstance(){
+        //获取表单
+        $.ajax({
+            async: false, //同步
+            url: '${basePath}ms/myWorks/findInstanceById?instanceId=' + instanceId,
+            dataType:'json',
+            success: function (res) {
+                if (res.code == 200) {
+                    formUrl = res.data.formUrl;
+                    $('#ccUserDiv').text(res.data.transMap.ccToUserUserName);
+                }
+            }
+        })
+    }
+
+
+
     $('#tt').tabs({
         onSelect: function (title, index) {
             $("#approval_operation").hide();
@@ -228,6 +238,12 @@ if(nvl(parameter.isView,'false') == 'true' && nvl(parameter.isTaskHistory,'false
     //驳回指定节点
     function backTask_node() {
         openDialog2('${basePath}b/page-ms-flow/node?taskId=' + taskId, '可回退节点');
+    }
+
+
+    //抄送
+    function addCCTo() {
+        openDialog2('${basePath}b/page-ms-flow/cc_to?instanceId=' + instanceId, '添加抄送人');
     }
 
     // 打开dialog2
@@ -308,6 +324,10 @@ if(nvl(parameter.isView,'false') == 'true' && nvl(parameter.isTaskHistory,'false
         })
     }
 
+    // 关闭dialog2
+    function closeDialog2() {
+        $('#addOrUpdateDialog2').dialog('close');
+    }
 </script>
 
 </html>

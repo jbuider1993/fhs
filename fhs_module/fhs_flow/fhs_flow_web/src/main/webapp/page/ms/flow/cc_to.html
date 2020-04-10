@@ -1,0 +1,45 @@
+<script>
+       var onSaveFuns = [];
+       var loadSuccessFuns = [];
+</script>
+<#SelectTreeFormTag title="抄送人" url="${fhs_basics_url}/ms/sysUser/getUserTree?jsonpCallback=?"
+valuefield="id" textfield="text"
+multiple="true" name="cc_to_users" required="true"  />
+
+<div id="dlg-buttons">
+    <center>
+        <a href="#" class="easyui-linkbutton" onclick="saveCC()">确认</a>
+        <a href="#" class="easyui-linkbutton" onclick="closeDialog2()">取消</a>
+    </center>
+</div>
+<script>
+
+    //提交
+    function saveCC() {
+        var _tree = $('#cc_to_users_select').combotree('tree')
+        var nodes = _tree.tree('getChecked');
+        var ccUserTos = [];
+        for(i=0;i<nodes.length;i++){
+            var node = nodes[i];
+            if(node.isUser===1){
+                ccUserTos.push(node.id);
+            }
+        }
+        ccUserTos = ccUserTos + '';
+        $.ajax({
+            type: "POST",
+            url: "${basePath}ms/flow_instance/updateCCTo",
+            data: {ccTo: ccUserTos, instanceId: '${parameter.instanceId}'},
+            success: function (res) {
+                if (res.code == 200) {
+                    Ealert("操作成功")
+                    closeDialog2();
+                    loadInstance();
+                }else{
+                    EalertE(res.message);
+                }
+            }
+        });
+    }
+
+</script>

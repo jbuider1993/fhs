@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fhs.common.constant.Constant;
 import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.trans.anno.Trans;
 import com.fhs.core.trans.constant.TransType;
@@ -94,8 +95,9 @@ public class FlowInstanceDO extends BaseDO<FlowInstanceDO> {
     /**
      * 抄送
      */
-    @TableField("cc_to")
     @Like
+    @Trans(type = TransType.AUTO_TRANS,key = Constant.USER_INFO + "#ccToUser")
+    @TableField("cc_to")
     private String ccTo;
 
 }

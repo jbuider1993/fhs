@@ -17,7 +17,8 @@
 		create_user AS createUser,
 		create_time AS createTime,
 		update_user AS updateUser,
-		update_time AS updateTime
+		update_time AS updateTime,
+        group_code AS groupCode
 		FROM
 		t_ucenter_ms_user
 		<where>
