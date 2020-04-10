@@ -53,7 +53,7 @@
            onclick="claimTask()">认领OK</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="complateTask" onclick="complateTask()">同意OK</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="ccTo" onclick="addCCTo()">抄送</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="delegate" onclick="delegate()">转办</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="delegate" onclick="addDelegate()">委派</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="backTask" onclick="backTask()">驳回OK</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="backTask_node"
            onclick="backTask_node()">驳回到指定操作OK</a>
@@ -253,6 +253,11 @@ if(nvl(parameter.isView,'false') == 'true' && nvl(parameter.isTaskHistory,'false
     //抄送
     function addCCTo() {
         openDialog2('${basePath}b/page-ms-flow/cc_to?instanceId=' + instanceId, '添加抄送人');
+    }
+
+    //委派
+    function addDelegate() {
+        openDialog2('${basePath}b/page-ms-flow/delegate?taskId=' + taskId, '委派');
     }
 
     // 打开dialog2

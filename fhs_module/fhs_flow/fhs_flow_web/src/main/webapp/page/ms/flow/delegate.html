@@ -1,0 +1,56 @@
+<script>
+    var onSaveFuns = [];
+    var loadSuccessFuns = [];
+</script>
+
+<div class="fitem">
+    <div class='fitemDiv' style="width:100%">
+        <label style="width:15%">委派:</label>
+        <input type='text' autocomplete='off' dataType='*' nullmsg=节点不能为空' errormsg='节点名称输入了错误的格式'
+               class='easyui-combotree'  data-options="
+                    multiple:false,
+                    checkbox:false,
+                " style="width:60%"
+               id='delegate_user' valuefield="id" textfield="text"
+               url="${fhs_basics_url}/ms/sysUser/getUserTree?jsonpCallback=?"/>
+        <span class='form-field-required'>*</span>
+    </div>
+</div>
+
+
+
+<div id="dlg-buttons">
+    <center>
+        <a href="#" class="easyui-linkbutton" onclick="doDelegate()">确认</a>
+        <a href="#" class="easyui-linkbutton" onclick="closeDialog2()">取消</a>
+    </center>
+</div>
+<script>
+
+    //提交
+    function doDelegate() {
+        var _tree = $('#delegate_user').combotree('tree')
+        var node = _tree.tree('getSelected');
+        debugger
+        if(!node || node.isUser===0){
+            EalertE('请选择委派人(注意不是组织)');
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: "${basePath}ms/myWorks/delegate",
+            data: {userId: node.id, userName: node.text,taskId: '${parameter.taskId}'},
+            success: function (res) {
+                if (res.code == 200) {
+                    Ealert("操作成功")
+                    closeDialog2();
+                    closeDialog();
+                    reload();
+                }else{
+                    EalertE(res.message);
+                }
+            }
+        });
+    }
+
+</script>

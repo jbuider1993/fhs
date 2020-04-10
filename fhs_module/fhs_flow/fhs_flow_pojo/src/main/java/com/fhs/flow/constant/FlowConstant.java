@@ -103,4 +103,8 @@ public interface FlowConstant {
      */
     int RESULT_WITHDRAW = 4;
 
+    /**
+     * 委派
+     */
+    int RESULT_DELEGATE = 5;
 }

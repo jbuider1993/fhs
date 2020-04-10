@@ -2,12 +2,14 @@ package com.fhs.flow.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.fhs.basics.api.rpc.FeignServerApiService;
 import com.fhs.basics.vo.SettMsMenuServerVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.CheckUtils;
 import com.fhs.common.utils.FileUtils;
+import com.fhs.common.utils.StringUtil;
 import com.fhs.core.base.controller.BaseController;
 import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.config.EConfig;
@@ -18,6 +20,7 @@ import com.fhs.core.result.HttpResult;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.flow.constant.FlowConstant;
 import com.fhs.flow.dox.FlowInstanceDO;
+import com.fhs.flow.dox.FlowTaskHistoryDO;
 import com.fhs.flow.service.*;
 import com.fhs.flow.vo.*;
 import org.activiti.engine.HistoryService;
@@ -34,10 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -84,6 +84,10 @@ public class MyWorksController extends BaseController {
     @Autowired
     private FlowTaskHistoryService flowTaskHistoryService;
 
+    @Autowired
+    private FlowTaskHistoryService taskHistoryService;
+
+
     /**
      * 查询待完成的工作
      *
@@ -98,6 +102,34 @@ public class MyWorksController extends BaseController {
         List<FlowTaskVO> dataList = workFlowTaskService.findNeedComplateTask(paramMap);
         int count = workFlowTaskService.findNeedComplateTaskCount(paramMap);
         return new Pager(count, dataList);
+    }
+
+    /**
+     * 委派
+     * @param taskId 任务id
+     * @param userId 用户id
+     * @return
+     */
+    @RequestMapping("delegate")
+    @Transactional(rollbackFor = Exception.class)
+    public HttpResult delegate(String taskId,String userId,String userName,HttpServletRequest request){
+        ParamChecker.isNotNullOrEmpty(taskId,"任务id不可为空");
+        ParamChecker.isNotNullOrEmpty(userId,"用户id不可为空");
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        taskService.delegateTask(taskId,userId);
+
+        //删除老数据
+        taskHistoryService.deleteMp(new LambdaQueryWrapper<FlowTaskHistoryDO>().eq(FlowTaskHistoryDO::getTaskId,taskId).ne(FlowTaskHistoryDO::getResult,FlowConstant.RESULT_DELEGATE));
+
+        FlowTaskHistoryDO history = FlowTaskHistoryDO.builder().id(StringUtil.getUUID()).taskId(taskId).taskFinishTime(new Date())
+                .instanceId(task.getProcessInstanceId()).title(task.getName()).status(FlowTaskHistoryService.STATUS_FINISH).assigneeUserId(task.getAssignee())
+                .build();
+        history.setUseTime((int) (System.currentTimeMillis() - task.getCreateTime().getTime()) / 1000 / 60);
+        history.preInsert(getSessionuser(request).getUserId());
+        history.setResult(FlowConstant.RESULT_DELEGATE);
+        history.setRemark("委派给" + userName);
+        taskHistoryService.insertSelective(history);
+        return HttpResult.success();
     }
 
     /**
@@ -127,6 +159,8 @@ public class MyWorksController extends BaseController {
         Task task = taskService.createTaskQuery().taskId(request.getParameter("taskId")).singleResult();
         if (task.getAssignee() == null) {
             taskService.claim(request.getParameter("taskId"), getSessionuser(request).getUserId());
+        }else{
+            throw new ParamException("任务已经被签收过");
         }
         return HttpResult.success(true);
     }
