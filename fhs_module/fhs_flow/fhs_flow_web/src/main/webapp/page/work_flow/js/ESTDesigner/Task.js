@@ -368,7 +368,14 @@ ESTDesigner.task.UserTask = ESTDesigner.task.BaseTask.extend({
 						}
 					}
 				} else {
-					if (this.performerType == 'candidateUsers') {
+					if (this.performerType == 'assignee') {
+						xml = xml + 'activiti:assignee="';
+						for (var i = 0; i < this.candidateUsers.getSize(); i++) {
+							var user = this.candidateUsers.get(i);
+							xml = xml + user.userId + ',';
+						}
+						xml = xml + '" ';
+					}else if (this.performerType == 'candidateUsers') {
 						xml = xml + 'activiti:candidateUsers="';
 						for (var i = 0; i < this.candidateUsers.getSize(); i++) {
 							var user = this.candidateUsers.get(i);

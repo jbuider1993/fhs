@@ -240,10 +240,10 @@
         if (task.isUseExpression) {
             $('#expressionTr').show();
             $('#expression').val(task.expression);
-            $("input:radio[name='useExpression'][value='"+task.isUseExpression+"']").attr("checked",true)
-            task_candidate_panel.panel("close");
+            $('#isExpression').prop('checked', true);
         } else {
             $('#expressionTr').hide();
+            $('#nonExpression').prop('checked', true);
         }
 
         $('#formKey').val(task.formKey);
