@@ -28,12 +28,15 @@
     </div>
 </div>
 
+
+<%
+     if(nvl(parameter.isView,'false')=='false'){
+  %>
+
 <div id="approval_operation">
     <div class="infoGroup">
         <legend>审批操作</legend>
     </div>
-
-
     <div class="fitem">
         <div class="bigLabelDiv"><label>备注:</label></div>
         <div class="bigContent"><textarea datatype="empty|*" nullmsg="备注不能为空" errormsg="备注输入了错误的格式"
@@ -63,7 +66,9 @@
      style="width: 45%; height: 45%; padding: 10px"
      buttons="#dlg-buttons">
 </div>
-
+<%
+   }
+%>
 </body>
 <script>
     $("#dlg-buttons").hide();
@@ -96,32 +101,42 @@
                 }
             }
         })
-        //回退节点为0
-        $.ajax({
-            async: false, //同步
-            type: 'post',
-            url: '${basePath}ms/myWorks/findBackAvtivity?taskId=' + taskId,
-            success: function (res) {
-                if (res.code == 200) {
-                    if (res.data.length == 0) {
-                        $("#ccTo").hide();
-                        $("#backTask").hide();
-                        $("#backTask_node").hide();
-                        $("#delegate").hide();
-                        $("#preAdd").hide();
-                        $("#afterAdd").hide();
-                        $("#withdraw").hide();
-                        $("#complateTask").hide();
-                        $('#formDetailFrame').attr('src',formUrl + '&isEdit=true&taskId=' + taskId);
-                    }else{
-                        $('#formDetailFrame').attr('src',formUrl + '&isView=true');
+
+        <%
+        if(nvl(parameter.isView,'false')=='false'){
+        %>
+            //回退节点为0
+            $.ajax({
+                async: false, //同步
+                type: 'post',
+                url: '${basePath}ms/myWorks/findBackAvtivity?taskId=' + taskId,
+                success: function (res) {
+                    if (res.code == 200) {
+                        if (res.data.length == 0) {
+                            $("#ccTo").hide();
+                            $("#backTask").hide();
+                            $("#backTask_node").hide();
+                            $("#delegate").hide();
+                            $("#preAdd").hide();
+                            $("#afterAdd").hide();
+                            $("#withdraw").hide();
+                            $("#complateTask").hide();
+                            $('#formDetailFrame').attr('src',formUrl + '&isEdit=true&taskId=' + taskId);
+                        }else{
+                            $('#formDetailFrame').attr('src',formUrl + '&isView=true');
+                        }
                     }
                 }
-            }
-        })
+            })
 
-        isClaimTask();
-        addChildListener();
+            isClaimTask();
+            addChildListener();
+        <%}%>
+        <%
+        if(nvl(parameter.isView,'false') == 'true'){
+        %>
+            $('#formDetailFrame').attr('src',formUrl + '&isView=true');
+        <%}%>
     })
 
     //添加监听器

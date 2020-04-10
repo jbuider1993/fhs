@@ -37,9 +37,8 @@ var listPage = {
     otherFunctions: function () {
         return {
             details: function (row) {
-                debugger;
-                openDialog('${path.basePath}/b/page-ms/details?taskId=' + row.taskId,
-                    '详情 {' + row.processTitle + "}");
+                openDialog('${path.basePath}/b/page-ms/handle?isView=true&taskId='+row.taskId + '&instanceId=' + row.instanceId,
+                    '查看任务 {' + row.processTitle + "}");
             }
         };
     }
