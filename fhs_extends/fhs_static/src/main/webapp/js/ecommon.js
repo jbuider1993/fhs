@@ -19,6 +19,21 @@ String.prototype.replaceAll = function (reallyDo, replaceWith, ignoreCase) {
     }
 }
 
+//下拉tree选择用户,获取用户ids
+function getSelectUsers(_combotreeName){
+    var _tree = $('#' + _combotreeName).combotree('tree')
+    var nodes = _tree.tree('getChecked');
+    var ccUserTos = [];
+    for(i=0;i<nodes.length;i++){
+        var node = nodes[i];
+        if(node.isUser===1){
+            ccUserTos.push(node.id);
+        }
+    }
+    ccUserTos = ccUserTos + '';
+    return ccUserTos;
+}
+
 //从url获取参数
 function getQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
