@@ -25805,7 +25805,7 @@ draw2d.shape.node.Node = draw2d.Figure.extend({
     addPort: function(port, locator)
     {
         if(!(port instanceof draw2d.Port)){
-            throw "page.ms.flow.nodee.Node#addPort";
+            throw "Argument is not typeof 'draw2d.Port'. \nFunction: draw2d.shape.node.Node#addPort";
         }
 
         // add to the internal cache if already build
