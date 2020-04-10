@@ -33,7 +33,7 @@ var listPage = {
     otherFunctions: function () {
         return {
             detail: function (row) {
-                openDialog('${path.basePath}/b/page-ms-flow/handle?instanceId=' + row.activitiProcessInstanceId,
+                openDialog('${path.basePath}/b/page-ms-flow/handle?isView=true&instanceId=' + row.activitiProcessInstanceId,
                     '处理任务 {' + row.title + "}");
             }
         };

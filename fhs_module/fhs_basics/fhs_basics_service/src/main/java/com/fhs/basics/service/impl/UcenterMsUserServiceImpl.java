@@ -398,10 +398,6 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         }
     }
 
-    @Override
-    public List<SettMsMenuVO> Test(Map<String, Object> map) {
-        return ListUtils.copyListToList(sysUserMapper.readMenuByIds(map), SettMsMenuVO.class);
-    }
 
     /**
      * 获取用户操作权限

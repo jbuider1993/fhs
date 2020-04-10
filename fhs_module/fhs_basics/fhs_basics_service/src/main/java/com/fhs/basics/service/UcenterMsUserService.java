@@ -101,13 +101,7 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      */
     public JSONArray buildMenuJson(UcenterMsUserDO adminUser);
 
-    /**
-     * 测试使用
-     *
-     * @param map
-     * @return
-     */
-    public List<SettMsMenuVO> Test(Map<String, Object> map);
+
 
     /**
      * 根据用户查询权限
