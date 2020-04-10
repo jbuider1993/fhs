@@ -73,8 +73,17 @@
    }
 %>
 <%
+if(nvl(parameter.isView,'false') == 'true'){
+%>
+<div class="fitem">
+    <div class="bigLabelDiv"><label>抄送人:</label></div>
+    <div class="bigContent" id="ccUserDiv" style="padding-top: 8px;padding-left: 10px;"></div>
+</div>
+<%}%>
+<%
 if(nvl(parameter.isView,'false') == 'true' && nvl(parameter.isTaskHistory,'false') == 'true'){
 %>
+
 <center><a href="javascript:void(0)" class="easyui-linkbutton" plain="true" id="withdraw" onclick="withdraw()">撤回OK</a></center>
 <%}%>
 </body>
