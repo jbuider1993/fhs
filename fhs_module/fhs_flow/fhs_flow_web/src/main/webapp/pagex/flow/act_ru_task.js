@@ -1,7 +1,7 @@
 var modelConfig = {
-    title: '代办事项', pkey: 'id', type: 'uuid',
+    title: '待办事项', pkey: 'id', type: 'uuid',
     orderBy: 'update_time Desc',
-    namespace: "act_ru_task", table: 'act_ru_task', trans: true, db: "park",
+    namespace: "act_ru_task", table: 'act_ru_task', trans: true,
     dataGridUrl: '${path.basePath}/ms/myWorks/getNeedComplateTask',
 };
 var listPage = {
@@ -41,7 +41,7 @@ var listPage = {
     otherFunctions: function () {
         return {
             handle: function (row) {
-                openDialog('${path.basePath}/b/page-ms/handle?taskId='+row.taskId + '&instanceId=' + row.activitiInstanceId,
+                openDialog('${path.basePath}/b/page-ms-flow/handle?taskId='+row.taskId + '&instanceId=' + row.activitiInstanceId,
                     '处理任务 {' + row.title + "}");
             }
         };

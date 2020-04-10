@@ -224,20 +224,34 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
 
     @Override
     public void updateEndSuccessProcess(String taskId, Map<String, Object> variables, boolean isRevoke, String userId) throws Exception {
+        Task task = this.findTaskById(taskId);
+        FlowInstanceVO flowInstance = this.flowInstanceService.selectBean(FlowInstanceDO.builder().activitiProcessInstanceId(task.getProcessInstanceId()).build());
         ActivityImpl endActivity = findActivitiImpl(taskId, "end");
+        Map<String, Object> msgMap = new HashMap<>();
         if (isRevoke) {
             variables.put("result", FlowConstant.RESULT_REVOKE);
-            Task task = this.findTaskById(taskId);
-            FlowInstanceVO flowInstance = this.flowInstanceService.selectBean(FlowInstanceDO.builder().activitiProcessInstanceId(task.getProcessInstanceId()).build());
+
             ParamChecker.isNotNullOrEmpty(flowInstance, "task对应的 flowInstance 丢失,activitiProcessInstanceId:" + task.getProcessInstanceId());
             if (!userId.equals(flowInstance.getCreateUser())) {
                 throw new ParamException("您不是工单创建人，无法撤销");
             }
             variables.put("result", FlowConstant.RESULT_REVOKE);
+            msgMap.put("instanceStatus",  FlowConstant.BUSINESS_INSTANCE_STATUS_REVOKE );
+            msgMap.put("type", FlowConstant.INSTANCE_NEWS_TYPE_REVOKE);
         } else {
             variables.put("result", FlowConstant.RESULT_END);
+            msgMap.put("instanceStatus",  FlowConstant.BUSINESS_INSTANCE_STATUS_END );
+            msgMap.put("type", FlowConstant.INSTANCE_NEWS_TYPE_COMPLATE);
         }
         commitProcess(taskId, variables, endActivity.getId());
+
+        msgMap.put("instanceId", flowInstance.getActivitiProcessInstanceId());
+        msgMap.put("businessKey", flowInstance.getFormPkey());
+
+        FlowJbpmXmlVO xml  = flowJbpmXmlService.selectById(flowInstance.getXmlId());
+        ParamChecker.isNotNull(xml,"xml丢失");
+        msgMap.put("namespace",xml.getNamespace());
+        distributedListenerRegister.callListener(FlowConstant.LISTENER_INSTANCE, FlowConstant.ENVENT_NEWS, new Object(), msgMap);
     }
 
     @Override

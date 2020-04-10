@@ -5124,7 +5124,7 @@ jQuery.event = {
 
 			// jQuery handler
 			handle = ( jQuery._data( cur, "events" ) || {} )[ event.type ] &&
-				jQuery._data( cur, "handle" );
+				jQuery._data( cur, "page.ms.flow.handle" );
 
 			if ( handle ) {
 				handle.apply( cur, data );

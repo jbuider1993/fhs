@@ -104,6 +104,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> {
         try {
             return idField.get(this);
         } catch (IllegalAccessException e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -126,6 +127,7 @@ public abstract class BaseDO<T extends BaseDO> extends SuperBean<T> {
                     throw new RuntimeException("找不到" + this.getClass() + "的id注解");
                 }
             }
+            fieldList.get(0).setAccessible(true);
             return fieldList.get(0);
         }
         fieldList.get(0).setAccessible(true);

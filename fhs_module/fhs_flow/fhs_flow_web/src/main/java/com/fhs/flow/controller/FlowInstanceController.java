@@ -1,5 +1,6 @@
 package com.fhs.flow.controller;
 
+import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.flow.dox.FlowInstanceDO;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * fhs的流程实例，为activiti的实例扩展表(FlowInstance)表控制层
@@ -41,5 +43,9 @@ public class FlowInstanceController extends ModelSuperController<FlowInstanceVO,
         return HttpResult.success(true);
     }
 
-
+    @Override
+    public Pager<FlowInstanceVO> findPage(FlowInstanceVO e, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        e.setCcTo(super.getSessionuser().getUserId());
+        return super.findPage(e, request, response);
+    }
 }

@@ -292,7 +292,7 @@ $(this).draggable({disabled:true});
 }};
 $.fn.draggable.parseOptions=function(_30){
 var t=$(_30);
-return $.extend({},$.parser.parseOptions(_30,["cursor","handle","axis",{"revert":"boolean","deltaX":"number","deltaY":"number","edge":"number","delay":"number"}]),{disabled:(t.attr("disabled")?true:undefined)});
+return $.extend({},$.parser.parseOptions(_30,["cursor","page.ms.flow.handle","axis",{"revert":"boolean","deltaX":"number","deltaY":"number","edge":"number","delay":"number"}]),{disabled:(t.attr("disabled")?true:undefined)});
 };
 $.fn.draggable.defaults={proxy:null,revert:false,cursor:"move",deltaX:null,deltaY:null,handle:null,disabled:false,edge:0,axis:null,delay:100,onBeforeDrag:function(e){
 },onStartDrag:function(e){

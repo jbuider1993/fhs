@@ -41,7 +41,7 @@
             AND fi.title LIKE '%${processTitle}%'
         </if>
         <if test="processName != null and processName != ''">
-            AND fjx.name LIKE '%${processName}%'
+            AND fth.title LIKE '%${processName}%'
         </if>
     </sql>
 
@@ -55,7 +55,8 @@
         fi.create_user createUser,
         fth.task_finish_time taskFinishTime,
         fth.use_time useTime,
-        fth.`result` useStatus
+        fth.`result` useStatus,
+        fth.instance_id instanceId
         FROM t_flow_task_history fth
         LEFT JOIN t_flow_instance fi ON fi.activiti_process_instance_id = fth.instance_id
         LEFT JOIN t_flow_jbpm_xml fjx ON fjx.id = fi.xml_id

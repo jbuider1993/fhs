@@ -29,7 +29,7 @@ var listPage = {
         return [];
     },
     disableButtons: function () {
-        return [];
+        return ['update','delete'];
     },
     otherFunctions: function () {
         return {}

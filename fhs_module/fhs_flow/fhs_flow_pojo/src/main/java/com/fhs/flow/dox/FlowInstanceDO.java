@@ -6,7 +6,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fhs.core.base.dox.BaseDO;
+import com.fhs.core.trans.anno.Trans;
+import com.fhs.core.trans.constant.TransType;
 import com.fhs.core.valid.group.*;
+import com.mybatis.jpa.annotation.Like;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -47,6 +50,7 @@ public class FlowInstanceDO extends BaseDO<FlowInstanceDO> {
     @NotNull(message = "xml id字段不可为null", groups = {Update.class, Delete.class})
     @Length(message = "xml id字段的长度最大为32", groups = {Add.class, Update.class}, max = 32)
     @TableField("xml_id")
+    @Trans(type = TransType.AUTO_TRANS,key = "flow_jbpm_xml")
     private String xmlId;
 
     /**
@@ -78,6 +82,7 @@ public class FlowInstanceDO extends BaseDO<FlowInstanceDO> {
      * 状态
      */
     @TableField("status")
+    @Trans(type = TransType.WORD_BOOK, key = "workFlow_process_status")
     private Integer status;
 
     /**
@@ -85,5 +90,12 @@ public class FlowInstanceDO extends BaseDO<FlowInstanceDO> {
      */
     @TableField("first_definition_key")
     private String firstDefinitionKey;
+
+    /**
+     * 抄送
+     */
+    @TableField("cc_to")
+    @Like
+    private String ccTo;
 
 }

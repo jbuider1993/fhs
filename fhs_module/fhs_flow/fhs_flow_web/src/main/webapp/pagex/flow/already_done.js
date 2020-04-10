@@ -1,13 +1,13 @@
 var modelConfig = {
     title: '办理历史', pkey: 'id', type: 'uuid',
     orderBy: 'update_time Desc',
-    namespace: "already_done", table: 't_flow_task_history', trans: true, db: "park",
+    namespace: "already_done", table: 't_flow_task_history', trans: true,
     dataGridUrl: '${path.basePath}/ms/flowTaskHistory/getTaskHistoryList',
 };
 var listPage = {
     listFieldSett: function () {
         return [
-            {name: 'processTitle', title: '流程标题', width: '19%', align: 'center'},
+            {name: 'processTitle', title: '流程实例标题', width: '19%', align: 'center'},
             {name: 'processName', title: '流程名称', width: '15%', align: 'center'},
             {name: 'taskName', title: '任务名称', width: '10%', align: 'center'},
             {name: 'processStatus', title: '流程状态', width: '10%', align: 'center',align: 'center',trans: 'book', showField: 'transMap.processStatusName'},
@@ -37,7 +37,7 @@ var listPage = {
     otherFunctions: function () {
         return {
             details: function (row) {
-                openDialog('${path.basePath}/b/page-ms/handle?isView=true&taskId='+row.taskId + '&instanceId=' + row.instanceId,
+                openDialog('${path.basePath}/b/page-ms-flow/handle?isView=true&isTaskHistory=true&taskId='+row.taskId + '&instanceId=' + row.instanceId,
                     '查看任务 {' + row.processTitle + "}");
             }
         };

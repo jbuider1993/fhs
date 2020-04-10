@@ -5,6 +5,7 @@ import com.fhs.common.utils.StringUtil;
 import com.fhs.core.base.service.impl.BaseServiceImpl;
 import com.fhs.core.config.EConfig;
 import com.fhs.core.exception.ParamException;
+import com.fhs.core.trans.anno.AutoTrans;
 import com.fhs.core.valid.checker.ParamChecker;
 import com.fhs.flow.dox.FlowJbpmXmlDO;
 import com.fhs.flow.service.FlowJbpmXmlService;
@@ -34,6 +35,7 @@ import java.util.regex.Pattern;
  * @since 2019-11-11 14:29:04
  */
 @Service("flowJbpmXmlService")
+@AutoTrans(namespace = "flow_jbpm_xml",fields = "name",defaultAlias = "xml")
 public class FlowJbpmXmlServiceImpl extends BaseServiceImpl<FlowJbpmXmlVO, FlowJbpmXmlDO> implements FlowJbpmXmlService {
 
     private static final Logger LOG = Logger.getLogger(WorkFlowJbpmXmlServiceImpl.class);

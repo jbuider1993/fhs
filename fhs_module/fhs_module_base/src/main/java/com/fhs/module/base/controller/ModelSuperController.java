@@ -69,9 +69,11 @@ public abstract class ModelSuperController<V extends VO, D extends BaseDO> exten
             throws Exception {
         if (isPermitted(request, "see")) {
             PageSizeInfo pgeSizeInfo = getPageSizeInfo();
-            List<V> dataList = baseService.selectPageForOrder((D) e, pgeSizeInfo.getPageStart(),
+            D d = (D) e;
+            d.setUserInfo(getSessionuser().asMap());
+            List<V> dataList = baseService.selectPageForOrder(d, pgeSizeInfo.getPageStart(),
                     pgeSizeInfo.getPageSize(), this.formartOrderBy(request));
-            int count = baseService.findCountJpa((D) e);
+            int count = baseService.findCountJpa(d);
             request.getSession().setAttribute(this.getClass() + "preLoadParam", e);
             return new Pager<V>(count, dataList);
         } else {

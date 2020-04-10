@@ -37,6 +37,9 @@ public class SuperBean<T extends SuperBean>  extends BaseObject<T>{
     @TableField(exist=false)
     private Map<String,String> inFilter = new HashMap<>();
 
+    @TableField(exist=false)
+    private Map<String,Object> userInfo =new HashMap<>();
+
     /**
      * 将一组过滤条件添加到in中
      * @param field 字段名字
@@ -77,5 +80,13 @@ public class SuperBean<T extends SuperBean>  extends BaseObject<T>{
 
     public void setInFilter(Map<String, String> inFilter) {
         this.inFilter = inFilter;
+    }
+
+    public Map<String, Object> getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(Map<String, Object> userInfo) {
+        this.userInfo = userInfo;
     }
 }
