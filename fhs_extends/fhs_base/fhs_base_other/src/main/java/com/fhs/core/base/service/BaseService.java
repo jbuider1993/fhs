@@ -74,6 +74,20 @@ public interface BaseService<V extends VO,D extends BaseDO> extends AutoTransAbl
     boolean deleteFromMap(Map<String, Object> map);
 
     /**
+     * 真实删除-根据id集合删除
+     * @param idList
+     * @return
+     */
+    int deleteByIdsMp(Collection<? extends Serializable> idList);
+
+    /**
+     * 根据Wrapper 删除-真实删除
+     * @param wrapper
+     * @return
+     */
+    int deleteMp( Wrapper<D> wrapper);
+
+    /**
      * 删除数据库 数据 参数为object
      *
      * @param bean bean

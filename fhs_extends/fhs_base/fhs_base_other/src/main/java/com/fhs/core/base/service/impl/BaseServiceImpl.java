@@ -26,6 +26,7 @@ import com.fhs.core.trans.service.impl.TransService;
 import com.fhs.logger.Logger;
 import com.mybatis.jpa.annotation.CatTableFlag;
 import com.mybatis.jpa.cache.JpaTools;
+import org.apache.poi.ss.formula.functions.T;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.InitializingBean;
@@ -337,6 +338,13 @@ public abstract class BaseServiceImpl<V extends VO, D extends BaseDO> implements
         return result;
     }
 
+    public int deleteByIdsMp(Collection<? extends Serializable> idList){
+        return baseMapper.deleteBatchIds(idList);
+    }
+
+    public int deleteMp( Wrapper<D> wrapper){
+        return baseMapper.delete(wrapper);
+    }
 
     @Override
     public int updateSelectiveById(D entity) {
