@@ -4,6 +4,7 @@
     //var task = workflow.getFigure(tid);
     var listenerId = "";
     var formPropertyId = "";
+    $.parser.parse();
     $(function () {
         $('#task-properties-accordion').accordion({
             onSelect: function (title, index) {
@@ -23,6 +24,7 @@
         $('#performerType').combobox({
             editable: false,
             onChange: function (newValue, oldValue) {
+                alert("触发")
                 switchTaskCandidatesList(newValue);
             }
         });
@@ -126,24 +128,26 @@
         });
         task_candidate_panel = $('#task-candidate-panel').panel({
             border: false,
-            //minimized:true,
-            height: 450
+            // minimized:true,
+            height: 450,
             //width:
-            //fit:true
+            // fit:true
         });
         populateTaskProperites();
-        //switchTaskCandidatesList($('#performerType').combobox('getValue'));
+        // switchTaskCandidatesList($('#performerType').combobox('getValue'));
     });
 
     function switchIsExpression(obj) {
         if (obj.value == 'true') {
             $('#expressionTr').show();
-            task_candidate_panel.panel("close");
+            task_candidate_panel.panel("close").panel('refresh');
         } else if (obj.value == 'false') {
             $('#expressionTr').hide();
             var performerType = $('#performerType').combobox('getValue');
-            task_candidate_panel.panel("open");
-            if (performerType == 'candidateUsers') {
+            task_candidate_panel.panel("open").panel('refresh');
+            if (performerType == 'assignee') {
+                task_candidate_panel.panel("refresh", "${basePath}/b/page-work_flow/assigneeUsersConfig");
+            }else if (performerType == 'candidateUsers') {
                 task_candidate_panel.panel("refresh", "${basePath}/b/page-work_flow/candidateUsersConfig");
             } else if (performerType == 'candidateGroups') {
                 task_candidate_panel.panel("refresh", "${basePath}/b/page-work_flow/candidateGroupsConfig");
@@ -152,14 +156,17 @@
     }
 
     function switchTaskCandidatesList(performerType) {
+        task_candidate_panel.panel("open").panel('refresh');
         if ($('input[name="useExpression"]:checked').val()) {
-            if (performerType == 'candidateUsers') {
+             if (performerType == 'candidateUsers') {
                 task_candidate_panel.panel("refresh", "${basePath}/b/page-work_flow/candidateUsersConfig");
             } else if (performerType == 'candidateGroups') {
                 task_candidate_panel.panel("refresh", "${basePath}/b/page-work_flow/candidateGroupsConfig");
-            } else if (performerType == 'assignee') {
-                task_candidate_panel.panel("refresh", "${basePath}/b/page-work_flow/assigneeUsersConfig");
-            }
+            }else if (performerType == 'assignee') {
+                 alert("是我")
+                 task_candidate_panel.panel("refresh", "${basePath}/b/page-work_flow/assigneeUsersConfig");
+                 alert(task_candidate_panel.panel("refresh", "${basePath}/b/page-work_flow/assigneeUsersConfig"));
+             }
         }
     }
 
@@ -235,8 +242,7 @@
     function populateTaskProperites() {
         //$('#id').val(task.taskId);
         //$('#name').val(task.taskName);
-        $('#performerType').combobox('setValue',task.performerType);
-        $('#performerType').trigger('onChange');
+
         if (task.isUseExpression) {
             $('#expressionTr').show();
             $('#expression').val(task.expression);
@@ -245,7 +251,8 @@
             $('#expressionTr').hide();
             $('#nonExpression').prop('checked', true);
         }
-
+        $('#performerType').combobox('setValue',task.performerType);
+        $('#performerType').trigger('onChange');
         $('#formKey').val(task.formKey);
         $('#dueDate').val(task.dueDate);
         $('#priority').val(task.priority);

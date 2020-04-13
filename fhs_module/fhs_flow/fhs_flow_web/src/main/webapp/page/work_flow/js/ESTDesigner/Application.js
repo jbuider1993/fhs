@@ -473,17 +473,32 @@ ESTDesigner.tool.Parser.UserTaskParser = ESTDesigner.tool.Parser.TaskParser.exte
 				var candidataGroups = xmlNode.attr('activiti:candidateGroups');
 				var assignee = xmlNode.attr('activiti:assignee');
 				if (assignee != null && assignee != "") {
-					task.isUseExpression = true;
-					task.performerType = "assignee";
-					task.expression = assignee;
+					if (assignee.indexOf("$") != -1) {
+						task.isUseExpression = true;
+						task.performerType = "assignee";
+						task.expression = assignee;
+					}else {
+						task.isUseExpression = false;
+						task.performerType = "assignee";
+					}
 				} else if (candidataUsers != null && candidataUsers != "") {
-					task.isUseExpression = true;
-					task.performerType = "candidateUsers";
-					task.expression = candidataUsers;
+					if (candidataUsers.indexOf("$")!=-1) {
+						task.isUseExpression = true;
+						task.performerType = "candidateUsers";
+						task.expression = candidataUsers;
+					}else {
+						task.isUseExpression = false;
+						task.performerType = "candidateUsers";
+					}
 				} else if (candidataGroups != null && candidataGroups != "") {
-					task.isUseExpression = true;
-					task.performerType = "candidateGroups";
-					task.expression = candidataGroups;
+					if (candidataGroups.indexOf("$") != -1){
+						task.isUseExpression = true;
+						task.performerType = "candidateGroups";
+						task.expression = candidataGroups;
+					}else {
+						task.isUseExpression = false;
+						task.performerType = "candidateGroups";
+					}
 				}
 			},
 			_parseTaskPerformer : function(xmlNode, task) {
