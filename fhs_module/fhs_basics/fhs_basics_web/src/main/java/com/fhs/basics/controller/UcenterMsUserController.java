@@ -52,6 +52,15 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     }
 
     /**
+     * 根据用户id获取用户详情
+     * @param userId 用户id
+     */
+    @RequestMapping("getUserById")
+    public void getUserById(String userId){
+        super.outJsonp(JsonUtils.bean2json(sysUserService.selectById(userId)));
+    }
+
+    /**
      * 添加平台用户
      *
      * @param request

@@ -20,10 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -45,12 +42,10 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
      * 获取角色集合
      *
      * @param organizationId 机构id
-     * @param request
-     * @param response
      */
     @RequiresPermissions("sysRole:see")
     @RequestMapping("/listData/{organizationId}")
-    public Pager<UcenterMsRoleVO> listData(@PathVariable(value = "organizationId") String organizationId, HttpServletRequest request, HttpServletResponse response) {
+    public Pager<UcenterMsRoleVO> listData(@PathVariable(value = "organizationId") String organizationId) {
         UcenterMsUserVO sysUser = super.getSessionuser();
         Map<String, Object> map = super.getPageTurnNum();
         if (CheckUtils.isNotEmpty(organizationId)) {
@@ -63,7 +58,27 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
         return new Pager<UcenterMsRoleVO>(count, dataList);
     }
 
+    /**
+     * 获取角色列表jsonp
+     */
+    @RequestMapping("getRolesForJsonp")
+    public void getRolesForJsonp(){
+        super.outJsonp(listData(null).asJson());
+    }
 
+    /**
+     * 根据
+     * @param ids
+     */
+    @RequestMapping("getRoleForJsonpByIds")
+    public void getRoleForJsonpByIds(String ids){
+        if(CheckUtils.isNullOrEmpty(ids)){
+            super.outJsonp("[]");
+            return;
+        }
+        List<UcenterMsRoleVO> roles =   sysRoleService.findByIds(Arrays.asList(ids.split(",")));
+        super.outJsonp(JsonUtils.list2json(roles));
+    }
 
 
     /**
@@ -114,6 +129,8 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
             return sysRoleService.findForListFromMap(map);
         }
     }
+
+
 
     /**
      * 更新角色信息
