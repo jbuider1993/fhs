@@ -472,33 +472,53 @@ ESTDesigner.tool.Parser.UserTaskParser = ESTDesigner.tool.Parser.TaskParser.exte
 				var candidataUsers = xmlNode.attr('activiti:candidateUsers');
 				var candidataGroups = xmlNode.attr('activiti:candidateGroups');
 				var assignee = xmlNode.attr('activiti:assignee');
+				if(!assignee){
+					task.isUseExpression = false;
+					return;
+				}
+				task.isUseExpression = assignee.indexOf("$") != -1;
 				if (assignee != null && assignee != "") {
-					if (assignee.indexOf("$") != -1) {
-						task.isUseExpression = true;
-						task.performerType = "assignee";
+					task.performerType = "assignee";
+					if(task.isUseExpression){
 						task.expression = assignee;
-					}else {
-						task.isUseExpression = false;
-						task.performerType = "assignee";
+					}
+					else{
+						//  assignee   candidateUsers  放一个用户进去
+						if(assignee){
+							$.ajax({
+								url:fhs_basics_url + '/ms/sysUser/getUserById?jsonpCallback=?&userId=' + assignee,
+								dataType:'json',
+								success:function(_userInfo){
+									task.addCandidateUser({
+										userId: _userInfo.userId,
+										name: _userInfo.userName,
+										orgName: _userInfo.transMap.orgName,
+										mobile: _userInfo.mobile,
+										email: _userInfo.email
+									});
+								}
+							})
+						}
 					}
 				} else if (candidataUsers != null && candidataUsers != "") {
-					if (candidataUsers.indexOf("$")!=-1) {
-						task.isUseExpression = true;
-						task.performerType = "candidateUsers";
+					task.performerType = "candidateUsers";
+					if(task.isUseExpression){
 						task.expression = candidataUsers;
-					}else {
-						task.isUseExpression = false;
-						task.performerType = "candidateUsers";
+					}
+					else{
+						// 逗号分隔的用户ids  == ajax 放一组用户进去
+
 					}
 				} else if (candidataGroups != null && candidataGroups != "") {
-					if (candidataGroups.indexOf("$") != -1){
-						task.isUseExpression = true;
-						task.performerType = "candidateGroups";
+					task.performerType = "candidateUsers";
+					if(task.isUseExpression){
 						task.expression = candidataGroups;
-					}else {
-						task.isUseExpression = false;
-						task.performerType = "candidateGroups";
 					}
+					else{
+						// 逗号分隔的角色ids  == ajax 放一组角色进去
+
+					}
+
 				}
 			},
 			_parseTaskPerformer : function(xmlNode, task) {

@@ -105,12 +105,10 @@
     <table id="task-unselect-candidate-user-list">
         <thead>
         <tr>
-            <th field="userId" align="middle" checkbox="true"></th>
-            <th field="userName" width="100" align="middle" sortable="true">姓名</th>
-            <th field="transMap.orgName" width="100" align="middle" sortable="true">部门</th>
-         <!--   <th field="roleName" width="200" align="middle">角色</th>-->
-            <th field="mobile" width="100" align="middle">手机号</th>
-            <th field="email" width="150" align="middle">Email</th>
+            <th field="userId" hidden='true'></th>
+            <th field="name" width="100" align="middle" sortable="false">姓名</th>
+            <th field="orgName" width="100" align="middle" sortable="false">部门</th>
+            <th field="action" width="80" align="center" formatter="candidateUsersBtFormatter">操作</th>
         </tr>
         </thead>
     </table>

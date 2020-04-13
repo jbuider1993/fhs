@@ -10,7 +10,7 @@
         });
         _task_candidate_unselected_group_grid = $('#_task_candidate_unselected_group_table').datagrid({
             title: "用户组",
-            url: '${fhs_basics_url}/ms/sysUser/findUsers?jsonpCallback=?',
+            url: '${fhs_basics_url}/ms/sysRole/getRolesForJsonp?jsonpCallback=?',
             //singleSelect:true,
             idField: 'roleId',
             height: 400,
@@ -51,7 +51,7 @@
         var rows = _task_candidate_unselected_group_grid.datagrid("getSelections");
         for (var i = 0; i < rows.length; i++) {
             var group = rows[i];
-            task.addCandidateGroup(group.roleName);
+            task.addCandidateGroup({roleName:group.roleName,roleId:group.roleId});
         }
         loadTaskCandidateGroups();
         _task_candidate_win.window('close');

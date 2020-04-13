@@ -277,8 +277,8 @@ ESTDesigner.task.UserTask = ESTDesigner.task.BaseTask.extend({
 			addTaskListener : function(listener) {
 				this.taskListeners.add(listener);
 			},
-			deleteCandidateGroup : function(name) {
-				var candidate = this.getCandidateGroup(name);
+			deleteCandidateGroup : function(_roleId) {
+				var candidate = this.getCandidateGroup(_roleId);
 				this.candidateGroups.remove(candidate);
 			},
 			deleteCandidateUser : function(userId) {
@@ -299,10 +299,10 @@ ESTDesigner.task.UserTask = ESTDesigner.task.BaseTask.extend({
 			setTaskListeners : function(listeners) {
 				this.taskListeners = listeners;
 			},
-			getCandidateGroup : function(name) {
+			getCandidateGroup : function(_roleId) {
 				for (var i = 0; i < this.candidateGroups.getSize(); i++) {
 					var candidate = this.candidateGroups.get(i);
-					if (candidate === name) {
+					if (candidate.roleId === _roleId) {
 						return candidate;
 					}
 				}
@@ -357,7 +357,7 @@ ESTDesigner.task.UserTask = ESTDesigner.task.BaseTask.extend({
 			},
 			getPerformersXML : function() {
 				var xml = '';
-				if (this.isUseExpression=="true") {
+				if (this.isUseExpression) {
 					if (this.expression != null && this.expression != '') {
 						if (this.performerType == 'assignee') {
 							xml = xml + 'activiti:assignee="' + this.expression + '" ';
@@ -370,23 +370,30 @@ ESTDesigner.task.UserTask = ESTDesigner.task.BaseTask.extend({
 				} else {
 					if (this.performerType == 'assignee') {
 						xml = xml + 'activiti:assignee="';
-						for (var i = 0; i < this.candidateUsers.getSize(); i++) {
-							var user = this.candidateUsers.get(i);
-							xml = xml + user.userId + ',';
+						if(this.candidateUsers && this.candidateUsers.getSize()>0){
+							xml  = xml + this.candidateUsers.data[0].userId ;
 						}
-						xml = xml + '" ';
+						xml =  xml + '" ';
 					}else if (this.performerType == 'candidateUsers') {
 						xml = xml + 'activiti:candidateUsers="';
-						for (var i = 0; i < this.candidateUsers.getSize(); i++) {
+						var _size = this.candidateUsers.getSize();
+						for (var i = 0; i < _size; i++) {
 							var user = this.candidateUsers.get(i);
-							xml = xml + user.userId + ',';
+							xml = xml + user.userId;
+							if((_size-1)!=i){
+								xml = xml + ',';
+							}
 						}
 						xml = xml + '" ';
 					} else if (this.performerType == 'candidateGroups') {
 						xml = xml + 'activiti:candidateGroups="';
-						for (var i = 0; i < this.candidateGroups.getSize(); i++) {
+						var _size = this.candidateGroups.getSize();
+						for (var i = 0; i < _size; i++) {
 							var group = this.candidateGroups.get(i);
-							xml = xml + group + ',';
+							xml = xml + group.roleId;
+							if((_size-1)!=i){
+								xml + xml + ',';
+							}
 						}
 						xml = xml + '" ';
 					}

@@ -32,34 +32,22 @@
     });
 
     function candidateGroupsBtFormatter(value, rowData, rowIndex) {
-        var roleName = rowData.roleName;
-        var d = '<img onclick="deleteCandidateGroup(\'' + roleName + '\')" src="${basePath}/page/work_flow/image/delete.gif" title="' + "删除" + '" style="cursor:hand;"/>';
+        var _roleId = rowData.roleId;
+        var d = '<img onclick="deleteCandidateGroup(\'' + _roleId + '\')" src="${basePath}/page/work_flow/image/delete.gif" title="' + "删除" + '" style="cursor:hand;"/>';
         return d;
     }
 
-    function deleteCandidateGroup(name) {
-        task.deleteCandidateGroup(name);
+    function deleteCandidateGroup(_roleId) {
+        task.deleteCandidateGroup(_roleId);
         loadTaskCandidateGroups();
     }
 
     function loadTaskCandidateGroups() {
         var candidateGroups = task.candidateGroups;
-        var candidate_groups_grid_rows = [];
-        //alert(listeners.getSize());
-        for (var i = 0; i < candidateGroups.getSize(); i++) {
-            debugger
-            var candidateGroup = candidateGroups.get(i);
-            var group = {
-                roleName: candidateGroup,
-                action: ''
-            };
-            candidate_groups_grid_rows[i] = group;
-        }
-        ;
         //alert(listener_grid_rows);
         var candidate_groups_grid_data = {
             total: candidateGroups.getSize(),
-            rows: candidate_groups_grid_rows
+            rows: candidateGroups.data
         };
         _task_candidate_groups_list.datagrid('loadData', candidate_groups_grid_data);
     }

@@ -6,17 +6,25 @@
     var formPropertyId = "";
     $.parser.parse();
     $(function () {
+        $.ajax({
+            url:'${basePath}/b/page-work_flow/taskGeneral',
+            success:function(res){
+                $('#general').html(res);
+            }
+        });
         $('#task-properties-accordion').accordion({
             onSelect: function (title, index) {
+                var pp = $('#task-properties-accordion').accordion('getSelected');
+
                 if (title == '通用') {
-                    var pp = $('#task-properties-accordion').accordion('getSelected');
-                    if (pp) {
-                        pp.panel('refresh', '${basePath}/b/page-work_flow/taskGeneral');
-                    }
+                    pp.panel('refresh', '${basePath}/b/page-work_flow/taskGeneral');
                 } else if (title == '多实例') {
-                    var pp = $('#task-properties-accordion').accordion('getSelected');
-                    if (pp) {
-                        pp.panel('refresh', '${basePath}/b/page-work_flow/taskMultiInstance');
+                    pp.panel('refresh', '${basePath}/b/page-work_flow/taskMultiInstance');
+                }else if (title == '主要配置') {
+                    if (eval($('input[name="useExpression"]:checked').val())) {
+                        switchIsExpression({value:'true'});
+                    }else{
+                        switchIsExpression({value:'false'});
                     }
                 }
             }
@@ -24,7 +32,6 @@
         $('#performerType').combobox({
             editable: false,
             onChange: function (newValue, oldValue) {
-                alert("触发")
                 switchTaskCandidatesList(newValue);
             }
         });
@@ -126,13 +133,7 @@
                 }
             }]
         });
-        task_candidate_panel = $('#task-candidate-panel').panel({
-            border: false,
-            // minimized:true,
-            height: 450,
-            //width:
-            // fit:true
-        });
+
         populateTaskProperites();
         // switchTaskCandidatesList($('#performerType').combobox('getValue'));
     });
@@ -140,32 +141,30 @@
     function switchIsExpression(obj) {
         if (obj.value == 'true') {
             $('#expressionTr').show();
-            task_candidate_panel.panel("close").panel('refresh');
+            if(task_candidate_panel){
+                task_candidate_panel.panel("close").panel('refresh');
+            }
         } else if (obj.value == 'false') {
             $('#expressionTr').hide();
             var performerType = $('#performerType').combobox('getValue');
-            task_candidate_panel.panel("open").panel('refresh');
-            if (performerType == 'assignee') {
-                task_candidate_panel.panel("refresh", "${basePath}/b/page-work_flow/assigneeUsersConfig");
-            }else if (performerType == 'candidateUsers') {
-                task_candidate_panel.panel("refresh", "${basePath}/b/page-work_flow/candidateUsersConfig");
-            } else if (performerType == 'candidateGroups') {
-                task_candidate_panel.panel("refresh", "${basePath}/b/page-work_flow/candidateGroupsConfig");
-            }
+            switchTaskCandidatesList(performerType);
         }
     }
 
     function switchTaskCandidatesList(performerType) {
-        task_candidate_panel.panel("open").panel('refresh');
+        task_candidate_panel = $('#task-candidate-panel').panel({
+            border: false,
+            height: 450,
+            width:'90%',
+        });
+        task_candidate_panel.panel("open");
         if ($('input[name="useExpression"]:checked').val()) {
              if (performerType == 'candidateUsers') {
                 task_candidate_panel.panel("refresh", "${basePath}/b/page-work_flow/candidateUsersConfig");
             } else if (performerType == 'candidateGroups') {
                 task_candidate_panel.panel("refresh", "${basePath}/b/page-work_flow/candidateGroupsConfig");
             }else if (performerType == 'assignee') {
-                 alert("是我")
                  task_candidate_panel.panel("refresh", "${basePath}/b/page-work_flow/assigneeUsersConfig");
-                 alert(task_candidate_panel.panel("refresh", "${basePath}/b/page-work_flow/assigneeUsersConfig"));
              }
         }
     }
@@ -230,8 +229,9 @@
             saveTaskMultiInstance();
         }
         task.performerType = $('#performerType').combobox('getValue');
+
         task.expression = $('#expression').val();
-        task.isUseExpression = $('input[name="useExpression"]:checked').val();
+        task.isUseExpression = eval($('input[name="useExpression"]:checked').val());
         task.formKey = $('#formKey').val();
         task.dueDate = $('#dueDate').val();
         task.priority = $('#priority').val();
@@ -252,11 +252,12 @@
             $('#nonExpression').prop('checked', true);
         }
         $('#performerType').combobox('setValue',task.performerType);
-        $('#performerType').trigger('onChange');
+        switchTaskCandidatesList(task.performerType)
         $('#formKey').val(task.formKey);
         $('#dueDate').val(task.dueDate);
         $('#priority').val(task.priority);
         $('#documentation').val(task.documentation);
+        console.log(task);
         loadTaskListeners();
         loadTaskFormProperties();
 
@@ -432,7 +433,7 @@
                     <tr>
                         <td></td>
                         <td>
-                            <div id="task-candidate-panel">
+                            <div id="task-candidate-panel" style="width:90%">
                             </div>
                         </td>
                     </tr>
