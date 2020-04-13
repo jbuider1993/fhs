@@ -13,10 +13,18 @@
 <body class="panel panel-default">
 <div id="tt" class="easyui-tabs">
     <div title="详情" style="padding:20px;">
-        <table id="details">
+        <div id="details">
             <iframe src="" id="formDetailFrame" width="100%" height="100%" frameborder="0"
                     class="layadmin-iframe"></iframe>
-        </table>
+        </div>
+        <%
+        if(nvl(parameter.isView,'false') == 'true'){
+        %>
+        <div class="fitem">
+            <div class="bigLabelDiv"><label>抄送人:</label></div>
+            <div class="bigContent" id="ccUserDiv" style="padding-top: 8px;padding-left: 10px;"></div>
+        </div>
+        <%}%>
     </div>
     <div title="审批历史" data-options="" style="padding:20px;">
         <table id="approval_history"></table>
@@ -72,14 +80,7 @@
 <%
    }
 %>
-<%
-if(nvl(parameter.isView,'false') == 'true'){
-%>
-<div class="fitem">
-    <div class="bigLabelDiv"><label>抄送人:</label></div>
-    <div class="bigContent" id="ccUserDiv" style="padding-top: 8px;padding-left: 10px;"></div>
-</div>
-<%}%>
+
 <%
 if(nvl(parameter.isView,'false') == 'true' && nvl(parameter.isTaskHistory,'false') == 'true'){
 %>

@@ -121,7 +121,7 @@ public class MyWorksController extends BaseController {
 
         //删除老数据
         taskHistoryService.deleteMp(new LambdaQueryWrapper<FlowTaskHistoryDO>().eq(FlowTaskHistoryDO::getTaskId, taskId).ne(FlowTaskHistoryDO::getResult, FlowConstant.RESULT_DELEGATE));
-        FlowTaskHistoryDO history = taskHistoryService.buildFlowTaskHistory(task.getTaskDefinitionKey(),task.getProcessInstanceId());
+        FlowTaskHistoryDO history = taskHistoryService.buildFlowTaskHistory(task.getTaskDefinitionKey(), task.getProcessInstanceId());
         history.setTaskFinishTime(new Date());
         history.setTitle(task.getName());
         history.setStatus(FlowTaskHistoryService.STATUS_FINISH);
@@ -355,7 +355,7 @@ public class MyWorksController extends BaseController {
      * @return 工作流实例详情
      */
     @RequestMapping("findInstanceById")
-    public HttpResult<InstanceVO> findInstanceById(String instanceId) {
+    public void findInstanceById(String instanceId) {
         ParamChecker.isNotNull(instanceId, "instanceId为必传");
         FlowInstanceVO instance = this.instanceService.selectBean(FlowInstanceDO.builder().activitiProcessInstanceId(instanceId).build());
         ParamChecker.isNotNull(instance, "instanceId无效");
@@ -395,7 +395,7 @@ public class MyWorksController extends BaseController {
             formUrl = formUrl + key + "=" + exParam.getString(key);
         }
         result.setFormUrl(formUrl);
-        return HttpResult.success(result);
+        super.outJsonp(HttpResult.success(result).asJson());
     }
 
 }

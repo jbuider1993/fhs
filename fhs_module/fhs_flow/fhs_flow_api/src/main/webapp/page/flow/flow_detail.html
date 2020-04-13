@@ -1,0 +1,68 @@
+<div id="tt" class="easyui-tabs">
+    <div title="详情" style="padding:20px;">
+        <div id="details">
+            <iframe src="" id="formDetailFrame" width="100%" height="100%" frameborder="0"
+                    class="layadmin-iframe"></iframe>
+        </div>
+        <div class="fitem">
+            <div class="bigLabelDiv"><label>抄送人:</label></div>
+            <div class="bigContent" id="ccUserDiv" style="padding-top: 8px;padding-left: 10px;"></div>
+        </div>
+    </div>
+    <div title="审批历史" data-options="" style="padding:20px;">
+        <table id="approval_history"></table>
+    </div>
+    <div title="流程图" data-options="" style="padding:20px;">
+        <div id="flow_chat">
+            <img id="flowImnage">
+        </div>
+    </div>
+</div>
+<script>
+
+    $(function (){
+        $('#approval_history').datagrid({
+            url: '${work_flow_url}ms/flowTaskHistory/getApprovalRecord?instanceId=${parameter.instanceId}&jsonpCallback=?',
+            pagination: false,
+            columns: [[
+                {field: 'taskName', title: '任务名称', width: '13%', align: 'center'},
+                {field: 'transMap.userName', title: '处理人', width: '10%', align: 'center'},
+                {field: 'createTime', title: '任务创建时间', width: '15%', align: 'center'},
+                {field: 'taskFinishTime', title: '处理时间', width: '15%', align: 'center'},
+                {field: 'transMap.useStatusName', title: '处理状态', width: '10%', align: 'center'},
+                {field: 'remark', title: '备注/意见', width: '25%', align: 'center'},
+            ]]
+        });
+        $("#flowImnage").attr("src", "${work_flow_url}ms/myWorks/getWorkFlowImg?instanceId=${parameter.instanceId}");
+        loadInstance();
+        addChildListener();
+        $('#subBtn').hide();
+    })
+
+    function loadInstance(){
+        //获取表单
+        $.ajax({
+            async: false, //同步
+            url: '${basePath}ms/myWorks/findInstanceById?jsonpCallback=?&instanceId=${parameter.instanceId}',
+            dataType:'json',
+            success: function (res) {
+                if (res.code == 200) {
+                    $('#formDetailFrame').attr('src',res.data.formUrl + '&isView=true');
+                    $('#ccUserDiv').text(res.data.transMap.ccToUserUserName);
+                }
+            }
+        })
+    }
+
+    //添加监听器
+    function addChildListener(){
+        window.addEventListener('message',function(event){
+            //
+            if(event.data.type=='setHeight'){
+                if($('#formDetailFrame').height() >  event.data.height){
+                    $('#formDetailFrame').height(new Number(event.data.height) + 30);
+                }
+            }
+        },false);
+    }
+</script>
