@@ -17,10 +17,7 @@ import com.fhs.flow.service.FlowTaskHistoryService;
 import com.fhs.flow.util.JsonUtil;
 import com.fhs.flow.vo.*;
 import com.fhs.logger.Logger;
-import org.activiti.engine.HistoryService;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
+import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
@@ -40,6 +37,7 @@ import org.activiti.engine.impl.pvm.process.TransitionImpl;
 import org.activiti.engine.impl.task.TaskDefinition;
 import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.DelegationState;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -148,7 +146,7 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
         // 获取当天task的 code 比如是 0012910 那么他的爸爸应该是001 0012 00129
         String taskCode = taskHistoryService.buildFlowTaskHistory(task.getTaskDefinitionKey(), task.getProcessInstanceId()).getCode();
         taskHistories.forEach(item -> {
-            if (taskCode.startsWith(item.getCode()) && (!taskCode.equals(item.getCode()))) {
+            if (item.getCode()!= null && taskCode.startsWith(item.getCode()) && (!taskCode.equals(item.getCode())) && item.getResult()!=FlowConstant.RESULT_DELEGATE) {
                 result.add(BackAvtivityVO.builder().id(item.getDefinitionKey()).title(item.getTitle()).build());
             }
         });
@@ -362,6 +360,9 @@ public class FlowCoreServiceImpl implements FlowCoreService, FeignWorkFlowApiSer
             history.setCreateTime(new Date());
             history.setTaskId(task.getId());
             taskHistoryService.insertSelective(history);
+        }
+        if (task.getDelegationState() != null && task.getDelegationState().equals(DelegationState.PENDING)) {
+            taskService.resolveTask(taskId,variables);
         }
         // 跳转节点为空，默认提交操作
         if (CheckUtils.isNullOrEmpty(activityId)) {

@@ -31,7 +31,6 @@
     function doDelegate() {
         var _tree = $('#delegate_user').combotree('tree')
         var node = _tree.tree('getSelected');
-        debugger
         if(!node || node.isUser===0){
             EalertE('请选择委派人(注意不是组织)');
             return;

@@ -66,32 +66,32 @@
     </sql>
 
 
-    <select id="findNeedClaimTask" parameterType="map" resultType="com.fhs.flow.vo.FlowTaskVO">
+    <select id="findNeedClaimTask" parameterType="com.fhs.basics.vo.UcenterMsUserVO" resultType="com.fhs.flow.vo.FlowTaskVO">
         SELECT DISTINCT
-        `ID_` as taskId,
-        `NAME_` as taskName,
-        `OWNER_` as taskOwner,
-        `ASSIGNEE_` as assignee,
-        `PRIORITY_` as priority,
-        DATE_FORMAT(`CREATE_TIME_`,'%Y-%m-%d %H:%i:%s') taskCreateTime,
+        RES1.`ID_` AS taskId,
+        RES1.`NAME_` AS taskName,
+        `OWNER_` AS taskOwner,
+        `ASSIGNEE_` AS assignee,
+        `PRIORITY_` AS priority,
+        DATE_FORMAT( `CREATE_TIME_`, '%Y-%m-%d %H:%i:%s' ) taskCreateTime,
         `DUE_DATE_` dueDate,
-        `CATEGORY_` category,
-        `SUSPENSION_STATE_` suspensionSate,
+        RES1.`CATEGORY_` category,
+        RES1.`SUSPENSION_STATE_` suspensionSate,
         `FORM_KEY_` formKey,
-        `id` as fhsInstanceId,
+        `id` AS fhsInstanceId,
         `title`,
         `create_user`,
-        i.create_time instanceCreateTime,
-        `activiti_process_instance_id` as activitiInstanceId
+        instance.create_time instanceCreateTime,
+        `activiti_process_instance_id` AS activitiInstanceId
 
         <include refid="needClaimWhere"></include>
         ORDER BY RES1.CREATE_TIME_ DESC
-        <if test="start!= null and end != null">
-            LIMIT ${start}, ${end}
+        <if test="start!= null and pageSize != null">
+            LIMIT ${start}, ${pageSize}
         </if>
     </select>
 
-    <select id="findNeedClaimTaskCount" parameterType="map"
+    <select id="findNeedClaimTaskCount" parameterType="com.fhs.basics.vo.UcenterMsUserVO"
             resultType="int">
         SELECT DISTINCT
         COUNT(1)
@@ -101,20 +101,16 @@
 
     <sql id="needClaimWhere">
 		FROM
-		ACT_RU_TASK RES1 INNER JOIN ACT_RE_PROCDEF D ON RES1.PROC_DEF_ID_ =
-		D.ID_ INNER
-		JOIN ACT_RU_VARIABLE V ON
-		V.PROC_INST_ID_=RES1.PROC_INST_ID_
-		LEFT JOIN ACT_RU_IDENTITYLINK I ON
-		I.TASK_ID_ = RES1.ID_ LEFT JOIN
-		t_work_flow_instance instance
-		ON
-		RES1.PROC_INST_ID_ = instance.process_instance_id
+        ACT_RU_TASK RES1
+        INNER JOIN ACT_RE_PROCDEF D ON RES1.PROC_DEF_ID_ = D.ID_
+        INNER JOIN ACT_RU_VARIABLE V ON V.PROC_INST_ID_ = RES1.PROC_INST_ID_
+        LEFT JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = RES1.ID_
+        LEFT JOIN t_flow_instance instance ON RES1.PROC_INST_ID_ = instance.activiti_process_instance_id
 		WHERE
 		RES1.ASSIGNEE_ IS NULL
 		AND I.TYPE_ = 'candidate' AND (
 		I.USER_ID_ =
 		#{userId}
-		OR I.GROUP_ID_ IN (dataPermissin.ruleIdForIn))
+		OR I.GROUP_ID_ IN (${roleIds}))
 	</sql>
 </mapper>

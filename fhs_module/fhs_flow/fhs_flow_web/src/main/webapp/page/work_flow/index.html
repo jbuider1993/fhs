@@ -4,7 +4,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, , maximum-scale=1.0"/>
     <meta charset="UTF-8">
-    <title>Activiti工作流设计器</title>
+    <title>${parameter.processName}流程设计</title>
     <link href="${basePath}/page/work_flow/css/style.css" type="text/css" rel="stylesheet"/>
     <!-- Draw2d CSS-->
     <link type="text/css" rel="stylesheet" href="${basePath}/page/work_flow/css/draw2d.css"/>
@@ -232,10 +232,8 @@
                     fit: true,
                     onSelect: function (title) {
                         if (title == 'XML') {
-                            var processKey = getQueryVariable('processKey');
-                            var processName = getQueryVariable('processName');
-                            $('#descriptorarea').text(canvas.toXML(processKey, processName));
-                            console.log(canvas.toXML(processKey, processName));
+                            $('#descriptorarea').text(canvas.toXML('${parameter.processKey}', '${parameter.processName}'));
+                            console.log(canvas.toXML('${parameter.processKey}', '${parameter.processName}'));
                             $('#descriptorarea').each(function (i, block) {
                                 hljs.highlightBlock(block);
                             });
@@ -285,9 +283,7 @@
 
     //保存xml到后台
     function saveXml(){
-        var processKey = getQueryVariable('processKey');
-        var processName = getQueryVariable('processName');
-        var xml = canvas.toXML(processKey, processName);
+        var xml = canvas.toXML('${parameter.processKey}', '${parameter.processName}');
         $.ajax({
             url:'${basePath}/ms/flow_jbpm_xml/updateXml',
             data:{xml:xml,xmlId:getQueryVariable('xmlId')},

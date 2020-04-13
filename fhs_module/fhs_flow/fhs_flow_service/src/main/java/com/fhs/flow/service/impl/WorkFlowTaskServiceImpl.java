@@ -1,5 +1,6 @@
 package com.fhs.flow.service.impl;
 
+import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.core.trans.service.impl.TransService;
 import com.fhs.flow.dox.FlowTaskDO;
 import com.fhs.flow.mapper.WorkFlowTaskMapper;
@@ -28,15 +29,15 @@ public class WorkFlowTaskServiceImpl implements WorkFlowTaskService {
     private TransService transService;
 
     @Override
-    public List<FlowTaskVO> findNeedClaimTask(Map<String, Object> paramMap) {
-        List<FlowTaskVO> result = workFlowTaskMapper.findNeedClaimTask(paramMap);
+    public List<FlowTaskVO> findNeedClaimTask(UcenterMsUserVO userVO) {
+        List<FlowTaskVO> result = workFlowTaskMapper.findNeedClaimTask(userVO);
         transService.transMore(result);
         return result;
     }
 
     @Override
-    public int findNeedClaimTaskCount(Map<String, Object> paramMap) {
-        return workFlowTaskMapper.findNeedClaimTaskCount(paramMap);
+    public int findNeedClaimTaskCount(UcenterMsUserVO userVO) {
+        return workFlowTaskMapper.findNeedClaimTaskCount(userVO);
     }
 
     @Override

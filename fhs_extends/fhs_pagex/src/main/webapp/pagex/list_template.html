@@ -193,10 +193,10 @@
             <#shiro name="${button.permissionsCode}">
                 <a href="javascript:void(0)" class="easyui-linkbutton"
                    iconcls="icon-view" plain="true" id="${button.id}"
-                <% if(nvl(button.isRow,false)){ %>
+                <% if(nvl(button.isRow,false)  && nvl(button.fun,'false')!='false'){ %>
                     onclick="addSelectRowFun('listGrid',${button.fun});"
                 <% } %>
-                <% if(!nvl(button.isRow,false)){ %>
+                <% if(!nvl(button.isRow,false) && nvl(button.fun,'false')!='false'){ %>
                     onclick="${button.fun}();"
                 <% } %>
                 >${button.title}</a>

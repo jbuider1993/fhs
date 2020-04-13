@@ -106,24 +106,26 @@ public class MyWorksController extends BaseController {
 
     /**
      * 委派
+     *
      * @param taskId 任务id
      * @param userId 用户id
      * @return
      */
     @RequestMapping("delegate")
     @Transactional(rollbackFor = Exception.class)
-    public HttpResult delegate(String taskId,String userId,String userName,HttpServletRequest request){
-        ParamChecker.isNotNullOrEmpty(taskId,"任务id不可为空");
-        ParamChecker.isNotNullOrEmpty(userId,"用户id不可为空");
+    public HttpResult delegate(String taskId, String userId, String userName, HttpServletRequest request) {
+        ParamChecker.isNotNullOrEmpty(taskId, "任务id不可为空");
+        ParamChecker.isNotNullOrEmpty(userId, "用户id不可为空");
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-        taskService.delegateTask(taskId,userId);
+        taskService.delegateTask(taskId, userId);
 
         //删除老数据
-        taskHistoryService.deleteMp(new LambdaQueryWrapper<FlowTaskHistoryDO>().eq(FlowTaskHistoryDO::getTaskId,taskId).ne(FlowTaskHistoryDO::getResult,FlowConstant.RESULT_DELEGATE));
-
-        FlowTaskHistoryDO history = FlowTaskHistoryDO.builder().id(StringUtil.getUUID()).taskId(taskId).taskFinishTime(new Date())
-                .instanceId(task.getProcessInstanceId()).title(task.getName()).status(FlowTaskHistoryService.STATUS_FINISH).assigneeUserId(task.getAssignee())
-                .build();
+        taskHistoryService.deleteMp(new LambdaQueryWrapper<FlowTaskHistoryDO>().eq(FlowTaskHistoryDO::getTaskId, taskId).ne(FlowTaskHistoryDO::getResult, FlowConstant.RESULT_DELEGATE));
+        FlowTaskHistoryDO history = taskHistoryService.buildFlowTaskHistory(task.getTaskDefinitionKey(),task.getProcessInstanceId());
+        history.setTaskFinishTime(new Date());
+        history.setTitle(task.getName());
+        history.setStatus(FlowTaskHistoryService.STATUS_FINISH);
+        history.setAssigneeUserId(task.getAssignee());
         history.setUseTime((int) (System.currentTimeMillis() - task.getCreateTime().getTime()) / 1000 / 60);
         history.preInsert(getSessionuser(request).getUserId());
         history.setResult(FlowConstant.RESULT_DELEGATE);
@@ -141,9 +143,12 @@ public class MyWorksController extends BaseController {
      */
     @RequestMapping("getNeedClaimTask")
     public Pager<FlowTaskVO> getNeedClaimTask(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        Map<String, Object> paramMap = super.getPageTurnNum();
-        List<FlowTaskVO> dataList = workFlowTaskService.findNeedClaimTask(paramMap);
-        int count = workFlowTaskService.findNeedClaimTaskCount(paramMap);
+        PageSizeInfo pageSizeInfo = super.getPageSizeInfo();
+        UcenterMsUserVO userVO = getSessionuser(request);
+        userVO.setStart(pageSizeInfo.getPageStart());
+        userVO.setPageSize(pageSizeInfo.getPageSize());
+        List<FlowTaskVO> dataList = workFlowTaskService.findNeedClaimTask(userVO);
+        int count = workFlowTaskService.findNeedClaimTaskCount(userVO);
         return new Pager(count, dataList);
     }
 
@@ -159,7 +164,7 @@ public class MyWorksController extends BaseController {
         Task task = taskService.createTaskQuery().taskId(request.getParameter("taskId")).singleResult();
         if (task.getAssignee() == null) {
             taskService.claim(request.getParameter("taskId"), getSessionuser(request).getUserId());
-        }else{
+        } else {
             throw new ParamException("任务已经被签收过");
         }
         return HttpResult.success(true);
@@ -296,7 +301,7 @@ public class MyWorksController extends BaseController {
             // 获取上一个任务
             if (isPre) {
                 activityId = activityList.get(activityList.size() - 1).getId();
-            //获取第一个任务
+                //获取第一个任务
             } else {
                 activityId = activityList.get(0).getId();
             }
@@ -314,9 +319,9 @@ public class MyWorksController extends BaseController {
         msgMap.put("businessKey", instanceVO.getFormPkey());
         msgMap.put("instanceStatus", status);
         msgMap.put("type", FlowConstant.INSTANCE_NEWS_TYPE_BACK);
-        FlowJbpmXmlVO xml  = flowJbpmXmlService.selectById(instanceVO.getXmlId());
-        ParamChecker.isNotNull(xml,"xml丢失");
-        msgMap.put("namespace",xml.getNamespace());
+        FlowJbpmXmlVO xml = flowJbpmXmlService.selectById(instanceVO.getXmlId());
+        ParamChecker.isNotNull(xml, "xml丢失");
+        msgMap.put("namespace", xml.getNamespace());
         distributedListenerRegister.callListener(FlowConstant.LISTENER_INSTANCE, FlowConstant.ENVENT_NEWS, new Object(), msgMap);
         return HttpResult.success(true);
     }

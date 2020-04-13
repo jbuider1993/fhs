@@ -107,7 +107,7 @@ public class AutoTransService implements ITransTypeService, InitializingBean, Ap
                 transCache = new HashMap<>();
                 Map<String, String> tempTransCache = null;
                 for (String tempPkey : pkeys) {
-                    tempTransCache = getTempTransCacheMap(namespace, ConverterUtils.toInteger(tempPkey));
+                    tempTransCache = getTempTransCacheMap(namespace,tempPkey);
                     if (tempTransCache == null) {
                         LOGGER.error("auto trans缓存未命中:" + namespace + "_" + tempPkey);
                         continue;

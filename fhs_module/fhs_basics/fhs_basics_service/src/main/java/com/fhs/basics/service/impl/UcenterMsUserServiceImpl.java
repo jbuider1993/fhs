@@ -79,7 +79,11 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
 
     @Override
     public UcenterMsUserVO login(UcenterMsUserDO adminUser) {
-        return d2v(sysUserMapper.login(adminUser));
+        adminUser = sysUserMapper.login(adminUser);
+        if (adminUser == null) {
+            return null;
+        }
+        return this.selectById(adminUser.getUserId());
     }
 
     @Override
@@ -609,7 +613,7 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
             String[] roleList = new String[roleVectorList.size()];
             roleVectorList.toArray(roleList);
             sysUser.setRoleList(roleList);
-            sysUser.setRoleIds(StringUtil.getStrForIn(roleVectorList, false));
+            sysUser.setRoleIds(StringUtil.getStrForIn(roleVectorList, true));
         } else {
             sysUser.setRoleList(new String[0]);
         }
@@ -702,7 +706,11 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
 
     @Override
     public HttpResult<UcenterMsUserVO> getSysUserByName(String userLoginName) {
-        return HttpResult.success(this.findBean(new UcenterMsUserVO().mk("userLoginName", userLoginName)));
+        UcenterMsUserVO msUserVO = this.findBean(new UcenterMsUserVO().mk("userLoginName", userLoginName));
+        if (msUserVO == null) {
+            HttpResult.error("找不到对应用户");
+        }
+        return HttpResult.success(this.selectById(msUserVO.getUserId()));
     }
 
     @Override

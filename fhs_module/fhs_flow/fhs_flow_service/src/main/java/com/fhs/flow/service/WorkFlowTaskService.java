@@ -1,5 +1,6 @@
 package com.fhs.flow.service;
 
+import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.flow.vo.FlowTaskVO;
 
 import java.util.List;
@@ -15,18 +16,18 @@ public interface WorkFlowTaskService {
     /**
      * 查询代签收任务
      *
-     * @param paramMap 参数map
+     * @param userVO 用户
      * @return 代签收map集合
      */
-    List<FlowTaskVO> findNeedClaimTask(Map<String, Object> paramMap);
+    List<FlowTaskVO> findNeedClaimTask(UcenterMsUserVO userVO);
 
     /**
      * 查询代签收任务总数
      *
-     * @param paramMap 参数map
+     * @param userVO 用户
      * @return 代签收总数
      */
-    int findNeedClaimTaskCount(Map<String, Object> paramMap);
+    int findNeedClaimTaskCount(UcenterMsUserVO userVO);
 
     /**
      * 查询待办任务

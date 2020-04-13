@@ -23,7 +23,7 @@ var listPage={
     },
     buttons:function(){
         return [
-            {title:'编辑流程实例',fun:'createFlow',permissionsCode:'flow_jbpm_xml:add',isRow:true},
+            {title:'编辑流程实例',permissionsCode:'flow_jbpm_xml:add',isRow:true,id:'editXml'},
             {title:'发布流程',fun:'publishFlow',permissionsCode:'flow_jbpm_xml:add',isRow:true},
         ];
     },
@@ -32,6 +32,16 @@ var listPage={
     },
     otherFunctions:function(){
         return {
+            onListPageReady:function(){
+
+                $('#listGrid').datagrid({
+                    onClickRow:function( rowIndex, rowData){
+                        console.log(rowData);
+                        $('#editXml').attr('href',"${path.basePath}/b/page-work_flow/index?xmlId=" + rowData.id  + "&processKey="+rowData.processKey+"&processName="+rowData.name);
+                        $('#editXml').attr('target','_blank');
+                    }
+                });
+            },
             createFlow:function (row) {
                 var content = '<iframe id="processIframe" src="' + "${path.basePath}/b/page-work_flow/index?xmlId=" + row.id  + "&processKey="+row.processKey+"&processName="+row.name+'" width="99%" height="100%" frameborder="0" scrolling="no" data-id="'+row.id+'"></iframe>';
                 $('#addOrUpdateDialog').dialog({

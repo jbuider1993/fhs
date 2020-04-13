@@ -69,6 +69,11 @@ public abstract class PagexBaseTag extends Tag {
         DATA_OPTION_KEY.add("onChange");
         DATA_OPTION_KEY.add("columns");
         DATA_OPTION_KEY.add("showAll");
+
+        DATA_OPTION_KEY.add("onBeforeCheck");
+        DATA_OPTION_KEY.add("onCheck");
+        DATA_OPTION_KEY.add("onBeforeSelect");
+        DATA_OPTION_KEY.add("onSelect");
     }
 
     protected HttpServletRequest request;

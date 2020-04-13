@@ -2,52 +2,77 @@ package com.fhs.core.base.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fhs.common.utils.StringUtil;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 所有的VO DO都需要继承此类
+ *
  * @param <T>
  */
 @SuppressWarnings({"serial", "rawtypes"})
-public class SuperBean<T extends SuperBean>  extends BaseObject<T>{
+public class SuperBean<T extends SuperBean> extends BaseObject<T> {
 
     /**
      * 翻译map 给transervice用的
      */
-    @TableField(exist=false)
-	private Map<String,String> transMap = new HashMap<>();
+    @TableField(exist = false)
+    private Map<String, String> transMap = new HashMap<>();
 
     /**
      * 数据权限
      */
-    @TableField(exist=false)
-    private Map<String,String> dataPermissin = new HashMap<>();
+    @TableField(exist = false)
+    private Map<String, String> dataPermissin = new HashMap<>();
 
     /**
      * 配合mybatis jpa between注解过滤条件使用
      */
-    @TableField(exist=false)
-	private Map<String,String> between = new HashMap<>();
+    @TableField(exist = false)
+    private Map<String, String> between = new HashMap<>();
 
     /**
      * 配合mybatis jpa in注解使用
      */
-    @TableField(exist=false)
-    private Map<String,String> inFilter = new HashMap<>();
+    @TableField(exist = false)
+    private Map<String, String> inFilter = new HashMap<>();
 
-    @TableField(exist=false)
-    private Map<String,Object> userInfo =new HashMap<>();
+    @TableField(exist = false)
+    private Map<String, Object> userInfo = new HashMap<>();
+
+    @TableField(exist = false)
+    private Integer start;
+
+    @TableField(exist = false)
+    private Integer PageSize;
+
+
+    public Integer getStart() {
+        return start;
+    }
+
+    public void setStart(Integer start) {
+        this.start = start;
+    }
+
+    public Integer getPageSize() {
+        return PageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        PageSize = pageSize;
+    }
 
     /**
      * 将一组过滤条件添加到in中
-     * @param field 字段名字
+     *
+     * @param field   字段名字
      * @param inParam 参数集合
      */
-    public void add2In(String field,List<String> inParam)
-    {
-        inFilter.put(field,StringUtil.getStrToIn(inParam));
+    public void add2In(String field, List<String> inParam) {
+        inFilter.put(field, StringUtil.getStrToIn(inParam));
     }
 
     public Map<String, String> getTransMap() {

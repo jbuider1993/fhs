@@ -33,7 +33,7 @@ public interface FlowTaskHistoryService extends BaseService<FlowTaskHistoryVO, F
      * 根据当前需要记录节点的usertaskkey和instanceId来构建一个FlowTaskHistory
      * 处理好code字段，和排序字段
      *
-     * @param definitionKey usertaskId
+     * @param definitionKey definitionKey
      * @param instanceId    流程实例id
      * @return 构建好的对象
      */
