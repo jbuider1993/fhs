@@ -479,6 +479,7 @@ ESTDesigner.tool.Parser.UserTaskParser = ESTDesigner.tool.Parser.TaskParser.exte
 				if (assignee != null && assignee != "") {
 					task.performerType = "assignee";
 					if (assignee.indexOf("$") != -1){
+						task.isUseExpression = true;
 						task.expression = assignee;
 					}else {
 						//  assignee   candidateUsers  放一个用户进去
@@ -501,6 +502,7 @@ ESTDesigner.tool.Parser.UserTaskParser = ESTDesigner.tool.Parser.TaskParser.exte
 				} else if (candidataUsers != null && candidataUsers != "") {
 					task.performerType = "candidateUsers";
 					if (candidataUsers.indexOf("$") != -1) {
+						task.isUseExpression = true;
 						task.expression = candidataUsers;
 					}else {
 						// 逗号分隔的用户ids  == ajax 放一组用户进去
@@ -523,6 +525,7 @@ ESTDesigner.tool.Parser.UserTaskParser = ESTDesigner.tool.Parser.TaskParser.exte
 				} else if (candidataGroups != null && candidataGroups != "") {
 					task.performerType = "candidateGroups";
 					if (candidataGroups.indexOf("$") != -1) {
+						task.isUseExpression = true;
 						task.expression = candidataGroups;
 					}else {
 						// 逗号分隔的角色ids  == ajax 放一组角色进去
