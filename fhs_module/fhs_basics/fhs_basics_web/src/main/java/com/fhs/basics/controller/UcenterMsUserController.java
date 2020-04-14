@@ -3,29 +3,24 @@ package com.fhs.basics.controller;
 import com.fhs.basics.dox.UcenterMsUserDO;
 import com.fhs.basics.service.UcenterMsUserService;
 import com.fhs.basics.vo.LeftMenuVO;
-import com.fhs.basics.vo.SysUserOrgVO;
 import com.fhs.basics.vo.UcenterMsUserVO;
 import com.fhs.common.constant.Constant;
 import com.fhs.common.utils.*;
 import com.fhs.core.base.pojo.pager.Pager;
 import com.fhs.core.exception.ParamException;
-import com.fhs.core.jsonfilter.anno.JsonFilter;
-import com.fhs.core.jsonfilter.anno.ObjFilter;
 import com.fhs.core.result.HttpResult;
 import com.fhs.core.safe.repeat.anno.NotRepeat;
 import com.fhs.core.valid.checker.ParamChecker;
-import com.fhs.core.valid.group.Delete;
 import com.fhs.logger.anno.LogDesc;
 import com.fhs.module.base.controller.ModelSuperController;
-import net.sf.jsqlparser.expression.UserVariable;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +53,20 @@ public class UcenterMsUserController extends ModelSuperController<UcenterMsUserV
     @RequestMapping("getUserById")
     public void getUserById(String userId){
         super.outJsonp(JsonUtils.bean2json(sysUserService.selectById(userId)));
+    }
+
+    /**
+     * 获取用户列表
+     * @param
+     */
+    @RequestMapping("getUserByIdList")
+    public void getUserByIdList(String userIds){
+        if(CheckUtils.isNullOrEmpty(userIds)){
+            super.outJsonp("[]");
+            return;
+        }
+        List<UcenterMsUserVO> byIds = sysUserService.findByIds(Arrays.asList(userIds.split(",")));
+        super.outJsonp(JsonUtils.list2json(byIds));
     }
 
     /**

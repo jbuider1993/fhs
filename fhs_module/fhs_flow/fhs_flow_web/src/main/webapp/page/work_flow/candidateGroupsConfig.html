@@ -32,13 +32,13 @@
     });
 
     function candidateGroupsBtFormatter(value, rowData, rowIndex) {
-        var _roleId = rowData.roleId;
-        var d = '<img onclick="deleteCandidateGroup(\'' + _roleId + '\')" src="${basePath}/page/work_flow/image/delete.gif" title="' + "删除" + '" style="cursor:hand;"/>';
+        var roleId = rowData.roleId;
+        var d = '<img onclick="deleteCandidateGroup(\'' + roleId + '\')" src="${basePath}/page/work_flow/image/delete.gif" title="' + "删除" + '" style="cursor:hand;"/>';
         return d;
     }
 
-    function deleteCandidateGroup(_roleId) {
-        task.deleteCandidateGroup(_roleId);
+    function deleteCandidateGroup(roleId) {
+        task.deleteCandidateGroup(roleId);
         loadTaskCandidateGroups();
     }
 
@@ -58,6 +58,7 @@
 <table id="task-candidate-groups-list" name="task-candidate-groups-list">
     <thead>
     <tr>
+        <ht field="roleId" hidden="true"></ht>
         <th field="roleName" width="100" align="middle" sortable="false">角色名称</th>
         <th field="action" width="80" align="center" formatter="candidateGroupsBtFormatter">操作</th>
     </tr>

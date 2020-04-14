@@ -25,7 +25,7 @@
             onLoadSuccess: function (data) {
                 var rows = data.rows;
                 for (var i = 0; i < rows.length; i++) {
-                    if (task.getCandidateGroup(rows[i].roleName) != null) {
+                    if (task.getCandidateGroup(rows[i].roleId) != null) {
                         $(this).datagrid('selectRow', i);
                     }
                 }

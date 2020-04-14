@@ -1,6 +1,8 @@
 <script type="text/javascript">
     //alert("${basePath}/pm/group/group!getUserTreeOfGroup.action");
     var _task_unselect_candidate_user_group = null;
+    var _task_unselect_candidate_user_list = null;
+    $.parser.parse("#task-unselect-candidate-user-list");
     $(function () {
         _task_unselected_candidate_user_panel = $('#task-unselect-candidate-user-panel').panel({
             border: false,
@@ -67,7 +69,7 @@
      _task_unselect_candidate_user_list.datagrid('reload', {
          userName: userName,
        //  roleId: roleId,
-         orgId: organId,
+         orgId: organId
      });
  }
 
@@ -93,9 +95,6 @@
             <td>部门:</td>
             <td><input type="text" id="task-unselect-candidate-user-group" name="task-unselect-candidate-user-group"
                        value=""/></td>
-           <!-- <td>角色:</td>
-            <td><input type="text" id="task-unselect-candidate-user-role" name="task-unselect-candidate-user-role"
-                       value="" size=""/></td>-->
             <td>姓名:</td>
             <td><input type="text" id="task-unselect-candidate-user-userName"
                        name="task-unselect-candidate-user-userName" value="" size="9"/></td>
@@ -105,10 +104,11 @@
     <table id="task-unselect-candidate-user-list">
         <thead>
         <tr>
-            <th field="userId" hidden='true'></th>
-            <th field="name" width="100" align="middle" sortable="false">姓名</th>
-            <th field="orgName" width="100" align="middle" sortable="false">部门</th>
-            <th field="action" width="80" align="center" formatter="candidateUsersBtFormatter">操作</th>
+            <th field="userId" align="middle" checkbox="true"></th>
+            <th field="userName" width="100" align="middle" sortable="true">姓名</th>
+            <th field="transMap.orgName" width="100" align="middle" sortable="true">部门</th>
+            <th field="mobile" width="100" align="middle">手机号</th>
+            <th field="email" width="150" align="middle">Email</th>
         </tr>
         </thead>
     </table>

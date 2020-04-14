@@ -472,17 +472,15 @@ ESTDesigner.tool.Parser.UserTaskParser = ESTDesigner.tool.Parser.TaskParser.exte
 				var candidataUsers = xmlNode.attr('activiti:candidateUsers');
 				var candidataGroups = xmlNode.attr('activiti:candidateGroups');
 				var assignee = xmlNode.attr('activiti:assignee');
-				if(!assignee){
+				if(!assignee && !candidataUsers && !candidataGroups){
 					task.isUseExpression = false;
 					return;
 				}
-				task.isUseExpression = assignee.indexOf("$") != -1;
 				if (assignee != null && assignee != "") {
 					task.performerType = "assignee";
-					if(task.isUseExpression){
+					if (assignee.indexOf("$") != -1){
 						task.expression = assignee;
-					}
-					else{
+					}else {
 						//  assignee   candidateUsers  放一个用户进去
 						if(assignee){
 							$.ajax({
@@ -502,24 +500,47 @@ ESTDesigner.tool.Parser.UserTaskParser = ESTDesigner.tool.Parser.TaskParser.exte
 					}
 				} else if (candidataUsers != null && candidataUsers != "") {
 					task.performerType = "candidateUsers";
-					if(task.isUseExpression){
+					if (candidataUsers.indexOf("$") != -1) {
 						task.expression = candidataUsers;
-					}
-					else{
+					}else {
 						// 逗号分隔的用户ids  == ajax 放一组用户进去
-
-					}
+							$.ajax({
+								url:fhs_basics_url + '/ms/sysUser/getUserByIdList?jsonpCallback=?&userIds=' + candidataUsers,
+								dataType:'json',
+								success:function(_userList){
+									for (var i = 0; i < _userList.length; i++) {
+										task.addCandidateUser({
+											userId: _userList[i].userId,
+											name: _userList[i].userName,
+											orgName: _userList[i].transMap.orgName,
+											mobile: _userList[i].mobile,
+											email: _userList[i].email
+										});
+									}
+								}
+							})
+						}
 				} else if (candidataGroups != null && candidataGroups != "") {
-					task.performerType = "candidateUsers";
-					if(task.isUseExpression){
+					task.performerType = "candidateGroups";
+					if (candidataGroups.indexOf("$") != -1) {
 						task.expression = candidataGroups;
-					}
-					else{
+					}else {
 						// 逗号分隔的角色ids  == ajax 放一组角色进去
-
+							$.ajax({
+								url:fhs_basics_url + 'ms/sysRole/getRoleForJsonpByIds?jsonpCallback=?&ids=' + candidataGroups,
+								dataType:'json',
+								success:function(_roleList) {
+									for (var i = 0; i < _roleList.length; i++) {
+										task.addCandidateGroup({
+											roleId: _roleList[i].roleId,
+											roleName: _roleList[i].roleName,
+											remark: _roleList[i].remark
+										});
+									}
+								}
+							})
+						}
 					}
-
-				}
 			},
 			_parseTaskPerformer : function(xmlNode, task) {
 				var performersExpression = xmlNode.find('potentialOwner')

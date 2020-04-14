@@ -263,9 +263,9 @@ ESTDesigner.task.UserTask = ESTDesigner.task.BaseTask.extend({
 				this.formProperties = new draw2d.util.ArrayList();
 				this.taskListeners = new draw2d.util.ArrayList();
 			},
-			addCandidateGroup : function(name) {
-				if (!this.candidateGroups.contains(name))
-					this.candidateGroups.add(name);
+			addCandidateGroup : function(_roleId) {
+				if (!this.candidateGroups.contains(_roleId))
+					this.candidateGroups.add(_roleId);
 			},
 			addCandidateUser : function(user) {
 				if (this.getCandidateUser(user.userId) == null)
@@ -302,7 +302,7 @@ ESTDesigner.task.UserTask = ESTDesigner.task.BaseTask.extend({
 			getCandidateGroup : function(_roleId) {
 				for (var i = 0; i < this.candidateGroups.getSize(); i++) {
 					var candidate = this.candidateGroups.get(i);
-					if (candidate.roleId === _roleId) {
+					if (candidate.roleId === parseInt(_roleId)) {
 						return candidate;
 					}
 				}
@@ -392,7 +392,7 @@ ESTDesigner.task.UserTask = ESTDesigner.task.BaseTask.extend({
 							var group = this.candidateGroups.get(i);
 							xml = xml + group.roleId;
 							if((_size-1)!=i){
-								xml + xml + ',';
+								xml = xml + ',';
 							}
 						}
 						xml = xml + '" ';

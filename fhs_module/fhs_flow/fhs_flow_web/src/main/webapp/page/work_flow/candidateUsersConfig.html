@@ -51,7 +51,7 @@
             var user = {
                 userId: candidateUser.userId,
                 name: candidateUser.name,
-                roleName: candidateUser.roleName,
+                orgName: candidateUser.orgName,
                 action: ''
             };
             candidate_users_grid_rows[i] = user;
@@ -73,7 +73,8 @@
     <tr>
         <th field="userId" hidden='true'></th>
         <th field="name" width="100" align="middle" sortable="false">姓名</th>
-        <th field="roleName" width="100" align="middle" sortable="false">角色</th>
+        <!--<th field="roleName" width="100" align="middle" sortable="false">角色</th>-->
+        <th field="orgName" width="100" align="middle" sortable="false">部门</th>
         <th field="action" width="80" align="center" formatter="candidateUsersBtFormatter">操作</th>
     </tr>
     </thead>
