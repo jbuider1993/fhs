@@ -187,6 +187,14 @@ public interface UcenterMsUserService extends BaseService<UcenterMsUserVO, Ucent
      */
     List<LeftMenuVO> getMenu(UcenterMsUserDO user, String menuType);
 
+    /**
+     * 获取vue用的菜单
+     * @param user  用户
+     * @param menuType 菜单类型
+     * @return vue路由菜单
+     */
+    List<VueRouterVO> getRouters(UcenterMsUserDO user, String menuType);
+
 
     /**
      * 删除用户

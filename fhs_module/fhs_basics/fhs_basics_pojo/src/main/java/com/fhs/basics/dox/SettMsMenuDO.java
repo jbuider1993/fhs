@@ -179,7 +179,15 @@ public class SettMsMenuDO extends BaseDO<SettMsMenuDO> {
 
     private Integer serverNameId = 1;
 
+    /**
+     * 排序
+     */
     private Integer orderIndex;
+
+    /**
+     * 排序
+     */
+    private String icon;
 
     /**
      * 给菜单类型0 运营菜单 1 园区菜单

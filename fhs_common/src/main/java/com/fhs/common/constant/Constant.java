@@ -394,6 +394,16 @@ public interface Constant
     /**
      * 订单一次生成个数
      */
-    public static final Integer ONCE_ORDER_NUM_CREATE = 500;
+    int ONCE_ORDER_NUM_CREATE = 500;
+
+    /**
+     * vue模式在header中带的key
+     */
+    String VUE_HEADER_TOKEN_KEY = "Authorization";
+
+    /**
+     * vue菜单
+     */
+    String MENU_TYPE_VUE = "2";
 
 }

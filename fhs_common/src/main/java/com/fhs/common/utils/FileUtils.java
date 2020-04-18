@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import java.util.Base64;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -59,6 +60,21 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
             download(path, response, fileName);
         }
 
+    }
+
+    /**
+     * BufferedImage 转byte数组
+     * @param bImage
+     * @return
+     */
+    public static byte[] imageToBytes(BufferedImage bImage) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            ImageIO.write(bImage, "png", out);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+        return out.toByteArray();
     }
 
     /**

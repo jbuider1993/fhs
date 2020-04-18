@@ -26,9 +26,17 @@ public class Base64Util {
         if (s == null) {
             return null;
         }
+        return byte2Base64(s.getBytes());
+    }
 
+    /**
+     * byte数组转base64字符串
+     * @param bytes
+     * @return
+     */
+    public static String byte2Base64(byte[] bytes){
         try {
-            return new String(Base64.getEncoder().encode(s.getBytes()), "UTF8");
+            return new String(Base64.getEncoder().encode(bytes), "UTF8");
         } catch (UnsupportedEncodingException e) {
             log.error("", e);
         }

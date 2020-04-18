@@ -498,13 +498,18 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
                 }
             }
         }
+        if(menuType!=null && Constant.MENU_TYPE_VUE.equals(menuType)){
+            paramMap.put("menuType", menuType);
+        }
         List<SettMsMenuVO> menuList = ListUtils.copyListToList(sysUserMapper.selectMenuAll(paramMap), SettMsMenuVO.class);
         menuList = menuFilter(user, menuList);
         Map<Integer, LeftMenuVO> leftMenuMap = new HashMap<>();
         // 遍历AdminMenu转换为LeftMenu
         menuList.forEach(adminMenu -> {
             LeftMenuVO leftMenu = new LeftMenuVO()
-                    .mk("id", adminMenu.getMenuId(), "serverUrl", adminMenu.getServerUrl(), "name", adminMenu.getMenuName(), "url", adminMenu.getMenuUrl(), "menuServer", adminMenu.getServerNameId(), "image", adminMenu.getImage());
+                    .mk("id", adminMenu.getMenuId(), "serverUrl", adminMenu.getServerUrl(), "name",
+                            adminMenu.getMenuName(), "url", adminMenu.getMenuUrl(), "menuServer", adminMenu.getServerNameId(), "image", adminMenu.getImage());
+            leftMenu.setNamespace(adminMenu.getNamespace());
             leftMenuMap.put(leftMenu.getId(), leftMenu);
         });
         List<LeftMenuVO> result = new ArrayList<>();
@@ -526,6 +531,41 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
         return result;
     }
 
+    @Override
+    public List<VueRouterVO> getRouters(UcenterMsUserDO user, String menuType) {
+        List<LeftMenuVO> menus =  getMenu( user,  menuType);
+        List<VueRouterVO> result = new ArrayList<>();
+        VueRouterVO tempRouter = null;
+        for (LeftMenuVO menu : menus) {
+            tempRouter = new VueRouterVO();
+            converterMenu2Router( menu, tempRouter,true);
+            result.add(tempRouter);
+        }
+        return result;
+    }
+
+    /**
+     * 转换leftMenu到vueRouter
+     * @param menu 菜单
+     * @param vueRouterVO vue 路由
+     * @param isFirst 是否是一级菜单
+     */
+    private void converterMenu2Router(LeftMenuVO menu,VueRouterVO vueRouterVO,boolean isFirst){
+        vueRouterVO.setName(menu.getNamespace());
+        vueRouterVO.setAlwaysShow(isFirst);
+        vueRouterVO.setPath(menu.getUrl());
+        vueRouterVO.setComponent(isFirst ? "Layout" : null);
+        vueRouterVO.setRedirect(isFirst ? "noRedirect" : null);
+        vueRouterVO.getMeta().put("title",menu.getName());
+        vueRouterVO.getMeta().put("icon",menu.getIcon());
+        if(menu.getSonMenu()!=null && !menu.getSonMenu().isEmpty()){
+            for (LeftMenuVO sonMenu : menu.getSonMenu()) {
+                VueRouterVO sunRouter = new VueRouterVO();
+                converterMenu2Router( sonMenu, sunRouter,false);
+                vueRouterVO.getChildren().add(sunRouter);
+            }
+        }
+    }
 
     /**
      * 从所有的菜单找到用户拥有权限的
