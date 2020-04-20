@@ -34,6 +34,9 @@ service.interceptors.request.use(
 
 // 响应拦截器
 service.interceptors.response.use(res => {
+    if(res.data instanceof Array || !res.data.code ){
+      return res.data
+    }
     const code = res.data.code
     if (code === 403) {
       MessageBox.confirm(
