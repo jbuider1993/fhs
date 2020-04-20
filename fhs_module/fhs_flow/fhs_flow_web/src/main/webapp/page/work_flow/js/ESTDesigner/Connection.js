@@ -109,8 +109,8 @@ ESTDesigner.connection.Connection = draw2d.Connection.extend({
 			getConditionXML : function() {
 				var xml = '';
 				if (this.condition != null && this.condition != '') {
-					xml = '<conditionExpression xsi:type="tFormalExpression"><![CDATA['
-							+ this.condition + ']]></conditionExpression>\n';
+					xml = '<conditionExpression xsi:type="tFormalExpression">'
+						 + this.condition + '</conditionExpression>\n';
 				}
 				return xml;
 			},

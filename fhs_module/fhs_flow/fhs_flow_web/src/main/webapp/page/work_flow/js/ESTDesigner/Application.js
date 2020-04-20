@@ -49,6 +49,7 @@ ESTDesigner.tool.Parser = Class.extend({
 		this._drawFigure();
 		// 画线操作必须在最后
 		this._parseConnection();
+        // this._parseExtension();
 		this._drawConnection();
 	},
 	_drawFigure : function() {
@@ -178,6 +179,7 @@ ESTDesigner.tool.Parser = Class.extend({
 					var lid = $(this).attr('id');
 					var name = $(this).attr('name');
 					var condition = $(this).find('conditionExpression').text();
+					var extension = $(this).find('extensionElements').find('activiti\\:executionListener');
 					var sourceRef = $(this).attr('sourceRef');
 					var targetRef = $(this).attr('targetRef');
 					var connectionEdge = null;
@@ -228,6 +230,36 @@ ESTDesigner.tool.Parser = Class.extend({
 							tempMinVal = portSubVal;
 						}
 					}
+					var parsedListeners = new draw2d.util.ArrayList();
+					extension.each(function(i) {
+						var listener = eval("new ESTDesigner.model.ConnectionListener()");
+						listener.event = $(this).attr('event');
+						var expression = $(this).attr('expression');
+						var clazz = $(this).attr('class');
+						if (expression != null && expression != "") {
+							listener.serviceType = 'expression';
+							listener.serviceExpression = expression;
+						} else if (clazz != null && clazz != "") {
+							listener.serviceType = 'javaClass';
+							listener.serviceClass = clazz;
+						}
+						var fields = $(this).find('activiti\\:field');
+						fields.each(function(i) {
+							var field = eval("new ESTDesigner.model.Field()");
+							field.name = $(this).attr('name');
+							var string = $(this).find('activiti\\:string').text();
+							var expression = $(this).find('activiti\\:expression').text();
+							if (string != null && string != "") {
+								field.type = 'string';
+								field.value = string;
+							} else if (expression != null && expression != "") {
+								field.type = 'expression';
+								field.value = expression;
+							}
+							listener.setField(field);
+						});
+						parsedListeners.add(listener);
+					});
 					var connection = canvas.createConnection(startPort, endPort);
 					connection.setLabel(name);
 					connection.id = lid;
@@ -235,18 +267,55 @@ ESTDesigner.tool.Parser = Class.extend({
 					connection.condition = condition;
 					connection.sourceRef = sourceRef;
 					connection.targetRef = targetRef;
+					connection.setListeners(parsedListeners);
 					connectionList.add(connection);
 				});
 		// for (var i = 0; i < connectionList.getSize(); i++) {
 		// this._loadConnectionLocation(connectionList.get(i));
 		// }
 	},
-	_parseGateway : function() {
+    _parseExtension : function (listeners) {
+        listeners =  this.descriptor.find('sequenceFlow').find('extensionElements').find('activiti\\:executionListener');
+        var parsedListeners = new draw2d.util.ArrayList();
+        listeners.each(function(i) {
+            var listener = eval("new ESTDesigner.model.ConnectionListener()");
+            listener.event = $(this).attr('event');
+            var expression = $(this).attr('expression');
+            var clazz = $(this).attr('class');
+            if (expression != null && expression != "") {
+                listener.serviceType = 'expression';
+                listener.serviceExpression = expression;
+            } else if (clazz != null && clazz != "") {
+                listener.serviceType = 'javaClass';
+                listener.serviceClass = clazz;
+            }
+            var fields = $(this).find('activiti\\:field');
+            fields.each(function(i) {
+                var field = eval("new ESTDesigner.model.Field()");
+                field.name = $(this).attr('name');
+                var string = $(this).find('activiti\\:string').text();
+                var expression = $(this).find('activiti\\:expression').text();
+                if (string != null && string != "") {
+                    field.type = 'string';
+                    field.value = string;
+                } else if (expression != null && expression != "") {
+                    field.type = 'expression';
+                    field.value = expression;
+                }
+                listener.setField(field);
+            });
+            parsedListeners.add(listener);
+        });
+		var connection = canvas.createConnection(startPort, endPort);
+		connection.setLabel(name);
+		connection.setListeners(parsedListeners);
+	},
+    _parseGateway : function() {
 		var exclusiveGateway = this.descriptor.find('exclusiveGateway');
 		var parallelGateway = this.descriptor.find('parallelGateway');
 		var gatewayList = this.gatewayList;
 		exclusiveGateway.each(function(i) {
-					var gateway = new ESTDesigner.gateway.ParallelGateway();
+					var gateway = new ESTDesigner.gateway.ExclusiveGateway();
 					var id = $(this).attr('id');
 					var name = $(this).attr('name');
 					gateway.id = id;
@@ -254,7 +323,7 @@ ESTDesigner.tool.Parser = Class.extend({
 					gatewayList.add(gateway);
 				});
 		parallelGateway.each(function(i) {
-					var gateway = new ESTDesigner.gateway.ExclusiveGateway();
+					var gateway = new ESTDesigner.gateway.ParallelGateway();
 					var gtwid = $(this).attr('id');
 					var gtwname = $(this).attr('name');
 					gateway.id = gtwid;
@@ -320,7 +389,7 @@ ESTDesigner.tool.Parser.BaseParser = Class.extend({
 							var fields = $(this).find('activiti\\:field');
 							fields.each(function(i) {
 										var field = eval("new " + fieldType + "()");
-										_that._parseField($(this), field);
+										 _that._parseField($(this), field);
 										listener.setField(field);
 									});
 							parsedListeners.add(listener);
@@ -369,7 +438,7 @@ ESTDesigner.tool.Parser.ProcessParser = ESTDesigner.tool.Parser.BaseParser.exten
 				if (extentsion != null) {
 					var listeners = extentsion.find('activiti\\:executionListener');
 					process.setListeners(this._parseListener(listeners,
-							"ESTDesigner.model.Listener", "ESTDesigner.model.Field"));
+							"ESTDesigner.model.Listener", "ESTDesigner.model.Field",this));
 				}
 				this._parseDataObject(xmlNode,process.dataObjects);
 				
@@ -402,7 +471,7 @@ ESTDesigner.tool.Parser.TaskParser = ESTDesigner.tool.Parser.BaseParser.extend({
 				var executionListeners = xmlNode.find('extensionElements')
 						.find('activiti\\:executionListener');
 				task.setListeners(this._parseListener(executionListeners,
-						"ESTDesigner.model.Listener", "ESTDesigner.model.Field"));
+						"ESTDesigner.model.Listener", "ESTDesigner.model.Field",this));
 			},
 			_parseTaskGeneralProp : function(xmlNode, task) {
 				var tid = xmlNode.attr('id');
@@ -624,15 +693,7 @@ ESTDesigner.tool.Parser.ServiceTaskParser = ESTDesigner.tool.Parser.TaskParser.e
 					task._type = 'delegateExpression';
 				}
 				var resultVarName = xmlNode.attr('activiti:resultVariableName');
-				var fields = xmlNode.find('extensionElements').find('activiti\\:field');
-
-				task.resultVariable = resultVarName;
-				fields.each(function(i) {
-							var field = new ESTDesigner.model.Field();
-							this._parseField($(this), field);
-							task.fields.add(field);
-						});
-			}
+			},
 		});
 ESTDesigner.tool.Parser.ScriptTaskParser = ESTDesigner.tool.Parser.TaskParser.extend({
 			init : function() {
@@ -763,7 +824,7 @@ ESTDesigner.tool.Parser.ContainerParser = ESTDesigner.tool.Parser.BaseParser.ext
 				var executionListeners = xmlNode.find('extensionElements')
 						.find('activiti\\:executionListener');
 				container.setListeners(this._parseListener(executionListeners,
-						"ESTDesigner.model.Listener", "ESTDesigner.model.Field"));
+						"ESTDesigner.model.Listener", "ESTDesigner.model.Field",this));
 			},
 			_parseGeneralProp : function(xmlNode, container) {
 				var tid = xmlNode.attr('id');
@@ -1007,9 +1068,13 @@ ESTDesigner.model.Listener = ESTDesigner.model.BaseModel.extend({
 			getFieldsString : function() {
 				var f = '';
 				var v = '';
-				for (var i = 0; i < this.fields.getSize(); i++) {
+				var _size = this.fields.getSize();
+				for (var i = 0; i < _size; i++) {
 					var field = this.fields.get(i);
-					f = f + field.name + ":" + field.value + ",";
+					f = f + field.name + ":" + field.value;
+					if ((_size - 1) != i) {
+						f = f + ",";
+					}
 				}
 				return f;
 			},
@@ -1150,9 +1215,13 @@ ESTDesigner.model.FormProperty = ESTDesigner.model.BaseModel.extend({
 			},
 			getValuesString : function() {
 				var f = '';
-				for (var i = 0; i < this.values.getSize(); i++) {
+				var _size = this.values.getSize();
+				for (var i = 0; i < _size ; i++) {
 					var v = this.values.get(i);
-					f = f + v.id + ":" + v.name + ",";
+					f = f + v.id + ":" + v.name;
+					if ((_size - 1) != i) {
+						f = f + ",";
+					}
 				}
 				return f;
 			}
@@ -1196,7 +1265,7 @@ ESTDesigner.model.ConnectionListener = ESTDesigner.model.Listener.extend({
 				this._super();
 			},
 			toXML : function() {
-				var xml = '<activiti:executionListener ';
+				var xml = '<activiti:executionListener event="' + this.event + '" ';
 				if (this.serviceType == 'javaClass') {
 					xml = xml + 'class="' + this.serviceClass + '" ';
 				} else if (this.serviceType == 'expression') {
@@ -1225,9 +1294,9 @@ var TASK_PARSER_MAP = [{
 			parser : new ESTDesigner.tool.Parser.ScriptTaskParser(),
 			model : 'ESTDesigner.task.ScriptTask'
 		}, {
-			tagName : 'serviceTask',
-			parser : new ESTDesigner.tool.Parser.ServiceTaskParser(),
-			model : 'ESTDesigner.task.ServiceTask'
+			tagName : 'mailTask',
+			parser : new ESTDesigner.tool.Parser.MailTaskParser(),
+			model : 'ESTDesigner.task.MailTask'
 		}, {
 			tagName : 'receiveTask',
 			parser : new ESTDesigner.tool.Parser.ReceiveTaskParser(),
