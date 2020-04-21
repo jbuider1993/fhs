@@ -660,13 +660,13 @@ ESTDesigner.task.MailTask = ESTDesigner.task.BaseTask.extend({
 				this._html = null;
 			},
 			getStartElementXML : function() {
-				var xml = '<serviceTask ';
+				var xml = '<mailTask ';
 				xml = xml + this.getGeneralXML();
 				xml = xml + ' activiti:type="mail">\n';
 				return xml;
 			},
 			getEndElementXML : function() {
-				var xml = '</serviceTask>\n';
+				var xml = '</mailTask>\n';
 				return xml;
 			},
 			getExtensionElementsXML : function() {

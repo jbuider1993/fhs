@@ -62,8 +62,13 @@ public class UcenterMsRoleController extends ModelSuperController<UcenterMsRoleV
      * 获取角色列表jsonp
      */
     @RequestMapping("getRolesForJsonp")
-    public void getRolesForJsonp(){
-        super.outJsonp(listData(null).asJson());
+    public void getRolesForJsonp(HttpServletRequest request){
+        PageSizeInfo pageSizeInfo = super.getPageSizeInfo();
+        UcenterMsRoleDO roleName = UcenterMsRoleDO.builder().roleName(request.getParameter("roleName")).build();
+        List<UcenterMsRoleVO> roles =
+                sysRoleService.selectPage(roleName, pageSizeInfo.getPageStart(), pageSizeInfo.getPageSize());
+        super.outJsonp(new Pager<UcenterMsRoleVO>(sysRoleService.selectCount(roleName),roles).asJson());
+        //        super.outJsonp(listData(null).asJson());
     }
 
     /**
