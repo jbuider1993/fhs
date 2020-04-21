@@ -235,9 +235,8 @@
               <el-select v-model="form.sex" placeholder="请选择">
                 <el-option
                   v-for="dict in sexOptions"
-                  :key="dict.dictValue"
-                  :label="dict.dictLabel"
-                  :value="dict.dictValue"
+                  :value="dict.wordbookCode"
+                  :label="dict.wordbookDesc"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -247,9 +246,9 @@
               <el-radio-group v-model="form.status">
                 <el-radio
                   v-for="dict in statusOptions"
-                  :key="dict.dictValue"
-                  :label="dict.dictValue"
-                >{{dict.dictLabel}}</el-radio>
+                  :value="dict.wordbookCode"
+                  :label="dict.wordbookDesc"
+                >{{dict.wordbookDesc}}</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -442,15 +441,13 @@ export default {
   created() {
     this.getList();
     this.getTreeselect();
-    this.getDicts("sys_normal_disable").then(response => {
-      this.statusOptions = response.data;
+    this.getDicts("is_enable").then(response => {
+      this.statusOptions = response;
     });
-    this.getDicts("sys_user_sex").then(response => {
-      this.sexOptions = response.data;
+    this.getDicts("sex").then(response => {
+      this.sexOptions = response;
     });
-    this.getConfigKey("sys.user.initPassword").then(response => {
-      this.initPassword = response.msg;
-    });
+    this.initPassword = 123456;
   },
   methods: {
     /** 查询用户列表 */
@@ -539,10 +536,10 @@ export default {
     handleAdd() {
       this.reset();
       this.getTreeselect();
+      this.open = true;
       getUser().then(response => {
         this.postOptions = response.posts;
         this.roleOptions = response.roles;
-        this.open = true;
         this.title = "添加用户";
         this.form.password = this.initPassword;
       });
