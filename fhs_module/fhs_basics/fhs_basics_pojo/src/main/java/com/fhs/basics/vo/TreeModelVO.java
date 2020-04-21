@@ -1,5 +1,8 @@
 package com.fhs.basics.vo;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Map;
 
@@ -8,6 +11,7 @@ import java.util.Map;
  *
  * @author admin
  */
+@Data
 public class TreeModelVO implements Serializable {
 
     private static final long serialVersionUID = -2847892870633694735L;
@@ -45,147 +49,6 @@ public class TreeModelVO implements Serializable {
     private boolean chkDisabled;
 
     private String menuType;
-
-
-    public String getMenuurl() {
-        return menuurl;
-    }
-
-    public void setMenuurl(String menuurl) {
-        this.menuurl = menuurl;
-    }
-
-    public String getMenuType() {
-        return menuType;
-    }
-
-    public void setMenuType(String menuType) {
-        this.menuType = menuType;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getPid() {
-        return pid;
-    }
-
-    public void setPid(String pid) {
-        this.pid = pid;
-    }
-
-    public String get_parentId() {
-        return _parentId;
-    }
-
-    public void set_parentId(String _parentId) {
-        this._parentId = _parentId;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isOpen() {
-        return open;
-    }
-
-    public void setOpen(boolean open) {
-        this.open = open;
-    }
-
-    public boolean isChecked() {
-        return checked;
-    }
-
-    public void setChecked(boolean checked) {
-        this.checked = checked;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public boolean isNoselect() {
-        return noselect;
-    }
-
-    public void setNoselect(boolean noselect) {
-        this.noselect = noselect;
-    }
-
-    public boolean isIsparent() {
-        return isparent;
-    }
-
-    public void setIsparent(boolean isparent) {
-        this.isparent = isparent;
-    }
-
-    public Map<String, Object> getAttributes() {
-        return attributes;
-    }
-
-    public void setAttributes(Map<String, Object> attributes) {
-        this.attributes = attributes;
-    }
-
-    public TreeNodeStyleVO getFont() {
-        return font;
-    }
-
-    public void setFont(TreeNodeStyleVO font) {
-        this.font = font;
-    }
-
-    public String getNodeType() {
-        return nodeType;
-    }
-
-    public void setNodeType(String nodeType) {
-        this.nodeType = nodeType;
-    }
-
-    public boolean isChkDisabled() {
-        return chkDisabled;
-    }
-
-    public void setChkDisabled(boolean chkDisabled) {
-        this.chkDisabled = chkDisabled;
-    }
-
-    @Override
-    public String toString() {
-        return "TreeModel [id=" + id + ", pid=" + pid + ", _parentId="
-                + _parentId + ", code=" + code + ", name="
-                + name + ", open=" + open + ", checked="
-                + checked + ", icon=" + icon + ", noselect="
-                + noselect + ", isparent=" + isparent
-                + ", attributes=" + attributes + ", font="
-                + font + ", nodeType=" + nodeType
-                + ", chkDisabled=" + chkDisabled + ", menuurl=" + menuurl + "]";
-    }
 
 
 }

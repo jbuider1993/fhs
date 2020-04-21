@@ -3,7 +3,7 @@
     <el-form :inline="true">
       <el-form-item label="部门名称">
         <el-input
-          v-model="queryParams.deptName"
+          v-model="queryParams.name"
           placeholder="请输入部门名称"
           clearable
           size="small"
@@ -11,7 +11,7 @@
         />
       </el-form-item>
       <el-form-item label="状态">
-        <el-select v-model="queryParams.status" placeholder="部门状态" clearable size="small">
+        <el-select v-model="queryParams.isEnable" placeholder="部门状态" clearable size="small">
           <el-option
             v-for="dict in statusOptions"
             :key="dict.dictValue"
@@ -42,13 +42,21 @@
     <el-table
       v-loading="loading"
       :data="deptList"
-      row-key="deptId"
+      row-key="id"
       default-expand-all
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
-      <el-table-column prop="deptName" label="部门名称" width="260"></el-table-column>
-      <el-table-column prop="orderNum" label="排序" width="200"></el-table-column>
-      <el-table-column prop="status" label="状态" :formatter="statusFormat" width="100"></el-table-column>
+      <el-table-column prop="name" label="部门名称" width="260"></el-table-column>
+      <el-table-column label="状态" align="center">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.isEnable"
+            active-value=1
+            inactive-value=0
+            @change="handleStatusChange(scope.row)"
+          ></el-switch>
+        </template>
+      </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createTime" width="200">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>

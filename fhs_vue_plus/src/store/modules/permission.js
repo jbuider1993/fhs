@@ -10,7 +10,9 @@ const permission = {
   mutations: {
     SET_ROUTES: (state, routes) => {
       state.addRoutes = routes
+      console.log(routes);
       state.routes = constantRoutes.concat(routes)
+      console.log( state.routes);
     }
   },
   actions: {
@@ -21,6 +23,7 @@ const permission = {
         getRouters().then(res => {
           const accessedRoutes = filterAsyncRouter(res.data)
           accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
+          console.log(accessedRoutes);
           commit('SET_ROUTES', accessedRoutes)
           resolve(accessedRoutes)
         })

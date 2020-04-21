@@ -6,6 +6,7 @@ import com.fhs.common.utils.JsonUtils;
 import com.fhs.common.utils.ReflectUtils;
 import com.fhs.core.exception.ParamException;
 import com.fhs.core.valid.checker.ParamChecker;
+import feign.Param;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -70,8 +71,12 @@ public class ApiController {
                         params = new Object[]{JSONObject.parseObject(jsonString, method.getParameters()[0].getType())};
                         break outside;
                     } else if (annotation instanceof RequestParam) {
-                        RequestParam tempParam = (RequestParam)annotation;
+                        RequestParam tempParam = (RequestParam) annotation;
                         params[index] = request.getParameter(tempParam.defaultValue());
+                    } else if (annotation instanceof Param) {
+                        Param tempParam = (Param) annotation;
+                        params[index] = request.getParameter(tempParam.value());
+
                     }
                 }
                 index++;

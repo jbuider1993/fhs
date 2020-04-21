@@ -553,8 +553,12 @@ public class UcenterMsUserServiceImpl extends BaseServiceImpl<UcenterMsUserVO, U
     private void converterMenu2Router(LeftMenuVO menu,VueRouterVO vueRouterVO,boolean isFirst){
         vueRouterVO.setName(menu.getNamespace());
         vueRouterVO.setAlwaysShow(isFirst);
-        vueRouterVO.setPath(menu.getUrl());
-        vueRouterVO.setComponent(isFirst ? "Layout" : null);
+        vueRouterVO.setPath(isFirst ? "/" + menu.getNamespace() : menu.getNamespace());
+        String component = null;
+        if(menu.getServerUrl()!=null && menu.getUrl()!=null){
+            component = menu.getUrl().replace(menu.getServerUrl(),"");
+        }
+        vueRouterVO.setComponent(isFirst ? "Layout" : component);
         vueRouterVO.setRedirect(isFirst ? "noRedirect" : null);
         vueRouterVO.getMeta().put("title",menu.getName());
         vueRouterVO.getMeta().put("icon",menu.getIcon());

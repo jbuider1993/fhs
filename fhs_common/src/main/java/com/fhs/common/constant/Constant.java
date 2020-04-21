@@ -404,6 +404,6 @@ public interface Constant
     /**
      * vue菜单
      */
-    String MENU_TYPE_VUE = "2";
+    String MENU_TYPE_VUE = "3";
 
 }

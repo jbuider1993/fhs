@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询部门列表
 export function listDept(query) {
   return request({
-    url: '/system/dept/list',
+    url: '/ms/sysOrganization/findPage',
     method: 'get',
     params: query
   })
@@ -20,7 +20,7 @@ export function getDept(deptId) {
 // 查询部门下拉树结构
 export function treeselect() {
   return request({
-    url: '/system/dept/treeselect',
+    url: '/ms/sysOrganization/getOrgIdComBoxData',
     method: 'get'
   })
 }

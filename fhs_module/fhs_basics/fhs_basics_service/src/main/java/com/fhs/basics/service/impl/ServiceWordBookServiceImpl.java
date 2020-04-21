@@ -85,7 +85,7 @@ public class ServiceWordBookServiceImpl extends BaseServiceImpl<ServiceWordbookV
 
     @Override
     public void initWordBookDataCache(ServiceWordbookDO bean) {
-        List<ServiceWordbookVO> list = super.select();
+        List<ServiceWordbookVO> list = super.findForList(ServiceWordbookDO.builder().wordbookCode(bean.getWordbookCode()).build());
         Map<String, Set<ServiceWordbookVO>> groupWordbookSetMap = new HashMap<>();
         Set<ServiceWordbookVO> tempSet = null;
         ServiceWordbookVO tempWordbook = null;

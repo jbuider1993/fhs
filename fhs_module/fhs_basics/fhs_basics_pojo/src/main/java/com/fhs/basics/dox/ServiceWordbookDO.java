@@ -5,8 +5,7 @@ import com.fhs.core.base.dox.BaseDO;
 import com.fhs.core.valid.group.Add;
 import com.fhs.core.valid.group.Delete;
 import com.fhs.core.valid.group.Update;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -24,6 +23,9 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "t_service_wordbook")
 public class ServiceWordbookDO extends BaseDO<ServiceWordbookDO> {

@@ -2,26 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.fhs.basics.mapper.UcenterMsUserMapper">
     <!-- 登录 -->
-    <select id="login" resultType="com.fhs.basics.dox.UcenterMsUserDO" parameterType="com.fhs.basics.dox.UcenterMsUserDO">
-		SELECT
-		user_name AS userName,
-		is_enable AS isEnable,
-		user_id AS userId,
-		user_login_name AS userLoginName,
-		is_admin AS isAdmin,
-		password AS password,
-		mobile,
-		email,
-		sex,
-		organization_id AS organizationId,
-		create_user AS createUser,
-		create_time AS createTime,
-		update_user AS updateUser,
-		update_time AS updateTime,
+    <select id="login" resultType="com.fhs.basics.dox.UcenterMsUserDO"
+            parameterType="com.fhs.basics.dox.UcenterMsUserDO">
+        SELECT
+        user_name AS userName,
+        is_enable AS isEnable,
+        user_id AS userId,
+        user_login_name AS userLoginName,
+        is_admin AS isAdmin,
+        password AS password,
+        mobile,
+        email,
+        sex,
+        organization_id AS organizationId,
+        create_user AS createUser,
+        create_time AS createTime,
+        update_user AS updateUser,
+        update_time AS updateTime,
         group_code AS groupCode
-		FROM
-		t_ucenter_ms_user
-		<where>
+        FROM
+        t_ucenter_ms_user
+        <where>
             AND
             user_login_name =
             #{userLoginName}
@@ -31,7 +32,7 @@
             </if>
             AND is_enable=1
         </where>
-	</select>
+    </select>
 
     <select id="findForListFromMap" parameterType="map" resultType="com.fhs.basics.dox.UcenterMsUserDO">
         SELECT
@@ -147,8 +148,14 @@
         `t_sett_ms_menu` m,t_sett_ms_menu_server s
         WHERE m.`server_name_id`=s.`id`
         <!-- 查询制定的菜单类型 -->
-        <if test="menuType !=null">
-        AND (m.menu_type=#{menuType} OR m.menu_type=2)
+        <if test="menuType !=null and menuType!='3' ">
+            AND (m.menu_type=#{menuType} OR m.menu_type=2)
+        </if>
+        <if test=" menuType=='3' ">
+            AND m.menu_type=3
+        </if>
+        <if test="menuType ==null">
+            AND m.menu_type !=3
         </if>
         <if test="systemIds != null and systemIds != ''">
             AND system_id IN(${systemIds})
@@ -335,7 +342,8 @@
     </select>
 
     <!-- 获取菜单信息 -->
-    <select id="findBean" parameterType="com.fhs.basics.dox.UcenterMsUserDO" resultType="com.fhs.basics.dox.UcenterMsUserDO">
+    <select id="findBean" parameterType="com.fhs.basics.dox.UcenterMsUserDO"
+            resultType="com.fhs.basics.dox.UcenterMsUserDO">
         SELECT
         user_name AS userName,
         user_id AS userId,
@@ -407,14 +415,14 @@
 
     <!-- 校验密码是否正确 -->
     <select id="validataPass" resultType="int" parameterType="com.fhs.basics.dox.UcenterMsUserDO">
-		SELECT
-		COUNT(1)
-		FROM `t_ucenter_ms_user`
-		<where>
+        SELECT
+        COUNT(1)
+        FROM `t_ucenter_ms_user`
+        <where>
             AND password = #{password}
             AND user_id = #{userId}
         </where>
-	</select>
+    </select>
 
     <!-- 修改密码 -->
     <update id="updatePass" parameterType="com.fhs.basics.dox.UcenterMsUserDO">

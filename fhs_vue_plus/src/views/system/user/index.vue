@@ -89,7 +89,7 @@
               icon="el-icon-plus"
               size="mini"
               @click="handleAdd"
-              v-hasPermi="['system:user:add']"
+              hasPermi="['system:user:add']"
             >新增</el-button>
           </el-col>
           <el-col :span="1.5">
@@ -134,17 +134,16 @@
 
         <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="40" align="center" />
-          <el-table-column label="用户编号" align="center" prop="userId" />
           <el-table-column label="用户名称" align="center" prop="userName" :show-overflow-tooltip="true" />
           <el-table-column label="用户昵称" align="center" prop="nickName" :show-overflow-tooltip="true" />
-          <el-table-column label="部门" align="center" prop="dept.deptName" :show-overflow-tooltip="true" />
-          <el-table-column label="手机号码" align="center" prop="phonenumber" width="120" />
+          <el-table-column label="部门" align="center" prop="transMap.orgName" :show-overflow-tooltip="true" />
+          <el-table-column label="手机号码" align="center" prop="mobile" width="120" />
           <el-table-column label="状态" align="center">
             <template slot-scope="scope">
               <el-switch
-                v-model="scope.row.status"
-                active-value="0"
-                inactive-value="1"
+                v-model="scope.row.isEnable"
+                active-value=1
+                inactive-value=0
                 @change="handleStatusChange(scope.row)"
               ></el-switch>
             </template>
@@ -166,7 +165,7 @@
                 type="text"
                 icon="el-icon-edit"
                 @click="handleUpdate(scope.row)"
-                v-hasPermi="['system:user:edit']"
+               hasPermi="['system:user:edit']"
               >修改</el-button>
               <el-button
                 v-if="scope.row.userId !== 1"
@@ -198,7 +197,7 @@
     </el-row>
 
     <!-- 添加或修改参数配置对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="600px">
+    <el-dialog :title="title" :visible.sync="open" width="600px" >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="12">
@@ -375,7 +374,7 @@ export default {
       form: {},
       defaultProps: {
         children: "children",
-        label: "label"
+        label: "text"
       },
       // 用户导入参数
       upload: {
@@ -467,7 +466,8 @@ export default {
     /** 查询部门下拉树结构 */
     getTreeselect() {
       treeselect().then(response => {
-        this.deptOptions = response.data;
+        this.deptOptions = response;
+
       });
     },
     // 筛选节点
@@ -482,17 +482,17 @@ export default {
     },
     // 用户状态修改
     handleStatusChange(row) {
-      let text = row.status === "0" ? "启用" : "停用";
+      let text = row.isEnable === 0 ? "启用" : "停用";
       this.$confirm('确认要"' + text + '""' + row.userName + '"用户吗?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return changeUserStatus(row.userId, row.status);
+          return changeUserStatus(row.userId, row.isEnable);
         }).then(() => {
           this.msgSuccess(text + "成功");
         }).catch(function() {
-          row.status = row.status === "0" ? "1" : "0";
+          row.isEnable = row.status === 0 ? 1 : 0;
         });
     },
     // 取消按钮
